@@ -7,6 +7,7 @@ import AppFooter from '../components/AppFooter';
 import './Pages.css';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import botnoiAirLogo from '../assets/BOTNOI-AIR-logo.png';
+import botnoiRestaurantLogo from '../assets/BOTNOI-Restaurant-logo.png';
 
 export default function Home() {
 
@@ -160,7 +161,23 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Card 2: IT Store */}
+          {/* Card 2: Food Ordering */}
+          <div className="bento-card col-4" id="card-food-demo">
+            <div className="bento-card-header">
+              <div className="bento-icon-alt-box" style={{ width: 'auto', padding: '1.5rem 0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" style={{ height: '4rem', width: 'auto', objectFit: 'contain' }} />
+              </div>
+              <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('food.title')}</h3>
+            </div>
+            <p>
+              {t('showcase.desc_restaurant')}
+            </p>
+            <Link className="bento-card-footer" to="/food-demo" id="link-food-demo">
+              {t('showcase.launch_demo')} <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+
+          {/* Card 3: IT Store */}
           <div className="bento-card col-4" id="card-itstore-demo">
             <div className="bento-card-header">
               <div
@@ -184,8 +201,8 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Card 3: B2B Sales Inquiry Form (Third card from left) */}
-          <div className="bento-card col-4" id="card-contact-demo">
+          {/* Card 4: B2B Sales Inquiry Form */}
+          <div className="bento-card col-6" id="card-contact-demo">
             <div className="bento-card-header">
               <div className="bento-icon-box">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10zM2 12h20" /></svg>
@@ -200,8 +217,8 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Card 4: All Demos Showcase Portal — full width at bottom */}
-          <div className="bento-card col-12" id="card-all-demo">
+          {/* Card 5: All Demos Showcase Portal */}
+          <div className="bento-card col-6" id="card-all-demo">
             <div className="bento-card-header">
               <div className="bento-icon-box" style={{ background: 'linear-gradient(135deg,rgba(16,185,129,0.12),rgba(5,150,105,0.08))', border: '1px solid rgba(16,185,129,0.2)' }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

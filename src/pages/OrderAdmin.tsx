@@ -96,7 +96,7 @@ export default function OrderAdmin() {
               {language === 'en' ? "Botnoi Restaurant · Kitchen Monitor" : "Botnoi Restaurant · บอร์ดจัดการห้องครัว"}
             </span>
           </div>
-          <Link to="/all-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
+          <Link to="/food-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
             {t("nav.back_to_main")}
           </Link>
         </div>
@@ -160,8 +160,14 @@ export default function OrderAdmin() {
                     </div>
                     <div className="space-y-3 mb-4">
                       {order.items.map((item) => {
-                        const transId = item.id.replace("-", "");
-                        const name = t(`food_item.${transId}.name` as any) || item.name;
+                        const localizedItem = item as typeof item & {
+                          englishName?: string;
+                          nameEn?: string;
+                          nameTh?: string;
+                        };
+                        const name = language === 'th'
+                          ? localizedItem.nameTh || item.name
+                          : localizedItem.englishName || localizedItem.nameEn || item.name;
                         return (
                           <div key={item.id} className="flex justify-between gap-3 text-xs font-bold text-stone-700">
                             <span className="flex-1 text-stone-800">

@@ -21,6 +21,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import botnoiAirLogo from "../assets/BOTNOI-AIR-logo.png";
+import botnoiRestaurantLogo from "../assets/BOTNOI-Restaurant-logo.png";
 
 export type ProjectCategory = 
   | "education"
@@ -73,6 +74,7 @@ export interface Receipt {
 const projectData: HouseItem[] = [
   { id: -1, code: 'SANDBOX', name: 'Flight Demo', style: 'Interactive Sandbox', type: 'flight', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
   { id: -2, code: 'SANDBOX', name: 'IT Store Demo', style: 'Interactive Sandbox', type: 'ecommerce', color: '#6366F1', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
+  { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', style: 'Interactive Sandbox', type: 'restaurant', color: '#059669', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
   { id: 1, code: 'TN01', name: '01-the-chill-crew', style: 'Modern Minimalist', type: 'education', color: '#6366F1', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
   { id: 2, code: 'TN02', name: '02-cozy-oracles', style: 'Neo-Classical', type: 'flight', color: '#b45309', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 3, code: 'TN03', name: '03-controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#059669', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
@@ -83,7 +85,7 @@ const projectData: HouseItem[] = [
   {
     id: 7,
     code: 'TN07',
-    name: '07-steak&game-bros',
+    name: '07-steak-game-bros',
     style: 'Organic Earth Dome',
     type: 'restaurant',
     color: '#10B981',
@@ -166,6 +168,12 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     typeBg = "bg-indigo-50 text-indigo-700 border-indigo-200/50";
     cardDescription = t("showcase.desc_ecommerce");
     displayName = t("showcase.itstore_demo_name");
+  } else if (house.id === -3) {
+    typeLabel = t("showcase.type_restaurant");
+    TypeIcon = UtensilsCrossed;
+    typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50";
+    cardDescription = t("showcase.desc_restaurant");
+    displayName = t("food.title");
   } else {
     if (TN_CUSTOM_DESC_KEYS[house.code]) {
       cardDescription = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
@@ -186,8 +194,8 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     }
   }
 
-  const cardId = house.id < 0 
-    ? `card-sandbox-${house.id === -1 ? 'flight' : 'itstore'}`
+  const cardId = house.id < 0
+    ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : 'food'}`
     : `card-${house.code.toLowerCase()}`;
 
   return (
@@ -196,7 +204,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
       id={cardId}
       aria-label={`${house.code}: ${displayName}`}
       className="bg-card border border-border rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
-      style={{ borderTop: `4px solid ${house.id < 0 ? '#0284c7' : house.color || '#38bdf8'}` }}
+      style={{ borderTop: `4px solid ${house.color || '#38bdf8'}` }}
       whileHover={{ y: -4, scale: 1.01 }}
     >
       <div>
@@ -206,6 +214,8 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             <div className="w-10 h-10 rounded-2xl bg-muted/40 border border-border flex items-center justify-center p-2 shadow-xs group-hover:scale-105 transition-transform shrink-0">
               {house.id === -1 ? (
                 <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
+              ) : house.id === -3 ? (
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
               ) : (
                 <TypeIcon className="size-5 text-primary shrink-0" />
               )}
@@ -287,6 +297,8 @@ export default function OrderDemo() {
         overviewText = t("showcase.desc_flight");
       } else if (house.id === -2) {
         overviewText = t("showcase.desc_ecommerce");
+      } else if (house.id === -3) {
+        overviewText = `${t("food.title")} ${t("showcase.desc_restaurant")}`;
       } else if (TN_CUSTOM_DESC_KEYS[house.code]) {
         overviewText = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
       } else if (!NO_DESC_CODES.has(house.code)) {
@@ -319,7 +331,7 @@ export default function OrderDemo() {
       aria-label="All Demos Showcase Portal"
     >
       {/* 1. Page Header & Hero */}
-      <header className="w-full bg-background/20 backdrop-blur-md border-b border-border py-8 relative z-10" aria-label="Portal Header">
+      <header className="w-full bg-card/60 backdrop-blur-md border-b border-border py-8 relative z-10" aria-label="Portal Header">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>

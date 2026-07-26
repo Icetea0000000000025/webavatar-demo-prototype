@@ -1100,6 +1100,7 @@ function TableManagementView({ orders, onRefreshOrders }: { orders: OrderHistory
   };
 
   // Auto-occupy tables
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (tables.length === 0) return;
     const tablesToUpdate = tables.filter(t => getActiveOrdersForTable(t.label).length > 0 && t.status === "available");

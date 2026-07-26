@@ -1658,7 +1658,7 @@ function KitchenMonitor() {
       const rawItem = MENU_ITEMS_FOR_SIMULATION[Math.floor(Math.random() * MENU_ITEMS_FOR_SIMULATION.length)];
       const qty = Math.floor(Math.random() * 2) + 1;
       
-      let name = rawItem.name;
+      const name = rawItem.name;
       const details = [];
       if (rawItem.category === "signature" || rawItem.category === "main" || rawItem.category === "noodles") {
         details.push(SPICY_LEVELS[Math.floor(Math.random() * SPICY_LEVELS.length)]);

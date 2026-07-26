@@ -237,6 +237,8 @@
 /* Hamburger Menu Icon */
 .hamburger-btn {
   display: none;
+  grid-column: 3;
+  justify-self: end;
   flex-direction: column;
   justify-content: center;
   align-items: center;

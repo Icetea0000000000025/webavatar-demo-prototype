@@ -12,6 +12,7 @@ import Contact from './pages/Contact';
 import FlightDemo from './pages/FlightDemo';
 import FlightAdmin from './pages/FlightAdmin';
 import OrderDemo from './pages/OrderDemo';
+import FoodOrderDemo from './pages/FoodOrderDemo';
 import OrderAdmin from './pages/OrderAdmin';
 import ITStoreDemo from './pages/ITStoreDemo';
 import ITStoreAdmin from './pages/ITStoreAdmin';
@@ -65,7 +66,8 @@ function App() {
               <Routes>
                 {/* Static admin/support routes */}
                 <Route path="/flight-demo/admin" element={<FlightAdmin />} />
-                <Route path="/all-demo/admin" element={<OrderAdmin />} />
+                <Route path="/food-demo" element={<FoodOrderDemo />} />
+                <Route path="/food-demo/admin" element={<OrderAdmin />} />
                 <Route path="/it-store-demo/admin" element={<ITStoreAdmin />} />
 
                 {/* Dynamic pages based on pagesConfig */}

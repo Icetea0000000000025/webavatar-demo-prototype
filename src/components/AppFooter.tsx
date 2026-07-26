@@ -16,8 +16,9 @@ export const AppFooter: React.FC = () => {
           <h4>{t('footer.usecases')}</h4>
           <ul>
             <li><Link to="/flight-demo">{t('footer.flight_booking')}</Link></li>
-            <li><Link to="/all-demo">{t('footer.restaurant_ordering')}</Link></li>
+            <li><Link to="/food-demo">{t('food.title')}</Link></li>
             <li><Link to="/it-store-demo">{t('nav.itstore')}</Link></li>
+            <li><Link to="/all-demo">{t('nav.all_demos')}</Link></li>
             <li><Link to="/contact">{t('footer.contact_leads')}</Link></li>
           </ul>
         </nav>

@@ -452,7 +452,7 @@ class MockQueryBuilder {
       const rawOrders = localStorage.getItem(STORAGE_KEYS.ORDERS);
       const rawItems = localStorage.getItem(STORAGE_KEYS.ORDER_ITEMS);
 
-      let ordersData = rawOrders ? JSON.parse(rawOrders) : [
+      const ordersData = rawOrders ? JSON.parse(rawOrders) : [
         {
           id: "ord-mock-101",
           order_number: "AK-1001",
@@ -482,7 +482,7 @@ class MockQueryBuilder {
         }
       ];
 
-      let itemsData = rawItems ? JSON.parse(rawItems) : [
+      const itemsData = rawItems ? JSON.parse(rawItems) : [
         {
           order_id: "ord-mock-101",
           item_id: "krapao",

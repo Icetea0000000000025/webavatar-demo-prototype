@@ -2440,7 +2440,7 @@ function ItemModal({
       .reduce((sum, t) => sum + t.price, 0);
 
     return basePrice + proteinPrice + toppingsPrice + sizePrice;
-  }, [isFood, item.price, selectedAddons, protein, size, selectedToppings, basePrice]);
+  }, [isFood, item.price, item.addons, selectedAddons, protein, size, selectedToppings, basePrice]);
 
   const total = unitPrice * qty;
 
