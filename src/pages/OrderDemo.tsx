@@ -326,12 +326,11 @@ export default function OrderDemo() {
 
   return (
     <div
-      className="order-theme min-h-[calc(100vh-68px)] w-full flex flex-col pb-16 selection:bg-primary selection:text-primary-foreground"
-      style={{ backgroundImage: 'var(--grad-mesh)' }}
+      className="min-h-[calc(100vh-68px)] w-full flex flex-col pb-16 selection:bg-primary selection:text-primary-foreground relative z-10"
       aria-label="All Demos Showcase Portal"
     >
       {/* 1. Page Header & Hero */}
-      <header className="w-full bg-card/60 backdrop-blur-md border-b border-border py-8 relative z-10" aria-label="Portal Header">
+      <header className="w-full bg-background/40 backdrop-blur-xl border-b border-border/60 py-10 relative z-10" aria-label="Portal Header">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
@@ -352,7 +351,7 @@ export default function OrderDemo() {
 
       {/* 2. Search & Filtering Controls */}
       <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-10" aria-label="Search and Filter Demos" id="search-filter-section">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-card border border-border p-4 rounded-3xl shadow-sm">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
           {/* Search Input */}
           <div className="relative w-full lg:max-w-md">
             <label htmlFor="demo-search-input" className="sr-only">
