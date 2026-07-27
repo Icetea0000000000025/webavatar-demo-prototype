@@ -172,7 +172,7 @@ export default function FlightDemo() {
             </div>
           </header>
 
-          <div className="mx-auto max-w-7xl px-6 pt-12 md:pt-16 pb-40 md:pb-44 w-full relative z-10">
+          <div className="mx-auto max-w-7xl px-6 pt-12 md:pt-16 pb-120 md:pb-44 w-full relative z-10">
             {/* Dark scrim behind text for readability */}
             <motion.div
               className="max-w-2xl"
