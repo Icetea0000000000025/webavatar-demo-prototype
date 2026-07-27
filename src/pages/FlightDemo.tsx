@@ -172,7 +172,7 @@ export default function FlightDemo() {
             </div>
           </header>
 
-          <div className="mx-auto max-w-7xl px-6 pt-12 md:pt-16 pb-40 md:pb-44 w-full relative z-10">
+          <div className="mx-auto max-w-7xl px-6 pt-12 md:pt-16 pb-120 md:pb-44 w-full relative z-10">
             {/* Dark scrim behind text for readability */}
             <motion.div
               className="max-w-2xl"
@@ -441,34 +441,41 @@ export default function FlightDemo() {
 
 
         {/* SPECIAL SERVICES */}
-        <section className="bg-gradient-to-b from-sky-50/40 to-indigo-50/40 border-y border-slate-100 py-20 relative z-10 text-left">
+        <section className="bg-foreground/[0.02] border-y border-foreground/10 py-20 relative z-10 text-left">
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center max-w-xl mx-auto mb-16">
-              <h2 className="font-display text-3xl font-extrabold text-slate-900 tracking-tight">{t('flight.about_heading')}</h2>
-              <p className="text-sm text-slate-500 mt-3">{t('flight.about_subheading')}</p>
+              <h2 className="font-display text-3xl font-extrabold text-foreground tracking-tight">{t('flight.about_heading')}</h2>
+              <p className="text-sm text-foreground/60 mt-3">{t('flight.about_subheading')}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/40 shadow-sm hover:shadow-md hover:border-sky-500/20 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-sky-50 text-sky-600 mb-4 border border-sky-100/50 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
+              
+              {/* Card 1 */}
+              <div className="group bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-foreground/10 shadow-sm hover:shadow-md hover:border-sky-500/30 transition-all duration-300">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-sky-500/10 text-sky-500 mb-4 border border-sky-500/20 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
                   <Luggage className="w-6 h-6" />
                 </div>
-                <h4 className="font-display font-bold text-slate-900 mb-2">{t('flight.service1_title')}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{t('flight.service1_desc')}</p>
+                <h4 className="font-display font-bold text-foreground mb-2">{t('flight.service1_title')}</h4>
+                <p className="text-xs text-foreground/60 leading-relaxed">{t('flight.service1_desc')}</p>
               </div>
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/40 shadow-sm hover:shadow-md hover:border-sky-500/20 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-amber-50 text-amber-600 mb-4 border border-amber-100/50 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+
+              {/* Card 2 */}
+              <div className="group bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-foreground/10 shadow-sm hover:shadow-md hover:border-amber-500/30 transition-all duration-300">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-amber-500/10 text-amber-500 mb-4 border border-amber-500/20 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
                   <Coffee className="w-6 h-6" />
                 </div>
-                <h4 className="font-display font-bold text-slate-900 mb-2">{t('flight.service2_title')}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{t('flight.service2_desc')}</p>
+                <h4 className="font-display font-bold text-foreground mb-2">{t('flight.service2_title')}</h4>
+                <p className="text-xs text-foreground/60 leading-relaxed">{t('flight.service2_desc')}</p>
               </div>
-              <div className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-slate-200/40 shadow-sm hover:shadow-md hover:border-sky-500/20 transition-all duration-300">
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-50 text-indigo-600 mb-4 border border-indigo-100/50 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
+
+              {/* Card 3 */}
+              <div className="group bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-foreground/10 shadow-sm hover:shadow-md hover:border-indigo-500/30 transition-all duration-300">
+                <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-indigo-500/10 text-indigo-500 mb-4 border border-indigo-500/20 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300">
                   <Mic className="w-6 h-6" />
                 </div>
-                <h4 className="font-display font-bold text-slate-900 mb-2">{t('flight.service3_title')}</h4>
-                <p className="text-xs text-slate-500 leading-relaxed">{t('flight.service3_desc')}</p>
+                <h4 className="font-display font-bold text-foreground mb-2">{t('flight.service3_title')}</h4>
+                <p className="text-xs text-foreground/60 leading-relaxed">{t('flight.service3_desc')}</p>
               </div>
+
             </div>
           </div>
         </section>

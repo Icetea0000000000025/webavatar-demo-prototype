@@ -100,7 +100,7 @@ export default function Home() {
                 <div className="avatar-visual-wrapper">
                   <div className="avatar-wave"></div>
                   <div className="avatar-wave-2"></div>
-                  <div className="avatar-pulsing-circle" style={{ overflow: 'hidden', padding: '24px', background: '#ffffff', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
+                  <div className="avatar-pulsing-circle" style={{ overflow: 'hidden', padding: '24px', background: 'var(--card)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
                     <img src={logoNewLightBlue} alt="Avatar Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export default function Home() {
               >
                 <motion.div variants={itemVariants}>
                   <div className="feature-item">
-                    <span className="feature-check text-indigo-600">✓</span>
+                    <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule1_title')}</div>
                       <div className="feature-item-desc">{t('home.rule1_desc')}</div>
@@ -277,7 +277,7 @@ export default function Home() {
                 </motion.div>
                 <motion.div variants={itemVariants}>
                   <div className="feature-item">
-                    <span className="feature-check text-indigo-600">✓</span>
+                    <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule2_title')}</div>
                       <div className="feature-item-desc">{t('home.rule2_desc')}</div>
@@ -286,7 +286,7 @@ export default function Home() {
                 </motion.div>
                 <motion.div variants={itemVariants}>
                   <div className="feature-item">
-                    <span className="feature-check text-indigo-600">✓</span>
+                    <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule3_title')}</div>
                       <div className="feature-item-desc">{t('home.rule3_desc')}</div>

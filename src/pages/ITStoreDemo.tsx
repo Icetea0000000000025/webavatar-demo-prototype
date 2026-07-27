@@ -128,7 +128,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate 80 Pro",
     specs: '6.75" LTPO OLED · 16GB RAM · 512GB ROM · 50MP Triple Camera',
     description:
-      "HUAWEI Mate 80 Pro มาพร้อมหน้าจอ LTPO OLED ขนาด 6.75 นิ้ว (2832×1280, 1-120Hz), ตัวเครื่องบาง 7.95 มม., มาตรฐานกันน้ำ IP68/IP69, ชิปความจุ RAM 16 GB + ROM 512 GB, แบตเตอรี่ 5,750 mAh พร้อมระบบชาร์จไว 100W",
+      "HUAWEI Mate 80 Pro comes with a 6.75-inch LTPO OLED display (2832×1280, 1-120Hz), 7.95mm slim body, IP68/IP69 rating, RAM 16 GB + ROM 512 GB, and a 5,750 mAh battery with 100W fast charging.",
     category: "Phone",
     price: 43990,
     image: huaweiMate80Pro,
@@ -161,7 +161,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate X7",
     specs: '8.0" OLED Foldable · 16GB RAM · 512GB ROM · 50MP Camera',
     description:
-      "สมาร์ทโฟนจอพับที่มาพร้อมหน้าจอหลัก OLED ขนาด 8 นิ้ว และหน้าจอนอก 6.49 นิ้ว, RAM 16 GB + ROM 512 GB, แบตเตอรี่ 5,600 mAh รองรับชาร์จไวผ่านสาย 66W และกล้องหลัง Ultra Lighting 50 MP",
+      "HUAWEI Mate X7 is a foldable smartphone with an 8-inch main OLED screen, 16 GB RAM + 512 GB ROM, 5,600 mAh battery supporting 66W wired charging, and a 50 MP Ultra Lighting camera.",
     category: "Phone",
     price: 69990,
     image: huaweiMateX7,
@@ -215,7 +215,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate XT ULTIMATE DESIGN",
     specs: '10.2" Tri-Fold OLED · Kirin 9010 · 16GB RAM · 1TB ROM · IPX8',
     description:
-      "สมาร์ทโฟนดีไซน์หน้าจอพับ 3 ทบ (Tri-fold) จอ OLED ปรับเปลี่ยนได้ 3 ขนาด, ชิป Kirin 9010, RAM 16 GB + ROM 1 TB, ตัวเครื่องบางเพียง 3.6 มม. เมื่อกางสุด และน้ำหนัก 298 กรัม",
+      "HUAWEI Mate XT ULTIMATE DESIGN features a triple-folding (Tri-fold) OLED screen expandable to 10.2 inches, Kirin 9010 chip, RAM 16 GB + ROM 1 TB, and 3.6mm ultra-slim body.",
     category: "Phone",
     price: 109990,
     image: huaweiMateXT,
@@ -268,7 +268,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate X6",
     specs: '7.93" OLED Foldable · Kirin 9020 · 12GB RAM · 512GB ROM',
     description:
-      "สมาร์ทโฟนจอพับหน้าจอหลัก OLED ด้านในขนาด 7.93 นิ้ว และจอนอก 6.45 นิ้ว, ชิป Kirin 9020 ร่วมกับ RAM 12 GB + ROM 512 GB บนระบบปฏิบัติการ EMUI 15.0",
+      "HUAWEI Mate X6 features a 7.93-inch internal foldable OLED display, Kirin 9020 processor, 12 GB RAM + 512 GB ROM on EMUI 15.0, and 5,110 mAh battery supporting 66W fast charging.",
     category: "Phone",
     price: 59990,
     image: huaweiMateX6,
@@ -320,7 +320,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate 50",
     specs: '6.7" OLED (90Hz) · Snapdragon 8+ Gen 1 · 8GB RAM · 256GB ROM',
     description:
-      "HUAWEI Mate 50 หน้าจอ OLED ขนาด 6.7 นิ้ว, ชิปเซ็ต Snapdragon 8+ Gen 1 4G, RAM 8 GB + ROM 256 GB, แบตเตอรี่ 4,460 mAh และกล้องหลัง Ultra Aperture 50 MP",
+      "HUAWEI Mate 50 features a 6.7-inch OLED screen, Snapdragon 8+ Gen 1 4G chipset, 8 GB RAM + 256 GB ROM, and a 4,460 mAh battery with 66W SuperCharge.",
     category: "Phone",
     price: 24990,
     image: huaweiMate50,
@@ -372,7 +372,7 @@ const products: ITProduct[] = [
     name: "HUAWEI Mate Xs 2",
     specs: '7.8" Outward Fold OLED · Snapdragon 888 4G · 8GB RAM · 512GB ROM',
     description:
-      "สมาร์ทโฟนจอพับพับออกนอก (Falcon Wing Design) หน้าจอ OLED 7.8 นิ้ว, ชิปเซ็ต Snapdragon 888 4G, RAM 8 GB + ROM 512 GB, กล้องหลัก True-Chroma 50 MP",
+      "HUAWEI Mate Xs 2 is an outward-folding smartphone featuring a 7.8-inch OLED screen, Snapdragon 888 4G chipset, 8 GB RAM + 512 GB ROM, and 50 MP True-Chroma camera.",
     category: "Phone",
     price: 39990,
     image: huaweiMateXs2,
@@ -512,7 +512,7 @@ export default function ITStoreDemo() {
     }
   };
 
-  return (
+ return (
     <>
       <AnimatePresence>
         {!ready && <PageSkeleton variant="order" />}
@@ -521,19 +521,19 @@ export default function ITStoreDemo() {
       <div className="itstore-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground page-grid">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="sticky top-4 z-20 mx-auto my-4 w-[calc(100%-2rem)] max-w-7xl bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl shadow-lg transition-all">
+        <header className="sticky top-4 z-20 mx-auto my-4 w-[calc(100%-2rem)] max-w-7xl bg-background/80 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
           <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <nav className="flex items-center gap-2 text-xs text-slate-500 font-bold" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-indigo-600 transition-colors flex items-center gap-1">
+            <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
+              <Link to="/" className="hover:text-indigo-500 transition-colors flex items-center gap-1">
                 <Home className="size-3" />
                 <span>{t('nav.home')}</span>
               </Link>
-              <ChevronRight className="size-3 text-slate-400" />
-              <Link to="/all-demo" className="hover:text-indigo-600 transition-colors">
+              <ChevronRight className="size-3 text-foreground/30" />
+              <Link to="/all-demo" className="hover:text-indigo-500 transition-colors">
                 <span>{t('showcase.portal')}</span>
               </Link>
-              <ChevronRight className="size-3 text-slate-400" />
-              <span className="text-slate-800 font-extrabold uppercase font-mono">
+              <ChevronRight className="size-3 text-foreground/30" />
+              <span className="text-foreground font-extrabold uppercase font-mono">
                 {t("nav.itstore") || 'IT Store'}
               </span>
             </nav>
@@ -544,7 +544,7 @@ export default function ITStoreDemo() {
                   variant="ghost"
                   size="sm"
                   onClick={() => setInvoiceOpen(true)}
-                  className="text-slate-600 hover:text-slate-900 gap-1.5 font-bold hover:bg-slate-100/60 rounded-full px-3 py-1.5"
+                  className="text-foreground/70 hover:text-foreground gap-1.5 font-bold hover:bg-foreground/5 rounded-full px-3 py-1.5 transition-colors"
                   id="itstore-view-invoice"
                 >
                   <ReceiptText className="size-4" />
@@ -553,7 +553,7 @@ export default function ITStoreDemo() {
               )}
               <Link
                 to="/it-store-demo/admin"
-                className="px-4 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200 text-slate-700 text-xs font-bold"
+                className="px-4 py-1.5 rounded-full bg-foreground/5 hover:bg-foreground/10 transition-all border border-foreground/10 text-foreground text-xs font-bold"
                 id="nav-itstore-admin"
               >
                 {t("itstore.nav_admin")}
@@ -576,9 +576,8 @@ export default function ITStoreDemo() {
 
         {/* ── Hero Banner ─────────────────────────────────────────────────── */}
         <section
-          className="relative overflow-hidden"
+          className="relative overflow-hidden bg-gradient-to-br from-indigo-500/10 via-background to-emerald-500/10"
           style={{
-            background: "linear-gradient(135deg,#f8f8ff 0%,#eef2ff 40%,#f0fdf4 100%)",
             padding: "4rem 1.5rem 3rem",
           }}
         >
@@ -609,13 +608,13 @@ export default function ITStoreDemo() {
                 {t("itstore.badge")}
               </span>
               <h1
-                className="font-extrabold tracking-tight mb-3"
-                style={{ fontSize: "clamp(2rem,5vw,3rem)", color: "#1e1b4b", lineHeight: 1.15 }}
+                className="font-extrabold tracking-tight mb-3 text-foreground"
+                style={{ fontSize: "clamp(2rem,5vw,3rem)", lineHeight: 1.15, background: 'none', WebkitTextFillColor: 'initial' }}
                 id="itstore-hero-title"
               >
                 {t("itstore.hero_title")}
               </h1>
-              <p className="text-slate-500 text-base max-w-lg" style={{ lineHeight: 1.65 }}>
+              <p className="text-foreground/70 text-base max-w-lg" style={{ lineHeight: 1.65 }}>
                 {t("itstore.hero_desc")}
               </p>
             </div>
@@ -630,9 +629,9 @@ export default function ITStoreDemo() {
                   transition={{ delay: 0.1 + i * 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   style={{
                     width: 120,
-                    background: "#fff",
+                    background: "var(--card)",
                     borderRadius: 16,
-                    border: "1px solid rgba(228,228,231,0.8)",
+                    border: "1px solid var(--border)",
                     padding: "1rem",
                     boxShadow: "0 8px 24px -4px rgba(0,0,0,0.06)",
                     display: "flex",
@@ -671,11 +670,11 @@ export default function ITStoreDemo() {
                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#6366f1" }}>
                   {language === "en" ? "Browse the catalogue" : "เลือกสินค้า"}
                 </p>
-                <h2 id="products-heading" className="font-extrabold text-3xl tracking-tight text-slate-900">
+                <h2 id="products-heading" className="font-extrabold text-3xl tracking-tight text-foreground">
                   {language === "en" ? "Our Products" : "สินค้าทั้งหมด"}
                 </h2>
               </div>
-              <p className="text-xs text-slate-400 font-bold">
+              <p className="text-xs text-foreground/50 font-bold">
                 {visibleProducts.length} {t("itstore.items_count")}
               </p>
             </div>
@@ -693,7 +692,7 @@ export default function ITStoreDemo() {
                     key={cat}
                     className={`relative shrink-0 snap-start px-5 py-2.5 rounded-full text-xs font-bold transition-all cursor-pointer border ${active
                         ? "border-transparent text-white"
-                        : "text-slate-500 border-slate-200 hover:text-slate-800 hover:bg-slate-50"
+                        : "text-foreground/60 border-foreground/10 hover:text-foreground hover:bg-foreground/5"
                       }`}
                     style={active ? { background: "linear-gradient(135deg,#6366f1,#8b5cf6)" } : {}}
                     onClick={() => setActiveCategory(cat)}
@@ -725,13 +724,13 @@ export default function ITStoreDemo() {
                       className="w-full"
                     >
                       <div
-                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl h-full"
+                        className="group relative flex flex-col overflow-hidden rounded-2xl border border-foreground/10 bg-background shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl h-full"
                         id={`itstore-product-${product.id}`}
                       >
                         {/* Image */}
                         <div
-                          className="relative overflow-hidden p-4"
-                          style={{ height: 200, background: "#f8fafc" }}
+                          className="relative overflow-hidden p-4 bg-foreground/5"
+                          style={{ height: 200 }}
                         >
                           <img
                             src={product.image}
@@ -755,8 +754,7 @@ export default function ITStoreDemo() {
                           {/* In cart overlay */}
                           {inCart && (
                             <div
-                              className="absolute inset-0 flex items-center justify-center"
-                              style={{ background: "rgba(255,255,255,0.7)" }}
+                              className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-xs"
                             >
                               <div
                                 className="flex items-center gap-3 px-4 py-2.5 rounded-full font-bold text-white shadow-lg"
@@ -764,7 +762,7 @@ export default function ITStoreDemo() {
                               >
                                 <button
                                   onClick={() => changeQty(product.id, -1)}
-                                  className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition"
+                                  className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition text-white"
                                   id={`itstore-minus-${product.id}`}
                                 >
                                   <Minus size={12} />
@@ -772,7 +770,7 @@ export default function ITStoreDemo() {
                                 <span className="min-w-[1.5rem] text-center text-sm">{qty}</span>
                                 <button
                                   onClick={() => changeQty(product.id, 1)}
-                                  className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition"
+                                  className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center hover:bg-white/50 transition text-white"
                                   id={`itstore-plus-${product.id}`}
                                 >
                                   <Plus size={12} />
@@ -785,7 +783,7 @@ export default function ITStoreDemo() {
                         {/* Info */}
                         <div className="flex flex-col flex-1 p-5 gap-3">
                           <div>
-                            <h3 className="font-extrabold text-slate-900 text-base leading-tight mb-1">
+                            <h3 className="font-extrabold text-foreground text-base leading-tight mb-1">
                               {getProductTranslation(product.id, "name", product.name)}
                             </h3>
                             <p
@@ -795,7 +793,7 @@ export default function ITStoreDemo() {
                               {t("itstore.speci")}: {getProductTranslation(product.id, "specs", product.specs)}
                             </p>
                              <div>
-                              <p className="text-sm text-slate-500 leading-relaxed inline">
+                              <p className="text-sm text-foreground/70 leading-relaxed inline">
                                 {(() => {
                                   const desc = getProductTranslation(product.id, "desc", product.description);
                                   const isExpanded = expandedProducts[product.id];
@@ -805,7 +803,7 @@ export default function ITStoreDemo() {
                                         {desc.slice(0, 110)}...{" "}
                                         <button
                                           onClick={() => toggleExpand(product.id)}
-                                          className="text-xs font-bold text-indigo-600 hover:text-indigo-850 transition ml-1 inline cursor-pointer"
+                                          className="text-xs font-bold text-indigo-500 hover:text-indigo-600 transition ml-1 inline cursor-pointer"
                                         >
                                           {t("itstore.read_more" as TranslationKey)}
                                         </button>
@@ -818,7 +816,7 @@ export default function ITStoreDemo() {
                                       {desc.length > 110 && (
                                         <button
                                           onClick={() => toggleExpand(product.id)}
-                                          className="text-xs font-bold text-indigo-600 hover:text-indigo-850 transition ml-1 inline cursor-pointer"
+                                          className="text-xs font-bold text-indigo-500 hover:text-indigo-600 transition ml-1 inline cursor-pointer"
                                         >
                                           {t("itstore.read_less" as TranslationKey)}
                                         </button>
@@ -831,7 +829,7 @@ export default function ITStoreDemo() {
                           </div>
 
                           <div className="mt-auto flex items-center justify-between gap-3">
-                            <div className="font-extrabold text-xl text-slate-900">
+                            <div className="font-extrabold text-xl text-foreground">
                               {money.format(product.price)}
                             </div>
                             {!inCart ? (
@@ -866,7 +864,7 @@ export default function ITStoreDemo() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full w-10 h-10 flex items-center justify-center border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full w-10 h-10 flex items-center justify-center border border-foreground/10 bg-transparent text-foreground/60 hover:text-foreground hover:bg-foreground/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   disabled={currentPage === 1}
                   onClick={() => {
                     setCurrentPage(prev => Math.max(1, prev - 1));
@@ -884,7 +882,7 @@ export default function ITStoreDemo() {
                       className={`w-10 h-10 rounded-full text-sm font-bold transition-all border cursor-pointer ${
                         active
                           ? "border-transparent text-white"
-                          : "text-slate-500 border-slate-200 hover:text-slate-800 hover:bg-slate-50"
+                          : "text-foreground/60 border-foreground/10 bg-transparent hover:text-foreground hover:bg-foreground/5"
                       }`}
                       style={active ? { background: "linear-gradient(135deg,#6366f1,#8b5cf6)" } : {}}
                       onClick={() => {
@@ -899,7 +897,7 @@ export default function ITStoreDemo() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="rounded-full w-10 h-10 flex items-center justify-center border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="rounded-full w-10 h-10 flex items-center justify-center border border-foreground/10 bg-transparent text-foreground/60 hover:text-foreground hover:bg-foreground/5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   disabled={currentPage === totalPages}
                   onClick={() => {
                     setCurrentPage(prev => Math.min(totalPages, prev + 1));
@@ -921,16 +919,15 @@ export default function ITStoreDemo() {
           >
             <div className="sticky top-24">
               <div
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm"
+                className="rounded-2xl border border-foreground/10 bg-background overflow-hidden shadow-sm"
               >
                 {/* Cart header */}
                 <div
-                  className="px-6 py-4 border-b border-slate-100 flex items-center justify-between"
-                  style={{ background: "linear-gradient(135deg,#f8f8ff,#eef2ff)" }}
+                  className="px-6 py-4 border-b border-foreground/10 flex items-center justify-between bg-foreground/5"
                 >
                   <div className="flex items-center gap-2">
                     <ShoppingCart size={18} style={{ color: "#6366f1" }} />
-                    <span className="font-extrabold text-slate-900 text-sm">{t("itstore.cart_title")}</span>
+                    <span className="font-extrabold text-foreground text-sm">{t("itstore.cart_title")}</span>
                   </div>
                   <span
                     className="px-2 py-0.5 rounded-full text-xs font-extrabold text-white"
@@ -941,12 +938,12 @@ export default function ITStoreDemo() {
                 </div>
 
                 {/* Cart items */}
-                <div className="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+                <div className="divide-y divide-foreground/10 max-h-80 overflow-y-auto">
                   <AnimatePresence>
                     {cartItems.length === 0 ? (
                       <motion.div
                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                        className="px-6 py-10 text-center text-slate-400 text-sm"
+                        className="px-6 py-10 text-center text-foreground/50 text-sm"
                       >
                         <ShoppingCart size={36} className="mx-auto mb-3 opacity-30" />
                         {t("itstore.cart_empty")}
@@ -964,7 +961,7 @@ export default function ITStoreDemo() {
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-12 h-12 rounded-xl object-cover border border-slate-100 flex-shrink-0"
+                            className="w-12 h-12 rounded-xl object-cover border border-foreground/10 flex-shrink-0"
                             loading="lazy"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src =
@@ -972,23 +969,23 @@ export default function ITStoreDemo() {
                             }}
                           />
                           <div className="flex-1 min-w-0">
-                            <div className="font-bold text-slate-900 text-xs leading-tight truncate">
+                            <div className="font-bold text-foreground text-xs leading-tight truncate">
                               {getProductTranslation(item.id, "name", item.name)}
                             </div>
-                            <div className="text-xs text-slate-400 mt-0.5">{money.format(item.price)}</div>
+                            <div className="text-xs text-foreground/60 mt-0.5">{money.format(item.price)}</div>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => changeQty(item.id, -1)}
-                              className="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-red-300 hover:text-red-500 transition"
+                              className="w-6 h-6 rounded-full border border-foreground/10 flex items-center justify-center text-foreground/60 hover:border-red-400 hover:text-red-500 transition-colors"
                               id={`cart-minus-${item.id}`}
                             >
                               {item.quantity === 1 ? <Trash2 size={10} /> : <Minus size={10} />}
                             </button>
-                            <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
+                            <span className="text-xs font-bold w-4 text-center text-foreground">{item.quantity}</span>
                             <button
                               onClick={() => changeQty(item.id, 1)}
-                              className="w-6 h-6 rounded-full border border-slate-200 flex items-center justify-center text-slate-500 hover:border-indigo-300 hover:text-indigo-500 transition"
+                              className="w-6 h-6 rounded-full border border-foreground/10 flex items-center justify-center text-foreground/60 hover:border-indigo-400 hover:text-indigo-500 transition-colors"
                               id={`cart-plus-${item.id}`}
                             >
                               <Plus size={10} />
@@ -1001,16 +998,16 @@ export default function ITStoreDemo() {
                 </div>
 
                 {/* Cart summary */}
-                <div className="px-6 py-4 border-t border-slate-100 space-y-2">
-                  <div className="flex justify-between text-sm text-slate-500">
+                <div className="px-6 py-4 border-t border-foreground/10 space-y-2">
+                  <div className="flex justify-between text-sm text-foreground/70">
                     <span>{t("itstore.cart_subtotal")}</span>
-                    <span className="font-semibold">{money.format(subtotal)}</span>
+                    <span className="font-semibold text-foreground">{money.format(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-sm text-slate-500">
+                  <div className="flex justify-between text-sm text-foreground/70">
                     <span>{t("itstore.cart_shipping")}</span>
-                    <span className="font-semibold text-emerald-600">{t("itstore.cart_shipping_free")}</span>
+                    <span className="font-semibold text-emerald-500">{t("itstore.cart_shipping_free")}</span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-100">
+                  <div className="flex justify-between text-base font-extrabold text-foreground pt-2 border-t border-foreground/10">
                     <span>{t("itstore.cart_total")}</span>
                     <span style={{ color: "#6366f1" }}>{money.format(subtotal)}</span>
                   </div>
@@ -1031,34 +1028,34 @@ export default function ITStoreDemo() {
 
         {/* ── Invoice Dialog ─────────────────────────────────────────────── */}
         <Dialog open={invoiceOpen} onOpenChange={setInvoiceOpen}>
-          <DialogContent className="max-w-md" id="itstore-invoice-dialog">
+          <DialogContent className="max-w-md bg-background text-foreground border-foreground/10" id="itstore-invoice-dialog">
             <DialogHeader>
-              <DialogTitle className="font-extrabold text-xl flex items-center gap-2">
+              <DialogTitle className="font-extrabold text-xl flex items-center gap-2 text-foreground">
                 <ReceiptText size={20} style={{ color: "#6366f1" }} />
                 {t("itstore.receipt_title")}
               </DialogTitle>
-              <DialogDescription>
-                {t("itstore.receipt_id")}: <strong>{order?.orderId}</strong>
+              <DialogDescription className="text-foreground/70">
+                {t("itstore.receipt_id")}: <strong className="text-foreground">{order?.orderId}</strong>
                 <br />
                 {t("itstore.receipt_time")}: {order?.orderedAt}
               </DialogDescription>
             </DialogHeader>
             {order && (
               <div className="space-y-3 mt-2">
-                <div className="divide-y divide-slate-100 rounded-xl border border-slate-200 overflow-hidden">
+                <div className="divide-y divide-foreground/10 rounded-xl border border-foreground/10 overflow-hidden">
                   {order.items.map((item) => (
-                    <div key={item.id} className="flex items-center gap-3 px-4 py-3">
+                    <div key={item.id} className="flex items-center gap-3 px-4 py-3 bg-foreground/5">
                       <img
                         src={item.image}
                         alt={item.name}
-                        className="w-10 h-10 rounded-lg object-cover border border-slate-100 flex-shrink-0"
+                        className="w-10 h-10 rounded-lg object-cover border border-foreground/10 flex-shrink-0"
                         loading="lazy"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-bold text-slate-900 leading-tight truncate">
+                        <div className="text-xs font-bold text-foreground leading-tight truncate">
                           {getProductTranslation(item.id, "name", item.name)}
                         </div>
-                        <div className="text-xs text-slate-400">{money.format(item.price)} × {item.quantity}</div>
+                        <div className="text-xs text-foreground/60">{money.format(item.price)} × {item.quantity}</div>
                       </div>
                       <div className="text-xs font-extrabold" style={{ color: "#6366f1" }}>
                         {money.format(item.price * item.quantity)}
@@ -1066,23 +1063,23 @@ export default function ITStoreDemo() {
                     </div>
                   ))}
                 </div>
-                <div className="rounded-xl border border-slate-200 px-4 py-3 space-y-1.5">
-                  <div className="flex justify-between text-sm text-slate-500">
+                <div className="rounded-xl border border-foreground/10 px-4 py-3 space-y-1.5 bg-background">
+                  <div className="flex justify-between text-sm text-foreground/70">
                     <span>{t("itstore.cart_subtotal")}</span>
-                    <span>{money.format(order.subtotal)}</span>
+                    <span className="text-foreground font-semibold">{money.format(order.subtotal)}</span>
                   </div>
-                  <div className="flex justify-between text-sm text-slate-500">
+                  <div className="flex justify-between text-sm text-foreground/70">
                     <span>{t("itstore.cart_shipping")}</span>
-                    <span className="text-emerald-600 font-semibold">{t("itstore.cart_shipping_free")}</span>
+                    <span className="text-emerald-500 font-semibold">{t("itstore.cart_shipping_free")}</span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-slate-900 border-t border-slate-100 pt-1.5">
+                  <div className="flex justify-between text-base font-extrabold text-foreground border-t border-foreground/10 pt-1.5">
                     <span>{t("itstore.cart_total")}</span>
                     <span style={{ color: "#6366f1" }}>{money.format(order.total)}</span>
                   </div>
                 </div>
                 <Button
                   variant="outline"
-                  className="w-full font-bold"
+                  className="w-full font-bold border-foreground/10 text-foreground hover:bg-foreground/5 transition-colors"
                   onClick={() => setInvoiceOpen(false)}
                   id="itstore-close-invoice"
                 >
@@ -1096,4 +1093,4 @@ export default function ITStoreDemo() {
       </div>
     </>
   );
-}
+}//

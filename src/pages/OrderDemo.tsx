@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import botnoiAirLogo from "../assets/BOTNOI-AIR-logo.png";
 import botnoiRestaurantLogo from "../assets/BOTNOI-Restaurant-logo.png";
+import AppFooter from "../components/AppFooter";
 
 export type ProjectCategory = 
   | "education"
@@ -327,7 +328,7 @@ export default function OrderDemo() {
 
   return (
     <div
-      className="min-h-[calc(100vh-68px)] w-full flex flex-col pb-16 selection:bg-primary selection:text-primary-foreground relative z-10"
+      className="min-h-[calc(100vh-68px)] w-full flex flex-col pb-40 selection:bg-primary selection:text-primary-foreground relative z-10"
       aria-label="All Demos Showcase Portal"
     >
       {/* 1. Page Header & Hero */}
@@ -409,8 +410,7 @@ export default function OrderDemo() {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-8 flex-1 space-y-12" aria-label="All Demo Projects" id="all-demos-main">
-
+      <main className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-8 mb-16 flex-1 space-y-12" aria-label="All Demo Projects" id="all-demos-main">
         {totalResults === 0 ? (
           /* Empty state */
           <div className="text-center py-20 bg-card border border-border rounded-3xl p-8 max-w-md mx-auto shadow-sm">
@@ -468,6 +468,8 @@ export default function OrderDemo() {
           </>
         )}
       </main>
+
+      <AppFooter />
     </div>
   );
 }

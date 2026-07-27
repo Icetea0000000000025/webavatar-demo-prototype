@@ -2,6 +2,7 @@ import { useState, useEffect, useLayoutEffect } from 'react';
 import type { ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './lib/LanguageContext';
+import { ThemeProvider } from './lib/ThemeContext';
 import { MotionConfig } from 'framer-motion';
 import AppNavbar from './components/AppNavbar';
 import PersistentBackground from './components/PersistentBackground';
@@ -54,36 +55,38 @@ function App() {
   }, []);
 
   return (
-    <LanguageProvider>
-      <MotionConfig reducedMotion={isMobileOrTablet ? "always" : "user"}>
-        <BrowserRouter>
-          <ScrollToTop />
-          <div className="app-container">
-            <PersistentBackground />
-            <AppNavbar />
+    <ThemeProvider>
+      <LanguageProvider>
+        <MotionConfig reducedMotion={isMobileOrTablet ? "always" : "user"}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <div className="app-container">
+              <PersistentBackground />
+              <AppNavbar />
 
-            <main className="main-content">
-              <Routes>
-                {/* Static admin/support routes */}
-                <Route path="/flight-demo/admin" element={<FlightAdmin />} />
-                <Route path="/food-demo" element={<FoodOrderDemo />} />
-                <Route path="/food-demo/admin" element={<OrderAdmin />} />
-                <Route path="/it-store-demo/admin" element={<ITStoreAdmin />} />
+              <main className="main-content">
+                <Routes>
+                  {/* Static admin/support routes */}
+                  <Route path="/flight-demo/admin" element={<FlightAdmin />} />
+                  <Route path="/food-demo" element={<FoodOrderDemo />} />
+                  <Route path="/food-demo/admin" element={<OrderAdmin />} />
+                  <Route path="/it-store-demo/admin" element={<ITStoreAdmin />} />
 
-                {/* Dynamic pages based on pagesConfig */}
-                {pagesConfig.map(page => (
-                  page.enabled && pageComponents[page.path] ? (
-                    <Route key={page.path} path={page.path} element={pageComponents[page.path]} />
-                  ) : null
-                ))}
-              </Routes>
-            </main>
+                  {/* Dynamic pages based on pagesConfig */}
+                  {pagesConfig.map(page => (
+                    page.enabled && pageComponents[page.path] ? (
+                      <Route key={page.path} path={page.path} element={pageComponents[page.path]} />
+                    ) : null
+                  ))}
+                </Routes>
+              </main>
 
-            <SpaNavListener />
-          </div>
-        </BrowserRouter>
-      </MotionConfig>
-    </LanguageProvider>
+              <SpaNavListener />
+            </div>
+          </BrowserRouter>
+        </MotionConfig>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

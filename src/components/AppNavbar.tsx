@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useTranslation } from '../lib/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
+import ThemeToggle from './ThemeToggle';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import textLogoNew from '../assets/Asset-5-8.png';
 import { pagesConfig } from '../config/pages';
@@ -11,6 +13,7 @@ export default function AppNavbar() {
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { language, setLanguage, t } = useTranslation();
+  const { isDark } = useTheme();
 
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [mobileLangMenuOpen, setMobileLangMenuOpen] = useState(false);
@@ -88,21 +91,29 @@ export default function AppNavbar() {
     'rgba(250, 251, 252, 0.55)',
     'rgba(250, 251, 252, 0.88)'
   ]);
+  const darkNavBg = useTransform(scrollY, [0, 50], [
+    'rgba(17, 24, 39, 0.75)',
+    'rgba(17, 24, 39, 0.92)'
+  ]);
   const darkBg = useTransform(scrollY, [0, 50], [
     'rgba(12, 10, 9, 0.55)',
     'rgba(12, 10, 9, 0.85)'
   ]);
-  const navbarBg = isSitePage ? darkBg : lightBg;
+  const navbarBg = isSitePage ? darkBg : (isDark ? darkNavBg : lightBg);
 
   const lightBorder = useTransform(scrollY, [0, 50], [
     'rgba(228, 228, 231, 0.25)',
     'rgba(228, 228, 231, 0.55)'
   ]);
+  const darkNavBorder = useTransform(scrollY, [0, 50], [
+    'rgba(255, 255, 255, 0.08)',
+    'rgba(255, 255, 255, 0.18)'
+  ]);
   const darkBorder = useTransform(scrollY, [0, 50], [
     'rgba(239, 68, 68, 0.12)',
     'rgba(239, 68, 68, 0.35)'
   ]);
-  const navbarBorder = isSitePage ? darkBorder : lightBorder;
+  const navbarBorder = isSitePage ? darkBorder : (isDark ? darkNavBorder : lightBorder);
 
   // Animation variants
   const logoVariants = {
@@ -241,6 +252,9 @@ export default function AppNavbar() {
           transition={{ delay: 0.25, duration: 0.5 }}
           style={{ marginLeft: '8rem' }}
         >
+          {/* Dark / Light Theme Toggle */}
+          <ThemeToggle isSitePage={isSitePage} />
+
           {/* Language Switch Toggle */}
           <div style={{ position: 'relative', zIndex: 10 }}>
             <button
@@ -251,14 +265,24 @@ export default function AppNavbar() {
                 justifyContent: 'space-between',
                 gap: '0.5rem',
                 minWidth: '95px',
-                backgroundColor: isSitePage ? 'rgba(28, 25, 23, 0.5)' : 'rgba(244, 244, 245, 0.9)',
+                backgroundColor: isSitePage
+                  ? 'rgba(28, 25, 23, 0.5)'
+                  : isDark
+                  ? 'rgba(30, 41, 59, 0.8)'
+                  : 'rgba(244, 244, 245, 0.9)',
                 borderRadius: '10px',
                 padding: '0.45rem 1rem',
-                border: `1px solid ${isSitePage ? 'rgba(244, 63, 94, 0.2)' : 'rgba(228, 228, 231, 0.8)'}`,
+                border: `1px solid ${
+                  isSitePage
+                    ? 'rgba(244, 63, 94, 0.2)'
+                    : isDark
+                    ? 'rgba(255, 255, 255, 0.15)'
+                    : 'rgba(228, 228, 231, 0.8)'
+                }`,
                 cursor: 'pointer',
                 fontSize: '0.75rem',
                 fontWeight: '700',
-                color: isSitePage ? '#FFFFFF' : 'var(--primary)',
+                color: isSitePage ? '#FFFFFF' : isDark ? '#F8FAFC' : 'var(--primary)',
                 transition: 'all 0.2s',
               }}
               id="lang-dropdown-trigger"
@@ -306,9 +330,19 @@ export default function AppNavbar() {
                     position: 'absolute',
                     top: 'calc(100% + 0.5rem)',
                     right: 0,
-                    backgroundColor: isSitePage ? 'rgba(28, 25, 23, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                    backgroundColor: isSitePage
+                      ? 'rgba(28, 25, 23, 0.95)'
+                      : isDark
+                      ? 'rgba(15, 23, 42, 0.95)'
+                      : 'rgba(255, 255, 255, 0.95)',
                     backdropFilter: 'blur(12px)',
-                    border: `1px solid ${isSitePage ? 'rgba(244, 63, 94, 0.15)' : 'rgba(228, 228, 231, 0.85)'}`,
+                    border: `1px solid ${
+                      isSitePage
+                        ? 'rgba(244, 63, 94, 0.15)'
+                        : isDark
+                        ? 'rgba(255, 255, 255, 0.15)'
+                        : 'rgba(228, 228, 231, 0.85)'
+                    }`,
                     borderRadius: '12px',
                     padding: '0.4rem',
                     boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
@@ -336,8 +370,24 @@ export default function AppNavbar() {
                           padding: '0.45rem 0.6rem',
                           borderRadius: '8px',
                           border: 'none',
-                          backgroundColor: active ? (isSitePage ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.08)') : 'transparent',
-                          color: active ? (isSitePage ? '#FFFFFF' : 'var(--primary)') : (isSitePage ? '#A1A1AA' : 'var(--muted-foreground)'),
+                          backgroundColor: active
+                            ? isSitePage
+                              ? 'rgba(239, 68, 68, 0.15)'
+                              : isDark
+                              ? 'rgba(99, 102, 241, 0.25)'
+                              : 'rgba(99, 102, 241, 0.08)'
+                            : 'transparent',
+                          color: active
+                            ? isSitePage
+                              ? '#FFFFFF'
+                              : isDark
+                              ? '#818CF8'
+                              : 'var(--primary)'
+                            : isSitePage
+                            ? '#A1A1AA'
+                            : isDark
+                            ? '#94A3B8'
+                            : 'var(--muted-foreground)',
                           fontSize: '0.75rem',
                           fontWeight: active ? '700' : '500',
                           textAlign: 'left',
@@ -419,27 +469,41 @@ export default function AppNavbar() {
             >
               {/* Drawer header */}
               <div className="mobile-drawer-header">
-<span className="mobile-drawer-logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', lineHeight: 1, verticalAlign: 'middle' }}>
-                <img src={textLogoNew} alt="Botnoi" style={{ height: '1.15rem', objectFit: 'contain', verticalAlign: 'middle' }} />
+                <span className="mobile-drawer-logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', lineHeight: 1, verticalAlign: 'middle' }}>
+                  <img src={textLogoNew} alt="Botnoi" style={{ height: '1.15rem', objectFit: 'contain', verticalAlign: 'middle' }} />
                   <span>Labs</span>
                 </span>
 
-                {/* Language Switch Toggle for Mobile */}
-                <div style={{ position: 'relative', marginRight: '1rem', zIndex: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginRight: '0.5rem' }}>
+                  {/* Theme Toggle for Mobile */}
+                  <ThemeToggle isSitePage={isSitePage} />
+
+                  {/* Language Switch Toggle for Mobile */}
+                  <div style={{ position: 'relative', zIndex: 10 }}>
                   <button
                     onClick={() => setMobileLangMenuOpen(!mobileLangMenuOpen)}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.45rem',
-                      backgroundColor: isSitePage ? 'rgba(28, 25, 23, 0.5)' : 'rgba(244, 244, 245, 0.9)',
+                      backgroundColor: isSitePage
+                        ? 'rgba(28, 25, 23, 0.5)'
+                        : isDark
+                        ? 'rgba(30, 41, 59, 0.8)'
+                        : 'rgba(244, 244, 245, 0.9)',
                       borderRadius: '10px',
                       padding: '0.4rem 0.8rem',
-                      border: `1px solid ${isSitePage ? 'rgba(244, 63, 94, 0.2)' : 'rgba(228, 228, 231, 0.8)'}`,
+                      border: `1px solid ${
+                        isSitePage
+                          ? 'rgba(244, 63, 94, 0.2)'
+                          : isDark
+                          ? 'rgba(255, 255, 255, 0.15)'
+                          : 'rgba(228, 228, 231, 0.8)'
+                      }`,
                       cursor: 'pointer',
                       fontSize: '0.7rem',
                       fontWeight: '700',
-                      color: isSitePage ? '#FFFFFF' : 'var(--primary)',
+                      color: isSitePage ? '#FFFFFF' : isDark ? '#F8FAFC' : 'var(--primary)',
                       transition: 'all 0.2s',
                     }}
                     id="mobile-lang-dropdown-trigger"
@@ -487,9 +551,19 @@ export default function AppNavbar() {
                           position: 'absolute',
                           top: 'calc(100% + 0.5rem)',
                           right: 0,
-                          backgroundColor: isSitePage ? 'rgba(28, 25, 23, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                          backgroundColor: isSitePage
+                            ? 'rgba(28, 25, 23, 0.95)'
+                            : isDark
+                            ? 'rgba(15, 23, 42, 0.95)'
+                            : 'rgba(255, 255, 255, 0.95)',
                           backdropFilter: 'blur(12px)',
-                          border: `1px solid ${isSitePage ? 'rgba(244, 63, 94, 0.15)' : 'rgba(228, 228, 231, 0.85)'}`,
+                          border: `1px solid ${
+                            isSitePage
+                              ? 'rgba(244, 63, 94, 0.15)'
+                              : isDark
+                              ? 'rgba(255, 255, 255, 0.15)'
+                              : 'rgba(228, 228, 231, 0.85)'
+                          }`,
                           borderRadius: '12px',
                           padding: '0.4rem',
                           boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
@@ -517,8 +591,24 @@ export default function AppNavbar() {
                                 padding: '0.4rem 0.5rem',
                                 borderRadius: '8px',
                                 border: 'none',
-                                backgroundColor: active ? (isSitePage ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.08)') : 'transparent',
-                                color: active ? (isSitePage ? '#FFFFFF' : 'var(--primary)') : (isSitePage ? '#A1A1AA' : 'var(--muted-foreground)'),
+                                backgroundColor: active
+                                  ? isSitePage
+                                    ? 'rgba(239, 68, 68, 0.15)'
+                                    : isDark
+                                    ? 'rgba(99, 102, 241, 0.25)'
+                                    : 'rgba(99, 102, 241, 0.08)'
+                                  : 'transparent',
+                                color: active
+                                  ? isSitePage
+                                    ? '#FFFFFF'
+                                    : isDark
+                                    ? '#818CF8'
+                                    : 'var(--primary)'
+                                  : isSitePage
+                                  ? '#A1A1AA'
+                                  : isDark
+                                  ? '#94A3B8'
+                                  : 'var(--muted-foreground)',
                                 fontSize: '0.7rem',
                                 fontWeight: active ? '700' : '500',
                                 textAlign: 'left',
@@ -545,15 +635,16 @@ export default function AppNavbar() {
                     </>
                   )}
                 </div>
-
-                <button
-                  className="mobile-drawer-close"
-                  onClick={closeDrawer}
-                  aria-label="Close menu"
-                >
-                  ✕
-                </button>
               </div>
+
+              <button
+                className="mobile-drawer-close"
+                onClick={closeDrawer}
+                aria-label="Close menu"
+              >
+                ✕
+              </button>
+            </div>
 
               {/* Nav links */}
               <nav aria-label="Mobile Navigation">

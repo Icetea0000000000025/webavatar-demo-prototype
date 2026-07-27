@@ -115,7 +115,7 @@
 }
 
 .hero-mockup {
-  background: #FFFFFF;
+  background: var(--card);
   border-radius: 20px;
   overflow: hidden;
   display: flex;
@@ -124,7 +124,7 @@
 
 .mockup-header {
   height: 44px;
-  background: #FAFBFC;
+  background: var(--muted);
   display: flex;
   align-items: center;
   padding: 0 1.25rem;
@@ -342,7 +342,7 @@
 .bento-icon-box {
   width: 48px;
   height: 48px;
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   display: flex;
@@ -365,7 +365,7 @@
   width: auto; /* Changed from 48px to auto so your logos fit nicely */
   padding: 0 1.25rem; /* Adds side padding for the landscape images */
   height: 48px;
-  background: #FFFFFF;
+  background: var(--card);
   border: 2px solid var(--border);
   border-radius: 12px;
   display: flex;
@@ -378,7 +378,7 @@
 }
 
 .bento-card:hover .bento-icon-alt-box {
-  background: #FFFFFF; /* Keeps background white */
+  background: var(--card);
   color: var(--primary); /* Keeps icon/text color visible */
   border: 2px solid var(--border);
   border-color: var(--primary); /* Changes border color on hover */
@@ -436,7 +436,7 @@
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   padding: 1.5rem;
   border-radius: 14px;
@@ -472,6 +472,39 @@
   color: var(--muted-foreground);
   margin: 0;
   line-height: 1.5;
+}
+
+/* Explicit Dark Mode Overrides for WebAvatar Engine Cards (Fields 01, 02, 03) */
+.dark .glass-panel::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+}
+
+.dark .feature-item {
+  background: #111827 !important;
+  border-color: #1F2937 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .feature-item-title {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 1.02rem !important;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark .feature-item-desc {
+  color: #E2E8F0 !important;
+  font-size: 0.88rem !important;
+  line-height: 1.6 !important;
+  opacity: 0.95;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark .feature-check {
+  color: #818CF8 !important;
 }
 
 /* Pricing Section Overhaul */
@@ -654,7 +687,7 @@
 
 /* Technical / Corporate Footer */
 .tech-footer {
-  background: #FFFFFF;
+  background: var(--card);
   border-top: 1px solid var(--border);
   padding: 5rem 3rem 2.5rem;
   z-index: 10;
@@ -783,7 +816,7 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #FFFFFF;
+  background: var(--card);
   border: 2px solid var(--border);
   z-index: 2;
   transition: border-color 0.3s, background-color 0.3s;
@@ -804,7 +837,7 @@
 }
 
 .timeline-panel {
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.75rem;
@@ -840,7 +873,7 @@
 }
 
 .competency-card {
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 2.25rem;
@@ -978,7 +1011,7 @@
 }
 
 .contact-info-card {
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 1.75rem;
@@ -1047,7 +1080,7 @@
 }
 
 .form-control {
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 0.8rem 1.1rem;
@@ -1081,7 +1114,7 @@ textarea.form-control {
 .faq-item {
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #FFFFFF;
+  background: var(--card);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
@@ -1134,7 +1167,7 @@ textarea.form-control {
   border-radius: 14px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
-  background: #FFFFFF;
+  background: var(--card);
   margin-top: 2rem;
 }
 
@@ -1146,7 +1179,7 @@ textarea.form-control {
 }
 
 .ledger-table-container th {
-  background: #FAFBFC;
+  background: var(--muted);
   font-weight: 700;
   color: var(--card-foreground);
   padding: 1rem 1.25rem;
@@ -1319,12 +1352,21 @@ textarea.form-control {
   border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-/* High contrast overrides for default light navbar text */
-.navbar:not(.site2026-theme) .nav-item a {
+/* High contrast overrides for default light navbar text (only in light mode) */
+:root:not(.dark) .navbar:not(.site2026-theme) .nav-item a {
   color: #3F3F46; /* Zinc-700 instead of Zinc-500 */
 }
-.navbar:not(.site2026-theme) .nav-item a:hover {
+:root:not(.dark) .navbar:not(.site2026-theme) .nav-item a:hover {
   color: #09090B;
+}
+
+/* Explicit Dark Mode Navbar link contrast adjustments */
+.dark .navbar:not(.site2026-theme) .nav-item a {
+  color: #CBD5E1 !important;
+}
+.dark .navbar:not(.site2026-theme) .nav-item a:hover,
+.dark .navbar:not(.site2026-theme) .nav-item.active-link a {
+  color: #FFFFFF !important;
 }
 
 /* Add text-shadow to make white text on lighter activity card background highly readable */
