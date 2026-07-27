@@ -217,8 +217,8 @@ export default function FoodOrderDemo() {
       <AnimatePresence>
         {!ready && <PageSkeleton variant="order" />}
       </AnimatePresence>
-      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground page-grid">
-      <header className="relative z-20 border-b border-stone-200 bg-stone-50/50">
+      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background/50 backdrop-blur-sm text-foreground page-grid relative z-10">
+      <header className="relative z-20 border-b border-stone-200/80 bg-stone-50/40 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
           <Link to="/food-demo" className="flex items-center gap-2.5">
             <img src={botnoiLogo} alt="Botnoi Restaurant" className="h-10 w-auto object-contain" />

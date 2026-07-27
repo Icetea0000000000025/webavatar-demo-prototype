@@ -80,7 +80,7 @@ const projectData: HouseItem[] = [
   { id: 3, code: 'TN03', name: '03-controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#059669', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
   { id: 4, code: 'TN04', name: '04-the-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#1e293b', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
   { id: 5, code: 'TN05', name: '05-aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#78350f', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 6, code: 'TN06', name: '06-lo-fi-homebodies', style: 'Glass Contemporary', type: 'flight', color: '#0284c7', progress: 60, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 6, code: 'TN06', name: '06-lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
   // Team 7 (Ours) - Lovable deployed app
   {
     id: 7,
@@ -110,7 +110,7 @@ const projectData: HouseItem[] = [
 
 // TN codes whose descriptions should be hidden/removed
 const NO_DESC_CODES = new Set([
-  'TN02', 'TN06', 'TN08', 'TN09', 'TN11', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN19', 'TN20'
+  'TN02', 'TN08', 'TN09', 'TN11', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN19', 'TN20'
 ]);
 
 // Custom prompt description keys for active TN projects
@@ -119,6 +119,7 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
   TN03: 'showcase.desc_tn03',
   TN04: 'showcase.desc_tn04',
   TN05: 'showcase.desc_tn05',
+  TN06: 'showcase.desc_tn06',
   TN07: 'showcase.desc_tn07',
   TN10: 'showcase.desc_tn10',
   TN14: 'showcase.desc_tn14',
