@@ -547,57 +547,57 @@ export default function FoodOrderDemo() {
       </footer>
 
       <Dialog open={receiptOpen} onOpenChange={setReceiptOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-3xl border-stone-200 p-0 sm:max-w-md text-stone-800">
+        <DialogContent className="max-h-[90vh] overflow-y-auto rounded-3xl border-stone-200 dark:border-emerald-900/50 p-0 sm:max-w-md bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-100">
           {receipt && (
             <div className="receipt-paper p-6 sm:p-8 relative">
               <DialogHeader className="items-center text-center">
                 <div className="mb-3 grid size-14 place-items-center rounded-full bg-emerald-500 text-white shadow-md">
                   <Check className="size-7" />
                 </div>
-                <DialogTitle className="font-display text-2xl text-stone-900 font-black tracking-tight">
+                <DialogTitle className="font-display text-2xl text-stone-900 dark:text-white font-black tracking-tight">
                   {language === 'en' ? 'Order Successful!' : 'สั่งซื้อสำเร็จ!'}
                 </DialogTitle>
-                <DialogDescription className="font-semibold text-stone-500 text-xs">
+                <DialogDescription className="font-semibold text-stone-500 dark:text-stone-400 text-xs">
                   {language === 'en' ? 'The kitchen has received your order.' : 'ครัวได้รับออเดอร์ของคุณแล้ว'}
                 </DialogDescription>
               </DialogHeader>
-              <div className="my-6 border-y border-dashed border-stone-200 py-4 text-center">
-                <p className="font-display text-lg font-bold text-stone-900 tracking-wide">BOTNOI RESTAURANT</p>
-                <p className="mt-1 text-xs text-stone-500">
+              <div className="my-6 border-y border-dashed border-stone-200 dark:border-stone-700 py-4 text-center">
+                <p className="font-display text-lg font-bold text-stone-900 dark:text-white tracking-wide">BOTNOI RESTAURANT</p>
+                <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
                   {t("food.receipt_title")} · {t("food.receipt_id")} {receipt.orderId}
                 </p>
-                <p className="text-xs text-stone-500 font-mono mt-0.5">{receipt.orderedAt}</p>
+                <p className="text-xs text-stone-500 dark:text-stone-400 font-mono mt-0.5">{receipt.orderedAt}</p>
               </div>
               <div className="space-y-3">
                 {receipt.items.map((item) => {
                   const name = getItemName(item);
                   return (
-                    <div key={item.id} className="flex justify-between gap-4 text-xs font-bold text-stone-700">
+                    <div key={item.id} className="flex justify-between gap-4 text-xs font-bold text-stone-700 dark:text-stone-200">
                       <span>
                         {item.quantity} × {name}
                       </span>
-                      <span className="shrink-0 font-bold text-stone-900 font-mono">
+                      <span className="shrink-0 font-bold text-stone-900 dark:text-white font-mono">
                         {money.format(item.price * item.quantity)}
                       </span>
                     </div>
                   );
                 })}
               </div>
-              <div className="mt-5 space-y-2 border-t border-dashed border-stone-200 pt-4 text-xs font-bold">
-                <div className="flex justify-between text-stone-500">
+              <div className="mt-5 space-y-2 border-t border-dashed border-stone-200 dark:border-stone-700 pt-4 text-xs font-bold">
+                <div className="flex justify-between text-stone-500 dark:text-stone-400">
                   <span>{t("food.cart_subtotal")}</span>
                   <span className="font-mono">{money.format(receipt.subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-stone-500">
+                <div className="flex justify-between text-stone-500 dark:text-stone-400">
                   <span>{t("food.cart_service")}</span>
                   <span className="font-mono">{money.format(receipt.serviceFee)}</span>
                 </div>
-                <div className="flex justify-between pt-3 border-t border-stone-100 font-display text-xl font-bold">
+                <div className="flex justify-between pt-3 border-t border-stone-100 dark:border-stone-800 font-display text-xl font-bold text-stone-900 dark:text-white">
                   <span>{t("food.cart_total")}</span>
-                  <span className="text-emerald-600 font-mono">{money.format(receipt.total)}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-mono">{money.format(receipt.total)}</span>
                 </div>
               </div>
-              <div className="mt-6 rounded-2xl bg-stone-100/70 border border-stone-200/20 p-4 text-center text-xs text-stone-700 font-bold">
+              <div className="mt-6 rounded-2xl bg-stone-100/70 dark:bg-stone-800/70 border border-stone-200/20 p-4 text-center text-xs text-stone-700 dark:text-stone-200 font-bold">
                 {language === 'en' ? 'Thank you for your order! Enjoy your meal.' : 'ขอบคุณที่อุดหนุน ขอให้อร่อยกับทุกคำ'}
               </div>
               <Button
