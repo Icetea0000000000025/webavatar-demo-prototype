@@ -37,8 +37,8 @@
   --color-cta-foreground: var(--cta-foreground);
   --color-success: var(--success);
 
-  --font-sans: "Prompt", "Roboto", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Prompt", "Roboto", sans-serif;
+  --font-sans: "Noto Sans", "Noto Sans Thai", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Noto Sans", "Noto Sans Thai", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
 }
@@ -163,7 +163,7 @@
     color: var(--primary);
     text-decoration: none;
     transition: var(--transition-fast);
-    font-family: "Anuphan", sans-serif;
+    font-family: var(--font-sans);
   }
 
   a:hover {
@@ -171,7 +171,7 @@
   }
 
   div {
-    font-family: "Anuphan", sans-serif;
+    font-family: var(--font-sans);
   }
 
   /* Focus States for Web Interface Guidelines */

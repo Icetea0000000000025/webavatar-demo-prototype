@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
 import {
   Search,
@@ -18,6 +18,8 @@ import {
   Coffee,
   Dumbbell,
   Clock,
+  SlidersHorizontal,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import botnoiAirLogo from "../assets/BOTNOI-AIR-logo.png";
@@ -285,13 +287,17 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function OrderDemo() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
-  // Split filtered results into two groups
+  const [statusFilter, setStatusFilter] = useState<"all" | "deployed" | "pending">("all");
+  const [sortBy, setSortBy] = useState<"code" | "progress">("code");
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
-    const all = projectData.filter(house => {
+    const allFiltered = projectData.filter(house => {
       let overviewText = "";
       if (house.id === -1) {
         overviewText = t("showcase.desc_flight");
@@ -313,16 +319,53 @@ export default function OrderDemo() {
 
       const matchesCategory = selectedCategory === "all" || house.type === selectedCategory;
 
-      return matchesSearch && matchesCategory;
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "deployed" && isHouseDeployed(house)) ||
+        (statusFilter === "pending" && !isHouseDeployed(house));
+
+      return matchesSearch && matchesCategory && matchesStatus;
     });
 
+    const sandboxes = allFiltered.filter(h => h.code === 'SANDBOX');
+    const projects = allFiltered.filter(h => h.code !== 'SANDBOX');
+
+    // Apply sorting to project demos
+    if (sortBy === "progress") {
+      projects.sort((a, b) => b.progress - a.progress || a.id - b.id);
+    } else {
+      projects.sort((a, b) => a.id - b.id);
+    }
+
     return {
-      sandboxDemos: all.filter(h => h.code === 'SANDBOX'),
-      projectDemos: all.filter(h => h.code !== 'SANDBOX'),
+      sandboxDemos: sandboxes,
+      projectDemos: projects,
     };
-  }, [searchQuery, selectedCategory, t]);
+  }, [searchQuery, selectedCategory, statusFilter, sortBy, t]);
 
   const totalResults = sandboxDemos.length + projectDemos.length;
+
+  useEffect(() => {
+    if (!isFilterModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsFilterModalOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isFilterModalOpen]);
+
+  useEffect(() => {
+    if (isFilterModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFilterModalOpen]);
 
   return (
     <div
@@ -351,60 +394,123 @@ export default function OrderDemo() {
 
       {/* 2. Search & Filtering Controls */}
       <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-10" aria-label="Search and Filter Demos" id="search-filter-section">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
-          {/* Search Input */}
-          <div className="relative w-full lg:max-w-md">
-            <label htmlFor="demo-search-input" className="sr-only">
-              {t('showcase.search_placeholder')}
-            </label>
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <input
-              id="demo-search-input"
-              name="searchQuery"
-              type="text"
-              aria-label={t('showcase.search_placeholder')}
-              placeholder={t('showcase.search_placeholder')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-muted/30 border border-border focus:border-primary rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
-            />
+        <div className="flex flex-col gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full">
+            {/* Search Input */}
+            <div className="relative w-full lg:max-w-xs shrink-0">
+              <label htmlFor="demo-search-input" className="sr-only">
+                {t('showcase.search_placeholder')}
+              </label>
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <input
+                id="demo-search-input"
+                name="searchQuery"
+                type="text"
+                aria-label={t('showcase.search_placeholder')}
+                placeholder={t('showcase.search_placeholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-muted/30 border border-border focus:border-primary rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
+              />
+            </div>
+
+            {/* Quick Filters (Middle) */}
+            <div className="flex flex-nowrap items-center justify-start lg:justify-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 py-0.5 flex-1 mx-2" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+              {[
+                { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+                { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
+                { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
+                { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
+                { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
+                { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+              ].map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                const Icon = cat.icon;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition-all flex items-center gap-1.5 cursor-pointer border shrink-0 ${
+                      isActive
+                        ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                        : "text-muted-foreground bg-muted/30 hover:bg-muted/50 hover:text-foreground border-border"
+                    }`}
+                  >
+                    <Icon className="size-3.5 shrink-0" />
+                    <span>{t(cat.translationKey as TranslationKey)}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Filter Toggle Button */}
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className="px-4 py-2.5 rounded-2xl bg-muted/30 border border-border hover:bg-muted/50 hover:text-foreground text-foreground text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 font-mono"
+              id="filter-modal-trigger"
+            >
+              <SlidersHorizontal className="size-4 text-primary" />
+              <span>{language === 'th' ? 'ตัวกรอง' : 'Filter'}</span>
+              {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              )}
+            </button>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto no-scrollbar">
-            {[
-              { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-              { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-              { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-              { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-              { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-              { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-              { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-              { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-              { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-              { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-              { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
-            ].map((cat) => {
-              const isActive = selectedCategory === cat.id;
-              const Icon = cat.icon;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  aria-label={`Filter by ${t(cat.translationKey as TranslationKey)}`}
-                  aria-pressed={isActive}
-                  className={`px-3.5 py-2 rounded-xl text-[11px] font-extrabold transition-all flex items-center gap-2 cursor-pointer border ${
-                    isActive
-                      ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                      : "text-muted-foreground bg-muted/30 hover:bg-muted/50 hover:text-foreground border-border"
-                  }`}
-                >
-                  <Icon className="size-3.5" />
-                  <span>{t(cat.translationKey as TranslationKey)}</span>
-                </button>
-              );
-            })}
-          </div>
+          {/* Active Filter Tags */}
+          {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border/40 w-full min-w-0" id="active-filter-tags">
+              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mr-1 font-mono">
+                {language === 'th' ? 'ตัวกรองที่เลือก:' : 'Active Filters:'}
+              </span>
+              {selectedCategory !== "all" && (
+                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
+                  {language === 'th' ? 'หมวดหมู่' : 'Category'}: {t(`showcase.cat_${selectedCategory}` as any)}
+                  <button
+                    onClick={() => setSelectedCategory("all")}
+                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
+                    aria-label="Remove category filter"
+                  >
+                    ✕
+                  </button>
+                </span>
+              )}
+              {statusFilter !== "all" && (
+                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
+                  {language === 'th' ? 'สถานะ' : 'Status'}: {statusFilter === "deployed" ? (language === 'th' ? "เปิดใช้งานแล้ว" : "Deployed") : (language === 'th' ? "กำลังพัฒนา" : "In Progress")}
+                  <button
+                    onClick={() => setStatusFilter("all")}
+                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
+                    aria-label="Remove status filter"
+                  >
+                    ✕
+                  </button>
+                </span>
+              )}
+              {sortBy !== "code" && (
+                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
+                  {language === 'th' ? 'จัดเรียง' : 'Sort'}: {sortBy === "progress" ? (language === 'th' ? "ความคืบหน้า" : "Progress") : (language === 'th' ? "รหัสทีม" : "Team Code")}
+                  <button
+                    onClick={() => setSortBy("code")}
+                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
+                    aria-label="Remove sort order"
+                  >
+                    ✕
+                  </button>
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  setSelectedCategory("all");
+                  setStatusFilter("all");
+                  setSortBy("code");
+                }}
+                className="text-[10px] font-black text-muted-foreground hover:text-primary transition-colors cursor-pointer ml-1 font-mono"
+              >
+                {t('showcase.clear_all' as any) || (language === 'th' ? 'ล้างทั้งหมด' : 'Clear All')}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -467,6 +573,171 @@ export default function OrderDemo() {
           </>
         )}
       </main>
+
+      {/* 3. Filter & Sort Modal */}
+      <AnimatePresence>
+        {isFilterModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsFilterModalOpen(false)}
+              className="absolute inset-0 bg-background/80 backdrop-blur-md cursor-pointer"
+            />
+
+            {/* Modal Dialog Panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ type: "spring", duration: 0.4 }}
+              className="relative w-full max-w-lg bg-card border border-border rounded-3xl shadow-2xl p-6 overflow-hidden max-h-[90vh] flex flex-col z-10"
+              id="filter-modal-dialog"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-border/60">
+                <h2 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
+                  <SlidersHorizontal className="size-4 text-primary" />
+                  <span>
+                    {language === "th" ? "ตัวกรอง & จัดเรียง" : "Filters & Sorting"}
+                  </span>
+                </h2>
+                <button
+                  onClick={() => setIsFilterModalOpen(false)}
+                  className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  aria-label="Close filters modal"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto py-5 space-y-6 pr-1" style={{ scrollbarWidth: 'thin' }}>
+                {/* 1. Sort By */}
+                <div className="space-y-2.5">
+                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
+                    {language === "th" ? "จัดเรียงลำดับ" : "Sort By"}
+                  </h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: "code", label: language === "th" ? "รหัสทีม (TN01-TN20)" : "Team Code (TN01-TN20)" },
+                      { id: "progress", label: language === "th" ? "ความคืบหน้า (มาก-น้อย)" : "Progress (High-Low)" },
+                    ].map((opt) => {
+                      const active = sortBy === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => setSortBy(opt.id as any)}
+                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
+                            active
+                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 2. Project Status */}
+                <div className="space-y-2.5">
+                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
+                    {language === "th" ? "สถานะโครงการ" : "Project Status"}
+                  </h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "all", label: language === "th" ? "ทั้งหมด" : "All" },
+                      { id: "deployed", label: language === "th" ? "เปิดใช้งานแล้ว" : "Live / Deployed" },
+                      { id: "pending", label: language === "th" ? "กำลังพัฒนา" : "In Progress" },
+                    ].map((opt) => {
+                      const active = statusFilter === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => setStatusFilter(opt.id as any)}
+                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
+                            active
+                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 3. Project Category */}
+                <div className="space-y-2.5">
+                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
+                    {language === "th" ? "หมวดหมู่โครงการ" : "Project Category"}
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    {[
+                      { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+                      { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
+                      { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
+                      { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
+                      { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
+                      { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+                      { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
+                      { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
+                      { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
+                      { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
+                      { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
+                    ].map((cat) => {
+                      const active = selectedCategory === cat.id;
+                      const Icon = cat.icon;
+                      return (
+                        <button
+                          key={cat.id}
+                          onClick={() => setSelectedCategory(cat.id)}
+                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                            active
+                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          }`}
+                        >
+                          <Icon className="size-3.5 shrink-0" />
+                          <span className="truncate">{t(cat.translationKey as TranslationKey)}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="pt-4 border-t border-border/60 flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    setSelectedCategory("all");
+                    setStatusFilter("all");
+                    setSortBy("code");
+                  }}
+                  disabled={selectedCategory === "all" && statusFilter === "all" && sortBy === "code"}
+                  className="px-4 py-2.5 rounded-xl border border-border text-foreground hover:bg-muted disabled:opacity-40 disabled:hover:bg-transparent text-xs font-bold transition-all cursor-pointer flex-1 text-center"
+                >
+                  {language === "th" ? "ล้างทั้งหมด" : "Reset All"}
+                </button>
+                <button
+                  onClick={() => setIsFilterModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl bg-cta hover:bg-cta/90 text-cta-foreground text-xs font-extrabold transition-all cursor-pointer flex-1 text-center shadow-md shadow-cta/15"
+                >
+                  {language === "th"
+                    ? `ตกลง (${totalResults} รายการ)`
+                    : `Apply (${totalResults} items)`}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

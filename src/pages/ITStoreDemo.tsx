@@ -669,10 +669,10 @@ export default function ITStoreDemo() {
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#6366f1" }}>
-                  {language === "en" ? "Browse the catalogue" : "เลือกสินค้า"}
+                  {t("itstore.select_products")}
                 </p>
                 <h2 id="products-heading" className="font-extrabold text-3xl tracking-tight text-slate-900">
-                  {language === "en" ? "Our Products" : "สินค้าทั้งหมด"}
+                  {t("itstore.all_products_title")}
                 </h2>
               </div>
               <p className="text-xs text-slate-400 font-bold">
@@ -684,7 +684,7 @@ export default function ITStoreDemo() {
             <div
               className="mb-8 flex gap-2 overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 scrollbar-hide snap-x"
               role="tablist"
-              aria-label={language === "en" ? "Product Categories" : "หมวดหมู่สินค้า"}
+              aria-label={t("itstore.categories_label")}
             >
               {categories.map((cat) => {
                 const active = activeCategory === cat;

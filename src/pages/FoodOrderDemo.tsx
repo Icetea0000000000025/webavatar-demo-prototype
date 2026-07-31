@@ -249,7 +249,7 @@ export default function FoodOrderDemo() {
               }
               className="gap-2 cursor-pointer font-bold"
             >
-              <ShoppingBag className="size-4" /> {language === 'en' ? 'Cart' : 'ตะกร้า'}{" "}
+              <ShoppingBag className="size-4" /> {t("food.cart_short")}{" "}
               <span className="rounded-full bg-white px-2 py-0.5 text-xs text-emerald-600 font-extrabold ml-1 shadow-sm">
                 {itemCount}
               </span>
@@ -265,14 +265,14 @@ export default function FoodOrderDemo() {
           <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest">
-                {language === 'en' ? 'Select delicious food' : 'เลือกความอร่อย'}
+                {t("food.select_delicious")}
               </p>
               <h2 id="menu-heading" className="font-display text-3xl font-extrabold text-stone-900 tracking-tight">
-                {language === 'en' ? 'Our Menu' : 'เมนูของทางร้าน'}
+                {t("food.our_menu")}
               </h2>
             </div>
             <p className="text-xs text-stone-500 font-bold">
-              {visibleMenu.length} {language === 'en' ? 'items' : 'รายการ'}
+              {visibleMenu.length} {t("food.items_count")}
             </p>
           </div>
           
@@ -280,7 +280,7 @@ export default function FoodOrderDemo() {
           <div
             className="mb-8 flex gap-2 overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 scrollbar-hide snap-x"
             role="tablist"
-            aria-label={language === 'en' ? 'Food Categories' : 'หมวดหมู่อาหาร'}
+            aria-label={t("food.categories_label")}
           >
             {categories.map((item) => {
               const active = category === item;
@@ -295,7 +295,7 @@ export default function FoodOrderDemo() {
                   onClick={() => setCategory(item)}
                   role="tab"
                   aria-selected={active}
-                  aria-label={language === 'en' ? `Select category: ${getCategoryLabel(item)}` : `เลือกหมวดหมู่อาหาร: ${item}`}
+                  aria-label={`${t("food.select_category_label")}: ${getCategoryLabel(item)}`}
                 >
                   <span className="relative z-10">{getCategoryLabel(item)}</span>
                   {active && (
@@ -366,7 +366,7 @@ export default function FoodOrderDemo() {
                             size="restaurantIcon"
                             className="size-8 sm:size-10 shrink-0 cursor-pointer"
                             onClick={() => changeQuantity(item.id, 1)}
-                            aria-label={language === 'en' ? `Add ${name} to cart` : `เพิ่ม ${name} ลงตะกร้า`}
+                            aria-label={`${t("food.btn_add")}: ${name}`}
                             id={`add-${item.id}`}
                           >
                             <Plus className="size-4 sm:size-5" />
@@ -378,7 +378,7 @@ export default function FoodOrderDemo() {
                               size="icon"
                               className="size-6 sm:size-8 rounded-full"
                               onClick={() => changeQuantity(item.id, -1)}
-                              aria-label={language === 'en' ? `Decrease quantity of ${name} by 1` : `ลดจำนวน ${name} ลง 1`}
+                              aria-label={`${t("food.btn_add")} (-): ${name}`}
                               id={`decrease-${item.id}`}
                             >
                               <Minus className="size-3 sm:size-4" />
@@ -389,7 +389,7 @@ export default function FoodOrderDemo() {
                               size="icon"
                               className="size-6 sm:size-8 rounded-full cursor-pointer"
                               onClick={() => changeQuantity(item.id, 1)}
-                              aria-label={language === 'en' ? `Increase quantity of ${name} by 1` : `เพิ่มจำนวน ${name} อีก 1`}
+                              aria-label={`${t("food.btn_add")} (+): ${name}`}
                               id={`increase-${item.id}`}
                             >
                               <Plus className="size-3 sm:size-4" />
@@ -471,7 +471,7 @@ export default function FoodOrderDemo() {
                             size="icon"
                             className="size-8 text-stone-400 hover:text-red-600 rounded-full"
                             onClick={() => changeQuantity(item.id, -item.quantity)}
-                            aria-label={language === 'en' ? `Remove ${name} from cart` : `ลบ ${name} ออกจากตะกร้า`}
+                            aria-label={`Remove ${name}`}
                             id={`remove-cart-${item.id}`}
                           >
                             <Trash2 className="size-4" />
@@ -483,7 +483,7 @@ export default function FoodOrderDemo() {
                             size="icon"
                             className="size-7 rounded-full text-stone-600"
                             onClick={() => changeQuantity(item.id, -1)}
-                            aria-label={language === 'en' ? `Decrease quantity of ${name} by 1` : `ลดจำนวน ${name} ในตะกร้าลง 1`}
+                            aria-label={`Decrease quantity of ${name}`}
                             id={`decrease-cart-${item.id}`}
                           >
                             <Minus className="size-3.5" />
@@ -494,7 +494,7 @@ export default function FoodOrderDemo() {
                             size="icon"
                             className="size-7 rounded-full text-stone-600"
                             onClick={() => changeQuantity(item.id, 1)}
-                            aria-label={language === 'en' ? `Increase quantity of ${name} by 1` : `เพิ่มจำนวน ${name} ในตะกร้าอีก 1`}
+                            aria-label={`Increase quantity of ${name}`}
                             id={`increase-cart-${item.id}`}
                           >
                             <Plus className="size-3.5" />
@@ -529,13 +529,13 @@ export default function FoodOrderDemo() {
               className="mt-6 w-full cursor-pointer font-bold justify-center"
               disabled={cartItems.length === 0}
               onClick={checkout}
-              aria-label={language === 'en' ? 'Place your order and send to kitchen' : 'ยืนยันการสั่งซื้อและชำระเงิน'}
+              aria-label={t("food.cart_checkout")}
               id="restaurant-checkout-button"
             >
               {t("food.cart_checkout")} <ChevronRight className="size-4" />
             </Button>
             <p className="mt-3.5 text-center text-[10px] text-stone-400 font-bold uppercase tracking-wider">
-              {language === 'en' ? 'Cart details will be saved on this device' : 'ข้อมูลตะกร้าจะถูกบันทึกไว้ในอุปกรณ์นี้'}
+              {t("food.cart_saved")}
             </p>
           </div>
         </aside>
@@ -543,7 +543,7 @@ export default function FoodOrderDemo() {
 
       <footer className="border-t border-stone-200/80 bg-white py-8 text-center text-xs text-stone-500 relative z-10">
         <span className="font-display font-bold text-stone-900 tracking-wide">BOTNOI RESTAURANT</span> ·{' '}
-        {language === 'en' ? 'Thai food cooked with heart' : 'อาหารไทยด้วยหัวใจ'}
+        {t("food.footer_heart")}
       </footer>
 
       <Dialog open={receiptOpen} onOpenChange={setReceiptOpen}>
@@ -555,10 +555,10 @@ export default function FoodOrderDemo() {
                   <Check className="size-7" />
                 </div>
                 <DialogTitle className="font-display text-2xl text-stone-900 font-black tracking-tight">
-                  {language === 'en' ? 'Order Successful!' : 'สั่งซื้อสำเร็จ!'}
+                  {t("food.order_success")}
                 </DialogTitle>
                 <DialogDescription className="font-semibold text-stone-500 text-xs">
-                  {language === 'en' ? 'The kitchen has received your order.' : 'ครัวได้รับออเดอร์ของคุณแล้ว'}
+                  {t("food.kitchen_received")}
                 </DialogDescription>
               </DialogHeader>
               <div className="my-6 border-y border-dashed border-stone-200 py-4 text-center">
@@ -598,7 +598,7 @@ export default function FoodOrderDemo() {
                 </div>
               </div>
               <div className="mt-6 rounded-2xl bg-stone-100/70 border border-stone-200/20 p-4 text-center text-xs text-stone-700 font-bold">
-                {language === 'en' ? 'Thank you for your order! Enjoy your meal.' : 'ขอบคุณที่อุดหนุน ขอให้อร่อยกับทุกคำ'}
+                {t("food.thank_you")}
               </div>
               <Button
                 variant="restaurantOutline"
