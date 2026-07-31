@@ -97,7 +97,7 @@ const projectData: HouseItem[] = [
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
   },
   { id: 8, code: 'TN08', name: '08-vibe-architects', style: 'Industrial Brickwork', type: 'ecommerce', color: '#991b1b', progress: 75, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 9, code: 'TN09', name: '09-sunset-superfans', style: 'Japanese Zen', type: 'accommodation', color: '#16a34a', progress: 100, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 9, code: 'TN09', name: '09-sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#16a34a', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
   { id: 10, code: 'TN10', name: '10-lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#ca8a04', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: '11-the-sharp-cuts', style: 'Mid-Century Gable', type: 'restaurant', color: '#475569', progress: 5, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 12, code: 'TN12', name: '12-coastal-avengers', style: 'Tropical Canopy', type: 'ecommerce', color: '#0d9488', progress: 95, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
@@ -113,7 +113,7 @@ const projectData: HouseItem[] = [
 
 // TN codes whose descriptions should be hidden/removed
 const NO_DESC_CODES = new Set([
-  'TN02', 'TN08', 'TN09', 'TN11', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN19', 'TN20'
+  'TN02', 'TN08', 'TN11', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN19', 'TN20'
 ]);
 
 // Custom prompt description keys for active TN projects
@@ -124,6 +124,7 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
   TN05: 'showcase.desc_tn05',
   TN06: 'showcase.desc_tn06',
   TN07: 'showcase.desc_tn07',
+  TN09: 'showcase.desc_tn09',
   TN10: 'showcase.desc_tn10',
   TN14: 'showcase.desc_tn14',
   TN16: 'showcase.desc_tn16',
