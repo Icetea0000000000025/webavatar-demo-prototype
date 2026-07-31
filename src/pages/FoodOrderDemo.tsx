@@ -218,7 +218,7 @@ export default function FoodOrderDemo() {
         {!ready && <PageSkeleton variant="order" />}
       </AnimatePresence>
       <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background/50 backdrop-blur-sm text-foreground page-grid relative z-10">
-      <header className="relative z-20 border-b border-stone-200/80 bg-stone-50/40 backdrop-blur-md">
+      <header className="relative z-20 border-b border-stone-200/80 dark:border-stone-800 bg-stone-50/40 dark:bg-stone-900/60 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
           <Link to="/food-demo" className="flex items-center gap-2.5">
             <img src={botnoiLogo} alt="Botnoi Restaurant" className="h-10 w-auto object-contain" />
@@ -229,14 +229,14 @@ export default function FoodOrderDemo() {
                 variant="ghost" 
                 size="sm" 
                 onClick={() => setReceiptOpen(true)} 
-                className="text-stone-600 hover:text-stone-900 gap-1.5 font-bold hover:bg-stone-100/50 rounded-full px-3 py-1.5"
+                className="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white gap-1.5 font-bold hover:bg-stone-100/50 dark:hover:bg-stone-800/50 rounded-full px-3 py-1.5"
               >
                 <ReceiptText className="size-4" /> <span>{t("food.nav_receipt")}</span>
               </Button>
             )}
             <Link 
               to="/food-demo/admin" 
-              className="px-4 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 transition-all border border-stone-200 text-stone-700 text-xs font-bold" 
+              className="px-4 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 transition-all border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold" 
               id="nav-order-admin"
             >
               {t("food.nav_admin")}
@@ -250,7 +250,7 @@ export default function FoodOrderDemo() {
               className="gap-2 cursor-pointer font-bold"
             >
               <ShoppingBag className="size-4" /> {t("food.cart_short")}{" "}
-              <span className="rounded-full bg-white px-2 py-0.5 text-xs text-emerald-600 font-extrabold ml-1 shadow-sm">
+              <span className="rounded-full bg-white dark:bg-emerald-950 px-2 py-0.5 text-xs text-emerald-600 dark:text-emerald-400 font-extrabold ml-1 shadow-sm">
                 {itemCount}
               </span>
             </Button>
@@ -289,8 +289,8 @@ export default function FoodOrderDemo() {
                   key={item}
                   className={`relative shrink-0 snap-start px-5 py-2.5 rounded-full text-xs font-bold transition-colors cursor-pointer border ${
                     active 
-                      ? "text-emerald-700 border-emerald-500/20" 
-                      : "text-stone-500 border-stone-200 hover:text-stone-800 hover:bg-stone-50"
+                      ? "text-emerald-700 dark:text-emerald-300 border-emerald-500/20 dark:border-emerald-500/40" 
+                      : "text-stone-500 dark:text-stone-400 border-stone-200 dark:border-stone-800 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800/50"
                   }`}
                   onClick={() => setCategory(item)}
                   role="tab"
@@ -301,7 +301,7 @@ export default function FoodOrderDemo() {
                   {active && (
                     <motion.div
                       layoutId="activeCategoryPill"
-                      className="absolute inset-0 bg-emerald-50 rounded-full"
+                      className="absolute inset-0 bg-emerald-50 dark:bg-emerald-950/70 rounded-full"
                       transition={{ type: 'spring', stiffness: 350, damping: 28 }}
                     />
                   )}
@@ -408,19 +408,19 @@ export default function FoodOrderDemo() {
         {/* Sidebar Shopping Cart overlay */}
         <aside
           ref={cartRef}
-          className="mt-12 lg:mt-0 scroll-mt-24 self-start rounded-3xl border border-stone-200 bg-white p-5 shadow-lg lg:sticky lg:top-24 w-full"
+          className="mt-12 lg:mt-0 scroll-mt-24 self-start rounded-3xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 p-5 shadow-lg lg:sticky lg:top-24 w-full"
           aria-labelledby="cart-heading"
         >
-          <div className="flex items-center justify-between border-b border-stone-100 pb-4">
+          <div className="flex items-center justify-between border-b border-stone-100 dark:border-stone-800 pb-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Your order
               </p>
-              <h2 id="cart-heading" className="font-display text-2xl font-bold text-stone-900 tracking-tight">
+              <h2 id="cart-heading" className="font-display text-2xl font-bold text-stone-900 dark:text-white tracking-tight">
                 {t("food.cart_title")}
               </h2>
             </div>
-            <div className="grid size-11 place-items-center rounded-full bg-emerald-50 text-emerald-600 shadow-sm">
+            <div className="grid size-11 place-items-center rounded-full bg-emerald-50 dark:bg-emerald-950/70 text-emerald-600 dark:text-emerald-400 shadow-sm">
               <ShoppingBag className="size-5" />
             </div>
           </div>
@@ -541,8 +541,8 @@ export default function FoodOrderDemo() {
         </aside>
       </div>
 
-      <footer className="border-t border-stone-200/80 bg-white py-8 text-center text-xs text-stone-500 relative z-10">
-        <span className="font-display font-bold text-stone-900 tracking-wide">BOTNOI RESTAURANT</span> ·{' '}
+      <footer className="border-t border-stone-200/80 dark:border-stone-800 bg-white dark:bg-stone-900 py-8 text-center text-xs text-stone-500 dark:text-stone-400 relative z-10">
+        <span className="font-display font-bold text-stone-900 dark:text-white tracking-wide">BOTNOI RESTAURANT</span> ·{' '}
         {t("food.footer_heart")}
       </footer>
 

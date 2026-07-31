@@ -42,9 +42,9 @@ export default function ITStoreAdmin() {
   const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
 
   return (
-    <div className="min-h-screen bg-slate-50 text-foreground">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground transition-colors">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur-sm">
+      <header className="sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div
@@ -61,15 +61,15 @@ export default function ITStoreAdmin() {
               <Cpu size={18} color="white" />
             </div>
             <div>
-              <div className="font-extrabold text-slate-900 text-sm leading-tight">
+              <div className="font-extrabold text-slate-900 dark:text-white text-sm leading-tight">
                 {t("itstore_admin.title")}
               </div>
-              <div className="text-xs text-slate-400">{t("itstore_admin.subtitle")}</div>
+              <div className="text-xs text-slate-400 dark:text-slate-500">{t("itstore_admin.subtitle")}</div>
             </div>
           </div>
           <Link
             to="/it-store-demo"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all border border-slate-200"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700"
             id="itstore-admin-back"
           >
             <ArrowLeft size={12} /> {language === "en" ? "Back to Store" : "กลับร้าน"}
@@ -103,9 +103,9 @@ export default function ITStoreAdmin() {
           ].map((stat, i) => (
             <div
               key={i}
-              className="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm"
+              className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-sm"
             >
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+              <div className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1">
                 {stat.label}
               </div>
               <div
@@ -119,17 +119,17 @@ export default function ITStoreAdmin() {
         </div>
 
         {/* ── Orders Table ────────────────────────────────────────── */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+        <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
           {/* Table header row */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 className="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+            <h2 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center gap-2">
               <Package size={18} style={{ color: "#6366f1" }} />
               {language === "en" ? "Order Log" : "บันทึกออเดอร์"}
             </h2>
             {orders.length > 0 && (
               <button
                 onClick={clearAll}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 border border-red-200 hover:bg-red-50 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 transition"
                 id="itstore-admin-clear"
               >
                 <Trash2 size={11} /> {t("itstore_admin.btn_clear")}
@@ -139,13 +139,13 @@ export default function ITStoreAdmin() {
 
           {/* Responsive table */}
           {!loaded ? (
-            <div className="px-6 py-12 text-center text-slate-400 text-sm animate-pulse">
+            <div className="px-6 py-12 text-center text-slate-400 dark:text-slate-500 text-sm animate-pulse">
               {language === "en" ? "Loading orders..." : "กำลังโหลด..."}
             </div>
           ) : orders.length === 0 ? (
             <div className="px-6 py-16 text-center">
-              <Package size={48} className="mx-auto mb-4 text-slate-200" />
-              <p className="text-slate-400 text-sm max-w-sm mx-auto">{t("itstore_admin.no_orders")}</p>
+              <Package size={48} className="mx-auto mb-4 text-slate-200 dark:text-slate-700" />
+              <p className="text-slate-400 dark:text-slate-500 text-sm max-w-sm mx-auto">{t("itstore_admin.no_orders")}</p>
               <Link
                 to="/it-store-demo"
                 className="inline-flex items-center gap-1.5 mt-5 px-5 py-2 rounded-full text-sm font-bold text-white transition-all hover:scale-105"
@@ -158,7 +158,7 @@ export default function ITStoreAdmin() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                  <tr className="bg-slate-50 dark:bg-slate-800/60 text-slate-400 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
                     <th className="px-6 py-3 text-left">{t("itstore_admin.th_id")}</th>
                     <th className="px-6 py-3 text-left">{t("itstore_admin.th_time")}</th>
                     <th className="px-6 py-3 text-right">{t("itstore_admin.th_total")}</th>
@@ -176,7 +176,7 @@ export default function ITStoreAdmin() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ delay: idx * 0.04 }}
-                        className="border-t border-slate-100 hover:bg-slate-50/60 transition-colors"
+                        className="border-t border-slate-100 dark:border-slate-800/80 hover:bg-slate-50/80 dark:hover:bg-slate-800/70 transition-colors"
                       >
                         {/* Order ID */}
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -192,7 +192,7 @@ export default function ITStoreAdmin() {
                           </span>
                         </td>
                         {/* Time */}
-                        <td className="px-6 py-4 whitespace-nowrap text-slate-500 text-xs">
+                        <td className="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400 text-xs">
                           {order.orderedAt}
                         </td>
                         {/* Total */}
@@ -207,17 +207,17 @@ export default function ITStoreAdmin() {
                                 <img
                                   src={item.image}
                                   alt={item.name}
-                                  className="w-7 h-7 rounded-lg object-cover border border-slate-100 flex-shrink-0"
+                                  className="w-7 h-7 rounded-lg object-cover border border-slate-100 dark:border-slate-700 flex-shrink-0"
                                   loading="lazy"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
                                       `https://placehold.co/28x28/eef2ff/6366f1?text=IT`;
                                   }}
                                 />
-                                <span className="text-xs text-slate-700 truncate max-w-[160px]">
+                                <span className="text-xs text-slate-700 dark:text-slate-200 truncate max-w-[160px]">
                                   {item.name}
                                 </span>
-                                <span className="text-xs font-bold text-slate-400 flex-shrink-0">
+                                <span className="text-xs font-bold text-slate-400 dark:text-slate-500 flex-shrink-0">
                                   {t("itstore_admin.qty")}{item.quantity}
                                 </span>
                               </div>
@@ -228,11 +228,11 @@ export default function ITStoreAdmin() {
                         <td className="px-6 py-4 text-center">
                           <button
                             onClick={() => deleteOrder(order.orderId)}
-                            className="p-1.5 rounded-full hover:bg-red-50 text-slate-400 hover:text-red-500 transition"
+                            className="p-1.5 rounded-full text-slate-400 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/50 hover:text-red-500 dark:hover:text-red-400 transition"
                             aria-label="Delete order"
                             id={`itstore-admin-delete-${order.orderId}`}
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={16} />
                           </button>
                         </td>
                       </motion.tr>
