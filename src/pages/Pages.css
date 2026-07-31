@@ -1395,4 +1395,13 @@ textarea.form-control {
 }
 
 
+/* สำหรับพื้นหลังการ์ดใน Dark Mode */
+.dark .team-card-back {
+  background-color: #111926; /* สีเทาเข้ม */
+}
 
+/* สำหรับตัวหนังสือในการ์ดใน Dark Mode */
+.dark .team-card-back p {
+  color: #f5f7fa; /* สีข้อความขาว/เทาสว่าง */
+  font-weight: 600; /* ทำให้ฟอนต์หนา/เข้มขึ้น */
+}
