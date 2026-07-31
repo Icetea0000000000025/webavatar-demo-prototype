@@ -11,6 +11,7 @@ export type Booking = {
   passengerName: string;
   email: string;
   phone: string;
+  seat?: string;
 };
 
 const KEY = "nok_bookings";
