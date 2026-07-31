@@ -107,6 +107,57 @@
   --shadow-glow: 0 0 40px -10px rgba(99, 102, 241, 0.25);
 }
 
+/* ═══════════════════════════════════════
+   PREMIUM DARK THEME DESIGN SYSTEM
+   Linear, Stripe & Vercel caliber
+   ═══════════════════════════════════════ */
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Color Palette - Deep Futuristic Dark Theme */
+  --background: #0B0F19;
+  --foreground: #F3F4F6;
+  --card: #111827;
+  --card-foreground: #F9FAFB;
+  --popover: #111827;
+  --popover-foreground: #F9FAFB;
+  --primary: #818CF8;
+  --primary-foreground: #0B0F19;
+  --secondary: #1F2937;
+  --secondary-foreground: #C7D2FE;
+  --muted: #1F2937;
+  --muted-foreground: #9CA3AF;
+  --accent: #064E3B;
+  --accent-foreground: #34D399;
+  --destructive: #F87171;
+  --destructive-foreground: #FFFFFF;
+  --border: #1F2937;
+  --input: #111827;
+  --ring: #818CF8;
+  --brand: #818CF8;
+  --brand-foreground: #0B0F19;
+  --cta: #22D3EE;
+  --cta-foreground: #0B0F19;
+  --success: #34D399;
+
+  /* Premium Gradients for Dark Mode */
+  --grad-primary: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%);
+  --grad-hover: linear-gradient(135deg, #818CF8 0%, #22D3EE 100%);
+  --grad-text: linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%);
+  --grad-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.2) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
+
+  /* Dark Mode Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+  --shadow-premium: 0 10px 30px -10px rgba(99, 102, 241, 0.25), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 40px -10px rgba(99, 102, 241, 0.4);
+}
+
 @layer base {
   * {
     border-color: var(--border);
@@ -315,4 +366,178 @@
       transparent 31px,
       color-mix(in oklab, var(--primary) 6%, transparent) 32px);
   background-size: 100% 32px;
+}
+
+/* ═══════════════════════════════════════
+   SUB-THEME DARK MODE OVERRIDES & UTILITIES
+   ═══════════════════════════════════════ */
+
+.dark .flight-theme,
+.dark.flight-theme {
+  --background: #091322;
+  --foreground: #F1F5F9;
+  --card: #0F1C2E;
+  --card-foreground: #F8FAFC;
+  --popover: #0F1C2E;
+  --popover-foreground: #F8FAFC;
+  --primary: #38BDF8;
+  --primary-foreground: #0F172A;
+  --secondary: #1E293B;
+  --secondary-foreground: #7DD3FC;
+  --muted: #162438;
+  --muted-foreground: #94A3B8;
+  --border: #1E2E45;
+  --input: #0F1C2E;
+  --ring: #38BDF8;
+  --grad-primary: linear-gradient(135deg, #0284C7 0%, #38BDF8 100%);
+  --grad-text: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
+  --grad-mesh: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.2) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+}
+
+.dark .order-theme,
+.dark.order-theme {
+  --background: #0B1412;
+  --foreground: #F2F4F3;
+  --card: #121F1C;
+  --card-foreground: #F2F4F3;
+  --popover: #121F1C;
+  --popover-foreground: #F2F4F3;
+  --primary: #34D399;
+  --primary-foreground: #064E3B;
+  --secondary: #1C2B27;
+  --secondary-foreground: #6EE7B7;
+  --muted: #182622;
+  --muted-foreground: #A1A1AA;
+  --border: #1E302B;
+  --input: #121F1C;
+  --ring: #34D399;
+  --grad-primary: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  --grad-text: linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%);
+  --grad-mesh: radial-gradient(at 0% 0%, rgba(52, 211, 153, 0.18) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(217, 119, 6, 0.12) 0px, transparent 50%);
+}
+
+.dark .itstore-theme,
+.dark.itstore-theme {
+  --background: #090D16;
+  --foreground: #F3F4F6;
+  --card: #111827;
+  --card-foreground: #F9FAFB;
+  --popover: #111827;
+  --popover-foreground: #F9FAFB;
+  --primary: #818CF8;
+  --primary-foreground: #090D16;
+  --secondary: #1F2937;
+  --secondary-foreground: #A5B4FC;
+  --muted: #1F2937;
+  --muted-foreground: #9CA3AF;
+  --border: #1F2937;
+  --input: #111827;
+  --ring: #818CF8;
+}
+
+/* Global Dark Mode Class Overrides for Hardcoded Light Colors & Text Contrast */
+.dark .bg-white,
+.dark .bg-white\/95,
+.dark .bg-white\/90,
+.dark .bg-white\/85,
+.dark .bg-white\/80,
+.dark .bg-white\/70,
+.dark .bg-white\/60,
+.dark .bg-white\/50,
+.dark .bg-white\/40,
+.dark .bg-white\/30,
+.dark .bg-white\/20,
+.dark .bg-white\/10 {
+  background-color: var(--card) !important;
+  color: var(--card-foreground);
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark .bg-slate-100\/60,
+.dark .bg-slate-100\/70,
+.dark .bg-slate-100\/50,
+.dark .bg-slate-200,
+.dark .bg-zinc-50,
+.dark .bg-zinc-100,
+.dark .bg-stone-50,
+.dark .bg-stone-100,
+.dark .bg-stone-100\/70,
+.dark .bg-stone-100\/50,
+.dark .bg-stone-200 {
+  background-color: var(--muted) !important;
+  color: var(--foreground);
+}
+
+.dark .hover\:bg-white:hover,
+.dark .hover\:bg-slate-50:hover,
+.dark .hover\:bg-slate-100:hover,
+.dark .hover\:bg-slate-200:hover,
+.dark .hover\:bg-stone-50:hover,
+.dark .hover\:bg-stone-100:hover,
+.dark .hover\:bg-stone-200:hover {
+  background-color: var(--secondary) !important;
+  color: var(--foreground) !important;
+}
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-200\/80,
+.dark .border-slate-200\/50,
+.dark .border-slate-200\/40,
+.dark .border-slate-200\/20,
+.dark .border-stone-100,
+.dark .border-stone-200,
+.dark .border-stone-200\/80,
+.dark .border-stone-200\/50,
+.dark .border-stone-200\/20,
+.dark .border-zinc-200,
+.dark .border-zinc-200\/60 {
+  border-color: var(--border) !important;
+}
+
+.dark .text-slate-950,
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700,
+.dark .text-stone-950,
+.dark .text-stone-900,
+.dark .text-stone-800,
+.dark .text-stone-700,
+.dark .text-zinc-950,
+.dark .text-zinc-900,
+.dark .text-zinc-800,
+.dark .text-zinc-700 {
+  color: var(--card-foreground) !important;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-500,
+.dark .text-slate-400,
+.dark .text-stone-600,
+.dark .text-stone-500,
+.dark .text-stone-400,
+.dark .text-zinc-600,
+.dark .text-zinc-500,
+.dark .text-zinc-400 {
+  color: var(--muted-foreground) !important;
+}
+
+.dark select option,
+.dark select option.bg-white {
+  background-color: var(--card) !important;
+  color: var(--card-foreground) !important;
+}
+
+.dark [role="dialog"],
+.dark [data-state="open"] > div {
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+
+.dark .tech-footer {
+  background: var(--card) !important;
+  border-top-color: var(--border) !important;
 }

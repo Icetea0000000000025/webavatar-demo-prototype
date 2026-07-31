@@ -5,9 +5,8 @@ import ParticleField from './ParticleField';
 
 export const PersistentBackground: React.FC = () => {
   const location = useLocation();
-  const showBackground =
-    !location.pathname.includes('/flight-demo') &&
-    !location.pathname.includes('/food-demo');
+  const showBackground = !location.pathname.includes('/flight-demo');
+
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
@@ -68,7 +67,7 @@ export const PersistentBackground: React.FC = () => {
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 90% 30%, rgba(8, 145, 178, 0.12) 0%, transparent 50%), radial-gradient(circle at 30% 90%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), #FAFBFC',
+          background: 'radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 90% 30%, rgba(8, 145, 178, 0.12) 0%, transparent 50%), radial-gradient(circle at 30% 90%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), var(--background)',
           zIndex: 0,
           pointerEvents: 'none'
         }}

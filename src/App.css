@@ -75,7 +75,7 @@
 .logo-icon {
   width: 44px;
   height: 44px;
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
   object-fit: contain;
@@ -245,7 +245,7 @@
   gap: 5px;
   width: 38px;
   height: 38px;
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
   cursor: pointer;
@@ -306,7 +306,7 @@
   z-index: 1;
   width: min(320px, 85vw);
   height: 100%;
-  background: #FFFFFF;
+  background: var(--card);
   border-left: 1px solid var(--border);
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -338,7 +338,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #FFFFFF;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted-foreground);
@@ -440,30 +440,51 @@
 }
 
 .btn-secondary {
-  background: #FFFFFF;
-  border-color: var(--border);
-  color: var(--muted-foreground);
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--foreground);
 }
 
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--foreground);
-  background: var(--background);
+  color: var(--primary);
+  background: var(--secondary);
 }
 
 .btn-glass {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(228, 228, 231, 0.8);
-  color: var(--muted-foreground);
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  color: var(--foreground);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .btn-glass:hover {
   background: #FFFFFF;
   border-color: var(--primary);
-  color: var(--foreground);
-  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* Dark mode explicit button contrast overrides */
+.dark .btn-secondary,
+.dark .btn-glass {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #F8FAFC !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .btn-secondary:hover,
+.dark .btn-glass:hover {
+  background: rgba(51, 65, 85, 0.95) !important;
+  border-color: #818CF8 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(129, 140, 248, 0.3) !important;
+  transform: translateY(-2px);
 }
 
 /* ═══════════════════════════════════════
@@ -1043,3 +1064,65 @@
 .site2026-theme .mobile-submenu-item a:hover {
   color: #FB7185;
 }
+
+/* ═══════════════════════════════════════
+   DARK MODE NAVBAR & HEADER HIGH CONTRAST
+   ═══════════════════════════════════════ */
+.dark .navbar {
+  background: rgba(17, 24, 39, 0.88);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6), 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+}
+
+.dark .logo-text,
+.dark .mobile-drawer-logo {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .logo-subtitle {
+  color: #9CA3AF;
+  border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .nav-item a {
+  color: #CBD5E1;
+}
+
+.dark .nav-item a:hover,
+.dark .nav-item.active-link a {
+  color: #FFFFFF;
+}
+
+.dark .widget-indicator {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34D399;
+}
+
+.dark .mobile-nav-item a {
+  color: #CBD5E1;
+}
+
+.dark .mobile-nav-item a:hover,
+.dark .mobile-nav-item.active-link a {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: #F9FAFB;
+}
+
+.dark h1 {
+  background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
