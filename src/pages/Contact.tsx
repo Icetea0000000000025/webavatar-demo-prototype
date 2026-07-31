@@ -311,17 +311,11 @@ function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={t('contact.form_name_placeholder')}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
-                  }}
+                  className="contact-glass-input placeholder:text-muted-foreground/60"
                 />
+                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
+                  {t('contact.form_name_helper')}
+                </span>
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
@@ -336,17 +330,11 @@ function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={t('contact.form_email_placeholder')}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
-                  }}
+                  className="contact-glass-input placeholder:text-muted-foreground/60"
                 />
+                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
+                  {t('contact.form_email_helper')}
+                </span>
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
@@ -359,23 +347,13 @@ function Contact() {
                     name="inquiryType"
                     value={formData.inquiryType}
                     onChange={handleChange}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '8px',
-                      border: '1px solid var(--border)',
-                      outline: 'none',
-                      fontSize: '0.9rem',
-                      background: '#FFFFFF',
-                      appearance: 'none',
-                      cursor: 'pointer'
-                    }}
+                    className="contact-glass-input"
                   >
-                    <option value="contact">{t('contact.inquiry_label_contact')}</option>
-                    <option value="webavatar">{t('contact.inquiry_label_webavatar')}</option>
-                    <option value="chatbot">{t('contact.inquiry_label_chatbot')}</option>
-                    <option value="voice">{t('contact.inquiry_label_voice')}</option>
-                    <option value="enterprise">{t('contact.inquiry_label_enterprise')}</option>
+                    <option value="contact" className="bg-card text-foreground">{t('contact.inquiry_label_contact')}</option>
+                    <option value="webavatar" className="bg-card text-foreground">{t('contact.inquiry_label_webavatar')}</option>
+                    <option value="chatbot" className="bg-card text-foreground">{t('contact.inquiry_label_chatbot')}</option>
+                    <option value="voice" className="bg-card text-foreground">{t('contact.inquiry_label_voice')}</option>
+                    <option value="enterprise" className="bg-card text-foreground">{t('contact.inquiry_label_enterprise')}</option>
                   </select>
                   <div style={{
                     position: 'absolute',
@@ -387,6 +365,9 @@ function Contact() {
                     fontSize: '0.75rem'
                   }}>▼</div>
                 </div>
+                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
+                  {t('contact.form_type_helper')}
+                </span>
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.75rem', textAlign: 'left' }}>
@@ -400,18 +381,11 @@ function Contact() {
                   onChange={handleChange}
                   placeholder={t('contact.form_message_placeholder')}
                   rows={4}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    resize: 'vertical',
-                    transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
-                  }}
+                  className="contact-glass-input placeholder:text-muted-foreground/60"
                 />
+                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
+                  {t('contact.form_message_helper')}
+                </span>
               </div>
 
               <button 

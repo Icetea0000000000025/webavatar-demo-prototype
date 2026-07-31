@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../src";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 
 /* Tailwind CSS v4 Theme Mapping */
 @theme {
