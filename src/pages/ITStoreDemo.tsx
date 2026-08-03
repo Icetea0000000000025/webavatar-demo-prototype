@@ -1007,7 +1007,7 @@ export default function ITStoreDemo() {
                     <span>{t("itstore.cart_shipping")}</span>
                     <span className="font-semibold text-emerald-500">{t("itstore.cart_shipping_free")}</span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-foreground pt-2 border-t border-foreground/10">
+                  <div className="flex justify-between text-base font-extrabold text-foreground pt-10 border-t border-foreground/10">
                     <span>{t("itstore.cart_total")}</span>
                     <span style={{ color: "#6366f1" }}>{money.format(subtotal)}</span>
                   </div>
@@ -1072,7 +1072,7 @@ export default function ITStoreDemo() {
                     <span>{t("itstore.cart_shipping")}</span>
                     <span className="text-emerald-500 font-semibold">{t("itstore.cart_shipping_free")}</span>
                   </div>
-                  <div className="flex justify-between text-base font-extrabold text-foreground border-t border-foreground/10 pt-1.5">
+                  <div className="flex justify-between text-base font-extrabold text-foreground border-t border-foreground/10 pt-10">
                     <span>{t("itstore.cart_total")}</span>
                     <span style={{ color: "#6366f1" }}>{money.format(order.total)}</span>
                   </div>

@@ -42,7 +42,7 @@ export default function ITStoreAdmin() {
   const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground transition-colors pt-7">
       {/* ── Header ─────────────────────────────────────────────────── */}
       <header className="sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
