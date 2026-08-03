@@ -619,44 +619,7 @@ export default function ITStoreDemo() {
               </p>
             </div>
 
-            {/* Floating product preview cards */}
-            <div className="flex gap-4 flex-shrink-0 flex-wrap justify-center">
-              {products.slice(0, 3).map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.12, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  style={{
-                    width: 120,
-                    background: "var(--card)",
-                    borderRadius: 16,
-                    border: "1px solid var(--border)",
-                    padding: "1rem",
-                    boxShadow: "0 8px 24px -4px rgba(0,0,0,0.06)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    style={{ width: 72, height: 72, objectFit: "cover", borderRadius: 10 }}
-                    loading="lazy"
-                  />
-                  <div
-                    style={{
-                      fontSize: "0.65rem", fontWeight: 700, color: p.color,
-                      textAlign: "center", lineHeight: 1.3,
-                    }}
-                  >
-                    {getProductTranslation(p.id, "name", p.name)}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+            
           </div>
         </section>
 
