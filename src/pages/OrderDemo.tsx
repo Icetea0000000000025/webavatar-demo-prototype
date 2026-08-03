@@ -78,6 +78,7 @@ const projectData: HouseItem[] = [
   { id: -1, code: 'SANDBOX', name: 'Flight Demo', style: 'Interactive Sandbox', type: 'flight', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
   { id: -2, code: 'SANDBOX', name: 'IT Store Demo', style: 'Interactive Sandbox', type: 'ecommerce', color: '#6366F1', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
   { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', style: 'Interactive Sandbox', type: 'restaurant', color: '#059669', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
+  { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', style: 'Interactive Sandbox', type: 'accommodation', color: '#f59e0b', progress: 100, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
   { id: 1, code: 'TN01', name: '01-the-chill-crew', style: 'Modern Minimalist', type: 'education', color: '#6366F1', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
   { id: 2, code: 'TN02', name: '02-cozy-oracles', style: 'Neo-Classical', type: 'flight', color: '#b45309', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 3, code: 'TN03', name: '03-controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#059669', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
@@ -179,6 +180,12 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50";
     cardDescription = t("showcase.desc_restaurant");
     displayName = t("food.title");
+  } else if (house.id === -4) {
+    typeLabel = t("showcase.type_accommodation");
+    TypeIcon = BedDouble;
+    typeBg = "bg-amber-50 text-amber-700 border-amber-200/50";
+    cardDescription = t("showcase.desc_accommodation");
+    displayName = t("showcase.hotel_demo_name");
   } else {
     if (TN_CUSTOM_DESC_KEYS[house.code]) {
       cardDescription = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
@@ -200,7 +207,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
   }
 
   const cardId = house.id < 0
-    ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : 'food'}`
+    ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : house.id === -3 ? 'food' : 'hotel'}`
     : `card-${house.code.toLowerCase()}`;
 
   return (
@@ -308,6 +315,8 @@ export default function OrderDemo() {
         overviewText = t("showcase.desc_ecommerce");
       } else if (house.id === -3) {
         overviewText = `${t("food.title")} ${t("showcase.desc_restaurant")}`;
+      } else if (house.id === -4) {
+        overviewText = t("showcase.desc_accommodation");
       } else if (TN_CUSTOM_DESC_KEYS[house.code]) {
         overviewText = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
       } else if (!NO_DESC_CODES.has(house.code)) {
@@ -421,6 +430,7 @@ export default function OrderDemo() {
             <div className="flex flex-nowrap items-center justify-start lg:justify-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 py-0.5 flex-1 mx-2" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
               {[
                 { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+                { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
                 { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
                 { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
                 { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
