@@ -97,7 +97,7 @@ const projectData: HouseItem[] = [
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
   },
-  { id: 8, code: 'TN08', name: '08-vibe-architects', style: 'Industrial Brickwork', type: 'ecommerce', color: '#991b1b', progress: 75, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 8, code: 'TN08', name: '08-vibe-architects', style: 'Industrial Brickwork', type: 'ac_service', color: '#991b1b', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
   { id: 9, code: 'TN09', name: '09-sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#16a34a', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
   { id: 10, code: 'TN10', name: '10-lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#ca8a04', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: '11-the-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#475569', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
@@ -108,13 +108,13 @@ const projectData: HouseItem[] = [
   { id: 16, code: 'TN16', name: '16-blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#334155', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
   { id: 17, code: 'TN17', name: '17-midnight-raiders', style: 'Spanish Terracotta', type: 'accommodation', color: '#c2410c', progress: 80, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 18, code: 'TN18', name: '18-indie-mountain-kids', style: 'Parametric Fluid', type: 'flight', color: '#06b6d4', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 19, code: 'TN19', name: '19-ocean-avengers', style: 'Victorian Restoration', type: 'restaurant', color: '#6d28d9', progress: 100, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 19, code: 'TN19', name: '19-ocean-avengers', style: 'Victorian Restoration', type: 'ac_service', color: '#6d28d9', progress: 100, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
   { id: 20, code: 'TN20', name: '20-final-boss-crew', style: 'Waterfront Living', type: 'ecommerce', color: '#0369a1', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
 ];
 
 // TN codes whose descriptions should be hidden/removed
 const NO_DESC_CODES = new Set([
-  'TN02', 'TN08', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN19', 'TN20'
+  'TN02', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN20'
 ]);
 
 // Custom prompt description keys for active TN projects
@@ -125,11 +125,13 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
   TN05: 'showcase.desc_tn05',
   TN06: 'showcase.desc_tn06',
   TN07: 'showcase.desc_tn07',
+  TN08: 'showcase.desc_tn08',
   TN09: 'showcase.desc_tn09',
   TN10: 'showcase.desc_tn10',
   TN11: 'showcase.desc_tn11',
   TN14: 'showcase.desc_tn14',
   TN16: 'showcase.desc_tn16',
+  TN19: 'showcase.desc_tn19',
 };
 
 const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {

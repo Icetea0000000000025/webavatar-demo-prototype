@@ -1,7 +1,6 @@
 import {
   Check,
   ChevronRight,
-  Home,
   Minus,
   Plus,
   ReceiptText,
@@ -218,61 +217,46 @@ export default function FoodOrderDemo() {
       <AnimatePresence>
         {!ready && <PageSkeleton variant="order" />}
       </AnimatePresence>
-
-      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background/50 backdrop-blur-sm text-foreground page-grid relative z-10 pt-5">
-        {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="sticky top-4 z-20 mx-auto my-4 w-[calc(100%-2rem)] max-w-7xl bg-background/80 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
-          <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-emerald-600 transition-colors flex items-center gap-1">
-                <Home className="size-3" />
-                <span>{t('nav.home')}</span>
-              </Link>
-              <ChevronRight className="size-3 text-foreground/30" />
-              <Link to="/all-demo" className="hover:text-emerald-600 transition-colors">
-                <span>{t('showcase.portal')}</span>
-              </Link>
-              <ChevronRight className="size-3 text-foreground/30" />
-              <span className="text-foreground font-extrabold uppercase font-mono flex items-center gap-2">
-                <img src={botnoiLogo} alt="Botnoi Restaurant" className="h-6 w-auto object-contain inline-block" />
-                {t("food.title") || 'Botnoi Restaurant'}
-              </span>
-            </nav>
-
-            <nav className="flex items-center gap-3 text-sm font-semibold">
-              {receipt && (
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={() => setReceiptOpen(true)} 
-                  className="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white gap-1.5 font-bold hover:bg-stone-100/50 dark:hover:bg-stone-800/50 rounded-full px-3 py-1.5"
-                >
-                  <ReceiptText className="size-4" /> <span>{t("food.nav_receipt")}</span>
-                </Button>
-              )}
-              <Link 
-                to="/food-demo/admin" 
-                className="px-4 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 transition-all border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold" 
-                id="nav-order-admin"
+      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background/50 backdrop-blur-sm text-foreground page-grid relative z-10">
+      <header className="relative z-20 border-b border-stone-200/80 dark:border-stone-800 bg-stone-50/40 dark:bg-stone-900/60 backdrop-blur-md">
+        <div className="mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
+          <Link to="/food-demo" className="flex items-center gap-2.5">
+            <img src={botnoiLogo} alt="Botnoi Restaurant" className="h-10 w-auto object-contain" />
+          </Link>
+          <nav className="flex items-center gap-4 text-sm font-semibold tracking-wide">
+            {receipt && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => setReceiptOpen(true)} 
+                className="text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white gap-1.5 font-bold hover:bg-stone-100/50 dark:hover:bg-stone-800/50 rounded-full px-3 py-1.5"
               >
-                {t("food.nav_admin")}
-              </Link>
-              <Button
-                variant="restaurant"
-                size="restaurant"
-                onClick={() =>
-                  cartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-                }
-                className="gap-2 cursor-pointer font-bold"
-              >
-                <ShoppingBag className="size-4" /> {t("food.cart_short")}{" "}
-                <span className="rounded-full bg-white dark:bg-emerald-950 px-2 py-0.5 text-xs text-emerald-600 dark:text-emerald-400 font-extrabold ml-1 shadow-sm">
-                  {itemCount}
-                </span>
+                <ReceiptText className="size-4" /> <span>{t("food.nav_receipt")}</span>
               </Button>
-            </nav>
-          </div>
-        </header>
+            )}
+            <Link 
+              to="/food-demo/admin" 
+              className="px-4 py-1.5 rounded-full bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 transition-all border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold" 
+              id="nav-order-admin"
+            >
+              {t("food.nav_admin")}
+            </Link>
+            <Button
+              variant="restaurant"
+              size="restaurant"
+              onClick={() =>
+                cartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
+              className="gap-2 cursor-pointer font-bold"
+            >
+              <ShoppingBag className="size-4" /> {t("food.cart_short")}{" "}
+              <span className="rounded-full bg-white dark:bg-emerald-950 px-2 py-0.5 text-xs text-emerald-600 dark:text-emerald-400 font-extrabold ml-1 shadow-sm">
+                {itemCount}
+              </span>
+            </Button>
+          </nav>
+        </div>
+      </header>
 
       <div
         className="mx-auto w-full max-w-7xl overflow-hidden px-4 py-8 pb-32 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_370px] lg:gap-8 lg:px-8 lg:pb-12"
