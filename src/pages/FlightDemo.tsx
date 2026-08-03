@@ -516,7 +516,7 @@ export default function FlightDemo() {
                       required
                       value={form.from}
                       onChange={(e) => setForm({ ...form, from: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm py-1 font-display cursor-pointer"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm py-1 font-display cursor-pointer"
                     >
                       {CITIES.map((c) => (
                         <option key={c} value={c} className="bg-white text-slate-800 dark:bg-slate-800 dark:text-white">{getCityLabel(c)}</option>
@@ -531,7 +531,7 @@ export default function FlightDemo() {
                       required
                       value={form.to}
                       onChange={(e) => setForm({ ...form, to: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm py-1 font-display cursor-pointer"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm py-1 font-display cursor-pointer"
                     >
                       {CITIES.map((c) => (
                         <option key={c} value={c} className="bg-white text-slate-800 dark:bg-slate-800 dark:text-white">{getCityLabel(c)}</option>
@@ -547,7 +547,7 @@ export default function FlightDemo() {
                       required
                       value={form.departDate}
                       onChange={(e) => setForm({ ...form, departDate: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm font-display cursor-pointer"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display cursor-pointer"
                     />
                   </Field>
 
@@ -560,7 +560,7 @@ export default function FlightDemo() {
                         required
                         value={form.returnDate}
                         onChange={(e) => setForm({ ...form, returnDate: e.target.value })}
-                        className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm font-display cursor-pointer"
+                        className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display cursor-pointer"
                       />
                     </Field>
                   ) : (
@@ -576,7 +576,7 @@ export default function FlightDemo() {
                       max={9}
                       value={form.passengers}
                       onChange={(e) => setForm({ ...form, passengers: +e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm font-display"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
                     />
                   </Field>
 
@@ -586,7 +586,7 @@ export default function FlightDemo() {
                       name="promoCode"
                       value={form.promoCode}
                       onChange={(e) => setForm({ ...form, promoCode: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
                       placeholder={language === 'en' ? "e.g., PROMO2026" : "เช่น PROMO2026"}
                     />
                   </Field>
@@ -1061,7 +1061,7 @@ export default function FlightDemo() {
                       required
                       value={form.passengerName}
                       onChange={(e) => setForm({ ...form, passengerName: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-white text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
                       placeholder={t('flight.passenger_name_placeholder')}
                     />
                   </Field>
@@ -1073,7 +1073,7 @@ export default function FlightDemo() {
                       required
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 text-sm text-foreground font-display"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       placeholder="you@email.com"
                     />
                   </Field>
@@ -1083,7 +1083,7 @@ export default function FlightDemo() {
                       name="phone"
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 text-sm text-foreground font-display"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       placeholder="08X-XXX-XXXX"
                     />
                   </Field>
@@ -1282,13 +1282,13 @@ function Field({ label, htmlFor, children, onClick, required }: { label: string;
   return (
     <div 
       onClick={onClick}
-      className={`block rounded-2xl bg-slate-50/60 dark:bg-slate-800 px-4 py-3.5 border border-slate-200/60 dark:border-slate-700 transition-all ${
+      className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${
         onClick 
-          ? "cursor-pointer hover:bg-white dark:hover:bg-slate-700 hover:border-sky-500 dark:hover:border-sky-400 hover:shadow-md hover:ring-2 hover:ring-sky-500/10 dark:hover:ring-sky-400/20 active:scale-98" 
-          : "focus-within:border-sky-500 dark:focus-within:border-sky-400 focus-within:bg-white dark:focus-within:bg-slate-800 focus-within:shadow-md focus-within:ring-2 focus-within:ring-sky-500/10 dark:focus-within:ring-sky-400/20"
+          ? "cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-850/60 hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98" 
+          : "focus-within:border-[var(--primary)] focus-within:bg-slate-50/50 dark:focus-within:bg-slate-850/60 focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
       }`}
     >
-      <label htmlFor={htmlFor} className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-300 block cursor-pointer select-none">
+      <label htmlFor={htmlFor} className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)] block cursor-pointer select-none">
         {label}
         {required && <span className="text-rose-500 ml-1 font-bold">*</span>}
       </label>

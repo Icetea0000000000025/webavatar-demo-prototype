@@ -88,7 +88,7 @@ export default function OrderAdmin() {
   };
 
   return (
-    <div className="order-theme min-h-screen bg-background text-foreground pb-20">
+    <div className="order-theme min-h-screen bg-background text-foreground pb-20 pt-24">
       <header className="bg-emerald-950 text-white shadow-md relative z-10">
         <div className="mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
