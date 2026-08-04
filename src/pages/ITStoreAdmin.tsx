@@ -14,8 +14,29 @@ const money = new Intl.NumberFormat("th-TH", {
   maximumFractionDigits: 0,
 });
 
+const formatOrderDate = (orderedAt: string, lang: string) => {
+  if (!orderedAt) return "";
+  const d = new Date(orderedAt);
+  if (!isNaN(d.getTime())) {
+    const localeMap: Record<string, string> = {
+      th: "th-TH",
+      en: "en-US",
+      zh: "zh-CN",
+      ja: "ja-JP",
+      ko: "ko-KR",
+      es: "es-ES",
+      fr: "fr-FR",
+    };
+    return d.toLocaleString(localeMap[lang] || "en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  }
+  return orderedAt;
+};
+
 export default function ITStoreAdmin() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [orders, setOrders] = useState<ITOrder[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -193,7 +214,7 @@ export default function ITStoreAdmin() {
                         </td>
                         {/* Time */}
                         <td className="px-6 py-4 whitespace-nowrap text-slate-500 dark:text-slate-400 text-xs">
-                          {order.orderedAt}
+                          {formatOrderDate(order.orderedAt, language)}
                         </td>
                         {/* Total */}
                         <td className="px-6 py-4 text-right whitespace-nowrap font-extrabold" style={{ color: "#6366f1" }}>
