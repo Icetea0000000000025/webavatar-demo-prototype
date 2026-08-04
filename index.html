@@ -11,7 +11,20 @@
   <!-- Premium Google Fonts for Multi-language Global Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+ <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <style>
+    body.avatar-hidden body > div:not(#root) canvas,
+    body.avatar-hidden [class*="bcw"] canvas,
+    body.avatar-hidden [id*="bcw"] canvas,
+    body.avatar-hidden .bcw-avatar-container {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  </style>
 </head>
 <body>
   <div id="root"></div>
@@ -19,8 +32,9 @@
 
   <!-- Inject WebAvatar Widget JSSDK -->
   <script>
-    window.ChatWidgetConfig = {
-      mode: "realtime-fullscreen",
+     document.body.classList.add('avatar-hidden');
+      window.ChatWidgetConfig = {
+      mode: "realtime-widget",
       avatarUrl: "Botnoi",
       widgetId: "Botnoi",
       greetingInstruction:"Greet the user in Thai.",
@@ -60,6 +74,43 @@
       'SalsaDanceloop','SambaDance1loop','SambaDanceloop','ShowFullBody','ToothlessLoop'];
 
       var resetTimeout = null;
+       function showAvatar() {
+        document.body.classList.remove('avatar-hidden');
+        document.body.classList.add('avatar-visible');
+      }
+      function hideAvatar() {
+        document.body.classList.remove('avatar-visible');
+        document.body.classList.add('avatar-hidden');
+      }
+      // Delegate click event to reveal avatar ONLY when the widget's call button is clicked
+      // We check that the clicked element (or any ancestor) is OUTSIDE #root (i.e., the widget overlay)
+      // and belongs to the widget by checking for bcw/fab/widget-specific class patterns.
+      document.addEventListener('click', function (e) {
+        var target = e.target;
+        // If the click originated inside #root (React app), ignore it completely.
+        var root = document.getElementById('root');
+        if (root && root.contains(target)) return;
+
+        // Walk up from click target looking for widget call button markers
+        var el = target;
+        while (el && el !== document.body) {
+          var cls = (el.className && typeof el.className === 'string') ? el.className : '';
+          var id  = el.id ? el.id : '';
+          if (
+            cls.indexOf('bcw') !== -1 ||
+            cls.indexOf('fab') !== -1 ||
+            cls.indexOf('widget-call') !== -1 ||
+            cls.indexOf('widget-connect') !== -1 ||
+            cls.indexOf('chat-widget') !== -1 ||
+            id.indexOf('bcw') !== -1 ||
+            id.indexOf('widget') !== -1
+          ) {
+            showAvatar();
+            break;
+          }
+          el = el.parentElement;
+        }
+      }, true);
 
       // Parse list parameter if defined in config animations
       if (window.ChatWidgetConfig && window.ChatWidgetConfig.animations) {
@@ -122,21 +173,26 @@
 
       // Listeners
       window.addEventListener('avatar-widget-ready', function () {
-        console.log('[Demo] Avatar widget ready. Starting idle animations if disconnected.');
+        console.log('[Demo] Avatar widget ready.');
         if (!isConnected) {
+          hideAvatar();
           startAnimations();
+        } else {
+          showAvatar();
         }
       });
 
       window.addEventListener('onConnect', function () {
-        console.log('[Demo] Connected. Stopping idle animations.');
+        console.log('[Demo] Connected. Showing avatar.');
         isConnected = true;
+        showAvatar();
         stopAnimations();
       });
 
       window.addEventListener('onDisconnect', function () {
-        console.log('[Demo] Disconnected. Restarting idle animations.');
+        console.log('[Demo] Disconnected. Hiding avatar.');
         isConnected = false;
+        hideAvatar();
         startAnimations();
       });
     })();
