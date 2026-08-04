@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Luggage, Coffee, Mic, Plane, Wifi, Zap, ChevronDown, ChevronUp, Check, ArrowLeft, Sparkles, Clock, Ticket } from "lucide-react";
+import { Luggage, Coffee, Mic, Plane, Wifi, Zap, ChevronDown, ChevronUp, Check, ArrowLeft, Sparkles, Clock, Ticket, ChevronRight, Home } from "lucide-react";
 import { saveBooking, getBookings, type Booking } from "@/lib/bookings";
 import { toast, Toaster } from "sonner";
 import PageSkeleton from "@/components/PageSkeleton";
@@ -27,6 +27,64 @@ const CITIES = [
   "เชียงราย (CEI)",
 ];
 
+export function getCityLabelForLang(city: string, language: string) {
+  if (language === 'th') return city;
+  const multiMap: Record<string, Record<string, string>> = {
+    "zh": {
+      "กรุงเทพฯ (DMK)": "曼谷 (DMK)",
+      "เชียงใหม่ (CNX)": "清迈 (CNX)",
+      "ภูเก็ต (HKT)": "普吉岛 (HKT)",
+      "หาดใหญ่ (HDY)": "合艾 (HDY)",
+      "อุดรธานี (UTH)": "乌隆他尼 (UTH)",
+      "อุบลราชธานี (UBP)": "乌汶 (UBP)",
+      "ขอนแก่น (KKC)": "孔敬 (KKC)",
+      "สุราษฎร์ธานี (URT)": "万仑 (URT)",
+      "นครศรีธรรมราช (NST)": "洛坤 (NST)",
+      "เชียงราย (CEI)": "清莱 (CEI)",
+    },
+    "ja": {
+      "กรุงเทพฯ (DMK)": "バンコク (DMK)",
+      "เชียงใหม่ (CNX)": "チェンマイ (CNX)",
+      "ภูเก็ต (HKT)": "プーケット (HKT)",
+      "หาดใหญ่ (HDY)": "ハートヤイ (HDY)",
+      "อุดรธานี (UTH)": "ウドーンターニー (UTH)",
+      "อุบลราชธานี (UBP)": "ウボンラーチャターニー (UBP)",
+      "ขอนแก่น (KKC)": "コンケン (KKC)",
+      "สุราษฎร์ธานี (URT)": "スラートターニー (URT)",
+      "นครศรีธรรมราช (NST)": "ナコーンシータマラート (NST)",
+      "เชียงราย (CEI)": "チェンライ (CEI)",
+    },
+    "ko": {
+      "กรุงเทพฯ (DMK)": "방콕 (DMK)",
+      "เชียงใหม่ (CNX)": "치앙마이 (CNX)",
+      "ภูเก็ต (HKT)": "푸켓 (HKT)",
+      "หาดใหญ่ (HDY)": "핫야이 (HDY)",
+      "อุดรธานี (UTH)": "우돈타니 (UTH)",
+      "อุบลราชธานี (UBP)": "우본라차타니 (UBP)",
+      "ขอนแก่น (KKC)": "콘แก่น (KKC)",
+      "สุราษฎร์ธานี (URT)": "수랏타니 (URT)",
+      "นครศรีธรรมราช (NST)": "나콘시탐มา랏 (NST)",
+      "เชียงราย (CEI)": "치앙라이 (CEI)",
+    }
+  };
+  if (multiMap[language] && multiMap[language][city]) {
+    return multiMap[language][city];
+  }
+  const enMap: Record<string, string> = {
+    "กรุงเทพฯ (DMK)": "Bangkok (DMK)",
+    "เชียงใหม่ (CNX)": "Chiang Mai (CNX)",
+    "ภูเก็ต (HKT)": "Phuket (HKT)",
+    "หาดใหญ่ (HDY)": "Hat Yai (HDY)",
+    "อุดรธานี (UTH)": "Udon Thani (UTH)",
+    "อุบลราชธานี (UBP)": "Ubon Ratchathani (UBP)",
+    "ขอนแก่น (KKC)": "Khon Kaen (KKC)",
+    "สุราษฎร์ธานี (URT)": "Surat Thani (URT)",
+    "นครศรีธรรมราช (NST)": "Nakhon Si Thammarat (NST)",
+    "เชียงราย (CEI)": "Chiang Rai (CEI)",
+  };
+  return enMap[city] || city;
+}
+
 interface BookingForm {
   from: string;
   to: string;
@@ -42,6 +100,9 @@ interface BookingForm {
 
 export default function FlightDemo() {
   const { t, language } = useTranslation();
+  const { scrollY } = useScroll();
+  const heroParallax = useTransform(scrollY, [0, 500], [0, 150]);
+  const getCityLabel = (city: string) => getCityLabelForLang(city, language);
   const [isReady, setIsReady] = useState(false);
   const [tripType, setTripType] = useState<"round" | "oneway">("round");
   const [ticketBooking, setTicketBooking] = useState<BookingForm | null>(null);
@@ -84,7 +145,7 @@ export default function FlightDemo() {
 
   const getMockFlights = (isReturn: boolean) => {
     const toCity = isReturn ? form.from : form.to;
-    
+
     const isPremiumRoute = toCity.includes("ภูเก็ต") || toCity.includes("หาดใหญ่");
     const basePrice = isPremiumRoute ? 990 : 890;
 
@@ -205,14 +266,12 @@ export default function FlightDemo() {
       to: toCity,
     }));
     toast.success(
-      t('flight.promo_selected')
-        .replace('{from}', fromCity.split('(')[0].trim())
-        .replace('{to}', toCity.split('(')[0].trim())
+      `${t('flight.selected_route')} ${fromCity.split('(')[0].trim()} → ${toCity.split('(')[0].trim()}`
     );
     setSelectedOutboundFlight(null);
     setSelectedInboundFlight(null);
     setIsReturnSelection(false);
-    setBookingStep("select_flight");
+    setBookingStep("search");
     const bookingSection = document.getElementById("booking");
     if (bookingSection) {
       bookingSection.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -245,36 +304,17 @@ export default function FlightDemo() {
     return () => document.removeEventListener("click", handleOutsideClick);
   }, []);
 
-  const { scrollY } = useScroll();
-  const heroParallax = useTransform(scrollY, [0, 400], [0, 150]);
 
-  const getCityLabel = (city: string) => {
-    if (language !== 'th') {
-      const mapping: Record<string, string> = {
-        "กรุงเทพฯ (DMK)": "Bangkok (DMK)",
-        "เชียงใหม่ (CNX)": "Chiang Mai (CNX)",
-        "ภูเก็ต (HKT)": "Phuket (HKT)",
-        "หาดใหญ่ (HDY)": "Hat Yai (HDY)",
-        "อุดรธานี (UTH)": "Udon Thani (UTH)",
-        "อุบลราชธานี (UBP)": "Ubon Ratchathani (UBP)",
-        "ขอนแก่น (KKC)": "Khon Kaen (KKC)",
-        "สุราษฎร์ธานี (URT)": "Surat Thani (URT)",
-        "นครศรีธรรมราช (NST)": "Nakhon Si Thammarat (NST)",
-        "เชียงราย (CEI)": "Chiang Rai (CEI)",
-      };
-      return mapping[city] || city;
-    }
-    return city;
-  };
+
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.departDate) {
-      toast.error(t('flight.err_depart_date'));
+      toast.error(t('flight.err_dep_date'));
       return;
     }
     if (tripType === "round" && !form.returnDate) {
-      toast.error(t('flight.err_return_date'));
+      toast.error(t('flight.err_ret_date'));
       return;
     }
     setSelectedOutboundFlight(null);
@@ -307,7 +347,7 @@ export default function FlightDemo() {
 
       if (isSeatTaken) {
         toast.error(
-          t('flight.err_seat_taken').replace('{seat}', form.seat)
+          t('flight.seat_occupied')
         );
         setForm((prev) => ({ ...prev, seat: "" }));
         setSeatMapOpen(true);
@@ -337,7 +377,7 @@ export default function FlightDemo() {
       console.error("Failed to save booking:", err);
     }
     setBoardingPassOpen(true);
-    
+
     // Reset steps
     setBookingStep("search");
     setSelectedOutboundFlight(null);
@@ -393,28 +433,41 @@ export default function FlightDemo() {
           {/* Dark scrim for text readability */}
           <div className="absolute inset-0 -z-[5] bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/70" />
 
-          <header className="relative z-20 bg-white/85 backdrop-blur-md border-b border-slate-200/50">
-            <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-              <Link to="/flight-demo" className="flex items-center gap-2.5">
-                <img src={botnoiAirLogo} alt="BotnoiAir" className="h-10 w-auto object-contain" />
-              </Link>
-              <nav className="flex items-center gap-4">
+          <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/50 dark:border-slate-800 rounded-2xl shadow-lg transition-all">
+            <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <nav className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-bold" aria-label="Breadcrumb">
+                <Link to="/" className="hover:text-sky-600 transition-colors flex items-center gap-1">
+                  <Home className="w-3.5 h-3.5" />
+                  <span>{t('nav.home')}</span>
+                </Link>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <Link to="/all-demo" className="hover:text-sky-600 transition-colors">
+                  <span>{t('showcase.portal')}</span>
+                </Link>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-sky-700 dark:text-sky-400 font-extrabold uppercase font-mono flex items-center gap-1.5">
+                  <img src={botnoiAirLogo} alt="BotnoiAir" className="h-5 w-auto object-contain inline-block" />
+                  {t('nav.flight') || 'Botnoi Air'}
+                </span>
+              </nav>
+
+              <nav className="flex items-center gap-3 text-sm font-semibold">
                 {ticketBooking && (
                   <button
                     onClick={() => setBoardingPassOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-700 hover:text-sky-900 hover:bg-sky-50 rounded-full transition-all"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-700 dark:text-sky-300 hover:text-sky-900 hover:bg-sky-50 rounded-full transition-all border border-sky-200 dark:border-sky-800"
                     id="nav-flight-boarding-pass"
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /><line x1="12" y1="12" x2="12" y2="16" /><line x1="10" y1="14" x2="14" y2="14" /></svg>
+                    <Ticket className="w-3.5 h-3.5" />
                     {t('flight.nav_receipt') || 'Boarding Pass'}
                   </button>
                 )}
-                <Link to="/flight-demo/admin" className="px-4 py-1.5 rounded-full bg-sky-50 hover:bg-sky-100 transition-all border border-sky-100 text-sky-700 hover:text-sky-800 text-sm font-semibold" id="nav-flight-admin">{t('flight.nav_admin')}</Link>
+                <Link to="/flight-demo/admin" className="px-4 py-1.5 rounded-full bg-sky-50 dark:bg-sky-900/50 hover:bg-sky-100 transition-all border border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300 hover:text-sky-800 text-xs font-bold" id="nav-flight-admin">{t('flight.nav_admin')}</Link>
               </nav>
             </div>
           </header>
 
-          <div className="mx-auto max-w-7xl px-6 pt-12 md:pt-16 pb-120 md:pb-44 w-full relative z-10">
+          <div className="mx-auto max-w-7xl px-6 pt-4 md:pt-6 pb-28 md:pb-44 w-full relative z-10">
             {/* Dark scrim behind text for readability */}
             <motion.div
               className="max-w-2xl"
@@ -457,28 +510,25 @@ export default function FlightDemo() {
             {/* Progress Bar */}
             <div className="flex items-center justify-between mb-8 max-w-lg mx-auto select-none">
               <div className="flex flex-col items-center flex-1 relative">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${
-                  bookingStep === "search" ? "bg-sky-600 text-white" : "bg-sky-100 text-sky-700"
-                }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${bookingStep === "search" ? "bg-sky-600 text-white" : "bg-sky-100 text-sky-700"
+                  }`}>
                   {bookingStep !== "search" ? <Check className="w-4 h-4" /> : "1"}
                 </div>
                 <span className="text-[10px] font-bold mt-1 text-slate-500">{t('flight.nav_booking') || "ค้นหา"}</span>
               </div>
               <div className="h-0.5 bg-slate-200 flex-1 -mt-4"></div>
               <div className="flex flex-col items-center flex-1 relative">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${
-                  bookingStep === "select_flight" ? "bg-sky-600 text-white" : 
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${bookingStep === "select_flight" ? "bg-sky-600 text-white" :
                   (bookingStep === "passenger_details" ? "bg-sky-100 text-sky-700" : "bg-slate-100 text-slate-400")
-                }`}>
+                  }`}>
                   {bookingStep === "passenger_details" ? <Check className="w-4 h-4" /> : "2"}
                 </div>
                 <span className="text-[10px] font-bold mt-1 text-slate-500">{t("flight.select_flight")}</span>
               </div>
               <div className="h-0.5 bg-slate-200 flex-1 -mt-4"></div>
               <div className="flex flex-col items-center flex-1 relative">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${
-                  bookingStep === "passenger_details" ? "bg-sky-600 text-white" : "bg-slate-100 text-slate-400"
-                }`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs transition-colors duration-300 ${bookingStep === "passenger_details" ? "bg-sky-600 text-white" : "bg-slate-100 text-slate-400"
+                  }`}>
                   3
                 </div>
                 <span className="text-[10px] font-bold mt-1 text-slate-500">{t('flight.modal_passenger') || "กรอกข้อมูล"}</span>
@@ -566,17 +616,40 @@ export default function FlightDemo() {
                   )}
 
                   <Field label={t('flight.passengers')} htmlFor="passengers" required>
-                    <input
-                      type="number"
-                      id="passengers"
-                      name="passengers"
-                      min={1}
-                      max={9}
-                      value={form.passengers}
-                      onChange={(e) => setForm({ ...form, passengers: +e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
-                    />
-                  </Field>
+  <input
+    type="text"
+    inputMode="numeric"
+    pattern="[0-9]*"
+    id="passengers"
+    name="passengers"
+    value={form.passengers}
+    onChange={(e) => {
+      // 1. กรองเอาเฉพาะตัวเลข
+      const rawValue = e.target.value.replace(/[^0-9]/g, '');
+      
+      // 2. ถ้าเป็นค่าว่าง ให้ใส่ 1 หรือค่าว่างเพื่อรองรับตอนกด Backspace ลบทั้งหมด
+      if (!rawValue) {
+        setForm({ ...form, passengers: 0 }); // หรือ 1
+        return;
+      }
+
+      // 3. แปลงเป็น Number เพื่อตัดเลข 0 นำหน้าออกอัตโนมัติ (เช่น "025" -> 25)
+      let num = parseInt(rawValue, 10);
+
+      // 4. คุมไม่ให้เกิน 60
+      if (num > 60) num = 60;
+
+      setForm({ ...form, passengers: num });
+    }}
+    onBlur={() => {
+      // ถ้าผู้ใช้ลบจนว่างแล้ววนออกนอกช่อง ให้คืนค่าเป็น 1 เสมอ
+      if (!form.passengers || form.passengers < 1) {
+        setForm({ ...form, passengers: 1 });
+      }
+    }}
+    className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
+  />
+</Field>
 
                   <Field label={t('flight.promo')} htmlFor="promoCode">
                     <input
@@ -585,7 +658,7 @@ export default function FlightDemo() {
                       value={form.promoCode}
                       onChange={(e) => setForm({ ...form, promoCode: e.target.value })}
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
-                      placeholder={t('flight.promo_placeholder')}
+                      placeholder={language === 'en' ? "e.g., PROMO2026" : "PROMO2026"}
                     />
                   </Field>
 
@@ -596,7 +669,7 @@ export default function FlightDemo() {
                       className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center gap-2"
                     >
                       <Plane className="w-4 h-4" />
-                      {t('flight.btn_search')}
+                      {t('flight.search_flights')}
                     </button>
                   </div>
                 </form>
@@ -614,24 +687,24 @@ export default function FlightDemo() {
                       setBookingStep("search");
                     }
                   }}
-                  className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-400 transition-colors mb-4 cursor-pointer"
+                  className="flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors mb-4 cursor-pointer"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  {t('flight.btn_back')}
+                  <ArrowLeft className="w-4 h-4" />
+                  {t('flight.step_back')}
                 </button>
 
                 {/* Step Title */}
                 <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4 mb-6">
                   <div>
                     <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white">
-                      {isReturnSelection 
-                        ? t('flight.select_return')
-                        : t('flight.select_outbound')
+                      {isReturnSelection
+                        ? t('flight.step_select_ret')
+                        : t('flight.step_select_dep')
                       }
                     </h3>
                     <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-display">
-                      {isReturnSelection 
-                        ? `${getCityLabel(form.to)} → ${getCityLabel(form.from)} | ${form.returnDate}` 
+                      {isReturnSelection
+                        ? `${getCityLabel(form.to)} → ${getCityLabel(form.from)} | ${form.returnDate}`
                         : `${getCityLabel(form.from)} → ${getCityLabel(form.to)} | ${form.departDate}`
                       }
                     </p>
@@ -641,7 +714,7 @@ export default function FlightDemo() {
                   </span>
                 </div>
 
-                 {/* Filters / Sorting tabs */}
+                {/* Filters / Sorting tabs */}
                 <div className="flex items-center gap-2 mb-4 select-none flex-wrap">
                   <div className="flex flex-1 gap-1.5 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-full border border-slate-200/50 dark:border-slate-700/50">
                     {(["cheapest", "best", "quickest"] as const).map((filter) => (
@@ -649,30 +722,28 @@ export default function FlightDemo() {
                         key={filter}
                         type="button"
                         onClick={() => setActiveFilter(filter)}
-                        className={`flex-1 py-2 text-center rounded-full text-xs font-bold transition-all cursor-pointer capitalize font-display ${
-                          activeFilter === filter 
-                            ? "bg-white dark:!bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/10 dark:border-slate-600" 
-                            : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                        }`}
+                        className={`flex-1 py-2 text-center rounded-full text-xs font-bold transition-all cursor-pointer capitalize font-display ${activeFilter === filter
+                          ? "bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/10 dark:border-slate-600"
+                          : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                          }`}
                       >
                         {filter === "cheapest" ? t('flight.filter_cheapest') :
-                         filter === "quickest" ? t('flight.filter_quickest') :
-                         t('flight.filter_best')}
+                          filter === "quickest" ? t('flight.filter_quickest') :
+                            t('flight.filter_best')}
                       </button>
                     ))}
                   </div>
-                  
+
                   <button
                     type="button"
                     onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-                    className={`px-4 py-2.5 rounded-full border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-display ${
-                      showAdvancedFilters 
-                        ? "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800" 
-                        : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
-                    }`}
+                    className={`px-4 py-2.5 rounded-full border text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer font-display ${showAdvancedFilters
+                      ? "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800"
+                      : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+                      }`}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" /></svg>
-                    {t('flight.filter_detailed')}
+                    {t('flight.detailed_filters')}
                   </button>
                 </div>
 
@@ -689,22 +760,21 @@ export default function FlightDemo() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* 1. Cabin Class */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_cabin_class')}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.cabin_class')}</label>
                           <div className="flex gap-1 bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200/50 dark:border-slate-700">
                             {(["all", "economy", "business"] as const).map((cls) => (
                               <button
                                 key={cls}
                                 type="button"
                                 onClick={() => setSelectedClass(cls)}
-                                className={`flex-1 py-1.5 text-[10px] font-bold rounded-xl transition-all cursor-pointer capitalize ${
-                                  selectedClass === cls 
-                                    ? "bg-sky-600 text-white" 
-                                    : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
-                                }`}
+                                className={`flex-1 py-1.5 text-[10px] font-bold rounded-xl transition-all cursor-pointer capitalize ${selectedClass === cls
+                                  ? "bg-sky-600 text-white"
+                                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                                  }`}
                               >
-                                {cls === "all" ? t('flight.class_all') :
-                                 cls === "economy" ? t('flight.class_economy') :
-                                 t('flight.class_business')}
+                                {cls === "all" ? t('flight.cabin_all') :
+                                  cls === "economy" ? t('flight.cabin_economy') :
+                                    t('flight.cabin_business')}
                               </button>
                             ))}
                           </div>
@@ -712,32 +782,31 @@ export default function FlightDemo() {
 
                         {/* 2. Time of Day */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_depart_time')}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.depart_time')}</label>
                           <div className="flex gap-1.5 flex-wrap">
                             {[
                               { id: "morning", label: t('flight.time_morning') },
                               { id: "afternoon", label: t('flight.time_afternoon') },
                               { id: "evening", label: t('flight.time_evening') }
-                            ].map((timeItem) => {
-                              const isChecked = selectedTimeOfDay.includes(timeItem.id);
+                            ].map((tItem) => {
+                              const isChecked = selectedTimeOfDay.includes(tItem.id);
                               return (
                                 <button
-                                  key={timeItem.id}
+                                  key={tItem.id}
                                   type="button"
                                   onClick={() => {
                                     if (isChecked) {
-                                      setSelectedTimeOfDay(selectedTimeOfDay.filter(x => x !== timeItem.id));
+                                      setSelectedTimeOfDay(selectedTimeOfDay.filter(x => x !== tItem.id));
                                     } else {
-                                      setSelectedTimeOfDay([...selectedTimeOfDay, timeItem.id]);
+                                      setSelectedTimeOfDay([...selectedTimeOfDay, tItem.id]);
                                     }
                                   }}
-                                  className={`px-3 py-1.5 rounded-full font-bold text-[10px] border transition-all cursor-pointer ${
-                                    isChecked 
-                                      ? "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800" 
-                                      : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
-                                  }`}
+                                  className={`px-3 py-1.5 rounded-full font-bold text-[10px] border transition-all cursor-pointer ${isChecked
+                                    ? "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800"
+                                    : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                    }`}
                                 >
-                                  {timeItem.label}
+                                  {tItem.label}
                                 </button>
                               );
                             })}
@@ -746,7 +815,7 @@ export default function FlightDemo() {
 
                         {/* 3. Airlines */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_airlines')}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.airlines')}</label>
                           <div className="flex gap-1.5 flex-wrap">
                             {mockAirlines.map((airline) => {
                               const isChecked = selectedAirlines.includes(airline.code);
@@ -761,11 +830,10 @@ export default function FlightDemo() {
                                       setSelectedAirlines([...selectedAirlines, airline.code]);
                                     }
                                   }}
-                                  className={`px-3 py-1.5 rounded-full font-bold text-[10px] border transition-all cursor-pointer ${
-                                    isChecked 
-                                      ? "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800" 
-                                      : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
-                                  }`}
+                                  className={`px-3 py-1.5 rounded-full font-bold text-[10px] border transition-all cursor-pointer ${isChecked
+                                    ? "bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 border-sky-200 dark:border-sky-800"
+                                    : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
+                                    }`}
                                 >
                                   {airline.name}
                                 </button>
@@ -778,7 +846,7 @@ export default function FlightDemo() {
                       {/* 4. Price Slider */}
                       <div className="pt-3 border-t border-slate-200/50 dark:border-slate-700/50">
                         <div className="flex justify-between items-center mb-1 text-xs">
-                          <label className="font-bold text-slate-700 dark:text-slate-300">{t('flight.label_max_price')}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300">{t('flight.max_price')}</label>
                           <span className="font-black text-sky-700 dark:text-sky-400">฿{maxPrice.toLocaleString()}</span>
                         </div>
                         <input
@@ -810,7 +878,7 @@ export default function FlightDemo() {
                             }}
                             className="text-[10px] font-bold text-rose-500 hover:text-rose-700 underline cursor-pointer"
                           >
-                            {t('flight.btn_clear_filters')}
+                            {t('flight.clear_filters')}
                           </button>
                         </div>
                       )}
@@ -825,7 +893,7 @@ export default function FlightDemo() {
                       <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400 dark:text-slate-600 mb-3">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
                       </div>
-                      <h4 className="font-bold text-slate-700 dark:text-slate-300 text-sm font-display">{t('flight.no_flights_found')}</h4>
+                      <h4 className="font-bold text-slate-700 dark:text-slate-300 text-sm font-display">{t('flight.no_flights')}</h4>
                       <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-xs mx-auto font-display">
                         {t('flight.no_flights_desc')}
                       </p>
@@ -839,7 +907,7 @@ export default function FlightDemo() {
                         }}
                         className="mt-4 px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full shadow-sm cursor-pointer font-display"
                       >
-                        {t('flight.btn_clear_filters')}
+                        {t('flight.clear_filters')}
                       </button>
                     </div>
                   ) : (
@@ -851,7 +919,7 @@ export default function FlightDemo() {
                       return (
                         <div key={flight.id} className="border border-slate-200/60 dark:border-slate-700/60 rounded-3xl overflow-hidden bg-white dark:bg-slate-800 shadow-sm hover:shadow-md transition-shadow">
                           <div className="grid md:grid-cols-4 items-center">
-                            
+
                             {/* Flight main details */}
                             <div className="md:col-span-3 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                               {/* Airline info */}
@@ -883,7 +951,7 @@ export default function FlightDemo() {
                                   <span className="font-black text-slate-800 dark:text-slate-200 text-base block font-display">{flight.departTime}</span>
                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider font-display">{fromCode}</span>
                                 </div>
-                                
+
                                 <div className="flex-1 max-w-[120px] flex flex-col items-center relative my-2">
                                   <span className="text-[9px] text-slate-400 font-bold block mb-1 font-display">{flight.duration}</span>
                                   <div className="w-full flex items-center relative">
@@ -908,7 +976,7 @@ export default function FlightDemo() {
                                 onClick={() => setExpandedDetailsIndex(isExpanded ? null : idx)}
                                 className="flex items-center gap-1 text-[11px] font-extrabold text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 py-1 px-3 bg-sky-50 dark:bg-sky-900/30 rounded-full cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors font-display"
                               >
-                                {t('flight.btn_view_details')}
+                                {t('flight.view_details')}
                                 {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                               </button>
                             </div>
@@ -943,7 +1011,7 @@ export default function FlightDemo() {
                                 }}
                                 className="w-full max-w-[130px] py-2.5 rounded-full bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-sm active:scale-95 transition-all cursor-pointer font-display"
                               >
-                                {t('flight.btn_select_flight')}
+                                {t('flight.select_this')}
                               </button>
                             </div>
                           </div>
@@ -955,7 +1023,7 @@ export default function FlightDemo() {
                                 <span className="border-b-2 border-sky-600 pb-3 -mb-3.5">{t('flight.detail_tab_details')}</span>
                                 <span className="text-slate-400">{t('flight.detail_tab_fares')}</span>
                               </div>
-                              
+
                               <div className="grid md:grid-cols-2 gap-4">
                                 <div className="flex items-start gap-2.5">
                                   <Luggage className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
@@ -964,7 +1032,7 @@ export default function FlightDemo() {
                                     <p className="text-[11px] text-slate-400 mt-0.5 font-display">{t('flight.baggage_desc')}</p>
                                   </div>
                                 </div>
-                                
+
                                 <div className="flex items-start gap-2.5">
                                   <Clock className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                                   <div>
@@ -1015,10 +1083,10 @@ export default function FlightDemo() {
                       setBookingStep("select_flight");
                     }
                   }}
-                  className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-400 transition-colors mb-6 cursor-pointer"
+                  className="flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors mb-6 cursor-pointer"
                 >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  {t('flight.btn_back_selection')}
+                  <ArrowLeft className="w-4 h-4" />
+                  {t('flight.back_to_selection')}
                 </button>
 
                 {/* Selected flights summary */}
@@ -1029,17 +1097,17 @@ export default function FlightDemo() {
                   </h4>
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between items-center py-1.5 border-b border-sky-100/50 dark:border-sky-800/50">
-                      <span className="text-slate-500 dark:text-slate-400 font-display">{t('flight.outbound_label')}:</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-display">{t('flight.summary_outbound')}:</span>
                       <span className="font-bold text-sky-950 dark:text-white font-display">{selectedOutboundFlight?.airline.name} ({selectedOutboundFlight?.flightNo}) · {selectedOutboundFlight?.departTime}</span>
                     </div>
                     {tripType === "round" && selectedInboundFlight && (
                       <div className="flex justify-between items-center py-1.5 border-b border-sky-100/50 dark:border-sky-800/50 font-display">
-                        <span className="text-slate-500 dark:text-slate-400">{t('flight.inbound_label')}:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('flight.summary_inbound')}:</span>
                         <span className="font-bold text-sky-950 dark:text-white">{selectedInboundFlight?.airline.name} ({selectedInboundFlight?.flightNo}) · {selectedInboundFlight?.departTime}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center pt-2 text-sm font-display">
-                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.fare_per_person')}:</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.summary_fare_per_person')}:</span>
                       <span className="font-extrabold text-sky-950 dark:text-white">฿{((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)).toLocaleString()}</span>
                     </div>
                   </div>
@@ -1048,7 +1116,7 @@ export default function FlightDemo() {
                 <h3 className="font-display text-xl font-bold mb-4 text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">
                   {t('flight.modal_passenger')}
                 </h3>
-                
+
                 <form onSubmit={handlePassengerSubmit} className="grid md:grid-cols-2 gap-4">
                   <Field label={t('flight.passenger_name')} htmlFor="passengerName" required>
                     <input
@@ -1083,13 +1151,13 @@ export default function FlightDemo() {
                       placeholder="08X-XXX-XXXX"
                     />
                   </Field>
-                  <Field 
-                    label={t('flight.modal_seat') || "Seat"} 
+                  <Field
+                    label={t('flight.modal_seat') || "Seat"}
                     onClick={() => setSeatMapOpen(true)}
                   >
                     <div className="py-0.5 select-none font-display">
                       <span className="font-bold text-slate-800 text-sm truncate block">
-                        {form.seat || t('flight.seat_not_selected')}
+                        {form.seat || t('flight.not_selected')}
                       </span>
                     </div>
                   </Field>
@@ -1151,32 +1219,28 @@ export default function FlightDemo() {
                     className={`transition duration-700 ${isActive ? "scale-105" : "group-hover:scale-105"}`}
                   />
                   {/* Full card dark overlay on hover / active */}
-                  <div className={`absolute inset-0 bg-black/60 transition-opacity duration-500 z-10 ${
-                    isActive ? "opacity-80" : "opacity-0 group-hover:opacity-80"
-                  }`} />
- 
+                  <div className={`absolute inset-0 bg-black/60 transition-opacity duration-500 z-10 ${isActive ? "opacity-80" : "opacity-0 group-hover:opacity-80"
+                    }`} />
+
                   {/* Expanding gradient overlay rising from the bottom */}
-                  <div 
-                    className={`absolute bottom-0 left-0 right-0 transition-all duration-500 ease-out z-10 ${
-                      isActive ? "h-[85%] opacity-80" : "h-[40%] opacity-70 group-hover:h-[85%] group-hover:opacity-80"
-                    }`}
+                  <div
+                    className={`absolute bottom-0 left-0 right-0 transition-all duration-500 ease-out z-10 ${isActive ? "h-[85%] opacity-80" : "h-[40%] opacity-70 group-hover:h-[85%] group-hover:opacity-80"
+                      }`}
                     style={{
                       background: 'linear-gradient(to top, #000000 0%, rgba(0,0,0,0.98) 45%, rgba(0,0,0,0.8) 75%, rgba(0,0,0,0) 100%)'
                     }}
                   />
- 
+
                   <div className="absolute inset-0 p-6 flex flex-col justify-end text-white z-20 text-left">
                     <p className="text-[10px] font-bold tracking-widest uppercase opacity-75">{x.label}</p>
                     <p className="mt-1.5 font-display text-xl font-bold tracking-tight">{x.t}</p>
-                    
-                    <div className={`transition-all duration-500 ease-out overflow-hidden ${
-                      isActive 
-                        ? "max-h-48 opacity-100 translate-y-0" 
-                        : "max-h-0 opacity-0 translate-y-4 group-hover:max-h-48 group-hover:opacity-100 group-hover:translate-y-0"
-                    }`}>
-                      <p className={`mt-2 text-xs text-white/70 leading-relaxed pr-1 ${
-                        isActive ? "line-clamp-none overflow-y-auto max-h-20" : "line-clamp-2 group-hover:line-clamp-none max-h-20 group-hover:overflow-y-auto"
-                      }`} style={{ scrollbarWidth: 'thin' }}>{x.desc}</p>
+
+                    <div className={`transition-all duration-500 ease-out overflow-hidden ${isActive
+                      ? "max-h-48 opacity-100 translate-y-0"
+                      : "max-h-0 opacity-0 translate-y-4 group-hover:max-h-48 group-hover:opacity-100 group-hover:translate-y-0"
+                      }`}>
+                      <p className={`mt-2 text-xs text-white/70 leading-relaxed pr-1 ${isActive ? "line-clamp-none overflow-y-auto max-h-20" : "line-clamp-2 group-hover:line-clamp-none max-h-20 group-hover:overflow-y-auto"
+                        }`} style={{ scrollbarWidth: 'thin' }}>{x.desc}</p>
                       <div className="mt-4 flex items-end justify-between">
                         <div>
                           <p className="text-[10px] opacity-75">{t('flight.starting_price')}</p>
@@ -1187,9 +1251,8 @@ export default function FlightDemo() {
                             e.stopPropagation();
                             handleSelectPromo(x.from, x.to);
                           }}
-                          className={`rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold text-white border border-white/10 transition-colors cursor-pointer ${
-                            isActive ? "bg-white/30 hover:bg-white/45" : "group-hover:bg-white/30 group-hover:hover:bg-white/45"
-                          }`}
+                          className={`rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold text-white border border-white/10 transition-colors cursor-pointer ${isActive ? "bg-white/30 hover:bg-white/45" : "group-hover:bg-white/30 group-hover:hover:bg-white/45"
+                            }`}
                         >
                           {t('flight.details') || "Book Now"}
                         </button>
@@ -1211,7 +1274,7 @@ export default function FlightDemo() {
               <p className="text-sm text-foreground/60 mt-3">{t('flight.about_subheading')}</p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
-              
+
               {/* Card 1 */}
               <div className="group bg-background/60 backdrop-blur-sm rounded-2xl p-6 border border-foreground/10 shadow-sm hover:shadow-md hover:border-sky-500/30 transition-all duration-300">
                 <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-sky-500/10 text-sky-500 mb-4 border border-sky-500/20 group-hover:scale-110 group-hover:bg-sky-500 group-hover:text-white transition-all duration-300">
@@ -1276,13 +1339,12 @@ export default function FlightDemo() {
 
 function Field({ label, htmlFor, children, onClick, required }: { label: string; htmlFor?: string; children: React.ReactNode; onClick?: () => void; required?: boolean }) {
   return (
-    <div 
+    <div
       onClick={onClick}
-      className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${
-        onClick 
-          ? "cursor-pointer hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98" 
-          : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
-      }`}
+      className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${onClick
+        ? "cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-850/60 hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98"
+        : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
+        }`}
     >
       <label htmlFor={htmlFor} className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)] block cursor-pointer select-none">
         {label}
@@ -1299,22 +1361,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
   const getCode = (city: string) => city.match(/\(([A-Z]{3})\)/)?.[1] || "N/A";
   const getCleanCity = (city: string) => {
-    if (language !== 'th') {
-      const mapping: Record<string, string> = {
-        "กรุงเทพฯ (DMK)": "Bangkok",
-        "เชียงใหม่ (CNX)": "Chiang Mai",
-        "ภูเก็ต (HKT)": "Phuket",
-        "หาดใหญ่ (HDY)": "Hat Yai",
-        "อุดรธานี (UTH)": "Udon Thani",
-        "อุบลราชธานี (UBP)": "Ubon Ratchathani",
-        "ขอนแก่น (KKC)": "Khon Kaen",
-        "สุราษฎร์ธานี (URT)": "Surat Thani",
-        "นครศรีธรรมราช (NST)": "Nakhon Si Thammarat",
-        "เชียงราย (CEI)": "Chiang Rai",
-      };
-      return mapping[city] || city.split('(')[0].trim();
-    }
-    return city.split('(')[0].trim();
+    return getCityLabelForLang(city, language).split('(')[0].trim();
   };
 
   // Generate stable flight number, seat number, and price based on passenger name hash
@@ -1329,7 +1376,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
   const basePrice = booking.pricePerPax || (booking.to.includes("เชียงใหม่") || booking.to.includes("ภูเก็ต") ? 890 : 990);
   const totalPrice = basePrice * booking.passengers;
-  
+
   // Calculate discount from promo codes
   const promoUpper = (booking.promoCode || "").toUpperCase();
   const discountPercent = promoUpper === "PROMO2026" ? 0.2 : promoUpper === "BOTNOI" ? 0.15 : 0;
@@ -1358,7 +1405,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogContent className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 p-0 sm:max-w-md bg-[#eef6fc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl font-display">
         <div className="p-8 relative select-none">
-          
+
           {/* Header branding (Top center) */}
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-1.5">
@@ -1387,18 +1434,18 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
             <div className="w-4 h-4 rounded-full bg-sky-200 dark:bg-sky-900/60 flex items-center justify-center shrink-0">
               <div className="w-1.5 h-1.5 rounded-full bg-sky-600 dark:bg-sky-400"></div>
             </div>
-            
+
             {/* Left dashed line */}
             <div className="flex-1 border-t-2 border-dashed border-sky-200/80 dark:border-sky-800/80 mx-2"></div>
-            
+
             {/* Center rotated Plane icon */}
             <div className="px-2 text-sky-950 dark:text-sky-200 shrink-0 transform rotate-45">
               <Plane className="w-6 h-6 fill-current stroke-[1.5]" />
             </div>
-            
+
             {/* Right dashed line */}
             <div className="flex-1 border-t-2 border-dashed border-sky-200/80 dark:border-sky-800/80 mx-2"></div>
-            
+
             {/* Right dot */}
             <div className="w-4 h-4 rounded-full bg-sky-200 dark:bg-sky-900/60 flex items-center justify-center shrink-0">
               <div className="w-1.5 h-1.5 rounded-full bg-sky-600 dark:bg-sky-400"></div>
@@ -1442,7 +1489,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_seat')}</p>
               <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{seatNumber}</p>
             </div>
-            
+
             <div className="col-span-2">
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_class_status')}</p>
               <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{flightClass} / {t('flight.status_confirmed')}</p>
@@ -1470,7 +1517,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
                 )}
               </div>
             </div>
-            
+
             {/* Barcode mockup */}
             <div className="h-9 w-32 opacity-80 dark:invert" style={{ background: "repeating-linear-gradient(95deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 6px, transparent 6px, transparent 10px, #1e293b 10px, #1e293b 14px, transparent 14px, transparent 16px)" }}></div>
           </div>
@@ -1500,7 +1547,7 @@ interface SeatMapModalProps {
 function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toCity }: SeatMapModalProps) {
   const { t } = useTranslation();
   const getCode = (city: string) => city.match(/\(([A-Z]{3})\)/)?.[1] || "N/A";
-  
+
   // Dynamic list of occupied seats combining static occupied seats & bookings from storage
   const OCCUPIED_SEATS = useMemo(() => {
     const staticOccupied = ["1B", "2E", "3A", "3F", "5D", "6B", "6C", "7A", "8F", "9C", "9D"];
@@ -1510,7 +1557,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
       .map((b: Booking) => b.seat as string);
     return Array.from(new Set([...staticOccupied, ...booked]));
   }, [fromCity, toCity, open]);
-  
+
   // Rows 1 to 10
   const rows = Array.from({ length: 10 }, (_, i) => i + 1);
   const leftCols = ["A", "B", "C"];
@@ -1528,7 +1575,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           {/* Header */}
           <div className="text-center mb-6">
             <h3 className="font-display font-black text-xl text-sky-950 tracking-tight">
-              {t('flight.modal_seat_title')}
+              {t('flight.seat_picker_title')}
             </h3>
             <p className="text-xs text-slate-400 mt-1">
               {getCode(fromCity)} → {getCode(toCity)}
@@ -1539,15 +1586,15 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           <div className="flex justify-center gap-6 text-xs mb-6 bg-slate-50 py-3 rounded-2xl border border-slate-100">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#cbdcf7] border border-[#cbdcf7]"></div>
-              <span className="text-[#0f3460] font-medium">{t('flight.seat_status_available')}</span>
+              <span className="text-[#0f3460] font-medium">{t('flight.seat_available')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center"><span className="text-[8px] text-slate-400 line-through">✕</span></div>
-              <span className="text-slate-400">{t('flight.seat_status_occupied')}</span>
+              <span className="text-slate-400">{t('flight.seat_occupied')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#0f3460] border border-[#0f3460]"></div>
-              <span className="text-[#0f3460] font-bold">{t('flight.seat_status_selected')}</span>
+              <span className="text-[#0f3460] font-bold">{t('flight.seat_selected')}</span>
             </div>
           </div>
 
@@ -1569,20 +1616,19 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
                     const seatId = `${row}${col}`;
                     const isOccupied = OCCUPIED_SEATS.includes(seatId);
                     const isSelected = selectedSeat === seatId;
-                    
+
                     return (
                       <button
                         key={seatId}
                         type="button"
                         disabled={isOccupied}
                         onClick={() => handleSeatClick(seatId)}
-                        className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${
-                          isOccupied
-                            ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
-                            : isSelected
+                        className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${isOccupied
+                          ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
+                          : isSelected
                             ? "bg-[#0f3460] border-[#0f3460] text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20"
                             : "bg-[#cbdcf7]/70 border-[#cbdcf7] text-[#0f3460] hover:bg-[#cbdcf7] hover:border-[#9abcee]"
-                        }`}
+                          }`}
                       >
                         {seatId}
                       </button>
@@ -1597,20 +1643,19 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
                     const seatId = `${row}${col}`;
                     const isOccupied = OCCUPIED_SEATS.includes(seatId);
                     const isSelected = selectedSeat === seatId;
-                    
+
                     return (
                       <button
                         key={seatId}
                         type="button"
                         disabled={isOccupied}
                         onClick={() => handleSeatClick(seatId)}
-                        className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${
-                          isOccupied
-                            ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
-                            : isSelected
+                        className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${isOccupied
+                          ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
+                          : isSelected
                             ? "bg-[#0f3460] border-[#0f3460] text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20"
                             : "bg-[#cbdcf7]/70 border-[#cbdcf7] text-[#0f3460] hover:bg-[#cbdcf7] hover:border-[#9abcee]"
-                        }`}
+                          }`}
                       >
                         {seatId}
                       </button>
@@ -1631,25 +1676,24 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           <div className="mt-8 flex flex-col gap-3">
             {selectedSeat ? (
               <div className="text-center text-xs text-[#0f3460] font-bold bg-[#cbdcf7]/30 border border-[#cbdcf7]/40 py-2.5 rounded-2xl">
-                {t('flight.seat_selected_val').replace('{seat}', selectedSeat)}
+                {t('flight.seat_selected_label')} {selectedSeat}
               </div>
             ) : (
               <div className="text-center text-xs text-rose-600 font-bold bg-rose-50 border border-rose-200/50 py-2.5 rounded-2xl">
-                {t('flight.please_select_seat')}
+                {t('flight.seat_please_select')}
               </div>
             )}
-            
+
             <button
               type="button"
               disabled={!selectedSeat}
               onClick={onClose}
-              className={`w-full py-3.5 font-display font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer ${
-                selectedSeat
-                  ? "bg-[#0f3460] hover:bg-[#0c2a50] text-white hover:shadow-lg active:scale-98"
-                  : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
-              }`}
+              className={`w-full py-3.5 font-display font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer ${selectedSeat
+                ? "bg-[#0f3460] hover:bg-[#0c2a50] text-white hover:shadow-lg active:scale-98"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
+                }`}
             >
-              {t('flight.btn_confirm_seat')}
+              {t('flight.seat_confirm')}
             </button>
           </div>
 

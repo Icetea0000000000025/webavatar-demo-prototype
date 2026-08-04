@@ -65,7 +65,7 @@ export default function ITStoreAdmin() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-foreground transition-colors pt-7">
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-20 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+      <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-lg transition-all">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div
@@ -98,7 +98,7 @@ export default function ITStoreAdmin() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8 pt-2">
 
         {/* ── Stats Bar ───────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
