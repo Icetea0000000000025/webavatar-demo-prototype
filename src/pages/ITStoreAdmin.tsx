@@ -15,7 +15,7 @@ const money = new Intl.NumberFormat("th-TH", {
 });
 
 export default function ITStoreAdmin() {
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
   const [orders, setOrders] = useState<ITOrder[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -34,7 +34,7 @@ export default function ITStoreAdmin() {
   };
 
   const clearAll = () => {
-    if (!window.confirm(language === "en" ? "Clear all orders? This cannot be undone." : "ล้างออเดอร์ทั้งหมด? ไม่สามารถย้อนกลับได้")) return;
+    if (!window.confirm(t("itstore_admin.clear_confirm"))) return;
     setOrders([]);
     window.localStorage.setItem(ORDERS_KEY, JSON.stringify([]));
   };
@@ -72,7 +72,7 @@ export default function ITStoreAdmin() {
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700"
             id="itstore-admin-back"
           >
-            <ArrowLeft size={12} /> {language === "en" ? "Back to Store" : "กลับร้าน"}
+            <ArrowLeft size={12} /> {t("itstore_admin.btn_back")}
           </Link>
         </div>
       </header>
@@ -83,12 +83,12 @@ export default function ITStoreAdmin() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {[
             {
-              label: language === "en" ? "Total Orders" : "ออเดอร์ทั้งหมด",
+              label: t("itstore_admin.stat_total_orders"),
               value: orders.length,
               color: "#6366f1",
             },
             {
-              label: language === "en" ? "Items Sold" : "สินค้าที่ขายได้",
+              label: t("itstore_admin.stat_items_sold"),
               value: orders.reduce(
                 (s, o) => s + o.items.reduce((si, i) => si + i.quantity, 0),
                 0
@@ -96,7 +96,7 @@ export default function ITStoreAdmin() {
               color: "#8b5cf6",
             },
             {
-              label: language === "en" ? "Total Revenue" : "รายได้รวม",
+              label: t("itstore_admin.stat_total_revenue"),
               value: money.format(totalRevenue),
               color: "#10b981",
             },
@@ -124,7 +124,7 @@ export default function ITStoreAdmin() {
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
             <h2 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center gap-2">
               <Package size={18} style={{ color: "#6366f1" }} />
-              {language === "en" ? "Order Log" : "บันทึกออเดอร์"}
+              {t("itstore_admin.order_log")}
             </h2>
             {orders.length > 0 && (
               <button
@@ -140,7 +140,7 @@ export default function ITStoreAdmin() {
           {/* Responsive table */}
           {!loaded ? (
             <div className="px-6 py-12 text-center text-slate-400 dark:text-slate-500 text-sm animate-pulse">
-              {language === "en" ? "Loading orders..." : "กำลังโหลด..."}
+              {t("itstore_admin.loading")}
             </div>
           ) : orders.length === 0 ? (
             <div className="px-6 py-16 text-center">
@@ -151,7 +151,7 @@ export default function ITStoreAdmin() {
                 className="inline-flex items-center gap-1.5 mt-5 px-5 py-2 rounded-full text-sm font-bold text-white transition-all hover:scale-105"
                 style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6)" }}
               >
-                {language === "en" ? "Go to Store →" : "ไปที่ร้านค้า →"}
+                {t("itstore_admin.btn_go_store")}
               </Link>
             </div>
           ) : (
@@ -163,7 +163,7 @@ export default function ITStoreAdmin() {
                     <th className="px-6 py-3 text-left">{t("itstore_admin.th_time")}</th>
                     <th className="px-6 py-3 text-right">{t("itstore_admin.th_total")}</th>
                     <th className="px-6 py-3 text-left">{t("itstore_admin.th_items")}</th>
-                    <th className="px-6 py-3 text-center">Actions</th>
+                    <th className="px-6 py-3 text-center">{t("itstore_admin.th_actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
