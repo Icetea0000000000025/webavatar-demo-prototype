@@ -319,7 +319,7 @@ function Contact() {
                     outline: 'none',
                     fontSize: '0.9rem',
                     transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
+
                   }}
                 />
               </div>
@@ -344,7 +344,6 @@ function Contact() {
                     outline: 'none',
                     fontSize: '0.9rem',
                     transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
                   }}
                 />
               </div>
@@ -366,7 +365,7 @@ function Contact() {
                       border: '1px solid var(--border)',
                       outline: 'none',
                       fontSize: '0.9rem',
-                      background: '#FFFFFF',
+
                       appearance: 'none',
                       cursor: 'pointer'
                     }}
@@ -409,7 +408,7 @@ function Contact() {
                     fontSize: '0.9rem',
                     resize: 'vertical',
                     transition: 'border-color 0.2s',
-                    background: '#FFFFFF'
+
                   }}
                 />
               </div>
