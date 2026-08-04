@@ -205,9 +205,9 @@ export default function FlightDemo() {
       to: toCity,
     }));
     toast.success(
-      language === 'en' 
-        ? `Selected route: ${fromCity.split('(')[0].trim()} to ${toCity.split('(')[0].trim()}` 
-        : `เลือกเส้นทาง: ${fromCity.split('(')[0].trim()} ไปยัง ${toCity.split('(')[0].trim()} เรียบร้อยแล้ว`
+      t('flight.promo_selected')
+        .replace('{from}', fromCity.split('(')[0].trim())
+        .replace('{to}', toCity.split('(')[0].trim())
     );
     setSelectedOutboundFlight(null);
     setSelectedInboundFlight(null);
@@ -270,11 +270,11 @@ export default function FlightDemo() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.departDate) {
-      toast.error(language === 'en' ? "Please select departure date" : "กรุณาเลือกวันเดินทางขาไป");
+      toast.error(t('flight.err_depart_date'));
       return;
     }
     if (tripType === "round" && !form.returnDate) {
-      toast.error(language === 'en' ? "Please select return date" : "กรุณาเลือกวันเดินทางขากลับ");
+      toast.error(t('flight.err_return_date'));
       return;
     }
     setSelectedOutboundFlight(null);
@@ -307,9 +307,7 @@ export default function FlightDemo() {
 
       if (isSeatTaken) {
         toast.error(
-          language === 'en'
-            ? `Seat ${form.seat} is already booked for this flight. Please select another seat.`
-            : `ที่นั่ง ${form.seat} ถูกจองไปแล้วสำหรับเที่ยวบินนี้ กรุณาเลือกที่นั่งอื่น`
+          t('flight.err_seat_taken').replace('{seat}', form.seat)
         );
         setForm((prev) => ({ ...prev, seat: "" }));
         setSeatMapOpen(true);
@@ -587,7 +585,7 @@ export default function FlightDemo() {
                       value={form.promoCode}
                       onChange={(e) => setForm({ ...form, promoCode: e.target.value })}
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
-                      placeholder={language === 'en' ? "e.g., PROMO2026" : "เช่น PROMO2026"}
+                      placeholder={t('flight.promo_placeholder')}
                     />
                   </Field>
 
@@ -598,7 +596,7 @@ export default function FlightDemo() {
                       className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center gap-2"
                     >
                       <Plane className="w-4 h-4" />
-                      {language === 'en' ? "Search Flights" : "ค้นหาเที่ยวบิน"}
+                      {t('flight.btn_search')}
                     </button>
                   </div>
                 </form>
@@ -619,7 +617,7 @@ export default function FlightDemo() {
                   className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-400 transition-colors mb-4 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  {language === 'en' ? "Back" : "ย้อนกลับ"}
+                  {t('flight.btn_back')}
                 </button>
 
                 {/* Step Title */}
@@ -627,8 +625,8 @@ export default function FlightDemo() {
                   <div>
                     <h3 className="font-display text-xl font-bold text-slate-900 dark:text-white">
                       {isReturnSelection 
-                        ? (language === 'en' ? "Select Return Flight" : "เลือกเที่ยวบินขากลับ") 
-                        : (language === 'en' ? "Select Departure Flight" : "เลือกเที่ยวบินขาไป")
+                        ? t('flight.select_return')
+                        : t('flight.select_outbound')
                       }
                     </h3>
                     <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 font-display">
@@ -639,7 +637,7 @@ export default function FlightDemo() {
                     </p>
                   </div>
                   <span className="text-xs font-bold text-sky-700 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/30 px-3 py-1.5 rounded-full font-display">
-                    {language === 'en' ? "Flights | Total 3 result" : "เที่ยวบิน | มีบริการ 3 รอบ"}
+                    {t('flight.results_count')}
                   </span>
                 </div>
 
@@ -657,9 +655,9 @@ export default function FlightDemo() {
                             : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                         }`}
                       >
-                        {filter === "cheapest" ? (language === 'en' ? "Cheapest" : "ถูกที่สุด") :
-                         filter === "quickest" ? (language === 'en' ? "Quickest" : "เร็วที่สุด") :
-                         (language === 'en' ? "Best" : "ดีที่สุด")}
+                        {filter === "cheapest" ? t('flight.filter_cheapest') :
+                         filter === "quickest" ? t('flight.filter_quickest') :
+                         t('flight.filter_best')}
                       </button>
                     ))}
                   </div>
@@ -674,7 +672,7 @@ export default function FlightDemo() {
                     }`}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" /></svg>
-                    {language === 'en' ? "Detailed Filters" : "ตัวกรองละเอียด"}
+                    {t('flight.filter_detailed')}
                   </button>
                 </div>
 
@@ -691,7 +689,7 @@ export default function FlightDemo() {
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* 1. Cabin Class */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{language === 'en' ? "Cabin Class" : "ระดับชั้นเที่ยวบิน"}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_cabin_class')}</label>
                           <div className="flex gap-1 bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-200/50 dark:border-slate-700">
                             {(["all", "economy", "business"] as const).map((cls) => (
                               <button
@@ -704,9 +702,9 @@ export default function FlightDemo() {
                                     : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                                 }`}
                               >
-                                {cls === "all" ? (language === 'en' ? "All" : "ทั้งหมด") :
-                                 cls === "economy" ? (language === 'en' ? "Economy" : "ประหยัด") :
-                                 (language === 'en' ? "Business" : "ธุรกิจ")}
+                                {cls === "all" ? t('flight.class_all') :
+                                 cls === "economy" ? t('flight.class_economy') :
+                                 t('flight.class_business')}
                               </button>
                             ))}
                           </div>
@@ -714,23 +712,23 @@ export default function FlightDemo() {
 
                         {/* 2. Time of Day */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{language === 'en' ? "Departure Time" : "เวลาออกเดินทาง"}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_depart_time')}</label>
                           <div className="flex gap-1.5 flex-wrap">
                             {[
-                              { id: "morning", label: language === 'en' ? "🌅 Morning" : "🌅 เช้า" },
-                              { id: "afternoon", label: language === 'en' ? "☀️ Afternoon" : "☀️ บ่าย" },
-                              { id: "evening", label: language === 'en' ? "🌙 Evening" : "🌙 เย็น" }
-                            ].map((t) => {
-                              const isChecked = selectedTimeOfDay.includes(t.id);
+                              { id: "morning", label: t('flight.time_morning') },
+                              { id: "afternoon", label: t('flight.time_afternoon') },
+                              { id: "evening", label: t('flight.time_evening') }
+                            ].map((timeItem) => {
+                              const isChecked = selectedTimeOfDay.includes(timeItem.id);
                               return (
                                 <button
-                                  key={t.id}
+                                  key={timeItem.id}
                                   type="button"
                                   onClick={() => {
                                     if (isChecked) {
-                                      setSelectedTimeOfDay(selectedTimeOfDay.filter(x => x !== t.id));
+                                      setSelectedTimeOfDay(selectedTimeOfDay.filter(x => x !== timeItem.id));
                                     } else {
-                                      setSelectedTimeOfDay([...selectedTimeOfDay, t.id]);
+                                      setSelectedTimeOfDay([...selectedTimeOfDay, timeItem.id]);
                                     }
                                   }}
                                   className={`px-3 py-1.5 rounded-full font-bold text-[10px] border transition-all cursor-pointer ${
@@ -739,7 +737,7 @@ export default function FlightDemo() {
                                       : "bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 border-slate-200/50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                                   }`}
                                 >
-                                  {t.label}
+                                  {timeItem.label}
                                 </button>
                               );
                             })}
@@ -748,7 +746,7 @@ export default function FlightDemo() {
 
                         {/* 3. Airlines */}
                         <div>
-                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{language === 'en' ? "Airlines" : "สายการบิน"}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-2">{t('flight.label_airlines')}</label>
                           <div className="flex gap-1.5 flex-wrap">
                             {mockAirlines.map((airline) => {
                               const isChecked = selectedAirlines.includes(airline.code);
@@ -780,7 +778,7 @@ export default function FlightDemo() {
                       {/* 4. Price Slider */}
                       <div className="pt-3 border-t border-slate-200/50 dark:border-slate-700/50">
                         <div className="flex justify-between items-center mb-1 text-xs">
-                          <label className="font-bold text-slate-700 dark:text-slate-300">{language === 'en' ? "Max Price per person" : "ราคาต่อคนสูงสุด"}</label>
+                          <label className="font-bold text-slate-700 dark:text-slate-300">{t('flight.label_max_price')}</label>
                           <span className="font-black text-sky-700 dark:text-sky-400">฿{maxPrice.toLocaleString()}</span>
                         </div>
                         <input
@@ -812,7 +810,7 @@ export default function FlightDemo() {
                             }}
                             className="text-[10px] font-bold text-rose-500 hover:text-rose-700 underline cursor-pointer"
                           >
-                            {language === 'en' ? "Clear All Filters" : "ล้างตัวกรองทั้งหมด"}
+                            {t('flight.btn_clear_filters')}
                           </button>
                         </div>
                       )}
@@ -827,11 +825,9 @@ export default function FlightDemo() {
                       <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto text-slate-400 dark:text-slate-600 mb-3">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="8" y1="12" x2="16" y2="12" /></svg>
                       </div>
-                      <h4 className="font-bold text-slate-700 dark:text-slate-300 text-sm font-display">{language === 'en' ? "No Flights Found" : "ไม่พบเที่ยวบินที่ระบุ"}</h4>
+                      <h4 className="font-bold text-slate-700 dark:text-slate-300 text-sm font-display">{t('flight.no_flights_found')}</h4>
                       <p className="text-xs text-slate-400 dark:text-slate-500 mt-1 max-w-xs mx-auto font-display">
-                        {language === 'en' 
-                          ? "Try expanding your budget, changing cabin class, or clearing all filters." 
-                          : "ลองขยายงบประมาณ เปลี่ยนระดับเที่ยวบิน หรือล้างค่าตัวกรองของคุณ"}
+                        {t('flight.no_flights_desc')}
                       </p>
                       <button
                         type="button"
@@ -843,7 +839,7 @@ export default function FlightDemo() {
                         }}
                         className="mt-4 px-4 py-2.5 bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs rounded-full shadow-sm cursor-pointer font-display"
                       >
-                        {language === 'en' ? "Clear All Filters" : "ล้างตัวกรองทั้งหมด"}
+                        {t('flight.btn_clear_filters')}
                       </button>
                     </div>
                   ) : (
@@ -897,7 +893,7 @@ export default function FlightDemo() {
                                     <div className="flex-1 border-t border-slate-200 dark:border-slate-600 border-dashed"></div>
                                     <div className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-600 border border-slate-300 dark:border-slate-500"></div>
                                   </div>
-                                  <span className="text-[9px] text-slate-400 font-bold block mt-1 uppercase tracking-widest font-display">Non-stop</span>
+                                  <span className="text-[9px] text-slate-400 font-bold block mt-1 uppercase tracking-widest font-display">{t('flight.non_stop')}</span>
                                 </div>
 
                                 <div className="text-right">
@@ -912,7 +908,7 @@ export default function FlightDemo() {
                                 onClick={() => setExpandedDetailsIndex(isExpanded ? null : idx)}
                                 className="flex items-center gap-1 text-[11px] font-extrabold text-sky-700 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 py-1 px-3 bg-sky-50 dark:bg-sky-900/30 rounded-full cursor-pointer hover:bg-sky-100 dark:hover:bg-sky-900/50 transition-colors font-display"
                               >
-                                {language === 'en' ? "View Details" : "ดูรายละเอียด"}
+                                {t('flight.btn_view_details')}
                                 {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                               </button>
                             </div>
@@ -925,7 +921,7 @@ export default function FlightDemo() {
                                 </span>
                               )}
                               <div className="mb-3">
-                                <span className="text-[10px] text-slate-400 uppercase font-bold block font-display">per passenger</span>
+                                <span className="text-[10px] text-slate-400 uppercase font-bold block font-display">{t('flight.per_passenger')}</span>
                                 <span className="font-display font-black text-2xl text-slate-800 dark:text-white">฿{flight.price.toLocaleString()}</span>
                               </div>
                               <button
@@ -947,7 +943,7 @@ export default function FlightDemo() {
                                 }}
                                 className="w-full max-w-[130px] py-2.5 rounded-full bg-sky-600 hover:bg-sky-500 text-white font-bold text-xs shadow-sm active:scale-95 transition-all cursor-pointer font-display"
                               >
-                                {language === 'en' ? "Select Flight" : "เลือกไฟลท์นี้"}
+                                {t('flight.btn_select_flight')}
                               </button>
                             </div>
                           </div>
@@ -956,24 +952,24 @@ export default function FlightDemo() {
                           {isExpanded && (
                             <div className="border-t border-slate-100 dark:border-slate-700 p-6 bg-slate-50/30 dark:bg-slate-900/30 text-left text-xs text-slate-600 dark:text-slate-400 space-y-4 animate-fadeIn">
                               <div className="flex gap-4 border-b border-slate-100 dark:border-slate-700 pb-3 mb-2 font-bold text-slate-800 dark:text-slate-200 font-display">
-                                <span className="border-b-2 border-sky-600 pb-3 -mb-3.5">DETAILS</span>
-                                <span className="text-slate-400">FARES (ECONOMY)</span>
+                                <span className="border-b-2 border-sky-600 pb-3 -mb-3.5">{t('flight.detail_tab_details')}</span>
+                                <span className="text-slate-400">{t('flight.detail_tab_fares')}</span>
                               </div>
                               
                               <div className="grid md:grid-cols-2 gap-4">
                                 <div className="flex items-start gap-2.5">
                                   <Luggage className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                                   <div>
-                                    <h5 className="font-bold text-slate-800 dark:text-slate-200 font-display">Baggage Allowance</h5>
-                                    <p className="text-[11px] text-slate-400 mt-0.5 font-display">Checked bag: 20 kgs / Cabin bag: 7 kgs</p>
+                                    <h5 className="font-bold text-slate-800 dark:text-slate-200 font-display">{t('flight.baggage_title')}</h5>
+                                    <p className="text-[11px] text-slate-400 mt-0.5 font-display">{t('flight.baggage_desc')}</p>
                                   </div>
                                 </div>
                                 
                                 <div className="flex items-start gap-2.5">
                                   <Clock className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
                                   <div>
-                                    <h5 className="font-bold text-slate-800 dark:text-slate-200 font-display">Flight Status</h5>
-                                    <p className="text-[11px] text-slate-400 mt-0.5 font-display">Operates on time. Non-refundable ticket reservation.</p>
+                                    <h5 className="font-bold text-slate-800 dark:text-slate-200 font-display">{t('flight.status_title')}</h5>
+                                    <p className="text-[11px] text-slate-400 mt-0.5 font-display">{t('flight.status_desc')}</p>
                                   </div>
                                 </div>
                               </div>
@@ -982,19 +978,19 @@ export default function FlightDemo() {
                               <div className="border-t border-slate-100 dark:border-slate-700 pt-4 flex flex-wrap gap-x-6 gap-y-2 text-slate-500 dark:text-slate-400 text-[11px] font-medium select-none font-display">
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-4 h-4 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[9px]"><Check className="w-3 h-3 stroke-[2.5]" /></div>
-                                  <span>31 in (80 cm) Seat Pitch</span>
+                                  <span>{t('flight.amenity_seat_pitch')}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-4 h-4 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[9px]"><Check className="w-3 h-3 stroke-[2.5]" /></div>
-                                  <div className="flex items-center gap-1"><Wifi className="w-3.5 h-3.5" /> <span>Wifi Available</span></div>
+                                  <div className="flex items-center gap-1"><Wifi className="w-3.5 h-3.5" /> <span>{t('flight.amenity_wifi')}</span></div>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-4 h-4 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[9px]"><Check className="w-3 h-3 stroke-[2.5]" /></div>
-                                  <div className="flex items-center gap-1"><Coffee className="w-3.5 h-3.5" /> <span>In-flight Food</span></div>
+                                  <div className="flex items-center gap-1"><Coffee className="w-3.5 h-3.5" /> <span>{t('flight.amenity_food')}</span></div>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                   <div className="w-4 h-4 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-[9px]"><Check className="w-3 h-3 stroke-[2.5]" /></div>
-                                  <div className="flex items-center gap-1"><Zap className="w-3.5 h-3.5" /> <span>USB Power Port</span></div>
+                                  <div className="flex items-center gap-1"><Zap className="w-3.5 h-3.5" /> <span>{t('flight.amenity_usb')}</span></div>
                                 </div>
                               </div>
                             </div>
@@ -1022,28 +1018,28 @@ export default function FlightDemo() {
                   className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-sky-700 dark:hover:text-sky-400 transition-colors mb-6 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
-                  {language === 'en' ? "Back to Flight Selection" : "ย้อนกลับไปหน้าเลือกเที่ยวบิน"}
+                  {t('flight.btn_back_selection')}
                 </button>
 
                 {/* Selected flights summary */}
                 <div className="bg-sky-50/50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-3xl p-5 mb-6">
                   <h4 className="font-display font-black text-sm text-sky-950 dark:text-sky-200 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                     <Ticket className="w-4 h-4" />
-                    {language === 'en' ? "Flight Selection Summary" : "สรุปเที่ยวบินที่เลือก"}
+                    {t('flight.summary_title')}
                   </h4>
                   <div className="space-y-2 text-xs">
                     <div className="flex justify-between items-center py-1.5 border-b border-sky-100/50 dark:border-sky-800/50">
-                      <span className="text-slate-500 dark:text-slate-400 font-display">{language === 'en' ? "Outbound Flight" : "เที่ยวบินขาไป"}:</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-display">{t('flight.outbound_label')}:</span>
                       <span className="font-bold text-sky-950 dark:text-white font-display">{selectedOutboundFlight?.airline.name} ({selectedOutboundFlight?.flightNo}) · {selectedOutboundFlight?.departTime}</span>
                     </div>
                     {tripType === "round" && selectedInboundFlight && (
                       <div className="flex justify-between items-center py-1.5 border-b border-sky-100/50 dark:border-sky-800/50 font-display">
-                        <span className="text-slate-500 dark:text-slate-400">{language === 'en' ? "Inbound Flight" : "เที่ยวบินขากลับ"}:</span>
+                        <span className="text-slate-500 dark:text-slate-400">{t('flight.inbound_label')}:</span>
                         <span className="font-bold text-sky-950 dark:text-white">{selectedInboundFlight?.airline.name} ({selectedInboundFlight?.flightNo}) · {selectedInboundFlight?.departTime}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center pt-2 text-sm font-display">
-                      <span className="text-slate-500 dark:text-slate-400 font-medium">{language === 'en' ? "Fare per person" : "ราคาต่อท่าน"}:</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.fare_per_person')}:</span>
                       <span className="font-extrabold text-sky-950 dark:text-white">฿{((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)).toLocaleString()}</span>
                     </div>
                   </div>
@@ -1093,7 +1089,7 @@ export default function FlightDemo() {
                   >
                     <div className="py-0.5 select-none font-display">
                       <span className="font-bold text-slate-800 text-sm truncate block">
-                        {form.seat || (language === 'en' ? "Not selected" : "ยังไม่ได้เลือก")}
+                        {form.seat || t('flight.seat_not_selected')}
                       </span>
                     </div>
                   </Field>
@@ -1303,7 +1299,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
   const getCode = (city: string) => city.match(/\(([A-Z]{3})\)/)?.[1] || "N/A";
   const getCleanCity = (city: string) => {
-    if (language === 'en') {
+    if (language !== 'th') {
       const mapping: Record<string, string> = {
         "กรุงเทพฯ (DMK)": "Bangkok",
         "เชียงใหม่ (CNX)": "Chiang Mai",
@@ -1418,11 +1414,11 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
             </div>
             <div className="text-center flex flex-col justify-center">
               <div className="font-extrabold text-xs text-slate-700 dark:text-slate-300">{flightNumber}</div>
-              <div className="text-[10px] text-slate-400 dark:text-slate-400 font-medium mt-0.5">Non-stop</div>
+              <div className="text-[10px] text-slate-400 dark:text-slate-400 font-medium mt-0.5">{t('flight.non_stop')}</div>
             </div>
             <div className="text-right">
               <div className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">
-                {booking.tripType === "round" && booking.returnDate ? t('flight.modal_return') : "Arrive"}
+                {booking.tripType === "round" && booking.returnDate ? t('flight.modal_return') : t('flight.modal_arrive')}
               </div>
               <div className="font-extrabold text-sm text-slate-800 dark:text-slate-200 mt-0.5">
                 {booking.tripType === "round" && booking.returnDate ? booking.returnDate : booking.departDate}
@@ -1448,8 +1444,8 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
             </div>
             
             <div className="col-span-2">
-              <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">Class / Status</p>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{flightClass} / Confirmed</p>
+              <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_class_status')}</p>
+              <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{flightClass} / {t('flight.status_confirmed')}</p>
             </div>
             <div>
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_passengers_num')}</p>
@@ -1461,7 +1457,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
           <div className="border-t border-dashed border-sky-200/80 dark:border-sky-800/80 pt-5 mt-5 flex justify-between items-center">
             {/* Mock price */}
             <div className="text-left">
-              <div className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">Total Fare</div>
+              <div className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.total_fare')}</div>
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-sky-950 dark:text-sky-100">฿{finalPrice.toLocaleString()}</span>
@@ -1502,7 +1498,7 @@ interface SeatMapModalProps {
 }
 
 function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toCity }: SeatMapModalProps) {
-  const { language } = useTranslation();
+  const { t } = useTranslation();
   const getCode = (city: string) => city.match(/\(([A-Z]{3})\)/)?.[1] || "N/A";
   
   // Dynamic list of occupied seats combining static occupied seats & bookings from storage
@@ -1532,7 +1528,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           {/* Header */}
           <div className="text-center mb-6">
             <h3 className="font-display font-black text-xl text-sky-950 tracking-tight">
-              {language === 'en' ? "Select Seat" : "เลือกที่นั่งที่ชอบ"}
+              {t('flight.modal_seat_title')}
             </h3>
             <p className="text-xs text-slate-400 mt-1">
               {getCode(fromCity)} → {getCode(toCity)}
@@ -1543,15 +1539,15 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           <div className="flex justify-center gap-6 text-xs mb-6 bg-slate-50 py-3 rounded-2xl border border-slate-100">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#cbdcf7] border border-[#cbdcf7]"></div>
-              <span className="text-[#0f3460] font-medium">{language === 'en' ? "Available" : "ว่าง"}</span>
+              <span className="text-[#0f3460] font-medium">{t('flight.seat_status_available')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center"><span className="text-[8px] text-slate-400 line-through">✕</span></div>
-              <span className="text-slate-400">{language === 'en' ? "Occupied" : "ไม่ว่าง"}</span>
+              <span className="text-slate-400">{t('flight.seat_status_occupied')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#0f3460] border border-[#0f3460]"></div>
-              <span className="text-[#0f3460] font-bold">{language === 'en' ? "Selected" : "เลือกอยู่"}</span>
+              <span className="text-[#0f3460] font-bold">{t('flight.seat_status_selected')}</span>
             </div>
           </div>
 
@@ -1635,11 +1631,11 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           <div className="mt-8 flex flex-col gap-3">
             {selectedSeat ? (
               <div className="text-center text-xs text-[#0f3460] font-bold bg-[#cbdcf7]/30 border border-[#cbdcf7]/40 py-2.5 rounded-2xl">
-                {language === 'en' ? `Selected Seat: ${selectedSeat}` : `ที่นั่งที่เลือก: ${selectedSeat}`}
+                {t('flight.seat_selected_val').replace('{seat}', selectedSeat)}
               </div>
             ) : (
               <div className="text-center text-xs text-rose-600 font-bold bg-rose-50 border border-rose-200/50 py-2.5 rounded-2xl">
-                {language === 'en' ? "Please select a seat" : "โปรดเลือกที่นั่งก่อนยืนยัน"}
+                {t('flight.please_select_seat')}
               </div>
             )}
             
@@ -1653,7 +1649,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
                   : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
               }`}
             >
-              {language === 'en' ? "Confirm Seat" : "ยืนยันการเลือกที่นั่ง"}
+              {t('flight.btn_confirm_seat')}
             </button>
           </div>
 
