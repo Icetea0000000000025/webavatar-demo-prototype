@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Receipt } from "./OrderDemo";
-import { RefreshCw, Trash2 } from "lucide-react";
+import { RefreshCw, Trash2, UtensilsCrossed, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
@@ -89,23 +89,46 @@ export default function OrderAdmin() {
 
   return (
     <div className="order-theme min-h-screen bg-background text-foreground pb-20">
-      <header className="bg-emerald-950 text-white shadow-md relative z-10">
-        <div className="mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
+      {/* ── Header ─────────────────────────────────────────────────── */}
+      <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-emerald-950/95 text-white backdrop-blur-md border border-emerald-900 rounded-2xl shadow-lg transition-all">
+        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-black tracking-tight">
-              {language === 'en' ? "Botnoi Restaurant · Kitchen Monitor" : "Botnoi Restaurant · บอร์ดจัดการห้องครัว"}
-            </span>
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 9,
+                background: "linear-gradient(135deg,#059669,#10b981)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              className="flex items-center justify-center shadow-sm shrink-0"
+            >
+              <UtensilsCrossed size={18} color="white" />
+            </div>
+            <div>
+              <div className="font-extrabold text-white text-sm leading-tight">
+                {language === 'en' ? "Botnoi Restaurant — Kitchen Monitor" : "Botnoi Restaurant — บอร์ดจัดการห้องครัว"}
+              </div>
+              <div className="text-xs text-emerald-300/80">
+                {language === 'en' ? "Monitor and manage live restaurant orders" : "ตรวจสอบคำสั่งซื้ออาหารและจัดการสถานะออเดอร์เรียลไทม์"}
+              </div>
+            </div>
           </div>
-          <Link to="/food-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
-            {t("nav.back_to_main")}
+          <Link
+            to="/food-demo"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-900/80 hover:bg-emerald-900 text-emerald-100 text-xs font-bold transition-all border border-emerald-800 shrink-0"
+            id="order-admin-back"
+          >
+            <ArrowLeft size={12} /> {language === "en" ? "Back to Restaurant" : "กลับร้านอาหาร"}
           </Link>
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="font-display text-2xl font-extrabold text-stone-900 tracking-tight">{t("food_admin.title")}</h1>
             <p className="text-xs text-stone-500 font-bold">
               {language === 'en' ? `Total ${orders.length} orders` : `มีทั้งหมด ${orders.length} รายการ`}
             </p>

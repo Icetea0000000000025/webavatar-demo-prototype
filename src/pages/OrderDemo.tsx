@@ -297,7 +297,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function OrderDemo() {
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -384,28 +384,8 @@ export default function OrderDemo() {
       className="min-h-[calc(100vh-68px)] w-full flex flex-col pb-10 selection:bg-primary selection:text-primary-foreground relative z-10"
       aria-label="All Demos Showcase Portal"
     >
-      {/* 1. Page Header & Hero */}
-      <header className="w-full bg-background/40 backdrop-blur-xl border-b border-border/60 py-10 relative z-10" aria-label="Portal Header">
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-              <span className="text-[10px] font-black text-primary uppercase tracking-widest block font-mono">
-                {t('showcase.student_projects')}
-              </span>
-              <h1 className="text-3xl md:text-4xl font-black text-foreground mt-1 tracking-tight flex items-center gap-2 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
-                <Sparkles className="size-8 text-primary animate-pulse" />
-                {t('showcase.portal')}
-              </h1>
-              <p className="text-sm text-muted-foreground font-medium mt-2 max-w-2xl leading-relaxed">
-                {t('showcase.desc')}
-              </p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* 2. Search & Filtering Controls */}
-      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-10" aria-label="Search and Filter Demos" id="search-filter-section">
+      {/* Search & Filtering Controls */}
+      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-4" aria-label="Search and Filter Demos" id="search-filter-section">
         <div className="flex flex-col gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full">
             {/* Search Input */}
@@ -426,8 +406,8 @@ export default function OrderDemo() {
               />
             </div>
 
-            {/* Quick Filters (Middle) */}
-            <div className="flex flex-nowrap items-center justify-start lg:justify-center gap-1.5 overflow-x-auto no-scrollbar min-w-0 py-0.5 flex-1 mx-2" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
+            {/* Quick Filters (Middle - Scrollable) */}
+            <div className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-1 flex-1 mx-2 scroll-smooth select-none" style={{ scrollbarWidth: "thin" }}>
               {[
                 { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
                 { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
@@ -436,6 +416,11 @@ export default function OrderDemo() {
                 { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
                 { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
                 { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+                { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
+                { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
+                { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
+                { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
+                { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
               ].map((cat) => {
                 const isActive = selectedCategory === cat.id;
                 const Icon = cat.icon;
@@ -463,7 +448,7 @@ export default function OrderDemo() {
               id="filter-modal-trigger"
             >
               <SlidersHorizontal className="size-4 text-primary" />
-              <span>{language === 'th' ? 'ตัวกรอง' : 'Filter'}</span>
+              <span>{t('showcase.filter')}</span>
               {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               )}
@@ -474,11 +459,11 @@ export default function OrderDemo() {
           {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
             <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border/40 w-full min-w-0" id="active-filter-tags">
               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mr-1 font-mono">
-                {language === 'th' ? 'ตัวกรองที่เลือก:' : 'Active Filters:'}
+                {t('showcase.active_filters')}
               </span>
               {selectedCategory !== "all" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {language === 'th' ? 'หมวดหมู่' : 'Category'}: {t(`showcase.cat_${selectedCategory}` as any)}
+                  {t('showcase.category')}: {t(`showcase.cat_${selectedCategory}` as any)}
                   <button
                     onClick={() => setSelectedCategory("all")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -490,7 +475,7 @@ export default function OrderDemo() {
               )}
               {statusFilter !== "all" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {language === 'th' ? 'สถานะ' : 'Status'}: {statusFilter === "deployed" ? (language === 'th' ? "เปิดใช้งานแล้ว" : "Deployed") : (language === 'th' ? "กำลังพัฒนา" : "In Progress")}
+                  {t('showcase.status')}: {statusFilter === "deployed" ? t('showcase.status_deployed') : t('showcase.status_in_progress')}
                   <button
                     onClick={() => setStatusFilter("all")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -502,7 +487,7 @@ export default function OrderDemo() {
               )}
               {sortBy !== "code" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {language === 'th' ? 'จัดเรียง' : 'Sort'}: {sortBy === "progress" ? (language === 'th' ? "ความคืบหน้า" : "Progress") : (language === 'th' ? "รหัสทีม" : "Team Code")}
+                  {t('showcase.sort')}: {sortBy === "progress" ? t('showcase.sort_progress') : t('showcase.sort_code')}
                   <button
                     onClick={() => setSortBy("code")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -520,7 +505,7 @@ export default function OrderDemo() {
                 }}
                 className="text-[10px] font-black text-muted-foreground hover:text-primary transition-colors cursor-pointer ml-1 font-mono"
               >
-                {t('showcase.clear_all' as any) || (language === 'th' ? 'ล้างทั้งหมด' : 'Clear All')}
+                {t('showcase.clear_all')}
               </button>
             </div>
           )}
@@ -613,7 +598,7 @@ export default function OrderDemo() {
                 <h2 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
                   <SlidersHorizontal className="size-4 text-primary" />
                   <span>
-                    {language === "th" ? "ตัวกรอง & จัดเรียง" : "Filters & Sorting"}
+                    {t('showcase.filters_sorting')}
                   </span>
                 </h2>
                 <button
@@ -630,12 +615,12 @@ export default function OrderDemo() {
                 {/* 1. Sort By */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {language === "th" ? "จัดเรียงลำดับ" : "Sort By"}
+                    {t('showcase.sort_by')}
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: "code", label: language === "th" ? "รหัสทีม (TN01-TN20)" : "Team Code (TN01-TN20)" },
-                      { id: "progress", label: language === "th" ? "ความคืบหน้า (มาก-น้อย)" : "Progress (High-Low)" },
+                      { id: "code", label: t('showcase.sort_code_label') },
+                      { id: "progress", label: t('showcase.sort_progress_label') },
                     ].map((opt) => {
                       const active = sortBy === opt.id;
                       return (
@@ -658,13 +643,13 @@ export default function OrderDemo() {
                 {/* 2. Project Status */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {language === "th" ? "สถานะโครงการ" : "Project Status"}
+                    {t('showcase.project_status')}
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: "all", label: language === "th" ? "ทั้งหมด" : "All" },
-                      { id: "deployed", label: language === "th" ? "เปิดใช้งานแล้ว" : "Live / Deployed" },
-                      { id: "pending", label: language === "th" ? "กำลังพัฒนา" : "In Progress" },
+                      { id: "all", label: t('showcase.status_all') },
+                      { id: "deployed", label: t('showcase.status_deployed') },
+                      { id: "pending", label: t('showcase.status_in_progress') },
                     ].map((opt) => {
                       const active = statusFilter === opt.id;
                       return (
@@ -687,7 +672,7 @@ export default function OrderDemo() {
                 {/* 3. Project Category */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {language === "th" ? "หมวดหมู่โครงการ" : "Project Category"}
+                    {t('showcase.project_category')}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {[
@@ -735,15 +720,13 @@ export default function OrderDemo() {
                   disabled={selectedCategory === "all" && statusFilter === "all" && sortBy === "code"}
                   className="px-4 py-2.5 rounded-xl border border-border text-foreground hover:bg-muted disabled:opacity-40 disabled:hover:bg-transparent text-xs font-bold transition-all cursor-pointer flex-1 text-center"
                 >
-                  {language === "th" ? "ล้างทั้งหมด" : "Reset All"}
+                  {t('showcase.reset_all')}
                 </button>
                 <button
                   onClick={() => setIsFilterModalOpen(false)}
                   className="px-4 py-2.5 rounded-xl bg-cta hover:bg-cta/90 text-cta-foreground text-xs font-extrabold transition-all cursor-pointer flex-1 text-center shadow-md shadow-cta/15"
                 >
-                  {language === "th"
-                    ? `ตกลง (${totalResults} รายการ)`
-                    : `Apply (${totalResults} items)`}
+                  {`OK (${totalResults})`}
                 </button>
               </div>
             </motion.div>
