@@ -306,11 +306,12 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 1.75rem 1.5rem;
   box-shadow: var(--shadow-premium);
   transition: var(--transition-normal);
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   position: relative;
   overflow: hidden;
 }
@@ -335,13 +336,20 @@
 .bento-card-header {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.bento-card-header h3 {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--foreground);
 }
 
 .bento-icon-box {
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -352,6 +360,7 @@
   font-size: 1.35rem;
   box-shadow: var(--shadow-sm);
   transition: var(--transition-normal);
+  flex-shrink: 0;
 }
 
 .bento-card:hover .bento-icon-box {
@@ -362,9 +371,9 @@
 }
 
 .bento-icon-alt-box {
-  width: auto; /* Changed from 48px to auto so your logos fit nicely */
-  padding: 0 1.25rem; /* Adds side padding for the landscape images */
-  height: 48px;
+  width: auto;
+  padding: 0 1rem;
+  height: 44px;
   background: var(--card);
   border: 2px solid var(--border);
   border-radius: 12px;
@@ -375,23 +384,24 @@
   font-size: 1.35rem;
   box-shadow: var(--shadow-sm);
   transition: var(--transition-normal);
+  flex-shrink: 0;
 }
 
 .bento-card:hover .bento-icon-alt-box {
   background: var(--card);
-  color: var(--primary); /* Keeps icon/text color visible */
+  color: var(--primary);
   border: 2px solid var(--border);
-  border-color: var(--primary); /* Changes border color on hover */
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15); /* Soft glow matching the border */
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
 }
 
 .bento-card p {
   color: var(--muted-foreground);
-  font-size: 0.95rem;
-  line-height: 1.65;
+  font-size: 0.875rem;
+  line-height: 1.55;
   margin: 0;
   flex-grow: 1;
-  max-height: 4.5rem;
+  max-height: 5.5rem;
   overflow-y: hidden;
   transition: all 0.2s ease;
   scrollbar-width: thin;
@@ -402,10 +412,10 @@
 }
 
 .bento-card-footer {
-  margin-top: 1.75rem;
-  padding-top: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 0.85rem;
   border-top: 1px solid rgba(228, 228, 231, 0.5);
-  font-size: 0.85rem;
+  font-size: 0.825rem;
   color: var(--primary);
   font-weight: 700;
   display: flex;
@@ -418,9 +428,16 @@
 .col-8 { grid-column: span 8; }
 .col-6 { grid-column: span 6; }
 .col-4 { grid-column: span 4; }
+.col-3 { grid-column: span 3; }
+
+@media (max-width: 1100px) {
+  .col-3 {
+    grid-column: span 6;
+  }
+}
 
 @media (max-width: 900px) {
-  .col-8, .col-4, .col-6 {
+  .col-8, .col-6, .col-4, .col-3 {
     grid-column: span 12;
   }
 }

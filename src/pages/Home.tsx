@@ -146,10 +146,10 @@ export default function Home() {
 
         <div className="bento-grid">
           {/* Card 1: Flight Booking */}
-          <div className="bento-card col-4" id="card-flight-demo">
+          <div className="bento-card col-3" id="card-flight-demo">
             <div className="bento-card-header">
-              <div className="bento-icon-alt-box" style={{ width: 'auto', padding: '1.5rem 0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={botnoiAirLogo} alt="Botnoi Air" style={{ height: '4rem', width: 'auto', objectFit: 'contain' }} />
+              <div className="bento-icon-box" style={{ width: '48px', height: '48px', padding: '6px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={botnoiAirLogo} alt="Botnoi Air" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_flight_title')}</h3>
             </div>
@@ -162,10 +162,10 @@ export default function Home() {
           </div>
 
           {/* Card 2: Food Ordering */}
-          <div className="bento-card col-4" id="card-food-demo">
+          <div className="bento-card col-3" id="card-food-demo">
             <div className="bento-card-header">
-              <div className="bento-icon-alt-box" style={{ width: 'auto', padding: '1.5rem 0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" style={{ height: '4rem', width: 'auto', objectFit: 'contain' }} />
+              <div className="bento-icon-box" style={{ width: '48px', height: '48px', padding: '6px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('food.title')}</h3>
             </div>
@@ -178,7 +178,7 @@ export default function Home() {
           </div>
 
           {/* Card 3: IT Store */}
-          <div className="bento-card col-4" id="card-itstore-demo">
+          <div className="bento-card col-3" id="card-itstore-demo">
             <div className="bento-card-header">
               <div
                 className="bento-icon-box"
@@ -201,7 +201,40 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Card 4: B2B Sales Inquiry Form */}
+          {/* Card 4: Hotel & Resort Booking */}
+          <div className="bento-card col-3" id="card-hotel-demo">
+            <div className="bento-card-header">
+              <div
+                className="bento-icon-box"
+                style={{
+                  background: 'linear-gradient(135deg,rgba(245,158,11,0.12),rgba(217,119,6,0.08))',
+                  border: '1px solid rgba(245,158,11,0.2)',
+                }}
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8" />
+                  <path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" />
+                  <path d="M12 4v6" />
+                  <path d="M2 18h20" />
+                </svg>
+              </div>
+              <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_hotel_title')}</h3>
+            </div>
+            <p>
+              {t('home.card_hotel_desc')}
+            </p>
+            <a
+              className="bento-card-footer"
+              href="https://botnoi-hotel-two.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="link-hotel-demo"
+            >
+              {t('home.card_hotel_cta')} <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+
+          {/* Card 5: B2B Sales Inquiry Form */}
           <div className="bento-card col-6" id="card-contact-demo">
             <div className="bento-card-header">
               <div className="bento-icon-box">
@@ -217,7 +250,7 @@ export default function Home() {
             </Link>
           </div>
 
-          {/* Card 5: All Demos Showcase Portal */}
+          {/* Card 6: All Demos Showcase Portal */}
           <div className="bento-card col-6" id="card-all-demo">
             <div className="bento-card-header">
               <div className="bento-icon-box" style={{ background: 'linear-gradient(135deg,rgba(16,185,129,0.12),rgba(5,150,105,0.08))', border: '1px solid rgba(16,185,129,0.2)' }}>

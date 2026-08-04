@@ -16,6 +16,7 @@ export const AppFooter: React.FC = () => {
           <h4>{t('footer.usecases')}</h4>
           <ul>
             <li><Link to="/flight-demo">{t('footer.flight_booking')}</Link></li>
+            <li><a href="https://botnoi-hotel-two.vercel.app/" target="_blank" rel="noopener noreferrer">{t('footer.hotel_booking')}</a></li>
             <li><Link to="/food-demo">{t('food.title')}</Link></li>
             <li><Link to="/it-store-demo">{t('nav.itstore')}</Link></li>
             <li><Link to="/all-demo">{t('nav.all_demos')}</Link></li>

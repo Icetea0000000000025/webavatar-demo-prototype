@@ -498,7 +498,7 @@ export default function FlightDemo() {
                         type="button"
                         onClick={() => setTripType(tType)}
                         className={`px-5 py-2 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer ${tripType === tType
-                          ? "bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/20 dark:border-slate-600"
+                          ? "bg-white dark:!bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/20 dark:border-slate-600"
                           : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                           }`}
                       >
@@ -653,7 +653,7 @@ export default function FlightDemo() {
                         onClick={() => setActiveFilter(filter)}
                         className={`flex-1 py-2 text-center rounded-full text-xs font-bold transition-all cursor-pointer capitalize font-display ${
                           activeFilter === filter 
-                            ? "bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/10 dark:border-slate-600" 
+                            ? "bg-white dark:!bg-slate-700 text-sky-700 dark:text-sky-400 shadow-sm border border-slate-200/10 dark:border-slate-600" 
                             : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                         }`}
                       >
@@ -1284,8 +1284,8 @@ function Field({ label, htmlFor, children, onClick, required }: { label: string;
       onClick={onClick}
       className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${
         onClick 
-          ? "cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-850/60 hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98" 
-          : "focus-within:border-[var(--primary)] focus-within:bg-slate-50/50 dark:focus-within:bg-slate-850/60 focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
+          ? "cursor-pointer hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98" 
+          : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
       }`}
     >
       <label htmlFor={htmlFor} className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)] block cursor-pointer select-none">
