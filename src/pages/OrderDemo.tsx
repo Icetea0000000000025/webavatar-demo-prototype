@@ -149,6 +149,63 @@ const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
   accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-700 border-amber-200/50" },
 };
 
+const CATEGORY_COLOR_MAP: Record<
+  string,
+  {
+    active: string;
+    hover: string;
+  }
+> = {
+  all: {
+    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25",
+    hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
+  },
+  accommodation: {
+    active: "bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/25",
+    hover: "hover:bg-amber-500/15 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-500/15",
+  },
+  education: {
+    active: "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/25",
+    hover: "hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-400/60 hover:shadow-sm hover:shadow-indigo-500/15",
+  },
+  skincare: {
+    active: "bg-pink-500 text-white border-pink-500 shadow-md shadow-pink-500/25",
+    hover: "hover:bg-pink-500/15 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-400/60 hover:shadow-sm hover:shadow-pink-500/15",
+  },
+  map: {
+    active: "bg-teal-500 text-white border-teal-500 shadow-md shadow-teal-500/25",
+    hover: "hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
+  },
+  hospital: {
+    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25",
+    hover: "hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
+  },
+  restaurant: {
+    active: "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/25",
+    hover: "hover:bg-emerald-500/15 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-sm hover:shadow-emerald-500/15",
+  },
+  ac_service: {
+    active: "bg-cyan-500 text-white border-cyan-500 shadow-md shadow-cyan-500/25",
+    hover: "hover:bg-cyan-500/15 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-sm hover:shadow-cyan-500/15",
+  },
+  coffee: {
+    active: "bg-amber-700 text-white border-amber-700 shadow-md shadow-amber-700/25",
+    hover: "hover:bg-amber-700/15 hover:text-amber-800 dark:hover:text-amber-400 hover:border-amber-600/60 hover:shadow-sm hover:shadow-amber-700/15",
+  },
+  fitness: {
+    active: "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/25",
+    hover: "hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-400/60 hover:shadow-sm hover:shadow-purple-500/15",
+  },
+  flight: {
+    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25",
+    hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
+  },
+  ecommerce: {
+    active: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25",
+    hover: "hover:bg-blue-500/15 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-400/60 hover:shadow-sm hover:shadow-blue-500/15",
+  },
+};
+
 function isHouseDeployed(house: HouseItem): boolean {
   return Boolean(
     house.deployedUrl &&
@@ -504,14 +561,15 @@ export default function OrderDemo() {
                   const isActive = selectedCategory === cat.id;
                   const Icon = cat.icon;
                   const label = t(cat.translationKey as TranslationKey);
+                  const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
                   return (
                     <button
                       key={cat.id}
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 ${
+                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 ${
                         isActive
-                          ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                          : "text-muted-foreground bg-muted/30 hover:bg-muted/50 hover:text-foreground border-border"
+                          ? colorConfig.active
+                          : `text-muted-foreground bg-muted/30 border-border ${colorConfig.hover}`
                       }`}
                     >
                       <Icon className="size-3.5 shrink-0" />
@@ -545,6 +603,11 @@ export default function OrderDemo() {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               )}
             </button>
+
+            {/* Total Cards Count Badge matching WebAvatar Live widget button style without green dot */}
+            <div className="card-count-badge py-2 px-3 rounded-2xl shrink-0" id="badge-total-card-count">
+              <span>{totalResults}</span>
+            </div>
           </div>
 
           {/* Active Filter Tags */}
@@ -628,8 +691,8 @@ export default function OrderDemo() {
                   <h2 className="text-xs font-black text-primary uppercase tracking-widest font-mono leading-none m-0 p-0 flex items-center">
                     {t('showcase.sandbox_demos' as any)}
                   </h2>
-                  <span className="text-[10px] font-black text-muted-foreground bg-muted/40 border border-border px-2 py-0.5 rounded-full font-mono inline-flex items-center justify-center leading-none">
-                    {sandboxDemos.length}
+                  <span className="card-count-badge" id="badge-sandbox-count">
+                    <span>{sandboxDemos.length}</span>
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -648,8 +711,8 @@ export default function OrderDemo() {
                   <h2 className="text-xs font-black text-primary uppercase tracking-widest font-mono leading-none m-0 p-0 flex items-center">
                     {t('showcase.student_projects')}
                   </h2>
-                  <span className="text-[10px] font-black text-muted-foreground bg-muted/40 border border-border px-2 py-0.5 rounded-full font-mono inline-flex items-center justify-center leading-none">
-                    {projectDemos.length}
+                  <span className="card-count-badge" id="badge-projects-count">
+                    <span>{projectDemos.length}</span>
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -784,14 +847,15 @@ export default function OrderDemo() {
                       const active = selectedCategory === cat.id;
                       const Icon = cat.icon;
                       const label = t(cat.translationKey as TranslationKey);
+                      const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
                       return (
                         <button
                           key={cat.id}
                           onClick={() => setSelectedCategory(cat.id)}
-                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer flex items-center justify-center gap-2 ${
+                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
                             active
-                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                              ? colorConfig.active
+                              : `bg-muted/20 border-border text-muted-foreground ${colorConfig.hover}`
                           }`}
                         >
                           <Icon className="size-3.5 shrink-0" />
