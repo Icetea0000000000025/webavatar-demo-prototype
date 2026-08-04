@@ -311,11 +311,17 @@ function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={t('contact.form_name_placeholder')}
-                  className="contact-glass-input placeholder:text-muted-foreground/60"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border)',
+                    outline: 'none',
+                    fontSize: '0.9rem',
+                    transition: 'border-color 0.2s',
+
+                  }}
                 />
-                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
-                  {t('contact.form_name_helper')}
-                </span>
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
@@ -330,11 +336,16 @@ function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={t('contact.form_email_placeholder')}
-                  className="contact-glass-input placeholder:text-muted-foreground/60"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border)',
+                    outline: 'none',
+                    fontSize: '0.9rem',
+                    transition: 'border-color 0.2s',
+                  }}
                 />
-                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
-                  {t('contact.form_email_helper')}
-                </span>
               </div>
 
               <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
@@ -347,7 +358,17 @@ function Contact() {
                     name="inquiryType"
                     value={formData.inquiryType}
                     onChange={handleChange}
-                    className="contact-glass-input"
+                    style={{
+                      width: '100%',
+                      padding: '0.75rem 1rem',
+                      borderRadius: '8px',
+                      border: '1px solid var(--border)',
+                      outline: 'none',
+                      fontSize: '0.9rem',
+
+                      appearance: 'none',
+                      cursor: 'pointer'
+                    }}
                   >
                     <option value="contact" className="bg-card text-foreground">{t('contact.inquiry_label_contact')}</option>
                     <option value="webavatar" className="bg-card text-foreground">{t('contact.inquiry_label_webavatar')}</option>
@@ -381,11 +402,18 @@ function Contact() {
                   onChange={handleChange}
                   placeholder={t('contact.form_message_placeholder')}
                   rows={4}
-                  className="contact-glass-input placeholder:text-muted-foreground/60"
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border)',
+                    outline: 'none',
+                    fontSize: '0.9rem',
+                    resize: 'vertical',
+                    transition: 'border-color 0.2s',
+
+                  }}
                 />
-                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
-                  {t('contact.form_message_helper')}
-                </span>
               </div>
 
               <button 
