@@ -92,7 +92,7 @@ const projectData: HouseItem[] = [
     name: '07-steak-game-bros',
     style: 'Organic Earth Dome',
     type: 'restaurant',
-    color: '#10B981',
+    color: '#0284c7',
     progress: 80,
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
