@@ -539,12 +539,12 @@ export default function ITStoreDemo() {
       <div className="itstore-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground page-grid">
 
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="sticky top-4 z-20 mx-auto my-4 w-[calc(100%-2rem)] max-w-7xl bg-background/80 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
+        <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-background/85 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
           <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
               <Link to="/" className="hover:text-indigo-500 transition-colors flex items-center gap-1">
                 <Home className="size-3" />
-                <span>{t('nav.home')}</span>
+                <span>{language === 'en' ? 'Home' : 'หน้าหลัก'}</span>
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
               <Link to="/all-demo" className="hover:text-indigo-500 transition-colors">
@@ -552,7 +552,7 @@ export default function ITStoreDemo() {
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
               <span className="text-foreground font-extrabold uppercase font-mono">
-                {t("nav.itstore") || 'IT Store'}
+                {language === 'en' ? 'IT Store' : 'ร้านค้าไอที'}
               </span>
             </nav>
 
