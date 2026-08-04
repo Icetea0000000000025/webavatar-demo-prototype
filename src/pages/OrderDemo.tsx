@@ -92,7 +92,7 @@ const projectData: HouseItem[] = [
     name: '07-steak-game-bros',
     style: 'Organic Earth Dome',
     type: 'restaurant',
-    color: '#0284c7',
+    color: '#10B981',
     progress: 80,
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
@@ -225,20 +225,20 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
       <div>
         {/* Top header: Logo / Icon + Tag Badges + House Code */}
         <div className="flex items-center justify-between gap-2.5 mb-4">
-          <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-            <div className={`w-11 h-11 rounded-full border flex items-center justify-center p-1 shadow-xs group-hover:scale-110 transition-all duration-300 shrink-0 overflow-hidden ${
-              house.id === -1
-                ? 'bg-white dark:bg-slate-900 border-sky-400/40 shadow-[0_2px_8px_rgba(14,165,233,0.15)] group-hover:border-sky-400 group-hover:shadow-[0_0_28px_rgba(14,165,233,0.75)]'
-                : house.id === -3
-                ? 'bg-white dark:bg-slate-900 border-rose-400/40 shadow-[0_2px_8px_rgba(239,68,68,0.15)] group-hover:border-rose-400 group-hover:shadow-[0_0_28px_rgba(239,68,68,0.75)]'
-                : 'border-indigo-500/25 bg-gradient-to-br from-indigo-500/12 to-purple-500/8 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:border-indigo-400 group-hover:shadow-[0_0_24px_rgba(99,102,241,0.65)]'
+          <div className="flex items-center gap-2 min-w-0">
+            <div className={`w-10 h-10 rounded-xl border-2 border-solid flex items-center justify-center p-1.5 shadow-xs transition-all duration-300 shrink-0 ${
+              house.id === -1 
+                ? 'bg-white dark:bg-slate-900 border-sky-400 dark:border-sky-500 group-hover:border-sky-500 group-hover:shadow-[0_0_16px_rgba(14,165,233,0.5)] group-hover:scale-105' 
+                : house.id === -3 
+                ? 'bg-white dark:bg-slate-900 border-indigo-400 dark:border-indigo-500 group-hover:border-indigo-500 group-hover:shadow-[0_0_16px_rgba(99,102,241,0.5)] group-hover:scale-105'
+                : 'bg-white dark:bg-slate-900 border-indigo-300 dark:border-indigo-600 group-hover:border-indigo-500 group-hover:shadow-[0_0_16px_rgba(99,102,241,0.5)] group-hover:scale-105'
             }`}>
               {house.id === -1 ? (
-                <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain p-0.5" />
+                <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
               ) : house.id === -3 ? (
-                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain p-0.5" />
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
               ) : (
-                <TypeIcon className="size-5 text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors shrink-0" />
+                <TypeIcon className="size-4.5 text-primary shrink-0" />
               )}
             </div>
             <span className={`text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 truncate ${typeBg}`}>
@@ -473,7 +473,7 @@ export default function OrderDemo() {
               </span>
               {selectedCategory !== "all" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.category')}: {t(`showcase.cat_${selectedCategory}` as any)}
+                  {t('showcase.filter_category')}: {t(`showcase.cat_${selectedCategory}` as any)}
                   <button
                     onClick={() => setSelectedCategory("all")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -485,7 +485,7 @@ export default function OrderDemo() {
               )}
               {statusFilter !== "all" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.status')}: {statusFilter === "deployed" ? t('showcase.status_deployed') : t('showcase.status_in_progress')}
+                  {t('showcase.filter_status')}: {statusFilter === "deployed" ? t('showcase.status_deployed') : t('showcase.status_pending')}
                   <button
                     onClick={() => setStatusFilter("all")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -497,7 +497,7 @@ export default function OrderDemo() {
               )}
               {sortBy !== "code" && (
                 <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.sort')}: {sortBy === "progress" ? t('showcase.sort_progress') : t('showcase.sort_code')}
+                  {t('showcase.filter_sort')}: {sortBy === "progress" ? t('showcase.sort_progress_short') : t('showcase.sort_code_short')}
                   <button
                     onClick={() => setSortBy("code")}
                     className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
@@ -608,7 +608,7 @@ export default function OrderDemo() {
                 <h2 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
                   <SlidersHorizontal className="size-4 text-primary" />
                   <span>
-                    {t('showcase.filters_sorting')}
+                    {t('showcase.filter_title')}
                   </span>
                 </h2>
                 <button
@@ -625,12 +625,12 @@ export default function OrderDemo() {
                 {/* 1. Sort By */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.sort_by')}
+                    {t('showcase.sort_heading')}
                   </h3>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { id: "code", label: t('showcase.sort_code_label') },
-                      { id: "progress", label: t('showcase.sort_progress_label') },
+                      { id: "code", label: t('showcase.sort_code_short') },
+                      { id: "progress", label: t('showcase.sort_progress_short') },
                     ].map((opt) => {
                       const active = sortBy === opt.id;
                       return (
@@ -653,13 +653,13 @@ export default function OrderDemo() {
                 {/* 2. Project Status */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.project_status')}
+                    {t('showcase.status_heading')}
                   </h3>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: "all", label: t('showcase.status_all') },
+                      { id: "all", label: t('showcase.cat_all') },
                       { id: "deployed", label: t('showcase.status_deployed') },
-                      { id: "pending", label: t('showcase.status_in_progress') },
+                      { id: "pending", label: t('showcase.status_pending') },
                     ].map((opt) => {
                       const active = statusFilter === opt.id;
                       return (
@@ -682,7 +682,7 @@ export default function OrderDemo() {
                 {/* 3. Project Category */}
                 <div className="space-y-2.5">
                   <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.project_category')}
+                    {t('showcase.category_heading')}
                   </h3>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {[
