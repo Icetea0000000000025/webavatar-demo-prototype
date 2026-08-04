@@ -57,6 +57,27 @@ export interface ITOrder {
   total: number;
 }
 
+export const formatOrderDate = (orderedAt: string, lang: string) => {
+  if (!orderedAt) return "";
+  const d = new Date(orderedAt);
+  if (!isNaN(d.getTime())) {
+    const localeMap: Record<string, string> = {
+      th: "th-TH",
+      en: "en-US",
+      zh: "zh-CN",
+      ja: "ja-JP",
+      ko: "ko-KR",
+      es: "es-ES",
+      fr: "fr-FR",
+    };
+    return d.toLocaleString(localeMap[lang] || "en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  }
+  return orderedAt;
+};
+
 // ─── Storage Keys ───────────────────────────────────────────────────────────
 const CART_KEY = "botnoi-itstore-cart";
 const ORDER_KEY = "botnoi-itstore-last-order";
@@ -480,10 +501,7 @@ export default function ITStoreDemo() {
     if (cartItems.length === 0) return;
     const newOrder: ITOrder = {
       orderId: `IT${Date.now().toString().slice(-7)}`,
-      orderedAt: new Date().toLocaleString(
-        language === "en" ? "en-US" : "th-TH",
-        { dateStyle: "medium", timeStyle: "short" }
-      ),
+      orderedAt: new Date().toISOString(),
       items: cartItems,
       subtotal,
       shipping,
@@ -1000,7 +1018,7 @@ export default function ITStoreDemo() {
               <DialogDescription className="text-foreground/70">
                 {t("itstore.receipt_id")}: <strong className="text-foreground">{order?.orderId}</strong>
                 <br />
-                {t("itstore.receipt_time")}: {order?.orderedAt}
+                {t("itstore.receipt_time")}: {order?.orderedAt ? formatOrderDate(order.orderedAt, language) : ""}
               </DialogDescription>
             </DialogHeader>
             {order && (

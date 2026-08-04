@@ -14,7 +14,7 @@ export default function FlightAdmin() {
   useEffect(() => { refresh(); }, []);
 
   const getCityLabel = (city: string) => {
-    if (language === 'en') {
+    if (language !== 'th') {
       const mapping: Record<string, string> = {
         "กรุงเทพฯ (DMK)": "Bangkok (DMK)",
         "เชียงใหม่ (CNX)": "Chiang Mai (CNX)",
@@ -43,7 +43,7 @@ export default function FlightAdmin() {
       <header className="bg-slate-900 text-white shadow-md relative z-10">
         <div className="mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <span className="text-lg font-black tracking-tight">{language === 'en' ? "BotnoiAir · Admin Dashboard" : "BotnoiAir · แผงควบคุมผู้ดูแลระบบ"}</span>
+            <span className="text-lg font-black tracking-tight">{t('flight_admin.header')}</span>
           </div>
           <Link to="/flight-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
             {t('nav.back_to_main')}
@@ -56,33 +56,33 @@ export default function FlightAdmin() {
           <div>
             <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{t('flight_admin.title')}</h1>
             <p className="text-slate-500 text-xs mt-1 font-semibold">
-              {language === 'en' ? `Total ${items.length} records (from localStorage)` : `รวม ${items.length} รายการ (จาก localStorage)`}
+              {t('flight_admin.records_count').replace('{count}', String(items.length))}
             </p>
           </div>
           <div className="flex gap-2">
             <input 
               value={q} 
               onChange={(e) => setQ(e.target.value)} 
-              placeholder={language === 'en' ? "Search name, email..." : "ค้นหาชื่อ, อีเมล..."} 
+              placeholder={t('flight_admin.search_placeholder')} 
               className="px-4 py-2 rounded-full border border-slate-200 bg-white text-sm outline-none focus:border-sky-500 transition-colors shadow-sm" 
             />
             <button 
               onClick={refresh} 
               className="px-4 py-2 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold transition-all shadow-sm cursor-pointer"
             >
-              {language === 'en' ? "Refresh" : "รีเฟรช"}
+              {t('flight_admin.btn_refresh')}
             </button>
             <button 
               onClick={() => { 
                 if (confirm(t('flight_admin.delete_confirm'))) { 
                   clearBookings(); 
                   refresh(); 
-                  toast.success(language === 'en' ? "Bookings cleared" : "ล้างข้อมูลการจองแล้ว"); 
+                  toast.success(t('flight_admin.cleared_toast')); 
                 } 
               }}
               className="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 text-xs font-bold transition-all shadow-sm cursor-pointer"
             >
-              {language === 'en' ? "Clear All" : "ล้างทั้งหมด"}
+              {t('flight_admin.btn_clear')}
             </button>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function FlightAdmin() {
                       transition={{ duration: 0.2 }}
                     >
                       <td className="px-5 py-4 text-slate-500 font-mono">
-                        {new Date(b.createdAt).toLocaleString(language === 'en' ? "en-US" : "th-TH", {
+                        {new Date(b.createdAt).toLocaleString(language === 'th' ? "th-TH" : "en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",

@@ -81,7 +81,7 @@ export default function OrderAdmin() {
   }, []);
 
   const clearOrders = () => {
-    if (confirm(language === 'en' ? 'Are you sure you want to clear all orders?' : 'คุณแน่ใจหรือไม่ว่าต้องการลบรายการสั่งซื้อทั้งหมด?')) {
+    if (confirm(t("food_admin.clear_confirm"))) {
       window.localStorage.removeItem(ORDERS_KEY);
       setOrders([]);
     }
@@ -93,7 +93,7 @@ export default function OrderAdmin() {
         <div className="mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <span className="text-lg font-black tracking-tight">
-              {language === 'en' ? "Botnoi Restaurant · Kitchen Monitor" : "Botnoi Restaurant · บอร์ดจัดการห้องครัว"}
+              {t("food_admin.header")}
             </span>
           </div>
           <Link to="/food-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
@@ -107,12 +107,12 @@ export default function OrderAdmin() {
           <div>
             <h1 className="font-display text-2xl font-extrabold text-stone-900 tracking-tight">{t("food_admin.title")}</h1>
             <p className="text-xs text-stone-500 font-bold">
-              {language === 'en' ? `Total ${orders.length} orders` : `มีทั้งหมด ${orders.length} รายการ`}
+              {t("food_admin.total_orders").replace("{count}", String(orders.length))}
             </p>
           </div>
           <div className="flex gap-2">
             <Button variant="restaurantOutline" onClick={loadOrders} className="cursor-pointer font-bold gap-1.5 hover:bg-stone-50">
-              <RefreshCw className="size-4" /> {language === 'en' ? 'Refresh' : 'รีเฟรช'}
+              <RefreshCw className="size-4" /> {t("food_admin.btn_refresh")}
             </Button>
             <Button variant="destructive" onClick={clearOrders} disabled={orders.length === 0} className="cursor-pointer font-bold gap-1.5">
               <Trash2 className="size-4" /> {t("food_admin.btn_clear")}
@@ -121,7 +121,7 @@ export default function OrderAdmin() {
         </div>
 
         {loading ? (
-          <div className="py-20 text-center text-stone-500 font-bold">{language === 'en' ? 'Loading...' : 'กำลังโหลด...'}</div>
+          <div className="py-20 text-center text-stone-500 font-bold">{t("food_admin.loading")}</div>
         ) : orders.length === 0 ? (
           <motion.div 
             className="rounded-3xl border border-stone-200 bg-white py-20 text-center shadow-md"
