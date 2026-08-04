@@ -226,19 +226,19 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
         {/* Top header: Logo / Icon + Tag Badges + House Code */}
         <div className="flex items-center justify-between gap-2.5 mb-4">
           <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-            <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center p-2 shadow-xs group-hover:scale-105 transition-all shrink-0 ${
-              house.id === -1 
-                ? 'bg-sky-50 dark:bg-sky-950/40 border-sky-200 dark:border-sky-800 group-hover:border-sky-400 group-hover:shadow-[0_0_12px_rgba(14,165,233,0.35)]' 
-                : house.id === -3 
-                ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800 group-hover:border-rose-400 group-hover:shadow-[0_0_12px_rgba(239,68,68,0.35)]'
-                : 'bg-muted/40 border-border'
+            <div className={`w-11 h-11 rounded-full border flex items-center justify-center p-1 shadow-xs group-hover:scale-110 transition-all duration-300 shrink-0 overflow-hidden ${
+              house.id === -1
+                ? 'bg-white dark:bg-slate-900 border-sky-400/40 shadow-[0_2px_8px_rgba(14,165,233,0.15)] group-hover:border-sky-400 group-hover:shadow-[0_0_28px_rgba(14,165,233,0.75)]'
+                : house.id === -3
+                ? 'bg-white dark:bg-slate-900 border-rose-400/40 shadow-[0_2px_8px_rgba(239,68,68,0.15)] group-hover:border-rose-400 group-hover:shadow-[0_0_28px_rgba(239,68,68,0.75)]'
+                : 'border-indigo-500/25 bg-gradient-to-br from-indigo-500/12 to-purple-500/8 group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 group-hover:border-indigo-400 group-hover:shadow-[0_0_24px_rgba(99,102,241,0.65)]'
             }`}>
               {house.id === -1 ? (
-                <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
+                <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain p-0.5" />
               ) : house.id === -3 ? (
-                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain p-0.5" />
               ) : (
-                <TypeIcon className="size-5 text-primary shrink-0" />
+                <TypeIcon className="size-5 text-indigo-600 dark:text-indigo-400 group-hover:text-white transition-colors shrink-0" />
               )}
             </div>
             <span className={`text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 truncate ${typeBg}`}>

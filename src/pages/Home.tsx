@@ -148,10 +148,8 @@ export default function Home() {
           {/* Card 1: Flight Booking */}
           <div className="bento-card col-3" id="card-flight-demo">
             <div className="bento-card-header">
-              <div className="bento-icon-box bento-icon-b2b-style" style={{ width: '48px', height: '48px', padding: '5px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '100%', height: '100%', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.95)', padding: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                  <img src={botnoiAirLogo} alt="Botnoi Air" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </div>
+              <div className="bento-icon-box bento-icon-air" style={{ width: '48px', height: '48px', padding: '3px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={botnoiAirLogo} alt="Botnoi Air" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_flight_title')}</h3>
             </div>
@@ -166,10 +164,8 @@ export default function Home() {
           {/* Card 2: Food Ordering */}
           <div className="bento-card col-3" id="card-food-demo">
             <div className="bento-card-header">
-              <div className="bento-icon-box bento-icon-b2b-style" style={{ width: '48px', height: '48px', padding: '5px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '100%', height: '100%', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.95)', padding: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-                  <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </div>
+              <div className="bento-icon-box bento-icon-restaurant" style={{ width: '48px', height: '48px', padding: '3px', overflow: 'hidden', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('food.title')}</h3>
             </div>
