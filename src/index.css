@@ -254,6 +254,19 @@
   background: #A1A1AA;
 }
 
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none,
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* ═══════════════════════════════════════
    SUB-THEME OVERRIDES (SATURATED PREMIUM LIGHT)
    ═══════════════════════════════════════ */

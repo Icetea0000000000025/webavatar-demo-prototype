@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
@@ -8,6 +8,7 @@ import {
   BedDouble,
   UtensilsCrossed,
   ShoppingBag,
+  ChevronLeft,
   ChevronRight,
   Sparkles,
   FlaskConical,
@@ -92,7 +93,7 @@ const projectData: HouseItem[] = [
     name: '07-steak-game-bros',
     style: 'Organic Earth Dome',
     type: 'restaurant',
-    color: '#10B981',
+    color: '#0284c7',
     progress: 80,
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
@@ -209,6 +210,30 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     }
   }
 
+  const bulletItems = useMemo(() => {
+    if (!cardDescription) return [];
+    if (cardDescription.includes('\n') || cardDescription.includes('•')) {
+      return cardDescription
+        .split(/[\n•]/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+    }
+    if (cardDescription.includes(': ')) {
+      const parts = cardDescription.split(/:\s*(.+)/);
+      if (parts[1]) {
+        const subItems = parts[1]
+          .split(/[,;\.]|\bและ\b|\band\b|\bincluding\b|\bfeaturing\b/i)
+          .map((s) => s.trim())
+          .filter(Boolean);
+        return subItems.length > 0 ? subItems : [parts[1].trim()];
+      }
+    }
+    return cardDescription
+      .split(/[,;\.]|\bและ\b|\band\b/i)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }, [cardDescription]);
+
   const cardId = house.id < 0
     ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : house.id === -3 ? 'food' : 'hotel'}`
     : `card-${house.code.toLowerCase()}`;
@@ -226,19 +251,13 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
         {/* Top header: Logo / Icon + Tag Badges + House Code */}
         <div className="flex items-center justify-between gap-2.5 mb-4">
           <div className="flex items-center gap-2 min-w-0">
-            <div className={`w-10 h-10 rounded-xl border-2 border-solid flex items-center justify-center p-1.5 shadow-xs transition-all duration-300 shrink-0 ${
-              house.id === -1 
-                ? 'bg-white dark:bg-slate-900 border-sky-400 dark:border-sky-500 group-hover:border-sky-500 group-hover:shadow-[0_0_16px_rgba(14,165,233,0.5)] group-hover:scale-105' 
-                : house.id === -3 
-                ? 'bg-white dark:bg-slate-900 border-indigo-400 dark:border-indigo-500 group-hover:border-indigo-500 group-hover:shadow-[0_0_16px_rgba(99,102,241,0.5)] group-hover:scale-105'
-                : 'bg-white dark:bg-slate-900 border-indigo-300 dark:border-indigo-600 group-hover:border-indigo-500 group-hover:shadow-[0_0_16px_rgba(99,102,241,0.5)] group-hover:scale-105'
-            }`}>
+            <div className="w-11 h-11 rounded-2xl border border-sky-200 dark:border-sky-800/80 bg-sky-50/60 dark:bg-sky-950/40 group-hover:border-sky-400 dark:group-hover:border-sky-500 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 flex items-center justify-center p-2 shadow-xs transition-all duration-300 shrink-0">
               {house.id === -1 ? (
                 <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
               ) : house.id === -3 ? (
                 <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
               ) : (
-                <TypeIcon className="size-4.5 text-primary shrink-0" />
+                <TypeIcon className="size-5 text-sky-600 dark:text-sky-400 shrink-0" />
               )}
             </div>
             <span className={`text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 truncate ${typeBg}`}>
@@ -255,12 +274,21 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
           <h3 className="text-lg font-black text-foreground mb-2 group-hover:text-primary transition-colors font-mono tracking-tight truncate">
             {displayName}
           </h3>
-          <p
-            className="text-xs text-muted-foreground leading-relaxed min-h-[4.5rem] max-h-[4.5rem] overflow-hidden group-hover:overflow-y-auto line-clamp-3 group-hover:line-clamp-none transition-all pr-1 cursor-text"
-            style={{ scrollbarWidth: 'thin' }}
-          >
-            {cardDescription}
-          </p>
+          {bulletItems.length > 0 ? (
+            <ul
+              className="text-xs text-muted-foreground leading-relaxed min-h-[4.5rem] max-h-[4.5rem] overflow-hidden group-hover:overflow-y-auto transition-all pr-1 cursor-text space-y-1 scrollbar-none"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {bulletItems.map((bullet, idx) => (
+                <li key={idx} className="flex items-start gap-1.5">
+                  <span className="size-1.5 rounded-full bg-primary/70 mt-1.5 shrink-0" />
+                  <span className="flex-1 font-sans">{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="min-h-[4.5rem]" />
+          )}
         </div>
       </div>
 
@@ -313,6 +341,31 @@ export default function OrderDemo() {
   const [statusFilter, setStatusFilter] = useState<"all" | "deployed" | "pending">("all");
   const [sortBy, setSortBy] = useState<"code" | "progress">("code");
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+
+  const filterScrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (filterScrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = filterScrollRef.current;
+      setCanScrollLeft(scrollLeft > 5);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener("resize", checkScroll);
+    return () => window.removeEventListener("resize", checkScroll);
+  }, []);
+
+  const handleScroll = (direction: "left" | "right") => {
+    if (filterScrollRef.current) {
+      const scrollAmount = direction === "left" ? -220 : 220;
+      filterScrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
 
   // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
@@ -415,40 +468,69 @@ export default function OrderDemo() {
               />
             </div>
 
-            {/* Quick Filters (Middle - Scrollable) */}
-            <div className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-1 flex-1 mx-2 scroll-smooth select-none" style={{ scrollbarWidth: "thin" }}>
-              {[
-                { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-                { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
-                { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-                { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-                { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-                { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-                { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-                { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-                { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-                { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-                { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-                { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
-              ].map((cat) => {
-                const isActive = selectedCategory === cat.id;
-                const Icon = cat.icon;
-                const label = t(cat.translationKey as TranslationKey);
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-4 py-2.5 rounded-2xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 ${
-                      isActive
-                        ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                        : "text-muted-foreground bg-muted/30 hover:bg-muted/50 hover:text-foreground border-border"
-                    }`}
-                  >
-                    <Icon className="size-3.5 shrink-0" />
-                    <span>{label}</span>
-                  </button>
-                );
-              })}
+            {/* Quick Filters Tab Container with Scroll Buttons & Bounded Scrollbar Track */}
+            <div className="relative flex items-center min-w-0 flex-1 mx-1.5">
+              {canScrollLeft && (
+                <button
+                  type="button"
+                  onClick={() => handleScroll("left")}
+                  className="absolute left-0 z-10 p-1.5 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md text-foreground hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer -translate-x-2 shrink-0"
+                  aria-label="Scroll left filters"
+                >
+                  <ChevronLeft className="size-3.5" />
+                </button>
+              )}
+
+              <div
+                ref={filterScrollRef}
+                onScroll={checkScroll}
+                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-2.5 px-1 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
+                style={{ scrollbarWidth: "thin" }}
+              >
+                {[
+                  { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+                  { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
+                  { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
+                  { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
+                  { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
+                  { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
+                  { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+                  { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
+                  { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
+                  { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
+                  { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
+                  { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
+                ].map((cat) => {
+                  const isActive = selectedCategory === cat.id;
+                  const Icon = cat.icon;
+                  const label = t(cat.translationKey as TranslationKey);
+                  return (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground border-primary shadow-xs"
+                          : "text-muted-foreground bg-muted/30 hover:bg-muted/50 hover:text-foreground border-border"
+                      }`}
+                    >
+                      <Icon className="size-3.5 shrink-0" />
+                      <span>{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {canScrollRight && (
+                <button
+                  type="button"
+                  onClick={() => handleScroll("right")}
+                  className="absolute right-0 z-10 p-1.5 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md text-foreground hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer translate-x-2 shrink-0"
+                  aria-label="Scroll right filters"
+                >
+                  <ChevronRight className="size-3.5" />
+                </button>
+              )}
             </div>
 
             {/* Filter Toggle Button */}
