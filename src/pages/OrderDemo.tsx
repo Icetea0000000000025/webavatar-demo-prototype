@@ -157,51 +157,51 @@ const CATEGORY_COLOR_MAP: Record<
   }
 > = {
   all: {
-    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25",
+    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25 dark:bg-sky-900/80 dark:text-sky-100 dark:border-sky-500/60 dark:shadow-sky-950/40",
     hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
   },
   accommodation: {
-    active: "bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/25",
+    active: "bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/25 dark:bg-amber-900/80 dark:text-amber-100 dark:border-amber-500/60 dark:shadow-amber-950/40",
     hover: "hover:bg-amber-500/15 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-500/15",
   },
   education: {
-    active: "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/25",
+    active: "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/25 dark:bg-indigo-900/80 dark:text-indigo-100 dark:border-indigo-500/60 dark:shadow-indigo-950/40",
     hover: "hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-400/60 hover:shadow-sm hover:shadow-indigo-500/15",
   },
   skincare: {
-    active: "bg-pink-500 text-white border-pink-500 shadow-md shadow-pink-500/25",
+    active: "bg-pink-500 text-white border-pink-500 shadow-md shadow-pink-500/25 dark:bg-pink-900/80 dark:text-pink-100 dark:border-pink-500/60 dark:shadow-pink-950/40",
     hover: "hover:bg-pink-500/15 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-400/60 hover:shadow-sm hover:shadow-pink-500/15",
   },
   map: {
-    active: "bg-teal-500 text-white border-teal-500 shadow-md shadow-teal-500/25",
+    active: "bg-teal-500 text-white border-teal-500 shadow-md shadow-teal-500/25 dark:bg-teal-900/80 dark:text-teal-100 dark:border-teal-500/60 dark:shadow-teal-950/40",
     hover: "hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
   },
   hospital: {
-    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25",
+    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
     hover: "hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
   },
   restaurant: {
-    active: "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/25",
+    active: "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/25 dark:bg-emerald-900/80 dark:text-emerald-100 dark:border-emerald-500/60 dark:shadow-emerald-950/40",
     hover: "hover:bg-emerald-500/15 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-sm hover:shadow-emerald-500/15",
   },
   ac_service: {
-    active: "bg-cyan-500 text-white border-cyan-500 shadow-md shadow-cyan-500/25",
+    active: "bg-cyan-500 text-white border-cyan-500 shadow-md shadow-cyan-500/25 dark:bg-cyan-900/80 dark:text-cyan-100 dark:border-cyan-500/60 dark:shadow-cyan-950/40",
     hover: "hover:bg-cyan-500/15 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-sm hover:shadow-cyan-500/15",
   },
   coffee: {
-    active: "bg-amber-700 text-white border-amber-700 shadow-md shadow-amber-700/25",
+    active: "bg-amber-700 text-white border-amber-700 shadow-md shadow-amber-700/25 dark:bg-amber-900/80 dark:text-amber-100 dark:border-amber-600/60 dark:shadow-amber-950/40",
     hover: "hover:bg-amber-700/15 hover:text-amber-800 dark:hover:text-amber-400 hover:border-amber-600/60 hover:shadow-sm hover:shadow-amber-700/15",
   },
   fitness: {
-    active: "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/25",
+    active: "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/25 dark:bg-purple-900/80 dark:text-purple-100 dark:border-purple-500/60 dark:shadow-purple-950/40",
     hover: "hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-400/60 hover:shadow-sm hover:shadow-purple-500/15",
   },
   flight: {
-    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25",
+    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25 dark:bg-sky-900/80 dark:text-sky-100 dark:border-sky-500/60 dark:shadow-sky-950/40",
     hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
   },
   ecommerce: {
-    active: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25",
+    active: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25 dark:bg-blue-900/80 dark:text-blue-100 dark:border-blue-500/60 dark:shadow-blue-950/40",
     hover: "hover:bg-blue-500/15 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-400/60 hover:shadow-sm hover:shadow-blue-500/15",
   },
 };
@@ -328,7 +328,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 
         {/* Title & Description */}
         <div className="mb-5">
-          <h3 className="text-lg font-black text-foreground mb-2 group-hover:text-primary transition-colors font-mono tracking-tight truncate">
+          <h3 className="text-base sm:text-lg font-black text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight leading-snug min-h-[2.75rem] flex items-center">
             {displayName}
           </h3>
           {bulletItems.length > 0 ? (
@@ -356,7 +356,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             <Link
               to={house.deployedUrl}
               aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="flex-1 text-center py-3 text-xs font-extrabold rounded-xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-cta hover:bg-cta/90 border-cta text-cta-foreground shadow-sm shadow-cta/10"
+              className="btn btn-primary flex-1 text-center py-3 text-xs font-extrabold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 dark:bg-indigo-950/80 dark:hover:bg-indigo-900/90 dark:border-indigo-800/80 dark:text-indigo-200 dark:shadow-none"
             >
               <span>{t('showcase.launch_demo')}</span>
               <ChevronRight className="size-3.5" />
@@ -367,7 +367,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="flex-1 text-center py-3 text-xs font-extrabold rounded-xl border transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-cta hover:bg-cta/90 border-cta text-cta-foreground shadow-sm shadow-cta/10"
+              className="btn btn-primary flex-1 text-center py-3 text-xs font-extrabold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 dark:bg-indigo-950/80 dark:hover:bg-indigo-900/90 dark:border-indigo-800/80 dark:text-indigo-200 dark:shadow-none"
             >
               <span>{t('showcase.launch_demo')}</span>
               <ChevronRight className="size-3.5" />
@@ -528,12 +528,12 @@ export default function OrderDemo() {
             </div>
 
             {/* Quick Filters Tab Container with Scroll Buttons & Bounded Scrollbar Track */}
-            <div className="flex items-center min-w-0 flex-1 gap-2">
+            <div className="flex items-center min-w-0 flex-1 gap-2 mt-1 lg:mt-0">
               <button
                 type="button"
                 onClick={() => handleScroll("left")}
                 disabled={!canScrollLeft}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 -mt-1.5 ${
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
                   canScrollLeft
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -546,7 +546,7 @@ export default function OrderDemo() {
               <div
                 ref={filterScrollRef}
                 onScroll={checkScroll}
-                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-1 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
+                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 pt-1.5 pb-2 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
                 style={{ scrollbarWidth: "thin" }}
               >
                 {[
@@ -588,7 +588,7 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => handleScroll("right")}
                 disabled={!canScrollRight}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 -mt-1.5 ${
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
                   canScrollRight
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -706,9 +706,9 @@ export default function OrderDemo() {
               </section>
             )}
 
-            {/* ── Section 2: TN Student Projects ────────────────────────── */}
+            {/* ── Section 2: TN Startup Demos ────────────────────────── */}
             {projectDemos.length > 0 && (
-              <section aria-label="TN Student Projects" id="tn-student-projects-section">
+              <section aria-label="TN Startup Demos" id="tn-startup-demos-section">
                 <div className="flex items-center gap-2.5 mb-5">
                   <Sparkles className="size-4 text-primary shrink-0" />
                   <h2 className="text-xs font-black text-primary uppercase tracking-widest font-mono leading-none m-0 p-0 flex items-center">
