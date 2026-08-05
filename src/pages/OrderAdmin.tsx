@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import type { Receipt } from "./OrderDemo";
+import type { Receipt } from "./FoodOrderDemo";
+import { formatOrderDate } from "./FoodOrderDemo";
 import { RefreshCw, Trash2, UtensilsCrossed, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
@@ -33,13 +34,12 @@ export default function OrderAdmin() {
               {
                 id: "krapao",
                 name: "ข้าวกะเพราไก่ไข่ดาว",
-                nameTh: "ข้าวกะเพราไก่ไข่ดาว",
-                nameEn: "Chicken Pad Kra Pao",
-                descTh: "",
-                descEn: "",
+                englishName: "Chicken Pad Kra Pao",
+                description: "กะเพราหอมฉุน ผัดไฟแรง",
                 category: "เมนูยอดนิยม",
                 price: 89,
-                quantity: 2
+                quantity: 2,
+                image: ""
               }
             ],
             subtotal: 178,
@@ -175,7 +175,9 @@ export default function OrderAdmin() {
                         <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
                           {t("food_admin.th_id")} {order.orderId}
                         </p>
-                        <p className="text-[10px] text-stone-400 font-bold mt-0.5 font-mono">{order.orderedAt}</p>
+                        <p className="text-[10px] text-stone-400 font-bold mt-0.5 font-mono">
+                          {formatOrderDate(order.timestamp || order.orderedAt, language)}
+                        </p>
                       </div>
                       <div className="rounded-full bg-stone-100 border border-stone-200/30 px-3 py-1 text-xs font-bold text-stone-900 font-mono">
                         {money.format(order.total)}

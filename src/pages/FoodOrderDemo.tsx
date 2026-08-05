@@ -49,10 +49,40 @@ export type Cart = Record<string, number>;
 export interface Receipt {
   orderId: string;
   orderedAt: string;
+  timestamp?: number;
   items: Array<MenuItem & { quantity: number }>;
   subtotal: number;
   serviceFee: number;
   total: number;
+}
+
+export function formatOrderDate(dateVal: string | number | undefined, lang: string): string {
+  if (!dateVal) return "";
+  let date: Date;
+  if (typeof dateVal === "number") {
+    date = new Date(dateVal);
+  } else {
+    const parsed = Number(dateVal);
+    if (!isNaN(parsed) && parsed > 1000000000000) {
+      date = new Date(parsed);
+    } else {
+      date = new Date(dateVal);
+    }
+  }
+  if (isNaN(date.getTime())) {
+    return String(dateVal);
+  }
+  const localeMap: Record<string, string> = {
+    th: 'th-TH',
+    en: 'en-US',
+    zh: 'zh-CN',
+    ja: 'ja-JP',
+    ko: 'ko-KR',
+    es: 'es-ES',
+    fr: 'fr-FR',
+  };
+  const locale = localeMap[lang] || 'en-US';
+  return date.toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" });
 }
 
 const menu: MenuItem[] = [
@@ -188,9 +218,11 @@ export default function FoodOrderDemo() {
 
   const checkout = () => {
     if (cartItems.length === 0) return;
+    const now = Date.now();
     const nextReceipt: Receipt = {
-      orderId: `BN${Date.now().toString().slice(-6)}`,
-      orderedAt: new Date().toLocaleString(language === 'en' ? 'en-US' : 'th-TH', { dateStyle: "medium", timeStyle: "short" }),
+      orderId: `BN${now.toString().slice(-6)}`,
+      timestamp: now,
+      orderedAt: new Date(now).toISOString(),
       items: cartItems.map(item => ({
         ...item,
         name: getItemName(item),
@@ -582,7 +614,9 @@ export default function FoodOrderDemo() {
                 <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
                   {t("food.receipt_title")} · {t("food.receipt_id")} {receipt.orderId}
                 </p>
-                <p className="text-xs text-stone-500 dark:text-stone-400 font-mono mt-0.5">{receipt.orderedAt}</p>
+                <p className="text-xs text-stone-500 dark:text-stone-400 font-mono mt-0.5">
+                  {formatOrderDate(receipt.timestamp || receipt.orderedAt, language)}
+                </p>
               </div>
               <div className="space-y-3">
                 {receipt.items.map((item) => {

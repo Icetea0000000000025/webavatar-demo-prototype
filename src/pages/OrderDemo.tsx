@@ -306,22 +306,22 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     >
       <div>
         {/* Top header: Logo / Icon + Tag Badges + House Code */}
-        <div className="flex items-center justify-between gap-2.5 mb-4">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-11 h-11 rounded-2xl border border-sky-200 dark:border-sky-800/80 bg-sky-50/60 dark:bg-sky-950/40 group-hover:border-sky-400 dark:group-hover:border-sky-500 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 flex items-center justify-center p-2 shadow-xs transition-all duration-300 shrink-0">
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <div className="w-10 h-10 rounded-2xl border border-sky-200 dark:border-sky-800/80 bg-sky-50/60 dark:bg-sky-950/40 group-hover:border-sky-400 dark:group-hover:border-sky-500 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 flex items-center justify-center p-2 shadow-xs transition-all duration-300 shrink-0">
               {house.id === -1 ? (
                 <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
               ) : house.id === -3 ? (
                 <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
               ) : (
-                <TypeIcon className="size-5 text-sky-600 dark:text-sky-400 shrink-0" />
+                <TypeIcon className="size-4.5 text-sky-600 dark:text-sky-400 shrink-0" />
               )}
             </div>
-            <span className={`text-[10px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border flex items-center gap-1.5 truncate ${typeBg}`}>
+            <span className={`text-[9.5px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full border flex items-center gap-1 whitespace-nowrap shrink-0 ${typeBg}`}>
               {typeLabel}
             </span>
           </div>
-          <span className="text-xs font-black text-foreground font-mono bg-muted/50 px-2 py-0.5 rounded-lg border border-border shrink-0">
+          <span className="text-[11px] font-black text-foreground font-mono bg-muted/50 px-2 py-0.5 rounded-lg border border-border shrink-0 ml-auto">
             {house.code}
           </span>
         </div>
@@ -533,7 +533,7 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => handleScroll("left")}
                 disabled={!canScrollLeft}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 -mt-1.5 ${
                   canScrollLeft
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -571,14 +571,14 @@ export default function OrderDemo() {
                     <button
                       key={cat.id}
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 ${
+                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 whitespace-nowrap ${
                         isActive
                           ? colorConfig.active
                           : `text-muted-foreground bg-muted/30 border-border ${colorConfig.hover}`
                       }`}
                     >
                       <Icon className="size-3.5 shrink-0" />
-                      <span>{label}</span>
+                      <span className="whitespace-nowrap">{label}</span>
                     </button>
                   );
                 })}
@@ -588,7 +588,7 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => handleScroll("right")}
                 disabled={!canScrollRight}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 -mt-1.5 ${
                   canScrollRight
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -855,14 +855,14 @@ export default function OrderDemo() {
                         <button
                           key={cat.id}
                           onClick={() => setSelectedCategory(cat.id)}
-                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 ${
+                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${
                             active
                               ? colorConfig.active
                               : `bg-muted/20 border-border text-muted-foreground ${colorConfig.hover}`
                           }`}
                         >
                           <Icon className="size-3.5 shrink-0" />
-                          <span className="truncate">{label}</span>
+                          <span className="whitespace-nowrap font-sans">{label}</span>
                         </button>
                       );
                     })}

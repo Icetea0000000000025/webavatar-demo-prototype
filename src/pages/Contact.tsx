@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Download } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
@@ -135,6 +136,49 @@ function Contact() {
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
+  };
+
+  const handleDownloadList = () => {
+    const hasDraft = Boolean(formData.name.trim() || formData.email.trim());
+    const dataToExport = submissions.length > 0 
+      ? submissions 
+      : hasDraft 
+      ? [{
+          id: 1,
+          formNumber: 1,
+          name: formData.name,
+          email: formData.email,
+          inquiryType: formData.inquiryType,
+          message: formData.message,
+          timestamp: new Date().toLocaleString()
+        }]
+      : [];
+
+    if (dataToExport.length === 0) {
+      alert("ยังไม่มีรายการติดต่อในระบบ กรุณากรอกแบบฟอร์มเพื่อทดลองดาวน์โหลด (No submissions to download yet)");
+      return;
+    }
+
+    const headers = ["Form ID", "Name", "Email", "Inquiry Type", "Message", "Timestamp"];
+    const rows = dataToExport.map(sub => [
+      `"#${sub.formNumber}"`,
+      `"${(sub.name || '').replace(/"/g, '""')}"`,
+      `"${(sub.email || '').replace(/"/g, '""')}"`,
+      `"${(getInquiryTypeLabel(sub.inquiryType) || sub.inquiryType || '').replace(/"/g, '""')}"`,
+      `"${(sub.message || '').replace(/"/g, '""')}"`,
+      `"${sub.timestamp || ''}"`
+    ]);
+
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `webavatar_contact_inquiries_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const faqs = [
@@ -473,22 +517,19 @@ function Contact() {
           </div>
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
             <button 
-              className="btn btn-secondary" 
-              disabled 
+              type="button"
+              onClick={handleDownloadList}
+              className="btn btn-secondary cursor-pointer hover:bg-primary hover:text-white transition-all shadow-sm flex items-center gap-2" 
               style={{ 
-                opacity: 0.4, 
-                cursor: 'not-allowed', 
-                background: 'var(--muted)',
-                borderColor: 'var(--border)',
-                color: 'var(--muted-foreground)',
-                borderRadius: '8px',
-                padding: '0.5rem 1.25rem',
+                borderRadius: '10px',
+                padding: '0.6rem 1.4rem',
                 fontSize: '0.85rem',
-                transition: 'none'
+                fontWeight: '700',
               }}
               id="download-ledger-button"
             >
-              Download List (Disabled)
+              <Download className="size-4" />
+              <span>{t('contact.btn_download_list')}</span>
             </button>
           </div>
         </AnimatedSection>
