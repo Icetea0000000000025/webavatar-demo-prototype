@@ -311,16 +311,9 @@ function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={t('contact.form_name_placeholder')}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    transition: 'border-color 0.2s',
-
-                  }}
+                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
+                    formData.name ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
+                  }`}
                 />
               </div>
 
@@ -336,15 +329,9 @@ function Contact() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={t('contact.form_email_placeholder')}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    transition: 'border-color 0.2s',
-                  }}
+                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
+                    formData.email ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
+                  }`}
                 />
               </div>
 
@@ -358,17 +345,9 @@ function Contact() {
                     name="inquiryType"
                     value={formData.inquiryType}
                     onChange={handleChange}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem 1rem',
-                      borderRadius: '8px',
-                      border: '1px solid var(--border)',
-                      outline: 'none',
-                      fontSize: '0.9rem',
-
-                      appearance: 'none',
-                      cursor: 'pointer'
-                    }}
+                    className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 appearance-none cursor-pointer focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
+                      formData.inquiryType ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
+                    }`}
                   >
                     <option value="contact" className="bg-card text-foreground">{t('contact.inquiry_label_contact')}</option>
                     <option value="webavatar" className="bg-card text-foreground">{t('contact.inquiry_label_webavatar')}</option>
@@ -402,17 +381,9 @@ function Contact() {
                   onChange={handleChange}
                   placeholder={t('contact.form_message_placeholder')}
                   rows={4}
-                  style={{
-                    width: '100%',
-                    padding: '0.75rem 1rem',
-                    borderRadius: '8px',
-                    border: '1px solid var(--border)',
-                    outline: 'none',
-                    fontSize: '0.9rem',
-                    resize: 'vertical',
-                    transition: 'border-color 0.2s',
-
-                  }}
+                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 resize-y focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
+                    formData.message ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
+                  }`}
                 />
               </div>
 

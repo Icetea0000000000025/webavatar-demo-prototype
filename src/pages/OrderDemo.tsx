@@ -136,17 +136,17 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
 };
 
 const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
-  education: { Icon: GraduationCap, bg: "bg-indigo-50 text-indigo-700 border-indigo-200/50" },
-  skincare: { Icon: Sparkles, bg: "bg-pink-50 text-pink-700 border-pink-200/50" },
-  map: { Icon: Map, bg: "bg-teal-50 text-teal-700 border-teal-200/50" },
-  hospital: { Icon: HeartPulse, bg: "bg-rose-50 text-rose-700 border-rose-200/50" },
-  restaurant: { Icon: UtensilsCrossed, bg: "bg-emerald-50 text-emerald-700 border-emerald-200/50" },
-  ac_service: { Icon: Wrench, bg: "bg-cyan-50 text-cyan-700 border-cyan-200/50" },
-  coffee: { Icon: Coffee, bg: "bg-amber-50 text-amber-800 border-amber-200/50" },
-  fitness: { Icon: Dumbbell, bg: "bg-purple-50 text-purple-700 border-purple-200/50" },
-  flight: { Icon: Plane, bg: "bg-sky-50 text-sky-700 border-sky-200/50" },
-  ecommerce: { Icon: ShoppingBag, bg: "bg-blue-50 text-blue-700 border-blue-200/50" },
-  accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-700 border-amber-200/50" },
+  education: { Icon: GraduationCap, bg: "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80" },
+  skincare: { Icon: Sparkles, bg: "bg-pink-50 text-pink-700 border-pink-200/50 dark:bg-pink-950/80 dark:text-pink-300 dark:border-pink-800/80" },
+  map: { Icon: Map, bg: "bg-teal-50 text-teal-700 border-teal-200/50 dark:bg-teal-950/80 dark:text-teal-300 dark:border-teal-800/80" },
+  hospital: { Icon: HeartPulse, bg: "bg-rose-50 text-rose-700 border-rose-200/50 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800/80" },
+  restaurant: { Icon: UtensilsCrossed, bg: "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80" },
+  ac_service: { Icon: Wrench, bg: "bg-cyan-50 text-cyan-700 border-cyan-200/50 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-800/80" },
+  coffee: { Icon: Coffee, bg: "bg-amber-50 text-amber-800 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80" },
+  fitness: { Icon: Dumbbell, bg: "bg-purple-50 text-purple-700 border-purple-200/50 dark:bg-purple-950/80 dark:text-purple-300 dark:border-purple-800/80" },
+  flight: { Icon: Plane, bg: "bg-sky-50 text-sky-700 border-sky-200/50 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-800/80" },
+  ecommerce: { Icon: ShoppingBag, bg: "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80" },
+  accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80" },
 };
 
 const CATEGORY_COLOR_MAP: Record<
@@ -219,32 +219,32 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
   const hasDeployed = isHouseDeployed(house);
   let typeLabel: string;
   let TypeIcon: LucideIcon = UtensilsCrossed;
-  let typeBg = "bg-stone-50 text-stone-600 border-stone-200";
+  let typeBg = "bg-stone-50 text-stone-600 border-stone-200 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700";
   let cardDescription = "";
   let displayName = house.name;
 
   if (house.id === -1) {
     typeLabel = t("showcase.type_flight");
     TypeIcon = Plane;
-    typeBg = "bg-blue-50 text-blue-700 border-blue-200/50";
+    typeBg = "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80";
     cardDescription = t("showcase.desc_flight");
     displayName = t("showcase.flight_demo_name");
   } else if (house.id === -2) {
     typeLabel = t("showcase.type_ecommerce");
     TypeIcon = ShoppingBag;
-    typeBg = "bg-indigo-50 text-indigo-700 border-indigo-200/50";
+    typeBg = "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80";
     cardDescription = t("showcase.desc_ecommerce");
     displayName = t("showcase.itstore_demo_name");
   } else if (house.id === -3) {
     typeLabel = t("showcase.type_restaurant");
     TypeIcon = UtensilsCrossed;
-    typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50";
+    typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80";
     cardDescription = t("showcase.desc_restaurant");
     displayName = t("food.title");
   } else if (house.id === -4) {
     typeLabel = t("showcase.type_accommodation");
     TypeIcon = BedDouble;
-    typeBg = "bg-amber-50 text-amber-700 border-amber-200/50";
+    typeBg = "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80";
     cardDescription = t("showcase.desc_accommodation");
     displayName = t("showcase.hotel_demo_name");
   } else {
@@ -257,7 +257,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     if (!hasDeployed) {
       typeLabel = t("showcase.type_pending");
       TypeIcon = Clock;
-      typeBg = "bg-stone-50 text-stone-500 border-stone-200/50";
+      typeBg = "bg-stone-50 text-stone-500 border-stone-200/50 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700";
     } else {
       typeLabel = t(`showcase.type_${house.type}` as any);
       if (CATEGORY_STYLES[house.type]) {
@@ -450,10 +450,12 @@ export default function OrderDemo() {
 
       const matchesCategory = selectedCategory === "all" || house.type === selectedCategory;
 
+      const isFilterActive = selectedCategory !== "all" || searchQuery.trim() !== "";
+
       const matchesStatus =
-        statusFilter === "all" ||
-        (statusFilter === "deployed" && isHouseDeployed(house)) ||
-        (statusFilter === "pending" && !isHouseDeployed(house));
+        statusFilter === "deployed" ? isHouseDeployed(house) :
+        statusFilter === "pending" ? !isHouseDeployed(house) :
+        isFilterActive ? isHouseDeployed(house) : true;
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -526,22 +528,25 @@ export default function OrderDemo() {
             </div>
 
             {/* Quick Filters Tab Container with Scroll Buttons & Bounded Scrollbar Track */}
-            <div className="relative flex items-center min-w-0 flex-1 mx-1.5">
-              {canScrollLeft && (
-                <button
-                  type="button"
-                  onClick={() => handleScroll("left")}
-                  className="absolute left-0 z-10 p-1.5 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md text-foreground hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer -translate-x-2 shrink-0"
-                  aria-label="Scroll left filters"
-                >
-                  <ChevronLeft className="size-3.5" />
-                </button>
-              )}
+            <div className="flex items-center min-w-0 flex-1 gap-2">
+              <button
+                type="button"
+                onClick={() => handleScroll("left")}
+                disabled={!canScrollLeft}
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                  canScrollLeft
+                    ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
+                    : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
+                }`}
+                aria-label="Scroll left filters"
+              >
+                <ChevronLeft className="size-4" />
+              </button>
 
               <div
                 ref={filterScrollRef}
                 onScroll={checkScroll}
-                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-2.5 px-1 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
+                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 py-1 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
                 style={{ scrollbarWidth: "thin" }}
               >
                 {[
@@ -579,16 +584,19 @@ export default function OrderDemo() {
                 })}
               </div>
 
-              {canScrollRight && (
-                <button
-                  type="button"
-                  onClick={() => handleScroll("right")}
-                  className="absolute right-0 z-10 p-1.5 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md text-foreground hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer translate-x-2 shrink-0"
-                  aria-label="Scroll right filters"
-                >
-                  <ChevronRight className="size-3.5" />
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => handleScroll("right")}
+                disabled={!canScrollRight}
+                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                  canScrollRight
+                    ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
+                    : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
+                }`}
+                aria-label="Scroll right filters"
+              >
+                <ChevronRight className="size-4" />
+              </button>
             </div>
 
             {/* Filter Toggle Button */}
@@ -603,11 +611,6 @@ export default function OrderDemo() {
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
               )}
             </button>
-
-            {/* Total Cards Count Badge matching WebAvatar Live widget button style without green dot */}
-            <div className="card-count-badge py-2 px-3 rounded-2xl shrink-0" id="badge-total-card-count">
-              <span>{totalResults}</span>
-            </div>
           </div>
 
           {/* Active Filter Tags */}
