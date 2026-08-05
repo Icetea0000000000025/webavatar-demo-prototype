@@ -606,6 +606,7 @@ export default function FlightDemo() {
                         id="returnDate"
                         name="returnDate"
                         required
+                        min={form.departDate}
                         value={form.returnDate}
                         onChange={(e) => setForm({ ...form, returnDate: e.target.value })}
                         className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display cursor-pointer"
@@ -616,40 +617,40 @@ export default function FlightDemo() {
                   )}
 
                   <Field label={t('flight.passengers')} htmlFor="passengers" required>
-  <input
-    type="text"
-    inputMode="numeric"
-    pattern="[0-9]*"
-    id="passengers"
-    name="passengers"
-    value={form.passengers}
-    onChange={(e) => {
-      // 1. กรองเอาเฉพาะตัวเลข
-      const rawValue = e.target.value.replace(/[^0-9]/g, '');
-      
-      // 2. ถ้าเป็นค่าว่าง ให้ใส่ 1 หรือค่าว่างเพื่อรองรับตอนกด Backspace ลบทั้งหมด
-      if (!rawValue) {
-        setForm({ ...form, passengers: 0 }); // หรือ 1
-        return;
-      }
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      id="passengers"
+                      name="passengers"
+                      value={form.passengers}
+                      onChange={(e) => {
+                        // 1. กรองเอาเฉพาะตัวเลข
+                        const rawValue = e.target.value.replace(/[^0-9]/g, '');
 
-      // 3. แปลงเป็น Number เพื่อตัดเลข 0 นำหน้าออกอัตโนมัติ (เช่น "025" -> 25)
-      let num = parseInt(rawValue, 10);
+                        // 2. ถ้าเป็นค่าว่าง ให้ใส่ 1 หรือค่าว่างเพื่อรองรับตอนกด Backspace ลบทั้งหมด
+                        if (!rawValue) {
+                          setForm({ ...form, passengers: 0 }); // หรือ 1
+                          return;
+                        }
 
-      // 4. คุมไม่ให้เกิน 60
-      if (num > 60) num = 60;
+                        // 3. แปลงเป็น Number เพื่อตัดเลข 0 นำหน้าออกอัตโนมัติ (เช่น "025" -> 25)
+                        let num = parseInt(rawValue, 10);
 
-      setForm({ ...form, passengers: num });
-    }}
-    onBlur={() => {
-      // ถ้าผู้ใช้ลบจนว่างแล้ววนออกนอกช่อง ให้คืนค่าเป็น 1 เสมอ
-      if (!form.passengers || form.passengers < 1) {
-        setForm({ ...form, passengers: 1 });
-      }
-    }}
-    className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
-  />
-</Field>
+                        // 4. คุมไม่ให้เกิน 60
+                        if (num > 60) num = 60;
+
+                        setForm({ ...form, passengers: num });
+                      }}
+                      onBlur={() => {
+                        // ถ้าผู้ใช้ลบจนว่างแล้ววนออกนอกช่อง ให้คืนค่าเป็น 1 เสมอ
+                        if (!form.passengers || form.passengers < 1) {
+                          setForm({ ...form, passengers: 1 });
+                        }
+                      }}
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
+                    />
+                  </Field>
 
                   <Field label={t('flight.promo')} htmlFor="promoCode">
                     <input
@@ -1123,8 +1124,36 @@ export default function FlightDemo() {
                       id="passengerName"
                       name="passengerName"
                       required
-                      value={form.passengerName}
-                      onChange={(e) => setForm({ ...form, passengerName: e.target.value })}
+                      value={form.passengerName || ''}
+
+                      // 1. ล้างตัวอักษรไทยออกทันทีหลังจากพิมพ์/ผสมคำเสร็จ
+                      onCompositionEnd={(e) => {
+                        const cleanValue = e.currentTarget.value.replace(/[^a-zA-Z\s]/g, '');
+                        setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                      }}
+
+                      // 2. รับค่าและกรองภาษาไทยออก (ใช้ Cast Type แก้ปัญหา TypeScript เรียบร้อย)
+                      onChange={(e) => {
+                        if (!(e.nativeEvent as InputEvent).isComposing) {
+                          const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                          setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                        } else {
+                          setForm((prev) => ({ ...prev, passengerName: e.target.value }));
+                        }
+                      }}
+
+                      // 3. ป้องกันตอนหลุดโฟกัส (Blur) และตอน ก๊อปปี้วาง (Paste)
+                      onBlur={(e) => {
+                        const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                        setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                      }}
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        const pastedText = e.clipboardData.getData('text');
+                        const cleanValue = pastedText.replace(/[^a-zA-Z\s]/g, '');
+                        setForm((prev) => ({ ...prev, passengerName: (prev.passengerName || '') + cleanValue }));
+                      }}
+
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
                       placeholder={t('flight.passenger_name_placeholder')}
                     />
@@ -1145,8 +1174,25 @@ export default function FlightDemo() {
                     <input
                       id="phone"
                       name="phone"
-                      value={form.phone}
-                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      type="tel"
+                      inputMode="numeric"
+                      value={form.phone || ''}
+                      onChange={(e) => {
+                        // คัดเอาเฉพาะตัวเลข (0-9) เท่านั้น ลบตัวอักษรหรือสัญลักษณ์อื่นทิ้งทันที
+                        const cleanValue = e.target.value.replace(/[^0-9]/g, '');
+
+                        // (Optional) จำกัดความยาวไม่เกิน 10 หลัก (ถ้าต้องการเปิดใช้ ให้เอา comment ออกได้ครับ)
+                        // if (cleanValue.length > 10) return;
+
+                        setForm((prev) => ({ ...prev, phone: cleanValue }));
+                      }}
+                      onPaste={(e) => {
+                        // ป้องกันกรณีก๊อปปี้ข้อความที่มีตัวอักษรติดมาวาง
+                        e.preventDefault();
+                        const pastedText = e.clipboardData.getData('text');
+                        const cleanValue = pastedText.replace(/[^0-9]/g, '');
+                        setForm((prev) => ({ ...prev, phone: (prev.phone || '') + cleanValue }));
+                      }}
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
                       placeholder="08X-XXX-XXXX"
                     />
