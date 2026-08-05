@@ -54,43 +54,43 @@
   /* Scales all rem font-sizes and spacings globally. Adjust this percentage to scale up/down. */
   --radius: 1rem;
 
-  /* Color Palette - Clean Editorial Light Theme */
+  /* Color Palette - Clean High-Contrast Light Theme */
   --background: #FAFBFC;
-  --foreground: #0A0A0B;
+  --foreground: #09090B;
   --card: #FFFFFF;
-  --card-foreground: #0A0A0B;
+  --card-foreground: #09090B;
   --popover: #FFFFFF;
-  --popover-foreground: #0A0A0B;
-  --primary: #6366F1;
-  /* Indigo-500 */
+  --popover-foreground: #09090B;
+  --primary: #4F46E5;
+  /* Indigo-600 */
   --primary-foreground: #FFFFFF;
   --secondary: #EEF2F6;
   /* Soft blue-gray */
-  --secondary-foreground: #4F46E5;
-  --muted: #F4F4F5;
-  /* Zinc-100 */
-  --muted-foreground: #71717A;
-  /* Zinc-500 */
+  --secondary-foreground: #4338CA;
+  --muted: #F1F5F9;
+  /* Slate-100 */
+  --muted-foreground: #334155;
+  /* Slate-700 - Sharp high contrast text */
   --accent: #ECFDF5;
   /* Emerald-50 tint */
-  --accent-foreground: #059669;
+  --accent-foreground: #047857;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E4E4E7;
-  /* Zinc-200 */
+  --border: #CBD5E1;
+  /* Slate-300 */
   --input: #FFFFFF;
-  --ring: #6366F1;
-  --brand: #6366F1;
+  --ring: #4F46E5;
+  --brand: #4F46E5;
   --brand-foreground: #FFFFFF;
-  --cta: #06B6D4;
-  /* Cyan-500 */
+  --cta: #0284C7;
+  /* Cyan-600 */
   --cta-foreground: #FFFFFF;
-  --success: #10B981;
+  --success: #059669;
 
   /* Premium Gradients */
-  --grad-primary: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%);
-  --grad-hover: linear-gradient(135deg, #4F46E5 0%, #0891B2 100%);
-  --grad-text: linear-gradient(135deg, #0A0A0B 0%, #27272A 100%);
+  --grad-primary: linear-gradient(135deg, #4F46E5 0%, #0284C7 100%);
+  --grad-hover: linear-gradient(135deg, #4338CA 0%, #0369A1 100%);
+  --grad-text: linear-gradient(135deg, #09090B 0%, #1E293B 100%);
   --grad-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
     radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.1) 0px, transparent 50%);
@@ -117,36 +117,37 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
-  /* Color Palette - Deep Futuristic Dark Theme */
+  /* Color Palette - Sharp High-Contrast Dark Theme */
   --background: #0B0F19;
-  --foreground: #F3F4F6;
+  --foreground: #FFFFFF;
   --card: #111827;
-  --card-foreground: #F9FAFB;
+  --card-foreground: #FFFFFF;
   --popover: #111827;
-  --popover-foreground: #F9FAFB;
-  --primary: #818CF8;
+  --popover-foreground: #FFFFFF;
+  --primary: #A5B4FC;
   --primary-foreground: #0B0F19;
   --secondary: #1F2937;
-  --secondary-foreground: #C7D2FE;
+  --secondary-foreground: #E0E7FF;
   --muted: #1F2937;
-  --muted-foreground: #9CA3AF;
+  --muted-foreground: #E2E8F0;
+  /* Slate-200 - Sharp high contrast text for dark mode */
   --accent: #064E3B;
-  --accent-foreground: #34D399;
+  --accent-foreground: #6EE7B7;
   --destructive: #F87171;
   --destructive-foreground: #FFFFFF;
-  --border: #1F2937;
+  --border: #334155;
   --input: #111827;
-  --ring: #818CF8;
-  --brand: #818CF8;
+  --ring: #A5B4FC;
+  --brand: #A5B4FC;
   --brand-foreground: #0B0F19;
-  --cta: #22D3EE;
+  --cta: #38BDF8;
   --cta-foreground: #0B0F19;
   --success: #34D399;
 
   /* Premium Gradients for Dark Mode */
   --grad-primary: linear-gradient(135deg, #6366F1 0%, #06B6D4 100%);
   --grad-hover: linear-gradient(135deg, #818CF8 0%, #22D3EE 100%);
-  --grad-text: linear-gradient(135deg, #FFFFFF 0%, #D1D5DB 100%);
+  --grad-text: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
   --grad-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.2) 0px, transparent 50%),
     radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.2) 0px, transparent 50%);
