@@ -510,11 +510,11 @@ export default function OrderDemo() {
         <div className="flex flex-col gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full">
             {/* Search Input */}
-            <div className="relative w-full lg:max-w-xs shrink-0">
+            <div className="relative w-full lg:max-w-xs shrink-0 flex items-center">
               <label htmlFor="demo-search-input" className="sr-only">
                 {t('showcase.search_placeholder')}
               </label>
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+              <Search className="absolute left-3.5 size-4 text-muted-foreground pointer-events-none" />
               <input
                 id="demo-search-input"
                 name="searchQuery"
@@ -523,7 +523,7 @@ export default function OrderDemo() {
                 placeholder={t('showcase.search_placeholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-muted/30 border border-border focus:border-primary rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
+                className="w-full h-10 pl-10 pr-4 bg-muted/30 border border-border focus:border-primary rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
               />
             </div>
 
@@ -533,7 +533,7 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => handleScroll("left")}
                 disabled={!canScrollLeft}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                className={`w-10 h-10 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-sm transition-all shrink-0 flex items-center justify-center -translate-y-1.5 ${
                   canScrollLeft
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -546,8 +546,8 @@ export default function OrderDemo() {
               <div
                 ref={filterScrollRef}
                 onScroll={checkScroll}
-                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 pt-1.5 pb-2 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-muted/30 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/80"
-                style={{ scrollbarWidth: "thin" }}
+                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 pt-1 pb-4 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-muted/15 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/40 [&::-webkit-scrollbar-thumb]:rounded-full transition-colors"
+                style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(148, 163, 184, 0.25) transparent" }}
               >
                 {[
                   { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
@@ -571,7 +571,7 @@ export default function OrderDemo() {
                     <button
                       key={cat.id}
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`px-3.5 py-2 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 whitespace-nowrap ${
+                      className={`h-10 px-3.5 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 whitespace-nowrap ${
                         isActive
                           ? colorConfig.active
                           : `text-muted-foreground bg-muted/30 border-border ${colorConfig.hover}`
@@ -588,7 +588,7 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => handleScroll("right")}
                 disabled={!canScrollRight}
-                className={`p-2 rounded-full bg-card/95 backdrop-blur-md border border-border shadow-md transition-all shrink-0 ${
+                className={`w-10 h-10 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-sm transition-all shrink-0 flex items-center justify-center -translate-y-1.5 ${
                   canScrollRight
                     ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
                     : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
@@ -599,17 +599,22 @@ export default function OrderDemo() {
               </button>
             </div>
 
-            {/* Filter Toggle Button */}
+            {/* Filter Toggle Icon Button */}
             <button
               onClick={() => setIsFilterModalOpen(true)}
-              className="px-4 py-2.5 rounded-2xl bg-muted/30 border border-border hover:bg-muted/50 hover:text-foreground text-foreground text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0 font-mono"
+              title={t('showcase.filter')}
+              aria-label={t('showcase.filter')}
+              className="w-10 h-10 rounded-2xl bg-muted/30 border border-border hover:bg-muted/50 hover:text-foreground text-foreground transition-all flex items-center justify-center cursor-pointer shrink-0 relative group shadow-sm -translate-y-1.5"
               id="filter-modal-trigger"
             >
-              <SlidersHorizontal className="size-4 text-primary" />
-              <span>{t('showcase.filter')}</span>
+              <SlidersHorizontal className="size-4.5 text-primary shrink-0" />
               {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
-                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-background animate-pulse" />
               )}
+              {/* Tooltip on hover */}
+              <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-slate-900/90 dark:bg-slate-800/95 backdrop-blur-md text-white text-[11px] font-bold rounded-xl shadow-lg border border-slate-700/50 opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none whitespace-nowrap z-50">
+                {t('showcase.filter')}
+              </span>
             </button>
           </div>
 

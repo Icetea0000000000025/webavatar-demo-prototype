@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Users, Mic, Globe } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
-import AnimatedCounter from '../components/AnimatedCounter';
+import SemiCircleGauge from '../components/SemiCircleGauge';
 import AppFooter from '../components/AppFooter';
 import './Pages.css';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
@@ -114,23 +115,57 @@ export default function Home() {
         </AnimatedSection>
       </section>
 
-      {/* SOCIAL PROOF BAR */}
-      <section className="border-y border-zinc-200/60 bg-white/40 backdrop-blur-md py-8 relative z-10" id="stats-section" aria-label="Key Statistics">
+      {/* SOCIAL PROOF BAR / GAUGE STATS SECTION */}
+      <section className="border-y border-border/40 bg-zinc-50/40 dark:bg-slate-900/30 backdrop-blur-md py-10 relative z-10" id="stats-section" aria-label="Key Statistics">
         <div style={{ maxWidth: '1150px', margin: '0 auto', padding: '0 1.5rem' }}>
-          <div className="grid grid-cols-3 gap-6 text-center">
-            <div>
-              <AnimatedCounter value={5000} suffix="+" className="block text-2xl md:text-3xl font-extrabold text-indigo-600 mb-1" />
-              <span className="text-xs md:text-sm text-zinc-500 font-medium uppercase tracking-wider">{t('home.stats_clients')}</span>
+          <AnimatedSection direction="up" duration={0.8}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {/* Gauge 1: Active Clients */}
+              <SemiCircleGauge
+                value={5000}
+                suffix="+"
+                percentage={92}
+                label={t('home.stats_clients')}
+                icon={<Users className="size-5" />}
+                gradientId="gauge-clients"
+                colorStart="#0284c7"
+                colorEnd="#6366f1"
+                badgeBg="bg-sky-50 dark:bg-sky-950/60"
+                badgeText="text-sky-600 dark:text-sky-400"
+                badgeBorder="border border-sky-200/80 dark:border-sky-800/80"
+              />
+
+              {/* Gauge 2: Realistic Voices */}
+              <SemiCircleGauge
+                value={100}
+                suffix="+"
+                percentage={85}
+                label={t('home.stats_voices')}
+                icon={<Mic className="size-5" />}
+                gradientId="gauge-voices"
+                colorStart="#8b5cf6"
+                colorEnd="#d946ef"
+                badgeBg="bg-purple-50 dark:bg-purple-950/60"
+                badgeText="text-purple-600 dark:text-purple-400"
+                badgeBorder="border border-purple-200/80 dark:border-purple-800/80"
+              />
+
+              {/* Gauge 3: Supported Languages */}
+              <SemiCircleGauge
+                value={10}
+                suffix="+"
+                percentage={95}
+                label={t('home.stats_languages')}
+                icon={<Globe className="size-5" />}
+                gradientId="gauge-languages"
+                colorStart="#10b981"
+                colorEnd="#06b6d4"
+                badgeBg="bg-emerald-50 dark:bg-emerald-950/60"
+                badgeText="text-emerald-600 dark:text-emerald-400"
+                badgeBorder="border border-emerald-200/80 dark:border-emerald-800/80"
+              />
             </div>
-            <div>
-              <AnimatedCounter value={100} suffix="+" className="block text-2xl md:text-3xl font-extrabold text-indigo-600 mb-1" />
-              <span className="text-xs md:text-sm text-zinc-500 font-medium uppercase tracking-wider">{t('home.stats_voices')}</span>
-            </div>
-            <div>
-              <AnimatedCounter value={10} suffix="+" className="block text-2xl md:text-3xl font-extrabold text-indigo-600 mb-1" />
-              <span className="text-xs md:text-sm text-zinc-500 font-medium uppercase tracking-wider">{t('home.stats_languages')}</span>
-            </div>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 

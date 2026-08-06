@@ -206,7 +206,7 @@ export default function ITStoreAdmin() {
                             style={{
                               background: "rgba(99,102,241,0.1)",
                               color: "#6366f1",
-                              fontFamily: "monospace",
+                              fontFamily: "var(--font-mono)",
                             }}
                           >
                             {order.orderId}

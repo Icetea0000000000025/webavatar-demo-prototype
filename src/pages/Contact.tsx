@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download } from 'lucide-react';
+import { Download, MapPin, Phone, Mail, ExternalLink, Check } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
@@ -62,6 +62,24 @@ function Contact() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastDetails, setToastDetails] = useState({ name: '', email: '', inquiryType: 'contact', formNumber: 0, message: '' });
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeCard, setActiveCard] = useState<string | null>(null);
+  const [copiedCard, setCopiedCard] = useState<string | null>(null);
+
+  const handleContactCardClick = (type: 'address' | 'phone' | 'email', actionUrl?: string, textToCopy?: string) => {
+    setActiveCard(type);
+    if (textToCopy) {
+      navigator.clipboard?.writeText(textToCopy);
+      setCopiedCard(type);
+      setTimeout(() => setCopiedCard(null), 2500);
+    }
+    if (actionUrl) {
+      if (actionUrl.startsWith('http')) {
+        window.open(actionUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        window.location.href = actionUrl;
+      }
+    }
+  };
 
   // Auto-hide success toast after 5 seconds
   useEffect(() => {
@@ -231,39 +249,98 @@ function Contact() {
               </p>
             </div>
 
-            <div className="contact-info-card" id="contact-address">
-              <div className="contact-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            {/* Card 1: Address */}
+            <motion.div
+              className={`contact-info-card group ${activeCard === 'address' ? 'active' : ''}`}
+              id="contact-address"
+              whileHover={{ y: -4, scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '21 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
+            >
+              <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                <div className="contact-card-icon bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/80 group-hover:border-sky-400 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 transition-all duration-300">
+                  <MapPin className="size-5" />
+                </div>
+                <div className="contact-card-content flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">Address</h4>
+                    {copiedCard === 'address' && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                        <Check className="size-3" /> Copied!
+                      </span>
+                    )}
+                  </div>
+                  <p>
+                    21 Asok Building, 253 Asok Montri Rd,<br />
+                    Khlong Toei Nuea, Watthana, Bangkok 10110
+                  </p>
+                </div>
               </div>
-              <div className="contact-card-content">
-                <h4>Address</h4>
-                <p>
-                  21 Asok Building, 253 Asok Montri Rd,<br />
-                  Khlong Toei Nuea, Watthana,<br />
-                  Bangkok 10110
-                </p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+                <span>Map</span>
+                <ExternalLink className="size-3.5" />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="contact-info-card" id="contact-phone">
-              <div className="contact-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            {/* Card 2: Phone */}
+            <motion.div
+              className={`contact-info-card group ${activeCard === 'phone' ? 'active' : ''}`}
+              id="contact-phone"
+              whileHover={{ y: -4, scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => handleContactCardClick('phone', 'tel:0641922433', '0641922433')}
+            >
+              <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                <div className="contact-card-icon bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/80 dark:border-indigo-800/80 group-hover:border-indigo-400 group-hover:shadow-[0_0_18px_rgba(99,102,241,0.45)] group-hover:scale-110 transition-all duration-300">
+                  <Phone className="size-5" />
+                </div>
+                <div className="contact-card-content flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Phone</h4>
+                    {copiedCard === 'phone' && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                        <Check className="size-3" /> Copied!
+                      </span>
+                    )}
+                  </div>
+                  <p>064 192 2433 • Office Hours (Mon-Fri, 9:00 - 18:00 ICT)</p>
+                </div>
               </div>
-              <div className="contact-card-content">
-                <h4>Phone</h4>
-                <p>064 192 2433 • Office Hours (Mon-Fri, 9:00 - 18:00 ICT)</p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+                <span>Call</span>
+                <ExternalLink className="size-3.5" />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="contact-info-card" id="contact-email">
-              <div className="contact-card-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            {/* Card 3: Email */}
+            <motion.div
+              className={`contact-info-card group ${activeCard === 'email' ? 'active' : ''}`}
+              id="contact-email"
+              whileHover={{ y: -4, scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => handleContactCardClick('email', 'mailto:admin@botnoigroup.com', 'admin@botnoigroup.com')}
+            >
+              <div className="flex items-center gap-3.5 flex-1 min-w-0">
+                <div className="contact-card-icon bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 group-hover:border-emerald-400 group-hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] group-hover:scale-110 transition-all duration-300">
+                  <Mail className="size-5" />
+                </div>
+                <div className="contact-card-content flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h4 className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Email</h4>
+                    {copiedCard === 'email' && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                        <Check className="size-3" /> Copied!
+                      </span>
+                    )}
+                  </div>
+                  <p>admin@botnoigroup.com</p>
+                </div>
               </div>
-              <div className="contact-card-content">
-                <h4>Email</h4>
-                <p>admin@botnoigroup.com</p>
+              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+                <span>Email</span>
+                <ExternalLink className="size-3.5" />
               </div>
-            </div>
+            </motion.div>
           </AnimatedSection>
 
           {/* RIGHT COLUMN: LEAD FORM OR SUCCESS STATE */}

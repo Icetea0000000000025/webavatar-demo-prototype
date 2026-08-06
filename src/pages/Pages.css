@@ -511,6 +511,50 @@
   text-decoration: none;
 }
 
+/* Dark Mode Styling for Bento Cards (Select Demo Use Cases) */
+.dark .bento-card {
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px 0 rgba(99, 102, 241, 0.05);
+}
+
+.dark .bento-card::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+}
+
+.dark .bento-card:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.75), 0 0 25px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-4px);
+}
+
+.dark .bento-card-header h3 {
+  color: #F8FAFC;
+}
+
+.dark .bento-card p {
+  color: #94A3B8;
+}
+
+.dark .bento-card:hover p {
+  color: #CBD5E1;
+}
+
+.dark .bento-card-footer {
+  border-top: 1px solid rgba(51, 65, 85, 0.6);
+  color: #818CF8;
+}
+
+.dark .bento-card:hover .bento-card-footer {
+  color: #38BDF8;
+}
+
+.dark .bento-icon-box {
+  background: #1E293B;
+  border-color: rgba(51, 65, 85, 0.8);
+  color: #818CF8;
+}
+
 .col-12 { grid-column: span 12; }
 .col-8 { grid-column: span 8; }
 .col-6 { grid-column: span 6; }
@@ -1140,52 +1184,100 @@
   gap: 1.5rem;
 }
 
+.contact-info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .contact-info-card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1.75rem;
+  border-radius: 18px;
+  padding: 1.5rem 1.75rem;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
   gap: 1.25rem;
   box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.contact-info-card:hover {
-  border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: var(--shadow-premium);
-  transform: translateY(-2px);
+.contact-info-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.contact-info-card:hover,
+.contact-info-card.active {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 16px 35px -8px rgba(99, 102, 241, 0.18), 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .contact-card-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: var(--secondary);
-  color: var(--primary);
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.25rem;
   flex-shrink: 0;
   box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.contact-card-content {
+  flex: 1;
 }
 
 .contact-card-content h4 {
   font-size: 1rem;
   color: var(--card-foreground);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   font-weight: 700;
   letter-spacing: -0.01em;
+  transition: color 0.2s ease;
 }
 
 .contact-card-content p {
   color: var(--muted-foreground);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin: 0;
   line-height: 1.55;
   font-weight: 450;
+}
+
+/* Dark Mode for Contact Cards */
+.dark .contact-info-card {
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(51, 65, 85, 0.7);
+  box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.5);
+}
+
+.dark .contact-info-card::before {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+}
+
+.dark .contact-info-card:hover,
+.dark .contact-info-card.active {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.75), 0 0 25px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+}
+
+.dark .contact-info-card:hover .contact-card-content h4,
+.dark .contact-info-card.active .contact-card-content h4 {
+  color: #F8FAFC;
 }
 
 /* Premium Form Elements */
