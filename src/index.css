@@ -39,8 +39,8 @@
   --color-cta-foreground: var(--cta-foreground);
   --color-success: var(--success);
 
-  --font-sans: "Noto Sans", "Noto Sans Thai", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Noto Sans", "Noto Sans Thai", "Noto Sans JP", "Noto Sans KR", "Noto Sans SC", sans-serif;
+  --font-sans: "Noto Sans", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Noto Sans", "Noto Sans Thai", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
 }
@@ -50,6 +50,9 @@
    Linear & Stripe caliber
    ═══════════════════════════════════════ */
 :root {
+  --font-sans: "Noto Sans", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Noto Sans", "Noto Sans Thai", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
   font-size: 100%;
   /* Scales all rem font-sizes and spacings globally. Adjust this percentage to scale up/down. */
   --radius: 1rem;
