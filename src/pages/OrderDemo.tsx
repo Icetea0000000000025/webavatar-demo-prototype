@@ -80,17 +80,17 @@ const projectData: HouseItem[] = [
   { id: -2, code: 'SANDBOX', name: 'IT Store Demo', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
   { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
   { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
-  { id: 1, code: 'TN01', name: '01-the-chill-crew', style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
-  { id: 2, code: 'TN02', name: '02-cozy-oracles', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 3, code: 'TN03', name: '03-controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 4, code: 'TN04', name: '04-the-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 5, code: 'TN05', name: '05-aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 6, code: 'TN06', name: '06-lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 1, code: 'TN01', name: 'LearnLab', style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
+  { id: 2, code: 'TN02', name: '', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 3, code: 'TN03', name: 'Skinbot', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 4, code: 'TN04', name: 'AI Trip Map Planner', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 5, code: 'TN05', name: 'SamitiveJ', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 6, code: 'TN06', name: 'Botnoi API', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
   // Team 7 (Ours) - Lovable deployed app
   {
     id: 7,
     code: 'TN07',
-    name: '07-steak-game-bros',
+    name: 'Ran-lung-get',
     style: 'Organic Earth Dome',
     type: 'restaurant',
     color: '#0284c7',
@@ -98,24 +98,24 @@ const projectData: HouseItem[] = [
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
   },
-  { id: 8, code: 'TN08', name: '08-vibe-architects', style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
-  { id: 9, code: 'TN09', name: '09-sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
-  { id: 10, code: 'TN10', name: '10-lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 11, code: 'TN11', name: '11-the-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 12, code: 'TN12', name: '12-coastal-avengers', style: 'Tropical Canopy', type: 'ecommerce', color: '#0284c7', progress: 95, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 13, code: 'TN13', name: '13-the-dungeon-masters', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 14, code: 'TN14', name: '14-the-all-rounders', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
-  { id: 15, code: 'TN15', name: '15-mountain-mode', style: 'Flat-Roof Minimal', type: 'restaurant', color: '#0284c7', progress: 15, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 16, code: 'TN16', name: '16-blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 17, code: 'TN17', name: '17-midnight-raiders', style: 'Spanish Terracotta', type: 'accommodation', color: '#0284c7', progress: 80, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 8, code: 'TN08', name: 'Chevi Shop', style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
+  { id: 9, code: 'TN09', name: 'Botnoi Live Translate', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
+  { id: 10, code: 'TN10', name: 'CoolCare Pro', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 11, code: 'TN11', name: 'MediQ', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 13, code: 'TN13', name: '', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 14, code: 'TN14', name: 'BrewAI', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
+  { id: 15, code: 'TN15', name: 'Glow Med Spa', style: 'Flat-Roof Minimal', type: 'fitness', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 16, code: 'TN16', name: 'Fitder', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 17, code: 'TN17', name: 'AI Commerce Agent', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
   { id: 18, code: 'TN18', name: '18-indie-mountain-kids', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 19, code: 'TN19', name: '19-ocean-avengers', style: 'Victorian Restoration', type: 'ac_service', color: '#0284c7', progress: 100, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
-  { id: 20, code: 'TN20', name: '20-final-boss-crew', style: 'Waterfront Living', type: 'ecommerce', color: '#0284c7', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
+  { id: 19, code: 'TN19', name: '19-ocean-avengers', style: 'Victorian Restoration', type: 'ac_service', color: '#0284c7', progress: 100, deployedUrl: '', githubUrl: 'https://github.com' },
+  { id: 20, code: 'TN20', name: '', style: 'Waterfront Living', type: 'ecommerce', color: '#0284c7', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
 ];
 
 // TN codes whose descriptions should be hidden/removed
 const NO_DESC_CODES = new Set([
-  'TN02', 'TN12', 'TN13', 'TN15', 'TN17', 'TN18', 'TN20'
+  'TN02', 'TN13', 'TN18', 'TN20'
 ]);
 
 // Custom prompt description keys for active TN projects
@@ -130,9 +130,29 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
   TN09: 'showcase.desc_tn09',
   TN10: 'showcase.desc_tn10',
   TN11: 'showcase.desc_tn11',
+  TN12: 'showcase.desc_tn12',
   TN14: 'showcase.desc_tn14',
+  TN15: 'showcase.desc_tn15',
   TN16: 'showcase.desc_tn16',
+  TN17: 'showcase.desc_tn17',
   TN19: 'showcase.desc_tn19',
+};
+
+const TN_TYPE_KEYS: Record<string, string> = {
+  TN01: 'showcase.type_tn01',
+  TN03: 'showcase.type_tn03',
+  TN04: 'showcase.type_tn04',
+  TN05: 'showcase.type_tn05',
+  TN06: 'showcase.type_tn06',
+  TN08: 'showcase.type_tn08',
+  TN10: 'showcase.type_tn10',
+  TN11: 'showcase.type_tn11',
+  TN12: 'showcase.type_tn12',
+  TN14: 'showcase.type_tn14',
+  TN15: 'showcase.type_tn15',
+  TN16: 'showcase.type_tn16',
+  TN17: 'showcase.type_tn17',
+  TN19: 'showcase.type_tn19',
 };
 
 const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
@@ -259,7 +279,9 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
       TypeIcon = Clock;
       typeBg = "bg-stone-50 text-stone-500 border-stone-200/50 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700";
     } else {
-      typeLabel = t(`showcase.type_${house.type}` as any);
+      typeLabel = TN_TYPE_KEYS[house.code]
+        ? t(TN_TYPE_KEYS[house.code] as any)
+        : t(`showcase.type_${house.type}` as any);
       if (CATEGORY_STYLES[house.type]) {
         TypeIcon = CATEGORY_STYLES[house.type].Icon;
         typeBg = CATEGORY_STYLES[house.type].bg;
