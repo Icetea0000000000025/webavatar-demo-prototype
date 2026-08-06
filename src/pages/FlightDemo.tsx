@@ -687,7 +687,7 @@ export default function FlightDemo() {
                       setBookingStep("search");
                     }
                   }}
-                  className="flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors mb-4 cursor-pointer"
+                  className="flex items-center gap-1.5 text-base font-bold text-slate-900 dark:text-white hover:!text-slate-500 dark:hover:!text-slate-400 transition-colors mb-4 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   {t('flight.step_back')}
@@ -1083,7 +1083,7 @@ export default function FlightDemo() {
                       setBookingStep("select_flight");
                     }
                   }}
-                  className="flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors mb-6 cursor-pointer"
+                  className="flex items-center gap-1.5 text-base font-bold text-slate-900 dark:text-white hover:!text-slate-500 dark:hover:!text-slate-400 transition-colors mb-4 cursor-pointer"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   {t('flight.back_to_selection')}
