@@ -14,6 +14,29 @@ export default function Home() {
 
   const { t } = useTranslation();
 
+  const renderRuleBullets = (text: string) => {
+    if (!text) return null;
+    const lines = text
+      .split('\n')
+      .map((line) => line.replace(/^[•\-\*]\s*/, '').trim())
+      .filter(Boolean);
+
+    if (lines.length > 1) {
+      return (
+        <ul className="rule-bullet-list">
+          {lines.map((line, idx) => (
+            <li key={idx}>
+              <span className="rule-bullet-dot" />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <div className="feature-item-desc">{text}</div>;
+  };
+
   const handleScrollTo = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -143,11 +166,11 @@ export default function Home() {
                 label={t('home.stats_voices')}
                 icon={<Mic className="size-5" />}
                 gradientId="gauge-voices"
-                colorStart="#8b5cf6"
-                colorEnd="#d946ef"
-                badgeBg="bg-purple-50 dark:bg-purple-950/60"
-                badgeText="text-purple-600 dark:text-purple-400"
-                badgeBorder="border border-purple-200/80 dark:border-purple-800/80"
+                colorStart="#10b981"
+                colorEnd="#06b6d4"
+                badgeBg="bg-emerald-50 dark:bg-emerald-950/60"
+                badgeText="text-emerald-600 dark:text-emerald-400"
+                badgeBorder="border border-emerald-200/80 dark:border-emerald-800/80"
               />
 
               {/* Gauge 3: Supported Languages */}
@@ -158,11 +181,11 @@ export default function Home() {
                 label={t('home.stats_languages')}
                 icon={<Globe className="size-5" />}
                 gradientId="gauge-languages"
-                colorStart="#10b981"
-                colorEnd="#06b6d4"
-                badgeBg="bg-emerald-50 dark:bg-emerald-950/60"
-                badgeText="text-emerald-600 dark:text-emerald-400"
-                badgeBorder="border border-emerald-200/80 dark:border-emerald-800/80"
+                colorStart="#8b5cf6"
+                colorEnd="#d946ef"
+                badgeBg="bg-purple-50 dark:bg-purple-950/60"
+                badgeText="text-purple-600 dark:text-purple-400"
+                badgeBorder="border border-purple-200/80 dark:border-purple-800/80"
               />
             </div>
           </AnimatedSection>
@@ -295,18 +318,15 @@ export default function Home() {
         </div>
       </section>
 
-
-      {/* WEBAVATAR SHOWCASE PANEL */}
-      <section className="section-wrapper relative z-10" style={{ margin: '6rem auto', maxWidth: '1150px', padding: '0 1.5rem' }} id="avatar-showcase" aria-label="WebAvatar Technology Showcase">
+      {/* TECH ARCHITECTURE & EXECUTION RULES */}
+      <section className="section-wrapper relative z-10" id="tech-architecture" style={{ margin: '0 auto 6rem', maxWidth: '1150px', padding: '0 1.5rem' }} aria-label="Technical Architecture">
         <AnimatedSection direction="up" duration={0.8}>
-          <div className="glass-panel" id="avatar-tech-details" style={{ padding: '3.5rem 3rem', transition: 'none' }}>
+          <div className="glass-panel" id="tech-rules" style={{ padding: '3.5rem 3rem', transition: 'none' }}>
             <div className="showcase-grid">
               <div>
-                <div style={{ textTransform: 'uppercase', fontSize: '0.75rem', color: 'var(--primary)', fontWeight: '800', letterSpacing: '0.1em', marginBottom: '0.75rem' }}>
-                  {t('home.tech_title')}
-                </div>
-                <h2 style={{ fontSize: '2.2rem', marginBottom: '1.25rem', letterSpacing: '-0.03em' }}>{t('home.tech_subtitle')}</h2>
-                <p style={{ lineHeight: '1.65', marginBottom: '1rem' }}>
+                <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>{t('home.tech_title')}</h2>
+                <h3 style={{ fontSize: '1.35rem', color: 'var(--foreground)', marginBottom: '1.25rem', fontWeight: 700 }}>{t('home.tech_subtitle')}</h3>
+                <p style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: '2rem' }}>
                   {t('home.tech_desc')}
                 </p>
                 <Link className="btn btn-primary" to="/contact" id="avatar-contact-cta" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -327,7 +347,7 @@ export default function Home() {
                     <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule1_title')}</div>
-                      <div className="feature-item-desc">{t('home.rule1_desc')}</div>
+                      {renderRuleBullets(t('home.rule1_desc'))}
                     </div>
                   </div>
                 </motion.div>
@@ -336,7 +356,7 @@ export default function Home() {
                     <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule2_title')}</div>
-                      <div className="feature-item-desc">{t('home.rule2_desc')}</div>
+                      {renderRuleBullets(t('home.rule2_desc'))}
                     </div>
                   </div>
                 </motion.div>
@@ -345,7 +365,7 @@ export default function Home() {
                     <span className="feature-check">✓</span>
                     <div>
                       <div className="feature-item-title">{t('home.rule3_title')}</div>
-                      <div className="feature-item-desc">{t('home.rule3_desc')}</div>
+                      {renderRuleBullets(t('home.rule3_desc'))}
                     </div>
                   </div>
                 </motion.div>
