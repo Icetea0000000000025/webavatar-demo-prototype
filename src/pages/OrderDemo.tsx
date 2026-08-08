@@ -21,6 +21,7 @@ import {
   Clock,
   SlidersHorizontal,
   X,
+  Users,
   type LucideIcon,
 } from "lucide-react";
 import botnoiAirLogo from "../assets/BOTNOI-AIR-logo.png";
@@ -45,6 +46,7 @@ export interface HouseItem {
   id: number;
   code: string;
   name: string;
+  teamName?: string;
   style: string;
   type: ProjectCategory;
   color: string;
@@ -76,21 +78,22 @@ export interface Receipt {
 
 // 20 Houses Mock Database mapped to Project Types and URLs
 const projectData: HouseItem[] = [
-  { id: -1, code: 'SANDBOX', name: 'Flight Demo', style: 'Interactive Sandbox', type: 'flight', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
-  { id: -2, code: 'SANDBOX', name: 'IT Store Demo', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
-  { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
-  { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
-  { id: 1, code: 'TN01', name: 'LearnLab', style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
-  { id: 2, code: 'TN02', name: '', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 3, code: 'TN03', name: 'Skinbot', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 4, code: 'TN04', name: 'AI Trip Map Planner', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 5, code: 'TN05', name: 'SamitiveJ', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 6, code: 'TN06', name: 'Botnoi API', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
+  { id: -1, code: 'SANDBOX', name: 'Flight Demo', teamName: 'Botnoi Air Team', style: 'Interactive Sandbox', type: 'flight', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
+  { id: -2, code: 'SANDBOX', name: 'IT Store Demo', teamName: 'Botnoi IT Team', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
+  { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', teamName: 'Botnoi Food Team', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
+  { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', teamName: 'Botnoi Hotel Team', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
+  { id: 1, code: 'TN01', name: 'LearnLab', teamName: 'The-chill-crew', style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
+  //{ id: 2, code: 'TN02', name: '', teamName: 'Team 02', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 3, code: 'TN03', name: 'Skinbot', teamName: 'Controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 4, code: 'TN04', name: 'AI Trip Map Planner', teamName: 'The-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 5, code: 'TN05', name: 'SamitiveJ', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 6, code: 'TN06', name: 'Botnoi API', teamName: 'lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
   // Team 7 (Ours) - Lovable deployed app
   {
     id: 7,
     code: 'TN07',
     name: 'Ran-lung-get',
+    teamName: 'steak-game-bros',
     style: 'Organic Earth Dome',
     type: 'restaurant',
     color: '#0284c7',
@@ -98,19 +101,19 @@ const projectData: HouseItem[] = [
     deployedUrl: 'https://ranlunggetdemo.vercel.app/',
     githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
   },
-  { id: 8, code: 'TN08', name: 'Chevi Shop', style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
-  { id: 9, code: 'TN09', name: 'Botnoi Live Translate', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
-  { id: 10, code: 'TN10', name: 'CoolCare Pro', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 11, code: 'TN11', name: 'MediQ', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 13, code: 'TN13', name: '', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 14, code: 'TN14', name: 'BrewAI', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
-  { id: 15, code: 'TN15', name: 'Glow Med Spa', style: 'Flat-Roof Minimal', type: 'fitness', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 16, code: 'TN16', name: 'Fitder', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 17, code: 'TN17', name: 'AI Commerce Agent', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 18, code: 'TN18', name: '18-indie-mountain-kids', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  { id: 19, code: 'TN19', name: '19-ocean-avengers', style: 'Victorian Restoration', type: 'ac_service', color: '#0284c7', progress: 100, deployedUrl: '', githubUrl: 'https://github.com' },
-  { id: 20, code: 'TN20', name: '', style: 'Waterfront Living', type: 'ecommerce', color: '#0284c7', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
+  { id: 8, code: 'TN08', name: 'Chevi Shop', teamName: 'Vibe-architects', style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
+  { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
+  { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 11, code: 'TN11', name: 'MediQ', teamName: 'The-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
+  //{ id: 13, code: 'TN13', name: '', teamName: 'Team 13', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  { id: 14, code: 'TN14', name: 'BrewAI', teamName: 'The-dungeon-masters', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
+  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'fitness', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 16, code: 'TN16', name: 'Fitder', teamName: 'Blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 17, code: 'TN17', name: 'AI Commerce Agent', teamName: 'Midnight-raiders', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
+  //{ id: 18, code: 'TN18', name: '18-indie-mountain-kids', teamName: 'Team 18', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  //{ id: 19, code: 'TN19', name: '19-ocean-avengers', teamName: 'Team 19', style: 'Victorian Restoration', type: 'ac_service', color: '#0284c7', progress: 100, deployedUrl: '', githubUrl: 'https://github.com' },
+  //{ id: 20, code: 'TN20', name: '', teamName: 'Team 20', style: 'Waterfront Living', type: 'ecommerce', color: '#0284c7', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
 ];
 
 // TN codes whose descriptions should be hidden/removed
@@ -317,6 +320,8 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : house.id === -3 ? 'food' : 'hotel'}`
     : `card-${house.code.toLowerCase()}`;
 
+  const teamNameDisplay = house.teamName || (house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team');
+
   return (
     <motion.article
       key={house.id}
@@ -344,7 +349,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             </span>
           </div>
           <span className="text-[11px] font-black text-foreground font-mono bg-muted/50 px-2 py-0.5 rounded-lg border border-border shrink-0 ml-auto">
-            {house.code}
+            {house.code.startsWith('TN') ? 'StartUP' : house.code}
           </span>
         </div>
 
@@ -371,17 +376,24 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
         </div>
       </div>
 
-      {/* Action Link Footer */}
-      <div className="flex items-center gap-3 pt-3.5 border-t border-border">
+      {/* Action Link Footer: Team Name on left, shrunken demo button on right */}
+      <div className="flex items-center justify-between gap-1.5 pt-3 border-t border-border mt-auto">
+        <div className="flex items-center gap-1 min-w-0 flex-1 overflow-hidden pr-1">
+          <Users className="size-3 text-primary shrink-0" />
+          <span className="text-[10px] sm:text-[11px] font-bold text-foreground/80 truncate leading-tight" title={teamNameDisplay}>
+            {teamNameDisplay}
+          </span>
+        </div>
         {hasDeployed ? (
           house.deployedUrl.startsWith('/') ? (
             <Link
               to={house.deployedUrl}
               aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="btn btn-primary flex-1 text-center py-3 text-xs font-extrabold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 dark:bg-indigo-950/80 dark:hover:bg-indigo-900/90 dark:border-indigo-800/80 dark:text-indigo-200 dark:shadow-none"
+              className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold text-white rounded-lg transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-xs hover:opacity-90 active:scale-95"
+              style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
             >
               <span>{t('showcase.launch_demo')}</span>
-              <ChevronRight className="size-3.5" />
+              <ChevronRight className="size-3 shrink-0" />
             </Link>
           ) : (
             <a
@@ -389,10 +401,11 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="btn btn-primary flex-1 text-center py-3 text-xs font-extrabold rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 dark:bg-indigo-950/80 dark:hover:bg-indigo-900/90 dark:border-indigo-800/80 dark:text-indigo-200 dark:shadow-none"
+              className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold text-white rounded-lg transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-xs hover:opacity-90 active:scale-95"
+              style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
             >
               <span>{t('showcase.launch_demo')}</span>
-              <ChevronRight className="size-3.5" />
+              <ChevronRight className="size-3 shrink-0" />
             </a>
           )
         ) : (
@@ -400,10 +413,10 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             disabled
             aria-disabled="true"
             aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName} (Unavailable)`}
-            className="flex-1 text-center py-3 text-xs font-extrabold rounded-xl border transition-all flex items-center justify-center gap-1.5 bg-muted/30 border-border text-muted-foreground/50 cursor-not-allowed opacity-60"
+            className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold rounded-lg border transition-all shrink-0 whitespace-nowrap bg-muted/30 border-border text-muted-foreground/50 cursor-not-allowed opacity-60"
           >
             <span>{t('showcase.launch_demo')}</span>
-            <ChevronRight className="size-3.5" />
+            <ChevronRight className="size-3 shrink-0" />
           </button>
         )}
       </div>
@@ -467,6 +480,7 @@ export default function OrderDemo() {
       const matchesSearch =
         house.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         house.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (house.teamName && house.teamName.toLowerCase().includes(searchQuery.toLowerCase())) ||
         overviewText.toLowerCase().includes(searchQuery.toLowerCase()) ||
         house.style.toLowerCase().includes(searchQuery.toLowerCase());
 

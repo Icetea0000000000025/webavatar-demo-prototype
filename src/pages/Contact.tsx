@@ -249,7 +249,7 @@ function Contact() {
               </p>
             </div>
 
-            {/* Card 1: Address */}
+            {/* Card 1: Address (Orange Tone / Amber) */}
             <motion.div
               className={`contact-info-card group ${activeCard === 'address' ? 'active' : ''}`}
               id="contact-address"
@@ -258,12 +258,12 @@ function Contact() {
               onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '21 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
             >
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/80 group-hover:border-sky-400 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 transition-all duration-300">
+                <div className="contact-card-icon bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/80 group-hover:border-amber-400 group-hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] group-hover:scale-110 transition-all duration-300">
                   <MapPin className="size-5" />
                 </div>
                 <div className="contact-card-content flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">Address</h4>
+                    <h4 className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Address</h4>
                     {copiedCard === 'address' && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
                         <Check className="size-3" /> Copied!
@@ -276,13 +276,13 @@ function Contact() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
                 <span>Map</span>
                 <ExternalLink className="size-3.5" />
               </div>
             </motion.div>
 
-            {/* Card 2: Phone */}
+            {/* Card 2: Phone (Green / Emerald) */}
             <motion.div
               className={`contact-info-card group ${activeCard === 'phone' ? 'active' : ''}`}
               id="contact-phone"
@@ -291,12 +291,12 @@ function Contact() {
               onClick={() => handleContactCardClick('phone', 'tel:0641922433', '0641922433')}
             >
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200/80 dark:border-indigo-800/80 group-hover:border-indigo-400 group-hover:shadow-[0_0_18px_rgba(99,102,241,0.45)] group-hover:scale-110 transition-all duration-300">
+                <div className="contact-card-icon bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 group-hover:border-emerald-400 group-hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] group-hover:scale-110 transition-all duration-300">
                   <Phone className="size-5" />
                 </div>
                 <div className="contact-card-content flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Phone</h4>
+                    <h4 className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Phone</h4>
                     {copiedCard === 'phone' && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
                         <Check className="size-3" /> Copied!
@@ -306,13 +306,13 @@ function Contact() {
                   <p>064 192 2433 • Office Hours (Mon-Fri, 9:00 - 18:00 ICT)</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
                 <span>Call</span>
                 <ExternalLink className="size-3.5" />
               </div>
             </motion.div>
 
-            {/* Card 3: Email */}
+            {/* Card 3: Email (Sky Blue) */}
             <motion.div
               className={`contact-info-card group ${activeCard === 'email' ? 'active' : ''}`}
               id="contact-email"
@@ -321,12 +321,12 @@ function Contact() {
               onClick={() => handleContactCardClick('email', 'mailto:admin@botnoigroup.com', 'admin@botnoigroup.com')}
             >
               <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 group-hover:border-emerald-400 group-hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] group-hover:scale-110 transition-all duration-300">
+                <div className="contact-card-icon bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/80 group-hover:border-sky-400 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 transition-all duration-300">
                   <Mail className="size-5" />
                 </div>
                 <div className="contact-card-content flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Email</h4>
+                    <h4 className="group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">Email</h4>
                     {copiedCard === 'email' && (
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
                         <Check className="size-3" /> Copied!
@@ -336,7 +336,7 @@ function Contact() {
                   <p>admin@botnoigroup.com</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
                 <span>Email</span>
                 <ExternalLink className="size-3.5" />
               </div>

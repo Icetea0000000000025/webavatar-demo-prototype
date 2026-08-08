@@ -23,6 +23,29 @@ function About() {
     restDelta: 0.001,
   });
 
+  const renderTimelineDesc = (text: string) => {
+    if (!text) return null;
+    const lines = text
+      .split('\n')
+      .map((line) => line.replace(/^[•\-\*]\s*/, '').trim())
+      .filter(Boolean);
+
+    if (lines.length > 1) {
+      return (
+        <ul className="timeline-bullet-list">
+          {lines.map((item, idx) => (
+            <li key={idx}>
+              <span className="timeline-bullet-dot" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <p>{text}</p>;
+  };
+
   return (
     <div style={{ position: 'relative', overflow: 'hidden', width: '100%' }}>
 
@@ -33,29 +56,30 @@ function About() {
             {t('about.badge')}
           </span>
           <h1 className="leading-tight text-wrap-balance">{t('about.title')}</h1>
-          <p className="hero-subtitle" style={{ margin: '0 auto' }}>
+          <p className="hero-subtitle max-w-2xl mx-auto">
             {t('about.subtitle')}
           </p>
         </AnimatedSection>
       </section>
 
       {/* MISSION & VISION */}
-      <section className="section-wrapper relative z-10" style={{ margin: '0 auto 4rem', maxWidth: '1150px', padding: '0 1.5rem' }} id="mission-section" aria-label="Mission and Vision">
-        <AnimatedSection direction="up" duration={0.8} delay={0.2}>
-          <div className="glass-panel" id="our-mission" style={{ padding: '3.5rem 3rem', transition: 'none' }}>
-            <div className="showcase-grid">
+      <section className="section-wrapper relative z-10" style={{ margin: '3rem auto', maxWidth: '1150px', padding: '0 1.5rem' }} id="purpose" aria-label="Company Purpose">
+        <AnimatedSection direction="up" duration={0.8}>
+          <div className="glass-panel" id="mission-vision" style={{ padding: '3.5rem 3rem', transition: 'none' }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
               <div>
-                <h2 style={{ color: 'var(--primary)', marginBottom: '1.25rem', letterSpacing: '-0.02em' }}>{t('about.purpose_title')}</h2>
-                <p style={{ lineHeight: '1.65', marginBottom: '1rem' }}>
+                <h2>{t('about.purpose_title')}</h2>
+                <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: '1rem' }}>
                   {t('about.purpose_desc1')}
                 </p>
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.92rem', lineHeight: '1.65' }}>
+                <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.7 }}>
                   {t('about.purpose_desc2')}
                 </p>
               </div>
-              <div>
-                <h2 style={{ color: 'var(--cta)', marginBottom: '1.25rem', letterSpacing: '-0.02em' }}>{t('about.vision_title')}</h2>
-                <p style={{ lineHeight: '1.65', marginBottom: '1.5rem' }}>
+
+              <div style={{ borderLeft: '1px solid var(--border)', paddingLeft: '2.5rem' }}>
+                <h2>{t('about.vision_title')}</h2>
+                <p style={{ fontSize: '1rem', color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: '1.5rem' }}>
                   {t('about.vision_desc')}
                 </p>
                 <Link className="btn btn-primary" to="/contact" id="about-vision-cta" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -86,7 +110,7 @@ function About() {
               <div className="timeline-year">2018</div>
               <div className="timeline-panel">
                 <h3>{t('about.timeline_2018_title')}</h3>
-                <p>{t('about.timeline_2018_desc')}</p>
+                {renderTimelineDesc(t('about.timeline_2018_desc'))}
               </div>
             </AnimatedSection>
           </div>
@@ -97,7 +121,7 @@ function About() {
               <div className="timeline-year">2020</div>
               <div className="timeline-panel">
                 <h3>{t('about.timeline_2020_title')}</h3>
-                <p>{t('about.timeline_2020_desc')}</p>
+                {renderTimelineDesc(t('about.timeline_2020_desc'))}
               </div>
             </AnimatedSection>
           </div>
@@ -108,7 +132,7 @@ function About() {
               <div className="timeline-year">2022</div>
               <div className="timeline-panel">
                 <h3>{t('about.timeline_2022_title')}</h3>
-                <p>{t('about.timeline_2022_desc')}</p>
+                {renderTimelineDesc(t('about.timeline_2022_desc'))}
               </div>
             </AnimatedSection>
           </div>
@@ -119,7 +143,7 @@ function About() {
               <div className="timeline-year">2026</div>
               <div className="timeline-panel">
                 <h3>{t('about.timeline_2026_title')}</h3>
-                <p>{t('about.timeline_2026_desc')}</p>
+                {renderTimelineDesc(t('about.timeline_2026_desc'))}
               </div>
             </AnimatedSection>
           </div>
@@ -138,30 +162,22 @@ function About() {
             <div className="competency-grid">
               <div className="competency-card">
                 <h3 style={{ color: 'var(--primary)', letterSpacing: '-0.015em' }}>{t('about.comp1_title')}</h3>
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.92rem', lineHeight: '1.65' }}>
-                  {t('about.comp1_desc')}
-                </p>
+                {renderTimelineDesc(t('about.comp1_desc'))}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--cta)', letterSpacing: '-0.015em' }}>{t('about.comp2_title')}</h3>
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.92rem', lineHeight: '1.65' }}>
-                  {t('about.comp2_desc')}
-                </p>
+                {renderTimelineDesc(t('about.comp2_desc'))}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--primary)', letterSpacing: '-0.015em' }}>{t('about.comp3_title')}</h3>
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.92rem', lineHeight: '1.65' }}>
-                  {t('about.comp3_desc')}
-                </p>
+                {renderTimelineDesc(t('about.comp3_desc'))}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--cta)', letterSpacing: '-0.015em' }}>{t('about.comp4_title')}</h3>
-                <p style={{ color: 'var(--muted-foreground)', fontSize: '0.92rem', lineHeight: '1.65' }}>
-                  {t('about.comp4_desc')}
-                </p>
+                {renderTimelineDesc(t('about.comp4_desc'))}
               </div>
             </div>
           </div>

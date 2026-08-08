@@ -57,7 +57,7 @@ function App() {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <MotionConfig reducedMotion={isMobileOrTablet ? "always" : "user"}>
+        <MotionConfig reducedMotion="user">
           <BrowserRouter>
             <ScrollToTop />
             <div className="app-container">

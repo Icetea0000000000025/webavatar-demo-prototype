@@ -32,8 +32,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
   // Semi-circle SVG Path Arc length calculations
   // Radius R = 50, Center (65, 65)
   // Arc length = PI * 50 = ~157.08
-  const arcLength = 157.08;
-  const targetOffset = arcLength * (1 - Math.min(Math.max(percentage, 0), 100) / 100);
+  const targetRatio = Math.min(Math.max(percentage, 0), 100) / 100;
 
   return (
     <div className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default">
@@ -67,18 +66,18 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
             strokeLinecap="round"
           />
 
-          {/* Animated Foreground Progress Arc */}
+          {/* Animated Foreground Progress Arc - iOS WebKit & Cross-Browser Optimized */}
           <motion.path
             d="M 15 65 A 50 50 0 0 1 115 65"
             fill="none"
             stroke={`url(#${gradientId})`}
             strokeWidth="10"
             strokeLinecap="round"
-            strokeDasharray={arcLength}
-            initial={{ strokeDashoffset: arcLength }}
-            whileInView={{ strokeDashoffset: targetOffset }}
-            viewport={{ once: true }}
+            initial={{ pathLength: 0 }}
+            whileInView={{ pathLength: targetRatio }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ WebkitTransform: 'translateZ(0)' }}
           />
         </svg>
 
