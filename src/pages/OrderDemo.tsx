@@ -24,8 +24,10 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import botnoiAirLogo from "../assets/BOTNOI-AIR-logo.png";
-import botnoiRestaurantLogo from "../assets/BOTNOI-Restaurant-logo.png";
+import botnoiAirLogo from "../assets/Screenshot 2026-08-10 140706.png";
+import botnoiRestaurantLogo from "../assets/IT.png";
+import promoPhuket from "../assets/hotel.png";
+import padKrapaoImage from "../assets/Restarant.png";
 import AppFooter from "../components/AppFooter";
 
 export type ProjectCategory = 
@@ -170,6 +172,46 @@ const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
   flight: { Icon: Plane, bg: "bg-sky-50 text-sky-700 border-sky-200/50 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-800/80" },
   ecommerce: { Icon: ShoppingBag, bg: "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80" },
   accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80" },
+};
+
+// Auto-discover any image files placed in src/assets/ (e.g. TN01.png, tn03.jpg, tn07.webp)
+const localAssetsMap = import.meta.glob<{ default: string }>('../assets/*.{png,jpg,jpeg,webp,svg}', {
+  eager: true,
+  import: 'default',
+});
+
+function getLocalAssetForHouse(code: string): string | undefined {
+  const codeLower = code.toLowerCase();
+  for (const path in localAssetsMap) {
+    const filename = path.split('/').pop()?.toLowerCase();
+    if (filename && (filename.startsWith(codeLower + '.') || filename.startsWith(codeLower + '_') || filename.startsWith(codeLower + '-')) ) {
+      return localAssetsMap[path] as unknown as string;
+    }
+  }
+  return undefined;
+}
+
+const DEMO_PREVIEW_IMAGES: Record<string, string> = {
+  '-1': botnoiAirLogo,
+  '-2': botnoiRestaurantLogo,
+  '-3': padKrapaoImage,
+  '-4': promoPhuket,
+  TN01: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&q=80&auto=format&fit=crop',
+  TN03: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80&auto=format&fit=crop',
+  TN04: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80&auto=format&fit=crop',
+  TN05: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80&auto=format&fit=crop',
+  TN06: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&q=80&auto=format&fit=crop',
+  TN07: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80&auto=format&fit=crop',
+  TN08: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80&auto=format&fit=crop',
+  TN09: 'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=80&auto=format&fit=crop',
+  TN10: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80&auto=format&fit=crop',
+  TN11: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=600&q=80&auto=format&fit=crop',
+  TN12: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&q=80&auto=format&fit=crop',
+  TN14: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80&auto=format&fit=crop',
+  TN15: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=80&auto=format&fit=crop',
+  TN16: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600&q=80&auto=format&fit=crop',
+  TN17: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&q=80&auto=format&fit=crop',
+  TN19: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80&auto=format&fit=crop',
 };
 
 const CATEGORY_COLOR_MAP: Record<
@@ -321,47 +363,74 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     : `card-${house.code.toLowerCase()}`;
 
   const teamNameDisplay = house.teamName || (house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team');
+  const previewImg = getLocalAssetForHouse(house.code) || DEMO_PREVIEW_IMAGES[String(house.id)] || DEMO_PREVIEW_IMAGES[house.code] || "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=80&auto=format&fit=crop";
 
   return (
     <motion.article
       key={house.id}
       id={cardId}
       aria-label={`${house.code}: ${displayName}`}
-      className="bg-card border border-border rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
-      style={{ borderTop: `4px solid ${house.color || '#38bdf8'}` }}
-      whileHover={{ y: -4, scale: 1.01 }}
+      className="playing-card relative bg-card border-2 border-border/80 dark:border-slate-800 rounded-[24px] shadow-md hover:shadow-2xl hover:border-primary/50 transition-all duration-300 flex flex-col justify-between group overflow-hidden"
+      style={{
+        boxShadow: "0 10px 25px -8px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04)",
+      }}
+      whileHover={{ y: -6, scale: 1.02, rotate: house.id % 2 === 0 ? 0.8 : -0.8 }}
     >
-      <div>
-        {/* Top header: Logo / Icon + Tag Badges + House Code */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <div className="w-10 h-10 rounded-2xl border border-sky-200 dark:border-sky-800/80 bg-sky-50/60 dark:bg-sky-950/40 group-hover:border-sky-400 dark:group-hover:border-sky-500 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 flex items-center justify-center p-2 shadow-xs transition-all duration-300 shrink-0">
-              {house.id === -1 ? (
-                <img src={botnoiAirLogo} alt="BotnoiAir" className="w-full h-full object-contain" />
-              ) : house.id === -3 ? (
-                <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain" />
-              ) : (
-                <TypeIcon className="size-4.5 text-sky-600 dark:text-sky-400 shrink-0" />
-              )}
-            </div>
-            <span className={`text-[9.5px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full border flex items-center gap-1 whitespace-nowrap shrink-0 ${typeBg}`}>
-              {typeLabel}
-            </span>
-          </div>
-          <span className="text-[11px] font-black text-foreground font-mono bg-muted/50 px-2 py-0.5 rounded-lg border border-border shrink-0 ml-auto">
-            {house.code.startsWith('TN') ? 'StartUP' : house.code}
+      {/* Top Demo Image Thumbnail Preview Box */}
+      <div className="relative w-full h-36 sm:h-40 overflow-hidden bg-slate-900 border-b border-border/60">
+        <img
+          src={previewImg}
+          alt={displayName}
+          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+          loading="lazy"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop";
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-black/35 pointer-events-none" />
+
+        {/* Top-Left Code Badge (StartUP for TN cards) */}
+        <div className="absolute top-3 left-3 z-10">
+          <span className="text-[10px] sm:text-[10.5px] font-black text-white font-mono bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-md">
+            {house.code.startsWith("TN") ? "StartUP" : house.code}
           </span>
         </div>
 
-        {/* Title & Description */}
-        <div className="mb-5">
-          <h3 className="text-base sm:text-lg font-black text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight leading-snug min-h-[2.75rem] flex items-center">
-            {displayName}
-          </h3>
+        {/* Top-Right Category Tag */}
+        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+          <span className={`text-[9px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border shadow-md backdrop-blur-md flex items-center gap-1.5 whitespace-nowrap ${typeBg}`}>
+            {house.id === -1 ? (
+              <img src={botnoiAirLogo} alt="BotnoiAir" className="w-3.5 h-3.5 object-contain shrink-0" />
+            ) : house.id === -3 ? (
+              <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-3.5 h-3.5 object-contain shrink-0" />
+            ) : (
+              <TypeIcon className="size-3 shrink-0" />
+            )}
+            <span>{typeLabel}</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Top Accent Strip below image */}
+      <div
+        className="h-1 opacity-90"
+        style={{ background: house.color || "var(--primary)" }}
+      />
+
+      <div className="relative z-10 flex flex-col flex-1 justify-between p-4.5">
+        <div>
+          {/* Card Title */}
+          <div className="mb-2">
+            <h3 className="text-base sm:text-[16px] font-black text-foreground group-hover:text-primary transition-colors tracking-tight leading-snug min-h-[2.4rem] flex items-center">
+              {displayName}
+            </h3>
+          </div>
+
+          {/* Card Description Bullets */}
           {bulletItems.length > 0 ? (
             <ul
-              className="text-xs text-muted-foreground leading-relaxed min-h-[4.5rem] max-h-[4.5rem] overflow-hidden group-hover:overflow-y-auto transition-all pr-1 cursor-text space-y-1 scrollbar-none"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              className="text-[11.5px] text-muted-foreground leading-relaxed max-h-[4.8rem] overflow-hidden group-hover:overflow-y-auto pr-1 cursor-text space-y-1 scrollbar-none"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
             >
               {bulletItems.map((bullet, idx) => (
                 <li key={idx} className="flex items-start gap-1.5">
@@ -374,51 +443,54 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             <div className="min-h-[4.5rem]" />
           )}
         </div>
-      </div>
 
-      {/* Action Link Footer: Team Name on left, shrunken demo button on right */}
-      <div className="flex items-center justify-between gap-1.5 pt-3 border-t border-border mt-auto">
-        <div className="flex items-center gap-1 min-w-0 flex-1 overflow-hidden pr-1">
-          <Users className="size-3 text-primary shrink-0" />
-          <span className="text-[10px] sm:text-[11px] font-bold text-foreground/80 truncate leading-tight" title={teamNameDisplay}>
-            {teamNameDisplay}
-          </span>
-        </div>
-        {hasDeployed ? (
-          house.deployedUrl.startsWith('/') ? (
-            <Link
-              to={house.deployedUrl}
-              aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold text-white rounded-lg transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-xs hover:opacity-90 active:scale-95"
-              style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
-            >
-              <span>{t('showcase.launch_demo')}</span>
-              <ChevronRight className="size-3 shrink-0" />
-            </Link>
+        {/* Card Footer: Team Name on left, Launch button on right */}
+        <div className="pt-3 border-t border-border/60 mt-4 flex items-center justify-between gap-1.5">
+          {/* Team Name on Left */}
+          <div className="flex items-center gap-1 min-w-0 flex-1 overflow-hidden pr-1">
+            <Users className="size-3 text-primary shrink-0" />
+            <span className="text-[10px] font-bold text-foreground/80 truncate leading-tight" title={teamNameDisplay}>
+              {teamNameDisplay}
+            </span>
+          </div>
+
+          {/* Launch Button */}
+          {hasDeployed ? (
+            house.deployedUrl.startsWith('/') ? (
+              <Link
+                to={house.deployedUrl}
+                aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
+                className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold text-white rounded-xl transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-2xs hover:opacity-95 active:scale-95 group-hover:shadow-md"
+                style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
+              >
+                <span>{t('showcase.launch_demo')}</span>
+                <ChevronRight className="size-3 shrink-0" />
+              </Link>
+            ) : (
+              <a
+                href={house.deployedUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
+                className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold text-white rounded-xl transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-2xs hover:opacity-95 active:scale-95 group-hover:shadow-md"
+                style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
+              >
+                <span>{t('showcase.launch_demo')}</span>
+                <ChevronRight className="size-3 shrink-0" />
+              </a>
+            )
           ) : (
-            <a
-              href={house.deployedUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-              className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold text-white rounded-lg transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-xs hover:opacity-90 active:scale-95"
-              style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
+            <button
+              disabled
+              aria-disabled="true"
+              aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName} (Unavailable)`}
+              className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold rounded-xl border transition-all shrink-0 whitespace-nowrap bg-muted/30 border-border text-muted-foreground/50 cursor-not-allowed opacity-60"
             >
               <span>{t('showcase.launch_demo')}</span>
               <ChevronRight className="size-3 shrink-0" />
-            </a>
-          )
-        ) : (
-          <button
-            disabled
-            aria-disabled="true"
-            aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName} (Unavailable)`}
-            className="inline-flex items-center justify-center gap-0.5 px-2 py-1 text-[10px] sm:text-[11px] font-extrabold rounded-lg border transition-all shrink-0 whitespace-nowrap bg-muted/30 border-border text-muted-foreground/50 cursor-not-allowed opacity-60"
-          >
-            <span>{t('showcase.launch_demo')}</span>
-            <ChevronRight className="size-3 shrink-0" />
-          </button>
-        )}
+            </button>
+          )}
+        </div>
       </div>
     </motion.article>
   );
