@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
@@ -23,8 +23,8 @@ import {
   SlidersHorizontal,
   X,
   ArrowUpDown,
-  Activity,
   Check,
+  Building2,
   ExternalLink,
   type LucideIcon,
 } from "lucide-react";
@@ -92,17 +92,17 @@ const projectData: HouseItem[] = [
   //{ id: 2, code: 'TN02', name: '', teamName: 'Team 02', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 3, code: 'TN03', name: 'Skinbot', teamName: 'Controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
   { id: 4, code: 'TN04', name: 'AI Trip Map Planner', teamName: 'The-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 5, code: 'TN05', name: 'SamitiveJ', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-demo-kohl.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 5, code: 'TN05', name: 'Demo Health', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-demo-kohl.vercel.app/', githubUrl: 'https://github.com' },
   { id: 6, code: 'TN06', name: 'Botnoi API', teamName: 'lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
-  //{ id: 7, code: 'TN07', name: 'Ran-lung-get', teamName: 'steak-game-bros', style: 'Organic Earth Dome', type: 'restaurant', color: '#0284c7', progress: 80, deployedUrl: 'https://ranlunggetdemo.vercel.app/', githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo' },
-  { id: 8, code: 'TN08, TN19', name: 'Chevi Shop', teamName: ['Vibe-architects', '19-ocean-avengers'], style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
+  { id: 7, code: 'TN07', name: 'Ran-lung-get', teamName: 'steak-game-bros', style: 'Organic Earth Dome', type: 'restaurant', color: '#0284c7', progress: 80, deployedUrl: 'https://ranlunggetdemo.vercel.app/', githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo' },
+  { id: 8, code: 'TN08, TN19', name: 'Chevi Shop', teamName: ['Vibe-architects', 'ocean-avengers'], style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
   { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
   { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: 'MediQ', teamName: 'The-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
   { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
   //{ id: 13, code: 'TN13', name: '', teamName: 'Team 13', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 14, code: 'TN14', name: 'BrewAI', teamName: 'The-dungeon-masters', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
-  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'fitness', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'map', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
   { id: 16, code: 'TN16', name: 'Fitder', teamName: 'Blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
   { id: 17, code: 'TN17', name: 'AI Commerce Agent', teamName: 'Midnight-raiders', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
   //{ id: 18, code: 'TN18', name: '18-indie-mountain-kids', teamName: 'Team 18', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
@@ -254,7 +254,7 @@ const CATEGORY_COLOR_MAP: Record<
     hover: "hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
   },
   hospital: {
-    active: "bg-rose-50 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
+    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
     hover: "hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
   },
   restaurant: {
@@ -518,15 +518,75 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
   );
 }
 
+const BUSINESS_TYPE_OPTIONS = [
+  { id: "all", label: "All" },
+  { id: "manufacturing", label: "Manufacturing" },
+  { id: "retail", label: "Retail" },
+  { id: "service", label: "Service" },
+  { id: "ecommerce", label: "E-commerce" },
+  { id: "realestate", label: "Real-estate" },
+  { id: "finance", label: "Finance & Investment" },
+];
+
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function OrderDemo() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [statusFilter, setStatusFilter] = useState<"all" | "deployed" | "pending">("all");
-  const [sortBy, setSortBy] = useState<"code" | "progress">("code");
+  const [businessTypeFilter, setBusinessTypeFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"all" | "sandbox" | "startup">("all");
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
+
+  // Dynamically compute available categories based on active demo pool (sortBy / businessTypeFilter)
+  const availableCategories = useMemo(() => {
+    const allCategories = [
+      { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+      { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
+      { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
+      { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
+      { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
+      { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
+      { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+      { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
+      { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
+      { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
+      { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
+      { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
+    ];
+
+    let pool = projectData;
+    if (sortBy === "sandbox") {
+      pool = projectData.filter(h => h.code === 'SANDBOX');
+    } else if (sortBy === "startup") {
+      pool = projectData.filter(h => h.code !== 'SANDBOX');
+    }
+
+    if (businessTypeFilter !== "all") {
+      pool = pool.filter(h => {
+        if (businessTypeFilter === "manufacturing") return h.type === "ac_service" || h.style.toLowerCase().includes("manufacturing");
+        if (businessTypeFilter === "retail") return h.type === "skincare" || h.type === "coffee" || h.type === "restaurant";
+        if (businessTypeFilter === "service") return h.type === "hospital" || h.type === "education" || h.type === "map" || h.type === "fitness" || h.type === "ac_service" || h.type === "flight";
+        if (businessTypeFilter === "ecommerce") return h.type === "ecommerce" || h.id === -2;
+        if (businessTypeFilter === "realestate") return h.type === "accommodation" || h.id === -4;
+        if (businessTypeFilter === "finance") return h.type === "map" || h.code === "TN06";
+        return true;
+      });
+    }
+
+    const presentTypes = new Set(pool.map(h => h.type));
+    return allCategories.filter(cat => cat.id === "all" || presentTypes.has(cat.id as any));
+  }, [sortBy, businessTypeFilter]);
+
+  // Reset selected category to "all" if current selection is no longer present in availableCategories
+  useEffect(() => {
+    if (selectedCategory !== "all") {
+      const exists = availableCategories.some(cat => cat.id === selectedCategory);
+      if (!exists) {
+        setSelectedCategory("all");
+      }
+    }
+  }, [availableCategories, selectedCategory]);
 
   // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
@@ -557,20 +617,26 @@ export default function OrderDemo() {
 
       const matchesCategory = selectedCategory === "all" || house.type === selectedCategory;
 
-      const matchesStatus =
-        statusFilter === "deployed" ? isHouseDeployed(house) :
-        statusFilter === "pending" ? !isHouseDeployed(house) :
-        true;
+      const matchesBusinessType =
+        businessTypeFilter === "all" ||
+        (businessTypeFilter === "manufacturing" && (house.type === "ac_service" || house.style.toLowerCase().includes("manufacturing"))) ||
+        (businessTypeFilter === "retail" && (house.type === "skincare" || house.type === "coffee" || house.type === "restaurant")) ||
+        (businessTypeFilter === "service" && (house.type === "hospital" || house.type === "education" || house.type === "map" || house.type === "fitness" || house.type === "ac_service" || house.type === "flight")) ||
+        (businessTypeFilter === "ecommerce" && (house.type === "ecommerce" || house.id === -2)) ||
+        (businessTypeFilter === "realestate" && (house.type === "accommodation" || house.id === -4)) ||
+        (businessTypeFilter === "finance" && (house.type === "map" || house.code === "TN06"));
 
-      return matchesSearch && matchesCategory && matchesStatus;
+      return matchesSearch && matchesCategory && matchesBusinessType;
     });
 
-    const sandboxes = allFiltered.filter(h => h.code === 'SANDBOX');
-    const projects = allFiltered.filter(h => h.code !== 'SANDBOX');
+    let sandboxes = allFiltered.filter(h => h.code === 'SANDBOX');
+    let projects = allFiltered.filter(h => h.code !== 'SANDBOX');
 
-    // Apply sorting to project demos
-    if (sortBy === "progress") {
-      projects.sort((a, b) => b.progress - a.progress || a.id - b.id);
+    // Filter by SortBy selection (Sandbox Demo vs StartUP Demo)
+    if (sortBy === "sandbox") {
+      projects = [];
+    } else if (sortBy === "startup") {
+      sandboxes = [];
     } else {
       projects.sort((a, b) => a.id - b.id);
     }
@@ -579,7 +645,7 @@ export default function OrderDemo() {
       sandboxDemos: sandboxes,
       projectDemos: projects,
     };
-  }, [searchQuery, selectedCategory, statusFilter, sortBy, t]);
+  }, [searchQuery, selectedCategory, businessTypeFilter, sortBy, t]);
 
   const totalResults = sandboxDemos.length + projectDemos.length;
 
@@ -589,11 +655,11 @@ export default function OrderDemo() {
       aria-label="All Demos Showcase Portal"
     >
       {/* Search & Filtering Controls */}
-      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-6" aria-label="Search and Filter Demos" id="search-filter-section">
+      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-6 relative z-40" aria-label="Search and Filter Demos" id="search-filter-section">
         {/* Main Container: Single container with a two-row layout */}
-        <div className="flex flex-col gap-4.5 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all">
+        <div className="flex flex-col gap-4.5 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all relative z-40">
           
-          {/* Top Row: Search input, inline dropdowns for 'Sort by' & 'Project status', OK & Clear buttons */}
+          {/* Top Row: Search input, inline dropdowns for 'Sort by' & 'Business Type', OK & Clear buttons */}
           <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 w-full">
             {/* Search + Dropdowns Group */}
             <div className="flex flex-wrap items-center gap-3 md:gap-4 flex-1 min-w-0">
@@ -627,7 +693,7 @@ export default function OrderDemo() {
               </div>
 
               {/* Custom Styled Dropdown: Sort by */}
-              <div className="relative">
+              <div className="relative z-50">
                 <button
                   type="button"
                   onClick={() => {
@@ -641,24 +707,25 @@ export default function OrderDemo() {
                     {t('showcase.sort_heading')}:
                   </span>
                   <span className="font-extrabold text-foreground">
-                    {sortBy === "progress" ? t('showcase.sort_progress_short') : t('showcase.sort_code_short')}
+                    {sortBy === "sandbox" ? "Sandbox Demo" : sortBy === "startup" ? "StartUP Demo" : t('showcase.cat_all')}
                   </span>
                   <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isSortOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
 
                 {isSortOpen && (
                   <>
-                    <div className="fixed inset-0 z-20" onClick={() => setIsSortOpen(false)} />
+                    <div className="fixed inset-0 z-40" onClick={() => setIsSortOpen(false)} />
                     <motion.div
                       initial={{ opacity: 0, y: 6, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-30 flex flex-col gap-1"
+                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
                     >
                       {[
-                        { id: "code", label: t('showcase.sort_code_short') },
-                        { id: "progress", label: t('showcase.sort_progress_short') },
+                        { id: "all", label: t('showcase.cat_all') },
+                        { id: "sandbox", label: "Sandbox Demo" },
+                        { id: "startup", label: "StartUP Demo" },
                       ].map((opt) => {
                         const isSelected = sortBy === opt.id;
                         return (
@@ -685,8 +752,8 @@ export default function OrderDemo() {
                 )}
               </div>
 
-              {/* Custom Styled Dropdown: Project status */}
-              <div className="relative">
+              {/* Custom Styled Dropdown: Business Type */}
+              <div className="relative z-50">
                 <button
                   type="button"
                   onClick={() => {
@@ -695,42 +762,34 @@ export default function OrderDemo() {
                   }}
                   className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95"
                 >
-                  <Activity className="size-3.5 text-primary shrink-0" />
+                  <Building2 className="size-3.5 text-primary shrink-0" />
                   <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                    {t('showcase.status_heading')}:
+                    BUSINESS TYPE:
                   </span>
                   <span className="font-extrabold text-foreground">
-                    {statusFilter === "deployed"
-                      ? t('showcase.status_deployed')
-                      : statusFilter === "pending"
-                      ? t('showcase.status_pending')
-                      : t('showcase.cat_all')}
+                    {BUSINESS_TYPE_OPTIONS.find(o => o.id === businessTypeFilter)?.label || "All"}
                   </span>
                   <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isStatusOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
 
                 {isStatusOpen && (
                   <>
-                    <div className="fixed inset-0 z-20" onClick={() => setIsStatusOpen(false)} />
+                    <div className="fixed inset-0 z-40" onClick={() => setIsStatusOpen(false)} />
                     <motion.div
                       initial={{ opacity: 0, y: 6, scale: 0.96 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-52 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-30 flex flex-col gap-1"
+                      className="absolute top-full left-0 mt-2 w-56 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
                     >
-                      {[
-                        { id: "all", label: t('showcase.cat_all') },
-                        { id: "deployed", label: t('showcase.status_deployed') },
-                        { id: "pending", label: t('showcase.status_pending') },
-                      ].map((opt) => {
-                        const isSelected = statusFilter === opt.id;
+                      {BUSINESS_TYPE_OPTIONS.map((opt) => {
+                        const isSelected = businessTypeFilter === opt.id;
                         return (
                           <button
                             key={opt.id}
                             type="button"
                             onClick={() => {
-                              setStatusFilter(opt.id as any);
+                              setBusinessTypeFilter(opt.id);
                               setIsStatusOpen(false);
                             }}
                             className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
@@ -766,8 +825,8 @@ export default function OrderDemo() {
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedCategory("all");
-                  setStatusFilter("all");
-                  setSortBy("code");
+                  setBusinessTypeFilter("all");
+                  setSortBy("all");
                 }}
                 title="Clear all filters"
                 className="h-10 px-3.5 bg-muted/40 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 rounded-2xl text-xs font-bold text-foreground/80 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
@@ -799,20 +858,7 @@ export default function OrderDemo() {
             </div>
 
             <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2.5 pt-0.5 min-w-0 flex-1 scroll-smooth select-none theme-filter-scrollbar">
-              {[
-                { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-                { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
-                { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-                { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-                { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-                { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-                { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-                { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-                { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-                { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-                { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-                { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
-              ].map((cat) => {
+              {availableCategories.map((cat) => {
                 const isActive = selectedCategory === cat.id;
                 const Icon = cat.icon;
                 const label = t(cat.translationKey as TranslationKey);
