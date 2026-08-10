@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
 import {
   Search,
@@ -8,8 +8,7 @@ import {
   BedDouble,
   UtensilsCrossed,
   ShoppingBag,
-  ChevronLeft,
-  ChevronRight,
+  ChevronDown,
   Sparkles,
   FlaskConical,
   GraduationCap,
@@ -19,9 +18,14 @@ import {
   Coffee,
   Dumbbell,
   Clock,
+  Users,
+  RotateCcw,
   SlidersHorizontal,
   X,
-  Users,
+  ArrowUpDown,
+  Activity,
+  Check,
+  ExternalLink,
   type LucideIcon,
 } from "lucide-react";
 import botnoiAirLogo from "../assets/Screenshot 2026-08-10 140706.png";
@@ -48,7 +52,7 @@ export interface HouseItem {
   id: number;
   code: string;
   name: string;
-  teamName?: string;
+  teamName?: string | string[];
   style: string;
   type: ProjectCategory;
   color: string;
@@ -84,26 +88,14 @@ const projectData: HouseItem[] = [
   { id: -2, code: 'SANDBOX', name: 'IT Store Demo', teamName: 'Botnoi IT Team', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
   { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', teamName: 'Botnoi Food Team', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
   { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', teamName: 'Botnoi Hotel Team', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
-  { id: 1, code: 'TN01', name: 'LearnLab', teamName: 'The-chill-crew', style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
+  { id: 1, code: 'TN01, TN07', name: 'LearnLab', teamName: ['The-chill-crew', 'steak-game-bros'], style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
   //{ id: 2, code: 'TN02', name: '', teamName: 'Team 02', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 3, code: 'TN03', name: 'Skinbot', teamName: 'Controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
   { id: 4, code: 'TN04', name: 'AI Trip Map Planner', teamName: 'The-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 5, code: 'TN05', name: 'SamitiveJ', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-health.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 5, code: 'TN05', name: 'SamitiveJ', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-demo-kohl.vercel.app/', githubUrl: 'https://github.com' },
   { id: 6, code: 'TN06', name: 'Botnoi API', teamName: 'lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
-  // Team 7 (Ours) - Lovable deployed app
-  {
-    id: 7,
-    code: 'TN07',
-    name: 'Ran-lung-get',
-    teamName: 'steak-game-bros',
-    style: 'Organic Earth Dome',
-    type: 'restaurant',
-    color: '#0284c7',
-    progress: 80,
-    deployedUrl: 'https://ranlunggetdemo.vercel.app/',
-    githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo'
-  },
-  { id: 8, code: 'TN08', name: 'Chevi Shop', teamName: 'Vibe-architects', style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
+  //{ id: 7, code: 'TN07', name: 'Ran-lung-get', teamName: 'steak-game-bros', style: 'Organic Earth Dome', type: 'restaurant', color: '#0284c7', progress: 80, deployedUrl: 'https://ranlunggetdemo.vercel.app/', githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo' },
+  { id: 8, code: 'TN08, TN19', name: 'Chevi Shop', teamName: ['Vibe-architects', '19-ocean-avengers'], style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
   { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
   { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: 'MediQ', teamName: 'The-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
@@ -160,6 +152,24 @@ const TN_TYPE_KEYS: Record<string, string> = {
   TN19: 'showcase.type_tn19',
 };
 
+function getTNCustomDescKey(code: string): string | undefined {
+  if (TN_CUSTOM_DESC_KEYS[code]) return TN_CUSTOM_DESC_KEYS[code];
+  const codes = code.split(/[\s,]+/);
+  for (const c of codes) {
+    if (TN_CUSTOM_DESC_KEYS[c]) return TN_CUSTOM_DESC_KEYS[c];
+  }
+  return undefined;
+}
+
+function getTNTypeKey(code: string): string | undefined {
+  if (TN_TYPE_KEYS[code]) return TN_TYPE_KEYS[code];
+  const codes = code.split(/[\s,]+/);
+  for (const c of codes) {
+    if (TN_TYPE_KEYS[c]) return TN_TYPE_KEYS[c];
+  }
+  return undefined;
+}
+
 const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
   education: { Icon: GraduationCap, bg: "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80" },
   skincare: { Icon: Sparkles, bg: "bg-pink-50 text-pink-700 border-pink-200/50 dark:bg-pink-950/80 dark:text-pink-300 dark:border-pink-800/80" },
@@ -181,11 +191,13 @@ const localAssetsMap = import.meta.glob<{ default: string }>('../assets/*.{png,j
 });
 
 function getLocalAssetForHouse(code: string): string | undefined {
-  const codeLower = code.toLowerCase();
-  for (const path in localAssetsMap) {
-    const filename = path.split('/').pop()?.toLowerCase();
-    if (filename && (filename.startsWith(codeLower + '.') || filename.startsWith(codeLower + '_') || filename.startsWith(codeLower + '-')) ) {
-      return localAssetsMap[path] as unknown as string;
+  const codes = code.toLowerCase().split(/[\s,]+/);
+  for (const c of codes) {
+    for (const path in localAssetsMap) {
+      const filename = path.split('/').pop()?.toLowerCase();
+      if (filename && (filename.startsWith(c + '.') || filename.startsWith(c + '_') || filename.startsWith(c + '-')) ) {
+        return localAssetsMap[path] as unknown as string;
+      }
     }
   }
   return undefined;
@@ -242,7 +254,7 @@ const CATEGORY_COLOR_MAP: Record<
     hover: "hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
   },
   hospital: {
-    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
+    active: "bg-rose-50 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
     hover: "hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
   },
   restaurant: {
@@ -283,52 +295,47 @@ function isHouseDeployed(house: HouseItem): boolean {
 function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
   const hasDeployed = isHouseDeployed(house);
   let typeLabel: string;
-  let TypeIcon: LucideIcon = UtensilsCrossed;
   let typeBg = "bg-stone-50 text-stone-600 border-stone-200 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700";
   let cardDescription = "";
   let displayName = house.name;
 
   if (house.id === -1) {
     typeLabel = t("showcase.type_flight");
-    TypeIcon = Plane;
     typeBg = "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80";
     cardDescription = t("showcase.desc_flight");
     displayName = t("showcase.flight_demo_name");
   } else if (house.id === -2) {
     typeLabel = t("showcase.type_ecommerce");
-    TypeIcon = ShoppingBag;
     typeBg = "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80";
     cardDescription = t("showcase.desc_ecommerce");
     displayName = t("showcase.itstore_demo_name");
   } else if (house.id === -3) {
     typeLabel = t("showcase.type_restaurant");
-    TypeIcon = UtensilsCrossed;
     typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80";
     cardDescription = t("showcase.desc_restaurant");
     displayName = t("food.title");
   } else if (house.id === -4) {
     typeLabel = t("showcase.type_accommodation");
-    TypeIcon = BedDouble;
     typeBg = "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80";
     cardDescription = t("showcase.desc_accommodation");
     displayName = t("showcase.hotel_demo_name");
   } else {
-    if (TN_CUSTOM_DESC_KEYS[house.code]) {
-      cardDescription = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
+    const customDescKey = getTNCustomDescKey(house.code);
+    if (customDescKey) {
+      cardDescription = t(customDescKey as any);
     } else if (!NO_DESC_CODES.has(house.code)) {
       cardDescription = t(`showcase.desc_${house.type}` as any);
     }
 
     if (!hasDeployed) {
       typeLabel = t("showcase.type_pending");
-      TypeIcon = Clock;
       typeBg = "bg-stone-50 text-stone-500 border-stone-200/50 dark:bg-slate-800/80 dark:text-slate-300 dark:border-slate-700";
     } else {
-      typeLabel = TN_TYPE_KEYS[house.code]
-        ? t(TN_TYPE_KEYS[house.code] as any)
+      const typeKey = getTNTypeKey(house.code);
+      typeLabel = typeKey
+        ? t(typeKey as any)
         : t(`showcase.type_${house.type}` as any);
       if (CATEGORY_STYLES[house.type]) {
-        TypeIcon = CATEGORY_STYLES[house.type].Icon;
         typeBg = CATEGORY_STYLES[house.type].bg;
       }
     }
@@ -362,15 +369,24 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     ? `card-sandbox-${house.id === -1 ? 'flight' : house.id === -2 ? 'itstore' : house.id === -3 ? 'food' : 'hotel'}`
     : `card-${house.code.toLowerCase()}`;
 
-  const teamNameDisplay = house.teamName || (house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team');
+  const teamNamesArray = useMemo(() => {
+    if (!house.teamName) {
+      return [house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team'];
+    }
+    if (Array.isArray(house.teamName)) {
+      return house.teamName;
+    }
+    return [house.teamName];
+  }, [house.teamName, house.code]);
+
   const previewImg = getLocalAssetForHouse(house.code) || DEMO_PREVIEW_IMAGES[String(house.id)] || DEMO_PREVIEW_IMAGES[house.code] || "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=80&auto=format&fit=crop";
 
-  return (
+  const cardInnerContent = (
     <motion.article
       key={house.id}
       id={cardId}
       aria-label={`${house.code}: ${displayName}`}
-      className="playing-card relative bg-card border-2 border-border/80 dark:border-slate-800 rounded-[24px] shadow-md hover:shadow-2xl hover:border-primary/50 transition-all duration-300 flex flex-col justify-between group overflow-hidden"
+      className="playing-card relative bg-card border-2 border-border/80 dark:border-slate-800 rounded-[24px] shadow-md hover:shadow-2xl hover:border-sky-400/70 transition-all duration-300 flex flex-col justify-between group overflow-hidden cursor-pointer h-full"
       style={{
         boxShadow: "0 10px 25px -8px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04)",
       }}
@@ -388,27 +404,6 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-black/35 pointer-events-none" />
-
-        {/* Top-Left Code Badge (StartUP for TN cards) */}
-        <div className="absolute top-3 left-3 z-10">
-          <span className="text-[10px] sm:text-[10.5px] font-black text-white font-mono bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/20 shadow-md">
-            {house.code.startsWith("TN") ? "StartUP" : house.code}
-          </span>
-        </div>
-
-        {/* Top-Right Category Tag */}
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
-          <span className={`text-[9px] font-black tracking-wider uppercase px-2.5 py-1 rounded-full border shadow-md backdrop-blur-md flex items-center gap-1.5 whitespace-nowrap ${typeBg}`}>
-            {house.id === -1 ? (
-              <img src={botnoiAirLogo} alt="BotnoiAir" className="w-3.5 h-3.5 object-contain shrink-0" />
-            ) : house.id === -3 ? (
-              <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-3.5 h-3.5 object-contain shrink-0" />
-            ) : (
-              <TypeIcon className="size-3 shrink-0" />
-            )}
-            <span>{typeLabel}</span>
-          </span>
-        </div>
       </div>
 
       {/* Top Accent Strip below image */}
@@ -421,7 +416,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
         <div>
           {/* Card Title */}
           <div className="mb-2">
-            <h3 className="text-base sm:text-[16px] font-black text-foreground group-hover:text-primary transition-colors tracking-tight leading-snug min-h-[2.4rem] flex items-center">
+            <h3 className="text-base sm:text-[16px] font-black text-foreground group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors tracking-tight leading-snug min-h-[2.4rem] flex items-center">
               {displayName}
             </h3>
           </div>
@@ -442,57 +437,84 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
           ) : (
             <div className="min-h-[4.5rem]" />
           )}
-        </div>
 
-        {/* Card Footer: Team Name on left, Launch button on right */}
-        <div className="pt-3 border-t border-border/60 mt-4 flex items-center justify-between gap-1.5">
-          {/* Team Name on Left */}
-          <div className="flex items-center gap-1 min-w-0 flex-1 overflow-hidden pr-1">
-            <Users className="size-3 text-primary shrink-0" />
-            <span className="text-[10px] font-bold text-foreground/80 truncate leading-tight" title={teamNameDisplay}>
-              {teamNameDisplay}
+          {/* Tags Row Below Description: Code Tag (SANDBOX / StartUP) & Category Type Tag */}
+          <div className="flex items-center gap-2 mt-4 pt-1 flex-wrap">
+            {/* Code Badge (SANDBOX / StartUP) */}
+            <span className="text-[10px] font-black text-foreground font-mono bg-muted/80 dark:bg-slate-800/90 px-2 py-0.5 rounded-md border border-border/70 shadow-2xs">
+              {house.code.startsWith("TN") ? "StartUP" : house.code}
+            </span>
+
+            {/* Category Type Tag (Text-only) */}
+            <span className={`text-[9.5px] font-black tracking-wider uppercase px-2.5 py-0.5 rounded-full border shadow-2xs whitespace-nowrap ${typeBg}`}>
+              {typeLabel}
             </span>
           </div>
+        </div>
 
-          {/* Launch Button */}
-          {hasDeployed ? (
-            house.deployedUrl.startsWith('/') ? (
-              <Link
-                to={house.deployedUrl}
-                aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-                className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold text-white rounded-xl transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-2xs hover:opacity-95 active:scale-95 group-hover:shadow-md"
-                style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
+        {/* Card Footer: Team Names (Renders multiple team badges if array) */}
+        <div className="pt-2.5 border-t border-border/60 mt-3.5 flex items-center justify-between gap-1.5 min-w-0">
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden pr-1 flex-wrap">
+            <Users className="size-3 text-primary shrink-0" />
+            {teamNamesArray.map((team, idx) => (
+              <span
+                key={idx}
+                className="text-[10px] font-bold text-foreground/80 bg-muted/60 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-border/40 truncate max-w-full leading-tight inline-flex items-center gap-1"
+                title={team}
               >
-                <span>{t('showcase.launch_demo')}</span>
-                <ChevronRight className="size-3 shrink-0" />
-              </Link>
-            ) : (
-              <a
-                href={house.deployedUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName}`}
-                className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold text-white rounded-xl transition-all cursor-pointer shrink-0 whitespace-nowrap shadow-2xs hover:opacity-95 active:scale-95 group-hover:shadow-md"
-                style={{ background: 'var(--grad-primary)', color: '#ffffff' }}
-              >
-                <span>{t('showcase.launch_demo')}</span>
-                <ChevronRight className="size-3 shrink-0" />
-              </a>
-            )
-          ) : (
-            <button
-              disabled
-              aria-disabled="true"
-              aria-label={`${t('showcase.launch_demo')} - ${house.code} ${displayName} (Unavailable)`}
-              className="inline-flex items-center justify-center gap-0.5 px-2.5 py-1.5 text-[10.5px] font-extrabold rounded-xl border transition-all shrink-0 whitespace-nowrap bg-muted/30 border-border text-muted-foreground/50 cursor-not-allowed opacity-60"
-            >
-              <span>{t('showcase.launch_demo')}</span>
-              <ChevronRight className="size-3 shrink-0" />
-            </button>
-          )}
+                {team}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* Full Card Blue Hover Overlay Layer (Swapped: Large Title on Top, Compact Button Below) */}
+      <div className="absolute inset-0 z-30 bg-sky-500/40 dark:bg-sky-600/30 backdrop-blur-xs flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none rounded-[24px] p-6 text-center shadow-2xl">
+        {hasDeployed ? (
+          <>
+            {/* 1. Large Bold Demo Title on Top */}
+            <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2 max-w-[90%] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              {displayName}
+            </h3>
+
+            {/* 2. Smaller Compact Launch Demo Button Below */}
+            <div className="px-3 py-1.5 rounded-xl bg-white/25 backdrop-blur-md border border-white/40 text-white text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1.5 shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+              <span>{t('showcase.launch_demo')}</span>
+              <ExternalLink className="size-3.5 shrink-0" />
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2 max-w-[90%] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              {displayName}
+            </h3>
+            <div className="px-3 py-1.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/25 text-white/90 text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1.5">
+              <Clock className="size-3.5 shrink-0" />
+              <span>{t('showcase.status_pending')}</span>
+            </div>
+          </>
+        )}
+      </div>
     </motion.article>
+  );
+
+  if (!hasDeployed) {
+    return cardInnerContent;
+  }
+
+  if (house.deployedUrl.startsWith('/')) {
+    return (
+      <Link to={house.deployedUrl} className="block h-full group font-sans">
+        {cardInnerContent}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={house.deployedUrl} target="_blank" rel="noopener noreferrer" className="block h-full group font-sans">
+      {cardInnerContent}
+    </a>
   );
 }
 
@@ -501,35 +523,10 @@ export default function OrderDemo() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
   const [statusFilter, setStatusFilter] = useState<"all" | "deployed" | "pending">("all");
   const [sortBy, setSortBy] = useState<"code" | "progress">("code");
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-
-  const filterScrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
-
-  const checkScroll = () => {
-    if (filterScrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = filterScrollRef.current;
-      setCanScrollLeft(scrollLeft > 5);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
-    }
-  };
-
-  useEffect(() => {
-    checkScroll();
-    window.addEventListener("resize", checkScroll);
-    return () => window.removeEventListener("resize", checkScroll);
-  }, []);
-
-  const handleScroll = (direction: "left" | "right") => {
-    if (filterScrollRef.current) {
-      const scrollAmount = direction === "left" ? -220 : 220;
-      filterScrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
 
   // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
@@ -549,21 +546,21 @@ export default function OrderDemo() {
         overviewText = t(`showcase.desc_${house.type}` as any);
       }
 
+      const teamText = Array.isArray(house.teamName) ? house.teamName.join(' ') : (house.teamName || '');
+
       const matchesSearch =
         house.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         house.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (house.teamName && house.teamName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        teamText.toLowerCase().includes(searchQuery.toLowerCase()) ||
         overviewText.toLowerCase().includes(searchQuery.toLowerCase()) ||
         house.style.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesCategory = selectedCategory === "all" || house.type === selectedCategory;
 
-      const isFilterActive = selectedCategory !== "all" || searchQuery.trim() !== "";
-
       const matchesStatus =
         statusFilter === "deployed" ? isHouseDeployed(house) :
         statusFilter === "pending" ? !isHouseDeployed(house) :
-        isFilterActive ? isHouseDeployed(house) : true;
+        true;
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -586,204 +583,262 @@ export default function OrderDemo() {
 
   const totalResults = sandboxDemos.length + projectDemos.length;
 
-  useEffect(() => {
-    if (!isFilterModalOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsFilterModalOpen(false);
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isFilterModalOpen]);
-
-  useEffect(() => {
-    if (isFilterModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isFilterModalOpen]);
-
   return (
     <div
       className="min-h-[calc(100vh-68px)] w-full flex flex-col pb-10 selection:bg-primary selection:text-primary-foreground relative z-10"
       aria-label="All Demos Showcase Portal"
     >
       {/* Search & Filtering Controls */}
-      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-4" aria-label="Search and Filter Demos" id="search-filter-section">
-        <div className="flex flex-col gap-4 bg-card/70 backdrop-blur-md border border-border/80 p-4 rounded-3xl shadow-sm">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 w-full">
-            {/* Search Input */}
-            <div className="relative w-full lg:max-w-xs shrink-0 flex items-center">
-              <label htmlFor="demo-search-input" className="sr-only">
-                {t('showcase.search_placeholder')}
-              </label>
-              <Search className="absolute left-3.5 size-4 text-muted-foreground pointer-events-none" />
-              <input
-                id="demo-search-input"
-                name="searchQuery"
-                type="text"
-                aria-label={t('showcase.search_placeholder')}
-                placeholder={t('showcase.search_placeholder')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-10 pr-4 bg-muted/30 border border-border focus:border-primary rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
-              />
-            </div>
-
-            {/* Quick Filters Tab Container with Scroll Buttons & Bounded Scrollbar Track */}
-            <div className="flex items-center min-w-0 flex-1 gap-2 mt-1 lg:mt-0">
-              <button
-                type="button"
-                onClick={() => handleScroll("left")}
-                disabled={!canScrollLeft}
-                className={`w-10 h-10 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-sm transition-all shrink-0 flex items-center justify-center -translate-y-1.5 ${
-                  canScrollLeft
-                    ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
-                    : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
-                }`}
-                aria-label="Scroll left filters"
-              >
-                <ChevronLeft className="size-4" />
-              </button>
-
-              <div
-                ref={filterScrollRef}
-                onScroll={checkScroll}
-                className="flex flex-nowrap items-center justify-start gap-1.5 overflow-x-auto min-w-0 pt-1 pb-4 flex-1 scroll-smooth select-none [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:bg-muted/15 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/40 [&::-webkit-scrollbar-thumb]:rounded-full transition-colors"
-                style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(148, 163, 184, 0.25) transparent" }}
-              >
-                {[
-                  { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-                  { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
-                  { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-                  { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-                  { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-                  { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-                  { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-                  { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-                  { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-                  { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-                  { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-                  { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
-                ].map((cat) => {
-                  const isActive = selectedCategory === cat.id;
-                  const Icon = cat.icon;
-                  const label = t(cat.translationKey as TranslationKey);
-                  const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`h-10 px-3.5 rounded-2xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border shrink-0 whitespace-nowrap ${
-                        isActive
-                          ? colorConfig.active
-                          : `text-muted-foreground bg-muted/30 border-border ${colorConfig.hover}`
-                      }`}
-                    >
-                      <Icon className="size-3.5 shrink-0" />
-                      <span className="whitespace-nowrap">{label}</span>
-                    </button>
-                  );
-                })}
+      <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-6" aria-label="Search and Filter Demos" id="search-filter-section">
+        {/* Main Container: Single container with a two-row layout */}
+        <div className="flex flex-col gap-4.5 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all">
+          
+          {/* Top Row: Search input, inline dropdowns for 'Sort by' & 'Project status', OK & Clear buttons */}
+          <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 w-full">
+            {/* Search + Dropdowns Group */}
+            <div className="flex flex-wrap items-center gap-3 md:gap-4 flex-1 min-w-0">
+              
+              {/* Search Input */}
+              <div className="relative w-full sm:w-72 md:w-80 shrink-0 flex items-center group">
+                <label htmlFor="demo-search-input" className="sr-only">
+                  {t('showcase.search_placeholder')}
+                </label>
+                <Search className="absolute left-3.5 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+                <input
+                  id="demo-search-input"
+                  name="searchQuery"
+                  type="text"
+                  aria-label={t('showcase.search_placeholder')}
+                  placeholder={t('showcase.search_placeholder')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-10 pl-10 pr-9 bg-muted/40 hover:bg-muted/60 dark:bg-slate-900/60 border border-border/80 focus:border-primary/80 focus:bg-background rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono shadow-2xs"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 p-0.5 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    aria-label="Clear search text"
+                  >
+                    <X className="size-3.5" />
+                  </button>
+                )}
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleScroll("right")}
-                disabled={!canScrollRight}
-                className={`w-10 h-10 rounded-2xl bg-card/95 backdrop-blur-md border border-border shadow-sm transition-all shrink-0 flex items-center justify-center -translate-y-1.5 ${
-                  canScrollRight
-                    ? "text-foreground hover:bg-primary hover:text-primary-foreground opacity-100 cursor-pointer"
-                    : "text-muted-foreground/30 opacity-30 cursor-not-allowed border-border/40"
-                }`}
-                aria-label="Scroll right filters"
-              >
-                <ChevronRight className="size-4" />
-              </button>
+              {/* Custom Styled Dropdown: Sort by */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsSortOpen(!isSortOpen);
+                    setIsStatusOpen(false);
+                  }}
+                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95"
+                >
+                  <ArrowUpDown className="size-3.5 text-primary shrink-0" />
+                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+                    {t('showcase.sort_heading')}:
+                  </span>
+                  <span className="font-extrabold text-foreground">
+                    {sortBy === "progress" ? t('showcase.sort_progress_short') : t('showcase.sort_code_short')}
+                  </span>
+                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isSortOpen ? "rotate-180 text-primary" : ""}`} />
+                </button>
+
+                {isSortOpen && (
+                  <>
+                    <div className="fixed inset-0 z-20" onClick={() => setIsSortOpen(false)} />
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-30 flex flex-col gap-1"
+                    >
+                      {[
+                        { id: "code", label: t('showcase.sort_code_short') },
+                        { id: "progress", label: t('showcase.sort_progress_short') },
+                      ].map((opt) => {
+                        const isSelected = sortBy === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                              setSortBy(opt.id as any);
+                              setIsSortOpen(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
+                              isSelected
+                                ? "bg-primary/15 text-primary"
+                                : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
+                            }`}
+                          >
+                            <span>{opt.label}</span>
+                            {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  </>
+                )}
+              </div>
+
+              {/* Custom Styled Dropdown: Project status */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsStatusOpen(!isStatusOpen);
+                    setIsSortOpen(false);
+                  }}
+                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95"
+                >
+                  <Activity className="size-3.5 text-primary shrink-0" />
+                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+                    {t('showcase.status_heading')}:
+                  </span>
+                  <span className="font-extrabold text-foreground">
+                    {statusFilter === "deployed"
+                      ? t('showcase.status_deployed')
+                      : statusFilter === "pending"
+                      ? t('showcase.status_pending')
+                      : t('showcase.cat_all')}
+                  </span>
+                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isStatusOpen ? "rotate-180 text-primary" : ""}`} />
+                </button>
+
+                {isStatusOpen && (
+                  <>
+                    <div className="fixed inset-0 z-20" onClick={() => setIsStatusOpen(false)} />
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 mt-2 w-52 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-30 flex flex-col gap-1"
+                    >
+                      {[
+                        { id: "all", label: t('showcase.cat_all') },
+                        { id: "deployed", label: t('showcase.status_deployed') },
+                        { id: "pending", label: t('showcase.status_pending') },
+                      ].map((opt) => {
+                        const isSelected = statusFilter === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                              setStatusFilter(opt.id as any);
+                              setIsStatusOpen(false);
+                            }}
+                            className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
+                              isSelected
+                                ? "bg-primary/15 text-primary"
+                                : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
+                            }`}
+                          >
+                            <span>{opt.label}</span>
+                            {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  </>
+                )}
+              </div>
             </div>
 
-            {/* Filter Toggle Icon Button */}
-            <button
-              onClick={() => setIsFilterModalOpen(true)}
-              title={t('showcase.filter')}
-              aria-label={t('showcase.filter')}
-              className="w-10 h-10 rounded-2xl bg-muted/30 border border-border hover:bg-muted/50 hover:text-foreground text-foreground transition-all flex items-center justify-center cursor-pointer shrink-0 relative group shadow-sm -translate-y-1.5"
-              id="filter-modal-trigger"
-            >
-              <SlidersHorizontal className="size-4.5 text-primary shrink-0" />
-              {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-background animate-pulse" />
-              )}
-              {/* Tooltip on hover */}
-              <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-slate-900/90 dark:bg-slate-800/95 backdrop-blur-md text-white text-[11px] font-bold rounded-xl shadow-lg border border-slate-700/50 opacity-0 group-hover:opacity-100 transition-all duration-150 pointer-events-none whitespace-nowrap z-50">
-                {t('showcase.filter')}
-              </span>
-            </button>
-          </div>
-
-          {/* Active Filter Tags */}
-          {(selectedCategory !== "all" || statusFilter !== "all" || sortBy !== "code") && (
-            <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-border/40 w-full min-w-0" id="active-filter-tags">
-              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mr-1 font-mono">
-                {t('showcase.active_filters')}
-              </span>
-              {selectedCategory !== "all" && (
-                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.filter_category')}: {t(`showcase.cat_${selectedCategory}` as any)}
-                  <button
-                    onClick={() => setSelectedCategory("all")}
-                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
-                    aria-label="Remove category filter"
-                  >
-                    ✕
-                  </button>
-                </span>
-              )}
-              {statusFilter !== "all" && (
-                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.filter_status')}: {statusFilter === "deployed" ? t('showcase.status_deployed') : t('showcase.status_pending')}
-                  <button
-                    onClick={() => setStatusFilter("all")}
-                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
-                    aria-label="Remove status filter"
-                  >
-                    ✕
-                  </button>
-                </span>
-              )}
-              {sortBy !== "code" && (
-                <span className="px-3 py-1 rounded-xl text-[10px] font-extrabold bg-primary/10 text-primary border border-primary/20 flex items-center gap-1">
-                  {t('showcase.filter_sort')}: {sortBy === "progress" ? t('showcase.sort_progress_short') : t('showcase.sort_code_short')}
-                  <button
-                    onClick={() => setSortBy("code")}
-                    className="hover:text-foreground ml-0.5 text-xs font-black cursor-pointer"
-                    aria-label="Remove sort order"
-                  >
-                    ✕
-                  </button>
-                </span>
-              )}
+            {/* OK & Clear Action Buttons Group (Right-aligned) */}
+            <div className="flex items-center gap-2 ml-auto shrink-0">
+              {/* OK Button */}
               <button
+                type="button"
+                className="h-10 px-8 bg-primary hover:bg-primary/95 text-primary-foreground border border-primary/80 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
+              >
+                OK
+              </button>
+
+              {/* Clear Button */}
+              <button
+                type="button"
                 onClick={() => {
+                  setSearchQuery("");
                   setSelectedCategory("all");
                   setStatusFilter("all");
                   setSortBy("code");
                 }}
-                className="text-[10px] font-black text-muted-foreground hover:text-primary transition-colors cursor-pointer ml-1 font-mono"
+                title="Clear all filters"
+                className="h-10 px-3.5 bg-muted/40 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 rounded-2xl text-xs font-bold text-foreground/80 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
               >
-                {t('showcase.clear_all')}
+                <RotateCcw className="size-3.5 shrink-0" />
+                <span>Clear</span>
               </button>
             </div>
-          )}
+          </div>
+
+          {/* Horizontal Line Divider */}
+          <div className="h-px bg-border/60 w-full" />
+
+          {/* Bottom Row: 'PROJECT CATEGORY' text label & category pills flex-wrap */}
+          <div className="flex flex-col gap-3 w-full">
+            <div className="flex items-center justify-between gap-2">
+              <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest font-mono flex items-center gap-1.5">
+                <SlidersHorizontal className="size-3.5 text-primary" />
+                PROJECT CATEGORY
+              </span>
+              {selectedCategory !== "all" && (
+                <button
+                  onClick={() => setSelectedCategory("all")}
+                  className="text-[10.5px] font-bold text-primary hover:underline cursor-pointer font-mono"
+                >
+                  Show All
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2.5 pt-0.5 min-w-0 flex-1 scroll-smooth select-none theme-filter-scrollbar">
+              {[
+                { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
+                { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
+                { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
+                { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
+                { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
+                { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
+                { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
+                { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
+                { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
+                { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
+                { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
+                { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
+              ].map((cat) => {
+                const isActive = selectedCategory === cat.id;
+                const Icon = cat.icon;
+                const label = t(cat.translationKey as TranslationKey);
+                const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`h-9 px-3.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
+                      isActive
+                        ? `${colorConfig.active} scale-[1.02]`
+                        : `text-foreground/80 bg-muted/30 border-border/80 ${colorConfig.hover}`
+                    }`}
+                  >
+                    <Icon className="size-3.5 shrink-0" />
+                    <span>{label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-8 mb-66 flex-1 space-y-12" aria-label="All Demo Projects" id="all-demos-main">
+      <main className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-8 mb-20 flex-1 space-y-12" aria-label="All Demo Projects" id="all-demos-main">
         {totalResults === 0 ? (
           /* Empty state */
           <div className="text-center py-20 bg-card border border-border rounded-3xl p-8 max-w-md mx-auto shadow-sm">
@@ -841,173 +896,6 @@ export default function OrderDemo() {
           </>
         )}
       </main>
-
-      {/* 3. Filter & Sort Modal */}
-      <AnimatePresence>
-        {isFilterModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsFilterModalOpen(false)}
-              className="absolute inset-0 bg-background/80 backdrop-blur-md cursor-pointer"
-            />
-
-            {/* Modal Dialog Panel */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ type: "spring", duration: 0.4 }}
-              className="relative w-full max-w-lg bg-card border border-border rounded-3xl shadow-2xl p-6 overflow-hidden max-h-[90vh] flex flex-col z-10"
-              id="filter-modal-dialog"
-            >
-              {/* Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-border/60">
-                <h2 className="text-sm font-black text-foreground tracking-tight flex items-center gap-2">
-                  <SlidersHorizontal className="size-4 text-primary" />
-                  <span>
-                    {t('showcase.filter_title')}
-                  </span>
-                </h2>
-                <button
-                  onClick={() => setIsFilterModalOpen(false)}
-                  className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                  aria-label="Close filters modal"
-                >
-                  <X className="size-4" />
-                </button>
-              </div>
-
-              {/* Scrollable Content */}
-              <div className="flex-1 overflow-y-auto py-5 space-y-6 pr-1" style={{ scrollbarWidth: 'thin' }}>
-                {/* 1. Sort By */}
-                <div className="space-y-2.5">
-                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.sort_heading')}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: "code", label: t('showcase.sort_code_short') },
-                      { id: "progress", label: t('showcase.sort_progress_short') },
-                    ].map((opt) => {
-                      const active = sortBy === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          onClick={() => setSortBy(opt.id as any)}
-                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
-                            active
-                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 2. Project Status */}
-                <div className="space-y-2.5">
-                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.status_heading')}
-                  </h3>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: "all", label: t('showcase.cat_all') },
-                      { id: "deployed", label: t('showcase.status_deployed') },
-                      { id: "pending", label: t('showcase.status_pending') },
-                    ].map((opt) => {
-                      const active = statusFilter === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          onClick={() => setStatusFilter(opt.id as any)}
-                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center ${
-                            active
-                              ? "bg-primary text-primary-foreground border-primary shadow-xs"
-                              : "bg-muted/20 border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* 3. Project Category */}
-                <div className="space-y-2.5">
-                  <h3 className="text-xs font-black text-muted-foreground uppercase tracking-widest font-mono">
-                    {t('showcase.category_heading')}
-                  </h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {[
-                      { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-                      { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
-                      { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-                      { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-                      { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-                      { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-                      { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-                      { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-                      { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-                      { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-                      { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-                      { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
-                    ].map((cat) => {
-                      const active = selectedCategory === cat.id;
-                      const Icon = cat.icon;
-                      const label = t(cat.translationKey as TranslationKey);
-                      const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
-                      return (
-                        <button
-                          key={cat.id}
-                          onClick={() => setSelectedCategory(cat.id)}
-                          className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all duration-200 cursor-pointer flex items-center justify-center gap-1.5 ${
-                            active
-                              ? colorConfig.active
-                              : `bg-muted/20 border-border text-muted-foreground ${colorConfig.hover}`
-                          }`}
-                        >
-                          <Icon className="size-3.5 shrink-0" />
-                          <span className="whitespace-nowrap font-sans">{label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer Actions */}
-              <div className="pt-4 border-t border-border/60 flex items-center gap-3">
-                <button
-                  onClick={() => {
-                    setSelectedCategory("all");
-                    setStatusFilter("all");
-                    setSortBy("code");
-                  }}
-                  disabled={selectedCategory === "all" && statusFilter === "all" && sortBy === "code"}
-                  className="px-4 py-2.5 rounded-xl border border-border text-foreground hover:bg-muted disabled:opacity-40 disabled:hover:bg-transparent text-xs font-bold transition-all cursor-pointer flex-1 text-center"
-                >
-                  {t('showcase.reset_all')}
-                </button>
-                <button
-                  onClick={() => setIsFilterModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-cta hover:bg-cta/90 text-cta-foreground text-xs font-extrabold transition-all cursor-pointer flex-1 text-center shadow-md shadow-cta/15"
-                >
-                  {`OK (${totalResults})`}
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
       <AppFooter />
     </div>
   );
