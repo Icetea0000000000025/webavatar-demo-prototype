@@ -659,39 +659,38 @@ export default function OrderDemo() {
         {/* Main Container: Single container with a two-row layout */}
         <div className="flex flex-col gap-4.5 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all relative z-40">
           
-          {/* Top Row: Search input, inline dropdowns for 'Sort by' & 'Business Type', OK & Clear buttons */}
+          {/* Top Row: Extended Search input, inline dropdowns ('Sort by' & 'Business Type') next to OK & Clear buttons */}
           <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 w-full">
-            {/* Search + Dropdowns Group */}
-            <div className="flex flex-wrap items-center gap-3 md:gap-4 flex-1 min-w-0">
-              
-              {/* Search Input */}
-              <div className="relative w-full sm:w-72 md:w-80 shrink-0 flex items-center group">
-                <label htmlFor="demo-search-input" className="sr-only">
-                  {t('showcase.search_placeholder')}
-                </label>
-                <Search className="absolute left-3.5 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
-                <input
-                  id="demo-search-input"
-                  name="searchQuery"
-                  type="text"
-                  aria-label={t('showcase.search_placeholder')}
-                  placeholder={t('showcase.search_placeholder')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-10 pr-9 bg-muted/40 hover:bg-muted/60 dark:bg-slate-900/60 border border-border/80 focus:border-primary/80 focus:bg-background rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono shadow-2xs"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 p-0.5 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                    aria-label="Clear search text"
-                  >
-                    <X className="size-3.5" />
-                  </button>
-                )}
-              </div>
+            {/* Search Input (Expands to fill available width up to Sort by) */}
+            <div className="relative flex-1 min-w-[200px] sm:min-w-[260px] flex items-center group">
+              <label htmlFor="demo-search-input" className="sr-only">
+                {t('showcase.search_placeholder')}
+              </label>
+              <Search className="absolute left-3.5 size-4 text-muted-foreground group-focus-within:text-primary transition-colors pointer-events-none" />
+              <input
+                id="demo-search-input"
+                name="searchQuery"
+                type="text"
+                aria-label={t('showcase.search_placeholder')}
+                placeholder={t('showcase.search_placeholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-10 pl-10 pr-9 bg-muted/40 hover:bg-muted/60 dark:bg-slate-900/60 border border-border/80 focus:border-primary/80 focus:bg-background rounded-2xl text-xs font-bold text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono shadow-2xs"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 p-0.5 rounded-full hover:bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  aria-label="Clear search text"
+                >
+                  <X className="size-3.5" />
+                </button>
+              )}
+            </div>
 
+            {/* Controls Group: Sort by, Business Type, OK & Clear Buttons (Aligned Together) */}
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
               {/* Custom Styled Dropdown: Sort by */}
               <div className="relative z-50">
                 <button
@@ -807,10 +806,7 @@ export default function OrderDemo() {
                   </>
                 )}
               </div>
-            </div>
 
-            {/* OK & Clear Action Buttons Group (Right-aligned) */}
-            <div className="flex items-center gap-2 ml-auto shrink-0">
               {/* OK Button */}
               <button
                 type="button"
