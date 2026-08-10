@@ -211,8 +211,8 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_flight_title')}</h3>
             </div>
-            <p>
-              {t('home.card_flight_desc')}
+            <p className="whitespace-pre-line">
+              {t('showcase.desc_flight')}
             </p>
             <Link className="bento-card-footer" to="/flight-demo" id="link-flight-demo">
               {t('home.card_flight_cta')} <span aria-hidden="true">→</span>
@@ -227,7 +227,7 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('food.title')}</h3>
             </div>
-            <p>
+            <p className="whitespace-pre-line">
               {t('showcase.desc_restaurant')}
             </p>
             <Link className="bento-card-footer" to="/food-demo" id="link-food-demo">
@@ -245,8 +245,8 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_itstore_title')}</h3>
             </div>
-            <p>
-              {t('home.card_itstore_desc')}
+            <p className="whitespace-pre-line">
+              {t('showcase.desc_ecommerce')}
             </p>
             <Link className="bento-card-footer" to="/it-store-demo" id="link-itstore-demo">
               {t('home.card_itstore_cta')} <span aria-hidden="true">→</span>
@@ -266,8 +266,8 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_hotel_title')}</h3>
             </div>
-            <p>
-              {t('home.card_hotel_desc')}
+            <p className="whitespace-pre-line">
+              {t('showcase.desc_accommodation')}
             </p>
             <a
               className="bento-card-footer"
@@ -288,7 +288,7 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_contact_title')}</h3>
             </div>
-            <p>
+            <p className="whitespace-pre-line">
               {t('home.card_contact_desc')}
             </p>
             <Link className="bento-card-footer" to="/contact" id="link-contact-demo">
@@ -306,7 +306,7 @@ export default function Home() {
               </div>
               <h3 style={{ margin: 0, letterSpacing: '-0.02em' }}>{t('home.card_alldemo_title')}</h3>
             </div>
-            <p>
+            <p className="whitespace-pre-line">
               {t('home.card_alldemo_desc')}
             </p>
             <div style={{ display: 'flex', gap: '2rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>

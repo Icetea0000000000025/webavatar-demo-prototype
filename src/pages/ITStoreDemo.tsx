@@ -544,7 +544,7 @@ export default function ITStoreDemo() {
             <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
               <Link to="/" className="hover:text-indigo-500 transition-colors flex items-center gap-1">
                 <Home className="size-3" />
-                <span>{language === 'en' ? 'Home' : 'หน้าหลัก'}</span>
+                <span>{t('nav.home')}</span>
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
               <Link to="/all-demo" className="hover:text-indigo-500 transition-colors">
@@ -552,7 +552,7 @@ export default function ITStoreDemo() {
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
               <span className="text-foreground font-extrabold uppercase font-mono">
-                {language === 'en' ? 'IT Store' : 'ร้านค้าไอที'}
+                {t('nav.itstore')}
               </span>
             </nav>
 
@@ -583,7 +583,7 @@ export default function ITStoreDemo() {
                 id="itstore-cart-btn"
               >
                 <ShoppingCart className="size-4" />
-                {language === "en" ? "Cart" : t("itstore.nav_cart")}
+                {t("itstore.nav_cart")}
                 <span className="absolute -top-1.5 -right-1.5 min-w-5 h-5 rounded-full bg-white text-indigo-600 text-xs font-extrabold flex items-center justify-center shadow px-1">
                   {itemCount}
                 </span>
