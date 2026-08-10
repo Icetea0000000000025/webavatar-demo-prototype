@@ -266,7 +266,7 @@ export default function FoodOrderDemo() {
               <ChevronRight className="size-3 text-foreground/30" />
               <span className="text-foreground font-extrabold uppercase font-mono flex items-center gap-1.5">
                 <img src={botnoiLogo} alt="Botnoi Restaurant" className="h-5 w-auto object-contain inline-block" />
-                {t('nav.restaurant') || 'Botnoi Restaurant'}
+                {t('nav.restaurant')}
               </span>
             </nav>
 

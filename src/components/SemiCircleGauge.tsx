@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import AnimatedCounter from './AnimatedCounter';
 
 interface SemiCircleGaugeProps {
@@ -29,13 +29,27 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
   badgeText,
   badgeBorder,
 }) => {
-  // Semi-circle SVG Path Arc length calculations
-  // Radius R = 50, Center (65, 65)
-  // Arc length = PI * 50 = ~157.08
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.1 });
+  const [animatedRatio, setAnimatedRatio] = useState(0);
+
   const targetRatio = Math.min(Math.max(percentage, 0), 100) / 100;
 
+  useEffect(() => {
+    // macOS Safari WebKit fallback: If IntersectionObserver is delayed or browser restricts scroll events
+    if (isInView) {
+      setAnimatedRatio(targetRatio);
+    } else {
+      // Fallback timer ensures arc displays even if scroll observer stalls in Safari
+      const timer = setTimeout(() => {
+        setAnimatedRatio(targetRatio);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [isInView, targetRatio]);
+
   return (
-    <div className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default">
+    <div ref={containerRef} className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default">
       {/* Background Soft Radial Glow */}
       <div
         className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity"
@@ -66,7 +80,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
             strokeLinecap="round"
           />
 
-          {/* Animated Foreground Progress Arc - iOS WebKit & Cross-Browser Optimized */}
+          {/* Animated Foreground Progress Arc - iOS & macOS WebKit Optimized */}
           <motion.path
             d="M 15 65 A 50 50 0 0 1 115 65"
             fill="none"
@@ -74,10 +88,12 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
             strokeWidth="10"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
-            whileInView={{ pathLength: targetRatio }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ WebkitTransform: 'translateZ(0)' }}
+            animate={{ pathLength: animatedRatio }}
+            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              WebkitTransform: 'translateZ(0)',
+              transform: 'translateZ(0)',
+            }}
           />
         </svg>
 

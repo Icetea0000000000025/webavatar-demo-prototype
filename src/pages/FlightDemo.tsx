@@ -161,7 +161,7 @@ export default function FlightDemo() {
         class: "economy",
         timeOfDay: "morning",
         type: "cheapest",
-        discount: "15% OFF"
+        discount: `15% ${t('flight.off_tag')}`
       },
       {
         id: isReturn ? "ret-2" : "out-2",
@@ -187,7 +187,7 @@ export default function FlightDemo() {
         class: "economy",
         timeOfDay: "afternoon",
         type: "cheapest",
-        discount: "20% OFF"
+        discount: `20% ${t('flight.off_tag')}`
       },
       {
         id: isReturn ? "ret-4" : "out-4",
@@ -226,7 +226,7 @@ export default function FlightDemo() {
         class: "economy",
         timeOfDay: "evening",
         type: "quickest",
-        discount: "10% OFF"
+        discount: `10% ${t('flight.off_tag')}`
       }
     ];
 
@@ -531,7 +531,7 @@ export default function FlightDemo() {
                   }`}>
                   3
                 </div>
-                <span className="text-[10px] font-bold mt-1 text-slate-500">{t('flight.modal_passenger') || "กรอกข้อมูล"}</span>
+                <span className="text-[10px] font-bold mt-1 text-slate-500">{t('flight.passenger_info_step')}</span>
               </div>
             </div>
 
@@ -935,11 +935,11 @@ export default function FlightDemo() {
                                     <span className="text-[10px] text-slate-400 font-display">· {flight.flightNo}</span>
                                     {flight.class === "business" ? (
                                       <span className="inline-block bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 font-bold text-[8px] px-1.5 py-0.5 rounded border border-purple-100 dark:border-purple-800 select-none uppercase tracking-wider font-display">
-                                        Business
+                                        {t('flight.cabin_business')}
                                       </span>
                                     ) : (
                                       <span className="inline-block bg-slate-50 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-bold text-[8px] px-1.5 py-0.5 rounded border border-slate-100 dark:border-slate-600 select-none uppercase tracking-wider font-display">
-                                        Economy
+                                        {t('flight.cabin_economy')}
                                       </span>
                                     )}
                                   </div>
@@ -1300,7 +1300,7 @@ export default function FlightDemo() {
                           className={`rounded-full bg-white/20 backdrop-blur-md px-4 py-2 text-xs font-bold text-white border border-white/10 transition-colors cursor-pointer ${isActive ? "bg-white/30 hover:bg-white/45" : "group-hover:bg-white/30 group-hover:hover:bg-white/45"
                             }`}
                         >
-                          {t('flight.details') || "Book Now"}
+                          {t('flight.details')}
                         </button>
                       </div>
                     </div>
@@ -1362,7 +1362,7 @@ export default function FlightDemo() {
               </p>
             </div>
             <div>
-              <p className="font-display font-bold mb-3 text-white text-sm">Services</p>
+              <p className="font-display font-bold mb-3 text-white text-sm">{t('flight.footer_services')}</p>
               <ul className="text-xs opacity-75 space-y-2.5">
                 <li>{t('flight.nav_booking')}</li>
                 <li>{t('flight.service1_title')}</li>
@@ -1370,7 +1370,7 @@ export default function FlightDemo() {
               </ul>
             </div>
             <div>
-              <p className="font-display font-bold mb-3 text-white text-sm">Contact Us</p>
+              <p className="font-display font-bold mb-3 text-white text-sm">{t('flight.nav_contact')}</p>
               <ul className="text-xs opacity-75 space-y-2.5">
                 <li>Tel. 1318 (24 Hours)</li>
                 <li>support@botnoiair.example</li>
@@ -1418,7 +1418,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
   const seatRow = (passengerHash % 30) + 1;
   const seatLetter = ['A', 'B', 'C', 'D', 'E', 'F'][passengerHash % 6];
   const seatNumber = booking.seat || `${seatRow}${seatLetter}`;
-  const flightClass = booking.class === "business" ? "Business" : "Economy";
+  const flightClass = booking.class === "business" ? t('flight.cabin_business') : t('flight.cabin_economy');
 
   const basePrice = booking.pricePerPax || (booking.to.includes("เชียงใหม่") || booking.to.includes("ภูเก็ต") ? 890 : 990);
   const totalPrice = basePrice * booking.passengers;
@@ -1458,7 +1458,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
               <span className="font-display font-black text-lg text-sky-950 dark:text-sky-100 tracking-tight">BotnoiAir</span>
             </div>
             <div className="text-[10px] font-bold uppercase tracking-widest text-sky-900/60 dark:text-sky-200 bg-sky-200/40 dark:bg-sky-900/40 px-2.5 py-1 rounded-full">
-              Boarding Pass
+              {t('flight.boarding_pass_tag')}
             </div>
           </div>
 
@@ -1554,11 +1554,11 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-1">
                   <span className="text-xl font-black text-sky-950 dark:text-sky-100">฿{finalPrice.toLocaleString()}</span>
-                  <span className="text-[9px] text-slate-400 dark:text-slate-400">/{booking.passengers} pax</span>
+                  <span className="text-[9px] text-slate-400 dark:text-slate-400">/{booking.passengers} {t('flight.pax_suffix')}</span>
                 </div>
                 {discountAmount > 0 && (
                   <span className="text-[9px] text-emerald-600 dark:text-emerald-400 font-bold block mt-0.5">
-                    (Saved ฿{discountAmount.toLocaleString()} via {promoUpper})
+                    ({t('flight.saved_amount')} ฿{discountAmount.toLocaleString()} via {promoUpper})
                   </span>
                 )}
               </div>
@@ -1650,7 +1650,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
             <div className="w-32 h-10 border-t-2 border-x-2 border-slate-200 rounded-t-full mx-auto mb-6 flex items-center justify-center bg-white relative">
               <div className="w-1.5 h-1.5 rounded-full bg-slate-200 absolute left-4 bottom-2"></div>
               <div className="w-1.5 h-1.5 rounded-full bg-slate-200 absolute right-4 bottom-2"></div>
-              <span className="text-[9px] font-bold text-slate-400 tracking-widest uppercase">COCKPIT</span>
+              <span className="text-[9px] font-bold text-slate-400 tracking-widest uppercase">{t('flight.cockpit')}</span>
             </div>
 
             {/* Cabin Seats Rows */}
