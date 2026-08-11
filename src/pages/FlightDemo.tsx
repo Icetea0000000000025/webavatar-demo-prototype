@@ -433,21 +433,21 @@ export default function FlightDemo() {
           {/* Dark scrim for text readability */}
           <div className="absolute inset-0 -z-[5] bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/70" />
 
-          <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border border-slate-200/50 dark:border-slate-800 rounded-2xl shadow-lg transition-all">
+          <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-slate-900/95 text-white backdrop-blur-md border border-slate-700/80 rounded-2xl shadow-xl transition-all">
             <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <nav className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 font-bold" aria-label="Breadcrumb">
-                <Link to="/" className="hover:text-sky-600 transition-colors flex items-center gap-1">
-                  <Home className="w-3.5 h-3.5" />
-                  <span>{t('nav.home')}</span>
+              <nav className="flex items-center gap-2 text-xs text-white font-bold" aria-label="Breadcrumb">
+                <Link to="/" className="text-white hover:text-sky-300 transition-colors flex items-center gap-1">
+                  <Home className="w-3.5 h-3.5 text-white" />
+                  <span className="text-white">{t('nav.home')}</span>
                 </Link>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <Link to="/all-demo" className="hover:text-sky-600 transition-colors">
-                  <span>{t('showcase.portal')}</span>
+                <Link to="/all-demo" className="text-white hover:text-sky-300 transition-colors">
+                  <span className="text-white">{t('showcase.portal')}</span>
                 </Link>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-sky-700 dark:text-sky-400 font-extrabold uppercase font-mono flex items-center gap-1.5">
+                <span className="text-white font-extrabold uppercase font-mono flex items-center gap-1.5">
                   <img src={botnoiAirLogo} alt="BotnoiAir" className="h-5 w-auto object-contain inline-block" />
-                  {t('nav.flight') || 'Botnoi Air'}
+                  <span className="text-white">{t('nav.flight') || 'Botnoi Air'}</span>
                 </span>
               </nav>
 
@@ -455,14 +455,16 @@ export default function FlightDemo() {
                 {ticketBooking && (
                   <button
                     onClick={() => setBoardingPassOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-sky-700 dark:text-sky-300 hover:text-sky-900 hover:bg-sky-50 rounded-full transition-all border border-sky-200 dark:border-sky-800"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-sky-800/40 rounded-full transition-all border border-sky-400/40"
                     id="nav-flight-boarding-pass"
                   >
-                    <Ticket className="w-3.5 h-3.5" />
-                    {t('flight.nav_receipt') || 'Boarding Pass'}
+                    <Ticket className="w-3.5 h-3.5 text-white" />
+                    <span className="text-white">{t('flight.nav_receipt') || 'Boarding Pass'}</span>
                   </button>
                 )}
-                <Link to="/flight-demo/admin" className="px-4 py-1.5 rounded-full bg-sky-50 dark:bg-sky-900/50 hover:bg-sky-100 transition-all border border-sky-200 dark:border-sky-800 text-sky-700 dark:text-sky-300 hover:text-sky-800 text-xs font-bold" id="nav-flight-admin">{t('flight.nav_admin')}</Link>
+                <Link to="/flight-demo/admin" className="px-4 py-1.5 rounded-full bg-sky-600/30 hover:bg-sky-600/50 transition-all border border-sky-400/40 text-white font-bold text-xs" id="nav-flight-admin">
+                  <span className="text-white">{t('flight.nav_admin')}</span>
+                </Link>
               </nav>
             </div>
           </header>

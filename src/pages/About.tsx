@@ -23,7 +23,7 @@ function About() {
     restDelta: 0.001,
   });
 
-  const renderTimelineDesc = (text: string) => {
+  const renderTimelineDesc = (text: string, dotColor?: string) => {
     if (!text) return null;
     const lines = text
       .split('\n')
@@ -35,7 +35,10 @@ function About() {
         <ul className="timeline-bullet-list">
           {lines.map((item, idx) => (
             <li key={idx}>
-              <span className="timeline-bullet-dot" />
+              <span
+                className="timeline-bullet-dot"
+                style={dotColor ? { background: dotColor, boxShadow: `0 0 6px ${dotColor}` } : undefined}
+              />
               <span>{item}</span>
             </li>
           ))}
@@ -162,22 +165,22 @@ function About() {
             <div className="competency-grid">
               <div className="competency-card">
                 <h3 style={{ color: 'var(--primary)', letterSpacing: '-0.015em' }}>{t('about.comp1_title')}</h3>
-                {renderTimelineDesc(t('about.comp1_desc'))}
+                {renderTimelineDesc(t('about.comp1_desc'), 'var(--primary)')}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--cta)', letterSpacing: '-0.015em' }}>{t('about.comp2_title')}</h3>
-                {renderTimelineDesc(t('about.comp2_desc'))}
+                {renderTimelineDesc(t('about.comp2_desc'), 'var(--cta)')}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--primary)', letterSpacing: '-0.015em' }}>{t('about.comp3_title')}</h3>
-                {renderTimelineDesc(t('about.comp3_desc'))}
+                {renderTimelineDesc(t('about.comp3_desc'), 'var(--primary)')}
               </div>
 
               <div className="competency-card">
                 <h3 style={{ color: 'var(--cta)', letterSpacing: '-0.015em' }}>{t('about.comp4_title')}</h3>
-                {renderTimelineDesc(t('about.comp4_desc'))}
+                {renderTimelineDesc(t('about.comp4_desc'), 'var(--cta)')}
               </div>
             </div>
           </div>
