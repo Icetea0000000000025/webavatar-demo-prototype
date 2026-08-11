@@ -7,6 +7,7 @@ import ThemeToggle from './ThemeToggle';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import textLogoNew from '../assets/Asset-5-8.png';
 import { pagesConfig } from '../config/pages';
+import { X } from 'lucide-react';
 
 
 export default function AppNavbar() {
@@ -469,17 +470,60 @@ export default function AppNavbar() {
             >
               {/* Drawer header */}
               <div className="mobile-drawer-header">
-                <span className="mobile-drawer-logo" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', lineHeight: 1, verticalAlign: 'middle' }}>
-                  <img src={textLogoNew} alt="Botnoi" style={{ height: '1.15rem', objectFit: 'contain', verticalAlign: 'middle' }} />
+                <Link
+                  to="/"
+                  onClick={closeDrawer}
+                  className="mobile-drawer-logo"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+                >
+                  <img src={textLogoNew} alt="Botnoi" style={{ height: '1.25rem', objectFit: 'contain', verticalAlign: 'middle' }} />
                   <span>Labs</span>
-                </span>
+                </Link>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginRight: '0.5rem' }}>
-                  {/* Theme Toggle for Mobile */}
+                <button
+                  type="button"
+                  className="mobile-drawer-close"
+                  onClick={closeDrawer}
+                  aria-label="Close menu"
+                >
+                  <X style={{ width: '16px', height: '16px' }} />
+                </button>
+              </div>
+
+              {/* Mobile Quick Controls Toolbar (Theme & Language) */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '0.5rem',
+                  padding: '0.5rem 0.75rem',
+                  marginBottom: '1.25rem',
+                  borderRadius: '14px',
+                  border: `1px solid ${
+                    isSitePage
+                      ? 'rgba(244, 63, 94, 0.2)'
+                      : isDark
+                      ? 'rgba(255, 255, 255, 0.12)'
+                      : 'rgba(228, 228, 231, 0.8)'
+                  }`,
+                  backgroundColor: isSitePage
+                    ? 'rgba(28, 25, 23, 0.4)'
+                    : isDark
+                    ? 'rgba(30, 41, 59, 0.4)'
+                    : 'rgba(244, 244, 245, 0.7)',
+                }}
+              >
+                {/* Theme Toggle for Mobile */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <ThemeToggle isSitePage={isSitePage} />
+                  <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--foreground)' }}>
+                    {isDark ? t('theme.dark') : t('theme.light')}
+                  </span>
+                </div>
 
-                  {/* Language Switch Toggle for Mobile */}
-                  <div style={{ position: 'relative', zIndex: 10 }}>
+                {/* Language Switch Toggle for Mobile */}
+                <div style={{ position: 'relative', zIndex: 10 }}>
                   <button
                     onClick={() => setMobileLangMenuOpen(!mobileLangMenuOpen)}
                     style={{
@@ -487,12 +531,12 @@ export default function AppNavbar() {
                       alignItems: 'center',
                       gap: '0.45rem',
                       backgroundColor: isSitePage
-                        ? 'rgba(28, 25, 23, 0.5)'
+                        ? 'rgba(28, 25, 23, 0.7)'
                         : isDark
                         ? 'rgba(30, 41, 59, 0.8)'
-                        : 'rgba(244, 244, 245, 0.9)',
+                        : 'rgba(255, 255, 255, 0.9)',
                       borderRadius: '10px',
-                      padding: '0.4rem 0.8rem',
+                      padding: '0.4rem 0.75rem',
                       border: `1px solid ${
                         isSitePage
                           ? 'rgba(244, 63, 94, 0.2)'
@@ -636,15 +680,6 @@ export default function AppNavbar() {
                   )}
                 </div>
               </div>
-
-              <button
-                className="mobile-drawer-close"
-                onClick={closeDrawer}
-                aria-label="Close menu"
-              >
-                ✕
-              </button>
-            </div>
 
               {/* Nav links */}
               <nav aria-label="Mobile Navigation">

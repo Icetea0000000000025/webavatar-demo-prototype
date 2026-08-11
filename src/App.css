@@ -422,13 +422,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(236, 253, 245, 0.8);
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: rgba(236, 253, 245, 0.9);
+  border: 1px solid rgba(16, 185, 129, 0.3);
   border-radius: 10px;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
   font-size: 0.8rem;
-  color: var(--accent-foreground);
-  font-weight: 600;
+  color: #065F46;
+  font-weight: 700;
 }
 
 /* Core Buttons in Light Theme */
@@ -1119,10 +1119,12 @@
   color: #FFFFFF;
 }
 
-.dark .widget-indicator {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #34D399;
+.dark .widget-indicator,
+.dark .mobile-widget-indicator,
+.mobile-drawer-panel.site2026-theme .mobile-widget-indicator {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #34D399 !important;
 }
 
 .dark .mobile-nav-item a {
