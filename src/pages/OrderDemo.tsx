@@ -177,11 +177,11 @@ const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
   hospital: { Icon: HeartPulse, bg: "bg-rose-50 text-rose-700 border-rose-200/50 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800/80" },
   restaurant: { Icon: UtensilsCrossed, bg: "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80" },
   ac_service: { Icon: Wrench, bg: "bg-cyan-50 text-cyan-700 border-cyan-200/50 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-800/80" },
-  coffee: { Icon: Coffee, bg: "bg-amber-50 text-amber-800 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80" },
+  coffee: { Icon: Coffee, bg: "bg-amber-950/10 text-amber-900 border-amber-800/30 dark:bg-amber-950/90 dark:text-amber-200 dark:border-amber-700/60" },
   fitness: { Icon: Dumbbell, bg: "bg-purple-50 text-purple-700 border-purple-200/50 dark:bg-purple-950/80 dark:text-purple-300 dark:border-purple-800/80" },
   flight: { Icon: Plane, bg: "bg-sky-50 text-sky-700 border-sky-200/50 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-800/80" },
   ecommerce: { Icon: ShoppingBag, bg: "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80" },
-  accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80" },
+  accommodation: { Icon: BedDouble, bg: "bg-orange-50 text-orange-700 border-orange-200/60 dark:bg-orange-950/80 dark:text-orange-300 dark:border-orange-800/80" },
 };
 
 // Auto-discover any image files placed in src/assets/ (e.g. TN01.png, tn03.jpg, tn07.webp)
@@ -316,7 +316,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     displayName = t("food.title");
   } else if (house.id === -4) {
     typeLabel = t("showcase.type_accommodation");
-    typeBg = "bg-amber-50 text-amber-700 border-amber-200/50 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800/80";
+    typeBg = CATEGORY_STYLES.accommodation.bg;
     cardDescription = t("showcase.desc_accommodation");
     displayName = t("showcase.hotel_demo_name");
   } else {
@@ -519,26 +519,51 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 }
 
 const BUSINESS_TYPE_OPTIONS = [
-  { id: "all", label: "All" },
-  { id: "manufacturing", label: "Manufacturing" },
-  { id: "retail", label: "Retail" },
-  { id: "service", label: "Service" },
-  { id: "ecommerce", label: "E-commerce" },
-  { id: "realestate", label: "Real-estate" },
-  { id: "finance", label: "Finance & Investment" },
+  { id: "all", translationKey: "showcase.cat_all" as const },
+  { id: "manufacturing", translationKey: "showcase.biz_manufacturing" as const },
+  { id: "retail", translationKey: "showcase.biz_retail" as const },
+  { id: "service", translationKey: "showcase.biz_service" as const },
+  { id: "ecommerce", translationKey: "showcase.biz_ecommerce" as const },
+  { id: "realestate", translationKey: "showcase.biz_realestate" as const },
+  { id: "finance", translationKey: "showcase.biz_finance" as const },
 ];
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function OrderDemo() {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [businessTypeFilter, setBusinessTypeFilter] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<"all" | "sandbox" | "startup">("all");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  // Applied filters (control what is currently rendered in demo cards and available categories)
+  const [appliedBusinessTypeFilter, setAppliedBusinessTypeFilter] = useState<string>("all");
+  const [appliedSortBy, setAppliedSortBy] = useState<"all" | "sandbox" | "startup">("all");
+
+  // Pending filters (selected via dropdowns before pressing OK)
+  const [pendingBusinessTypeFilter, setPendingBusinessTypeFilter] = useState<string>("all");
+  const [pendingSortBy, setPendingSortBy] = useState<"all" | "sandbox" | "startup">("all");
+
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
 
-  // Dynamically compute available categories based on active demo pool (sortBy / businessTypeFilter)
+  const hasPendingChanges = pendingSortBy !== appliedSortBy || pendingBusinessTypeFilter !== appliedBusinessTypeFilter;
+
+  // Toggle multi-select categories
+  const handleCategoryToggle = (catId: string) => {
+    if (catId === "all") {
+      setSelectedCategories([]);
+      return;
+    }
+    setSelectedCategories((prev) => {
+      const clean = prev.filter((id) => id !== "all");
+      if (clean.includes(catId)) {
+        return clean.filter((id) => id !== catId);
+      } else {
+        return [...clean, catId];
+      }
+    });
+  };
+
+  // Dynamically compute available categories based on active demo pool (appliedSortBy / appliedBusinessTypeFilter)
   const availableCategories = useMemo(() => {
     const allCategories = [
       { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
@@ -556,37 +581,38 @@ export default function OrderDemo() {
     ];
 
     let pool = projectData;
-    if (sortBy === "sandbox") {
+    if (appliedSortBy === "sandbox") {
       pool = projectData.filter(h => h.code === 'SANDBOX');
-    } else if (sortBy === "startup") {
+    } else if (appliedSortBy === "startup") {
       pool = projectData.filter(h => h.code !== 'SANDBOX');
     }
 
-    if (businessTypeFilter !== "all") {
+    if (appliedBusinessTypeFilter !== "all") {
       pool = pool.filter(h => {
-        if (businessTypeFilter === "manufacturing") return h.type === "ac_service" || h.style.toLowerCase().includes("manufacturing");
-        if (businessTypeFilter === "retail") return h.type === "skincare" || h.type === "coffee" || h.type === "restaurant";
-        if (businessTypeFilter === "service") return h.type === "hospital" || h.type === "education" || h.type === "map" || h.type === "fitness" || h.type === "ac_service" || h.type === "flight";
-        if (businessTypeFilter === "ecommerce") return h.type === "ecommerce" || h.id === -2;
-        if (businessTypeFilter === "realestate") return h.type === "accommodation" || h.id === -4;
-        if (businessTypeFilter === "finance") return h.type === "map" || h.code === "TN06";
+        if (appliedBusinessTypeFilter === "manufacturing") return h.type === "ac_service" || h.style.toLowerCase().includes("manufacturing");
+        if (appliedBusinessTypeFilter === "retail") return h.type === "skincare" || h.type === "coffee" || h.type === "restaurant";
+        if (appliedBusinessTypeFilter === "service") return h.type === "hospital" || h.type === "education" || h.type === "map" || h.type === "fitness" || h.type === "ac_service" || h.type === "flight";
+        if (appliedBusinessTypeFilter === "ecommerce") return h.type === "ecommerce" || h.id === -2;
+        if (appliedBusinessTypeFilter === "realestate") return h.type === "accommodation" || h.id === -4;
+        if (appliedBusinessTypeFilter === "finance") return h.type === "map" || h.code === "TN06";
         return true;
       });
     }
 
     const presentTypes = new Set(pool.map(h => h.type));
     return allCategories.filter(cat => cat.id === "all" || presentTypes.has(cat.id as any));
-  }, [sortBy, businessTypeFilter]);
+  }, [appliedSortBy, appliedBusinessTypeFilter]);
 
-  // Reset selected category to "all" if current selection is no longer present in availableCategories
+  // Reset selected categories if current selections are no longer present in availableCategories
   useEffect(() => {
-    if (selectedCategory !== "all") {
-      const exists = availableCategories.some(cat => cat.id === selectedCategory);
-      if (!exists) {
-        setSelectedCategory("all");
+    if (selectedCategories.length > 0) {
+      const validSet = new Set(availableCategories.map((cat) => cat.id));
+      const validSelected = selectedCategories.filter((id) => id === "all" || validSet.has(id));
+      if (validSelected.length !== selectedCategories.length) {
+        setSelectedCategories(validSelected);
       }
     }
-  }, [availableCategories, selectedCategory]);
+  }, [availableCategories, selectedCategories]);
 
   // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
@@ -615,16 +641,19 @@ export default function OrderDemo() {
         overviewText.toLowerCase().includes(searchQuery.toLowerCase()) ||
         house.style.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesCategory = selectedCategory === "all" || house.type === selectedCategory;
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes("all") ||
+        selectedCategories.includes(house.type);
 
       const matchesBusinessType =
-        businessTypeFilter === "all" ||
-        (businessTypeFilter === "manufacturing" && (house.type === "ac_service" || house.style.toLowerCase().includes("manufacturing"))) ||
-        (businessTypeFilter === "retail" && (house.type === "skincare" || house.type === "coffee" || house.type === "restaurant")) ||
-        (businessTypeFilter === "service" && (house.type === "hospital" || house.type === "education" || house.type === "map" || house.type === "fitness" || house.type === "ac_service" || house.type === "flight")) ||
-        (businessTypeFilter === "ecommerce" && (house.type === "ecommerce" || house.id === -2)) ||
-        (businessTypeFilter === "realestate" && (house.type === "accommodation" || house.id === -4)) ||
-        (businessTypeFilter === "finance" && (house.type === "map" || house.code === "TN06"));
+        appliedBusinessTypeFilter === "all" ||
+        (appliedBusinessTypeFilter === "manufacturing" && (house.type === "ac_service" || house.style.toLowerCase().includes("manufacturing"))) ||
+        (appliedBusinessTypeFilter === "retail" && (house.type === "skincare" || house.type === "coffee" || house.type === "restaurant")) ||
+        (appliedBusinessTypeFilter === "service" && (house.type === "hospital" || house.type === "education" || house.type === "map" || house.type === "fitness" || house.type === "ac_service" || house.type === "flight")) ||
+        (appliedBusinessTypeFilter === "ecommerce" && (house.type === "ecommerce" || house.id === -2)) ||
+        (appliedBusinessTypeFilter === "realestate" && (house.type === "accommodation" || house.id === -4)) ||
+        (appliedBusinessTypeFilter === "finance" && (house.type === "map" || house.code === "TN06"));
 
       return matchesSearch && matchesCategory && matchesBusinessType;
     });
@@ -632,10 +661,10 @@ export default function OrderDemo() {
     let sandboxes = allFiltered.filter(h => h.code === 'SANDBOX');
     let projects = allFiltered.filter(h => h.code !== 'SANDBOX');
 
-    // Filter by SortBy selection (Sandbox Demo vs StartUP Demo)
-    if (sortBy === "sandbox") {
+    // Filter by appliedSortBy selection (Sandbox Demo vs StartUP Demo)
+    if (appliedSortBy === "sandbox") {
       projects = [];
-    } else if (sortBy === "startup") {
+    } else if (appliedSortBy === "startup") {
       sandboxes = [];
     } else {
       projects.sort((a, b) => a.id - b.id);
@@ -645,9 +674,10 @@ export default function OrderDemo() {
       sandboxDemos: sandboxes,
       projectDemos: projects,
     };
-  }, [searchQuery, selectedCategory, businessTypeFilter, sortBy, t]);
+  }, [searchQuery, selectedCategories, appliedBusinessTypeFilter, appliedSortBy, t]);
 
   const totalResults = sandboxDemos.length + projectDemos.length;
+  const isAllCategoryActive = selectedCategories.length === 0 || selectedCategories.includes("all");
 
   return (
     <div
@@ -706,7 +736,7 @@ export default function OrderDemo() {
                     {t('showcase.sort_heading')}:
                   </span>
                   <span className="font-extrabold text-foreground">
-                    {sortBy === "sandbox" ? "Sandbox Demo" : sortBy === "startup" ? "StartUP Demo" : t('showcase.cat_all')}
+                    {pendingSortBy === "sandbox" ? t('showcase.sort_sandbox' as TranslationKey) : pendingSortBy === "startup" ? t('showcase.sort_startup' as TranslationKey) : t('showcase.cat_all')}
                   </span>
                   <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isSortOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
@@ -723,16 +753,16 @@ export default function OrderDemo() {
                     >
                       {[
                         { id: "all", label: t('showcase.cat_all') },
-                        { id: "sandbox", label: "Sandbox Demo" },
-                        { id: "startup", label: "StartUP Demo" },
+                        { id: "sandbox", label: t('showcase.sort_sandbox' as TranslationKey) },
+                        { id: "startup", label: t('showcase.sort_startup' as TranslationKey) },
                       ].map((opt) => {
-                        const isSelected = sortBy === opt.id;
+                        const isSelected = pendingSortBy === opt.id;
                         return (
                           <button
                             key={opt.id}
                             type="button"
                             onClick={() => {
-                              setSortBy(opt.id as any);
+                              setPendingSortBy(opt.id as any);
                               setIsSortOpen(false);
                             }}
                             className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
@@ -763,10 +793,13 @@ export default function OrderDemo() {
                 >
                   <Building2 className="size-3.5 text-primary shrink-0" />
                   <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                    BUSINESS TYPE:
+                    {t('showcase.business_type' as TranslationKey)}:
                   </span>
                   <span className="font-extrabold text-foreground">
-                    {BUSINESS_TYPE_OPTIONS.find(o => o.id === businessTypeFilter)?.label || "All"}
+                    {(() => {
+                      const opt = BUSINESS_TYPE_OPTIONS.find(o => o.id === pendingBusinessTypeFilter);
+                      return opt ? t(opt.translationKey as TranslationKey) : t('showcase.cat_all');
+                    })()}
                   </span>
                   <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isStatusOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
@@ -782,13 +815,13 @@ export default function OrderDemo() {
                       className="absolute top-full left-0 mt-2 w-56 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
                     >
                       {BUSINESS_TYPE_OPTIONS.map((opt) => {
-                        const isSelected = businessTypeFilter === opt.id;
+                        const isSelected = pendingBusinessTypeFilter === opt.id;
                         return (
                           <button
                             key={opt.id}
                             type="button"
                             onClick={() => {
-                              setBusinessTypeFilter(opt.id);
+                              setPendingBusinessTypeFilter(opt.id);
                               setIsStatusOpen(false);
                             }}
                             className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
@@ -797,7 +830,7 @@ export default function OrderDemo() {
                                 : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
                             }`}
                           >
-                            <span>{opt.label}</span>
+                            <span>{t(opt.translationKey as TranslationKey)}</span>
                             {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
                           </button>
                         );
@@ -810,7 +843,13 @@ export default function OrderDemo() {
               {/* OK Button */}
               <button
                 type="button"
-                className="h-10 px-8 bg-primary hover:bg-primary/95 text-primary-foreground border border-primary/80 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
+                onClick={() => {
+                  setAppliedSortBy(pendingSortBy);
+                  setAppliedBusinessTypeFilter(pendingBusinessTypeFilter);
+                }}
+                className={`h-10 px-8 bg-primary hover:bg-primary/95 text-primary-foreground border border-primary/80 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0 ${
+                  hasPendingChanges ? "ring-2 ring-primary ring-offset-2 animate-pulse" : ""
+                }`}
               >
                 OK
               </button>
@@ -820,15 +859,17 @@ export default function OrderDemo() {
                 type="button"
                 onClick={() => {
                   setSearchQuery("");
-                  setSelectedCategory("all");
-                  setBusinessTypeFilter("all");
-                  setSortBy("all");
+                  setSelectedCategories([]);
+                  setPendingBusinessTypeFilter("all");
+                  setAppliedBusinessTypeFilter("all");
+                  setPendingSortBy("all");
+                  setAppliedSortBy("all");
                 }}
                 title="Clear all filters"
                 className="h-10 px-3.5 bg-muted/40 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 rounded-2xl text-xs font-bold text-foreground/80 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
               >
                 <RotateCcw className="size-3.5 shrink-0" />
-                <span>Clear</span>
+                <span>{t('showcase.clear_all' as TranslationKey)}</span>
               </button>
             </div>
           </div>
@@ -841,28 +882,21 @@ export default function OrderDemo() {
             <div className="flex items-center justify-between gap-2">
               <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest font-mono flex items-center gap-1.5">
                 <SlidersHorizontal className="size-3.5 text-primary" />
-                PROJECT CATEGORY
+                {t('showcase.project_category' as TranslationKey)}
               </span>
-              {selectedCategory !== "all" && (
-                <button
-                  onClick={() => setSelectedCategory("all")}
-                  className="text-[10.5px] font-bold text-primary hover:underline cursor-pointer font-mono"
-                >
-                  Show All
-                </button>
-              )}
             </div>
 
             <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2.5 pt-0.5 min-w-0 flex-1 scroll-smooth select-none theme-filter-scrollbar">
               {availableCategories.map((cat) => {
-                const isActive = selectedCategory === cat.id;
+                const isActive = cat.id === "all" ? isAllCategoryActive : selectedCategories.includes(cat.id);
                 const Icon = cat.icon;
                 const label = t(cat.translationKey as TranslationKey);
                 const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
                 return (
                   <button
                     key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
+                    type="button"
+                    onClick={() => handleCategoryToggle(cat.id)}
                     className={`h-9 px-3.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
                       isActive
                         ? `${colorConfig.active} scale-[1.02]`
@@ -871,6 +905,9 @@ export default function OrderDemo() {
                   >
                     <Icon className="size-3.5 shrink-0" />
                     <span>{label}</span>
+                    {isActive && cat.id !== "all" && (
+                      <span className="size-1.5 rounded-full bg-primary shrink-0 ml-0.5" />
+                    )}
                   </button>
                 );
               })}

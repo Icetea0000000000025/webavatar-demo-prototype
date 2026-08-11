@@ -86,7 +86,7 @@ export default function Home() {
             <button className="btn btn-primary" onClick={() => handleScrollTo('demo-showcase')} id="btn-explore-demos">
               {t('home.btn_explore')}
             </button>
-            <button className="btn btn-glass" onClick={() => handleScrollTo('avatar-tech-details')} id="btn-view-tech">
+            <button className="btn btn-glass" onClick={() => handleScrollTo('tech-architecture')} id="btn-view-tech">
               {t('home.btn_tech')}
             </button>
           </AnimatedSection>
@@ -107,17 +107,9 @@ export default function Home() {
                   <h3 style={{ color: 'var(--card-foreground)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>
                     {t('home.mockup_title')}
                   </h3>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--muted-foreground)', marginBottom: '1.5rem', lineHeight: '1.65' }}>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--muted-foreground)', lineHeight: '1.65' }}>
                     {t('home.mockup_desc')}
                   </p>
-                </div>
-                <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
-                  <Link className="btn btn-primary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} to="/contact" id="mockup-cta">
-                    {t('home.btn_request_live')}
-                  </Link>
-                  <button className="btn btn-secondary" style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }} onClick={() => handleScrollTo('demo-showcase')} id="mockup-pricing">
-                    {t('home.btn_launch_usecases')}
-                  </button>
                 </div>
               </div>
               <div className="avatar-preview-box">
@@ -326,12 +318,9 @@ export default function Home() {
               <div>
                 <h2 style={{ color: 'var(--primary)', marginBottom: '1rem', letterSpacing: '-0.02em' }}>{t('home.tech_title')}</h2>
                 <h3 style={{ fontSize: '1.35rem', color: 'var(--foreground)', marginBottom: '1.25rem', fontWeight: 700 }}>{t('home.tech_subtitle')}</h3>
-                <p style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', lineHeight: 1.7, marginBottom: '2rem' }}>
+                <p style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', lineHeight: 1.7 }}>
                   {t('home.tech_desc')}
                 </p>
-                <Link className="btn btn-primary" to="/contact" id="avatar-contact-cta" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                  {t('home.tech_cta')}
-                </Link>
               </div>
 
               <motion.div
