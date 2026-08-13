@@ -14,8 +14,8 @@ export const PersistentBackground: React.FC = () => {
 
   useEffect(() => {
     const checkDevice = () => {
-      const mobileOrTablet = window.innerWidth < 1024 || /Mobi|Android|iPhone|iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document;
-      setIsMobileOrTablet(mobileOrTablet);
+      const isSmallMobile = window.innerWidth < 640;
+      setIsMobileOrTablet(isSmallMobile);
     };
     checkDevice();
     window.addEventListener('resize', checkDevice);
