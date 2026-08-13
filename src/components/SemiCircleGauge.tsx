@@ -49,7 +49,11 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
   }, [isInView, targetRatio]);
 
   return (
-    <div ref={containerRef} className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default">
+    <div
+      ref={containerRef}
+      className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default bg-transparent border-0 shadow-none transition-all duration-300 hover:-translate-y-1"
+    >
+
       {/* Background Soft Radial Glow */}
       <div
         className="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full blur-3xl pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity"

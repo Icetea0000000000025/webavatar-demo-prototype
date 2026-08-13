@@ -40,12 +40,12 @@ export default function FlightAdmin() {
     <div className="flight-theme min-h-screen bg-background text-foreground pb-20">
       <Toaster position="top-center" richColors />
       
-      <header className="bg-slate-900 text-white shadow-md relative z-10">
+      <header className="bg-white/90 dark:bg-slate-900/90 border-b border-border/80 text-foreground shadow-sm relative z-10">
         <div className="mx-auto max-w-7xl px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <span className="text-lg font-black tracking-tight">{t('flight_admin.header')}</span>
           </div>
-          <Link to="/flight-demo" className="text-xs font-bold opacity-80 hover:opacity-100 transition-opacity hover:underline">
+          <Link to="/flight-demo" className="text-xs font-bold text-sky-600 dark:text-sky-400 opacity-90 hover:opacity-100 transition-opacity hover:underline">
             {t('nav.back_to_main')}
           </Link>
         </div>
@@ -54,8 +54,8 @@ export default function FlightAdmin() {
       <main className="mx-auto max-w-7xl px-6 py-10 relative z-10 text-left">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">{t('flight_admin.title')}</h1>
-            <p className="text-slate-500 text-xs mt-1 font-semibold">
+            <h1 className="text-2xl font-extrabold text-foreground tracking-tight">{t('flight_admin.title')}</h1>
+            <p className="text-muted-foreground text-xs mt-1 font-semibold">
               {t('flight_admin.records_count').replace('{count}', String(items.length))}
             </p>
           </div>

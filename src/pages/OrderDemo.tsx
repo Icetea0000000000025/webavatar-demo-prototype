@@ -392,18 +392,33 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
       }}
       whileHover={{ y: -6, scale: 1.02, rotate: house.id % 2 === 0 ? 0.8 : -0.8 }}
     >
-      {/* Top Demo Image Thumbnail Preview Box */}
+      {/* Top Demo Image Thumbnail Preview Box with Image-Only Hover Overlay */}
       <div className="relative w-full h-36 sm:h-40 overflow-hidden bg-slate-900 border-b border-border/60">
         <img
           src={previewImg}
           alt={displayName}
-          className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
           loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80&auto=format&fit=crop";
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-card via-card/15 to-black/35 pointer-events-none" />
+
+        {/* Hover Overlay Layer (Restricted ONLY to Image Preview Area) */}
+        <div className="absolute inset-0 z-20 bg-sky-600/45 dark:bg-sky-500/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none p-3 text-center">
+          {hasDeployed ? (
+            <div className="px-3.5 py-1.5 rounded-xl bg-white text-sky-950 dark:bg-slate-900 dark:text-sky-300 font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5 shadow-xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              <span>{t('showcase.launch_demo')}</span>
+              <ExternalLink className="size-3.5 shrink-0" />
+            </div>
+          ) : (
+            <div className="px-3 py-1.5 rounded-xl bg-black/60 backdrop-blur-md border border-white/25 text-white text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1.5 shadow-lg">
+              <Clock className="size-3.5 shrink-0" />
+              <span>{t('showcase.status_pending')}</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Top Accent Strip below image */}
@@ -467,34 +482,6 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Full Card Blue Hover Overlay Layer (Swapped: Large Title on Top, Compact Button Below) */}
-      <div className="absolute inset-0 z-30 bg-sky-500/40 dark:bg-sky-600/30 backdrop-blur-xs flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none rounded-[24px] p-6 text-center shadow-2xl">
-        {hasDeployed ? (
-          <>
-            {/* 1. Large Bold Demo Title on Top */}
-            <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2 max-w-[90%] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-              {displayName}
-            </h3>
-
-            {/* 2. Smaller Compact Launch Demo Button Below */}
-            <div className="px-3 py-1.5 rounded-xl bg-white/25 backdrop-blur-md border border-white/40 text-white text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1.5 shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 delay-75">
-              <span>{t('showcase.launch_demo')}</span>
-              <ExternalLink className="size-3.5 shrink-0" />
-            </div>
-          </>
-        ) : (
-          <>
-            <h3 className="text-base sm:text-lg font-black text-white tracking-tight leading-snug drop-shadow-md line-clamp-2 max-w-[90%] transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-              {displayName}
-            </h3>
-            <div className="px-3 py-1.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/25 text-white/90 text-[11px] font-extrabold tracking-wider uppercase flex items-center gap-1.5">
-              <Clock className="size-3.5 shrink-0" />
-              <span>{t('showcase.status_pending')}</span>
-            </div>
-          </>
-        )}
       </div>
     </motion.article>
   );
@@ -633,13 +620,59 @@ export default function OrderDemo() {
       }
 
       const teamText = Array.isArray(house.teamName) ? house.teamName.join(' ') : (house.teamName || '');
+      const houseCode = (house.code || '').toLowerCase();
+      const houseName = (house.name || '').toLowerCase();
+      const houseType = (house.type || '').toLowerCase();
+      const houseStyle = (house.style || '').toLowerCase();
+      const teamString = teamText.toLowerCase();
+      const overviewString = (overviewText || '').toLowerCase();
+
+      const query = searchQuery.trim().toLowerCase();
+
+      // Tag & Keyword Aliases Dictionary (Thai & English)
+      const tagAliases: Record<string, string[]> = {
+        flight: ['flight', 'air', 'เครื่องบิน', 'ตั๋ว', 'สายการบิน', 'การบิน', 'จองตั๋ว', 'botnoi air', 'บิน', 'การเดินทาง'],
+        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'กิน', 'โภชนาการ', 'บอทน้อย'],
+        accommodation: ['hotel', 'resort', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก', 'บ้าน', 'ที่อยู่อาศัย'],
+        ecommerce: ['it', 'store', 'shop', 'ecommerce', 'อีคอมเมิร์ซ', 'ร้านค้า', 'ขายของ', 'สินค้า', 'ไอที', 'ช้อป', 'ออนไลน์'],
+        education: ['education', 'learn', 'การศึกษา', 'เรียน', 'โรงเรียน', 'ความรู้', 'ติว', 'สอบ', 'มหาวิทยาลัย'],
+        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'คลินิก'],
+        hospital: ['hospital', 'health', 'หมอ', 'โรงพยาบาล', 'คลินิก', 'สุขภาพ', 'แพทย์', 'พยาบาล', 'รักษา', 'ยา'],
+        map: ['map', 'trip', 'แผนที่', 'ท่องเที่ยว', 'วางแผน', 'นำทาง', 'พิกัด', 'เที่ยว'],
+        ac_service: ['ac', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'เครื่องปรับอากาศ'],
+        coffee: ['coffee', 'cafe', 'กาแฟ', 'คาเฟ่', 'เครื่องดื่ม', 'ชา', 'ร้านกาแฟ'],
+        fitness: ['fitness', 'gym', 'ฟิตเนส', 'ยิม', 'ออกกำลังกาย', 'กล้าม', 'สุขภาพ', 'ออกกำลัง'],
+      };
+
+      const categoryKeyMap: Record<string, string> = {
+        flight: 'showcase.cat_flight',
+        restaurant: 'showcase.cat_restaurant',
+        accommodation: 'showcase.cat_accommodation',
+        ecommerce: 'showcase.cat_ecommerce',
+        education: 'showcase.cat_education',
+        skincare: 'showcase.cat_skincare',
+        hospital: 'showcase.cat_hospital',
+        map: 'showcase.cat_map',
+        ac_service: 'showcase.cat_ac_service',
+        coffee: 'showcase.cat_coffee',
+        fitness: 'showcase.cat_fitness',
+      };
+
+      // Check if house matched query
+      const catTranslation = categoryKeyMap[house.type] ? t(categoryKeyMap[house.type] as any).toLowerCase() : '';
+      const aliases = tagAliases[house.type] || [];
+      const matchesTagAlias = aliases.some(alias => alias.includes(query) || query.includes(alias));
 
       const matchesSearch =
-        house.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        house.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        teamText.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        overviewText.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        house.style.toLowerCase().includes(searchQuery.toLowerCase());
+        !query ||
+        houseCode.includes(query) ||
+        houseName.includes(query) ||
+        houseType.includes(query) ||
+        teamString.includes(query) ||
+        overviewString.includes(query) ||
+        houseStyle.includes(query) ||
+        catTranslation.includes(query) ||
+        matchesTagAlias;
 
       const matchesCategory =
         selectedCategories.length === 0 ||
@@ -847,8 +880,10 @@ export default function OrderDemo() {
                   setAppliedSortBy(pendingSortBy);
                   setAppliedBusinessTypeFilter(pendingBusinessTypeFilter);
                 }}
-                className={`h-10 px-8 bg-primary hover:bg-primary/95 text-primary-foreground border border-primary/80 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0 ${
-                  hasPendingChanges ? "ring-2 ring-primary ring-offset-2 animate-pulse" : ""
+                className={`h-10 px-6 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 active:scale-95 ${
+                  hasPendingChanges
+                    ? "bg-primary text-primary-foreground border border-primary/90 shadow-md shadow-primary/30"
+                    : "bg-muted/40 hover:bg-muted text-muted-foreground border border-border/80"
                 }`}
               >
                 OK
@@ -905,9 +940,6 @@ export default function OrderDemo() {
                   >
                     <Icon className="size-3.5 shrink-0" />
                     <span>{label}</span>
-                    {isActive && cat.id !== "all" && (
-                      <span className="size-1.5 rounded-full bg-primary shrink-0 ml-0.5" />
-                    )}
                   </button>
                 );
               })}
