@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   Users, Mic, Globe, Laptop,
-  Building2, FileText, Layers, ArrowRight, ExternalLink,
+  Building2, FileText, Layers, ArrowRight,
   ChevronDown, Plus
 } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
