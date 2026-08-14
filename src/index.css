@@ -39,8 +39,8 @@
   --color-cta-foreground: var(--cta-foreground);
   --color-success: var(--success);
 
-  --font-sans: "Noto Sans", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Noto Sans", "Noto Sans Thai", sans-serif;
+  --font-sans: "Noto Sans Thai", "Noto Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Noto Sans Thai", "Noto Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
 
 }
@@ -50,8 +50,8 @@
    Linear & Stripe caliber
    ═══════════════════════════════════════ */
 :root {
-  --font-sans: "Noto Sans", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Noto Sans", "Noto Sans Thai", sans-serif;
+  --font-sans: "Noto Sans Thai", "Noto Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Noto Sans Thai", "Noto Sans", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
   font-size: 100%;
   /* Scales all rem font-sizes and spacings globally. Adjust this percentage to scale up/down. */
@@ -204,6 +204,37 @@
   samp,
   .font-mono {
     font-family: var(--font-mono) !important;
+  }
+
+  /* Fix Thai typography & prevent wide tracking from breaking Thai character spacing */
+  :lang(th),
+  [lang="th"] {
+    font-family: var(--font-sans);
+  }
+
+  :lang(th) p,
+  :lang(th) span,
+  :lang(th) h1,
+  :lang(th) h2,
+  :lang(th) h3,
+  :lang(th) h4,
+  :lang(th) h5,
+  :lang(th) h6,
+  :lang(th) a,
+  :lang(th) button,
+  :lang(th) div,
+  [lang="th"] p,
+  [lang="th"] span,
+  [lang="th"] h1,
+  [lang="th"] h2,
+  [lang="th"] h3,
+  [lang="th"] h4,
+  [lang="th"] h5,
+  [lang="th"] h6,
+  [lang="th"] a,
+  [lang="th"] button,
+  [lang="th"] div {
+    letter-spacing: normal;
   }
 
   h1,

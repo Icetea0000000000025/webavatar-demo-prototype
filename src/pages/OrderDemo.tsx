@@ -102,7 +102,7 @@ const projectData: HouseItem[] = [
   { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
   //{ id: 13, code: 'TN13', name: '', teamName: 'Team 13', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 14, code: 'TN14', name: 'BrewAI', teamName: 'The-dungeon-masters', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
-  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'map', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'skincare', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
   { id: 16, code: 'TN16', name: 'Fitder', teamName: 'Blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
   { id: 17, code: 'TN17', name: 'AI Commerce Agent', teamName: 'Midnight-raiders', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
   //{ id: 18, code: 'TN18', name: '18-indie-mountain-kids', teamName: 'Team 18', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
@@ -135,13 +135,34 @@ const TN_CUSTOM_DESC_KEYS: Record<string, string> = {
   TN19: 'showcase.desc_tn19',
 };
 
+const TN_NAME_KEYS: Record<string, string> = {
+  TN01: 'showcase.name_tn01',
+  TN03: 'showcase.name_tn03',
+  TN04: 'showcase.name_tn04',
+  TN05: 'showcase.name_tn05',
+  TN06: 'showcase.name_tn06',
+  TN07: 'showcase.name_tn07',
+  TN08: 'showcase.name_tn08',
+  TN09: 'showcase.name_tn09',
+  TN10: 'showcase.name_tn10',
+  TN11: 'showcase.name_tn11',
+  TN12: 'showcase.name_tn12',
+  TN14: 'showcase.name_tn14',
+  TN15: 'showcase.name_tn15',
+  TN16: 'showcase.name_tn16',
+  TN17: 'showcase.name_tn17',
+  TN19: 'showcase.name_tn19',
+};
+
 const TN_TYPE_KEYS: Record<string, string> = {
   TN01: 'showcase.type_tn01',
   TN03: 'showcase.type_tn03',
   TN04: 'showcase.type_tn04',
   TN05: 'showcase.type_tn05',
   TN06: 'showcase.type_tn06',
+  TN07: 'showcase.type_tn07',
   TN08: 'showcase.type_tn08',
+  TN09: 'showcase.type_tn09',
   TN10: 'showcase.type_tn10',
   TN11: 'showcase.type_tn11',
   TN12: 'showcase.type_tn12',
@@ -151,6 +172,15 @@ const TN_TYPE_KEYS: Record<string, string> = {
   TN17: 'showcase.type_tn17',
   TN19: 'showcase.type_tn19',
 };
+
+function getTNNameKey(code: string): string | undefined {
+  if (TN_NAME_KEYS[code]) return TN_NAME_KEYS[code];
+  const codes = code.split(/[\s,]+/);
+  for (const c of codes) {
+    if (TN_NAME_KEYS[c]) return TN_NAME_KEYS[c];
+  }
+  return undefined;
+}
 
 function getTNCustomDescKey(code: string): string | undefined {
   if (TN_CUSTOM_DESC_KEYS[code]) return TN_CUSTOM_DESC_KEYS[code];
@@ -320,6 +350,10 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
     cardDescription = t("showcase.desc_accommodation");
     displayName = t("showcase.hotel_demo_name");
   } else {
+    const nameKey = getTNNameKey(house.code);
+    if (nameKey) {
+      displayName = t(nameKey as any);
+    }
     const customDescKey = getTNCustomDescKey(house.code);
     if (customDescKey) {
       cardDescription = t(customDescKey as any);
@@ -457,7 +491,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
           <div className="flex items-center gap-2 mt-4 pt-1 flex-wrap">
             {/* Code Badge (SANDBOX / StartUP) */}
             <span className="text-[10px] font-black text-foreground font-mono bg-muted/80 dark:bg-slate-800/90 px-2 py-0.5 rounded-md border border-border/70 shadow-2xs">
-              {house.code.startsWith("TN") ? "StartUP" : house.code}
+              {house.code.startsWith("TN") ? t("showcase.startup_badge" as any) : house.code}
             </span>
 
             {/* Category Type Tag (Text-only) */}
