@@ -170,15 +170,40 @@
     box-sizing: border-box;
   }
 
+  html,
   body {
-    background-color: var(--background);
-    color: var(--foreground);
     font-family: var(--font-sans);
     font-feature-settings: "kern";
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  a,
+  div,
+  p,
+  span,
+  label {
+    font-family: var(--font-sans);
+  }
+
+  code,
+  pre,
+  kbd,
+  samp,
+  .font-mono {
+    font-family: var(--font-mono) !important;
   }
 
   h1,
@@ -220,15 +245,10 @@
     color: var(--primary);
     text-decoration: none;
     transition: var(--transition-fast);
-    font-family: var(--font-sans);
   }
 
   a:hover {
     color: var(--cta);
-  }
-
-  div {
-    font-family: var(--font-sans);
   }
 
   /* Focus States for Web Interface Guidelines */

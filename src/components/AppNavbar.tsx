@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from '../lib/LanguageContext';
 import { useTheme } from '../lib/ThemeContext';
 import ThemeToggle from './ThemeToggle';
@@ -85,36 +85,10 @@ export default function AppNavbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Sticky navbar animation on scroll
-  const { scrollY } = useScroll();
+  // Navbar background
   const isSitePage = location.pathname === '/nia-site-2026';
-  const lightBg = useTransform(scrollY, [0, 50], [
-    'rgba(250, 251, 252, 0.55)',
-    'rgba(250, 251, 252, 0.88)'
-  ]);
-  const darkNavBg = useTransform(scrollY, [0, 50], [
-    'rgba(17, 24, 39, 0.75)',
-    'rgba(17, 24, 39, 0.92)'
-  ]);
-  const darkBg = useTransform(scrollY, [0, 50], [
-    'rgba(12, 10, 9, 0.55)',
-    'rgba(12, 10, 9, 0.85)'
-  ]);
-  const navbarBg = isSitePage ? darkBg : (isDark ? darkNavBg : lightBg);
-
-  const lightBorder = useTransform(scrollY, [0, 50], [
-    'rgba(228, 228, 231, 0.25)',
-    'rgba(228, 228, 231, 0.55)'
-  ]);
-  const darkNavBorder = useTransform(scrollY, [0, 50], [
-    'rgba(255, 255, 255, 0.08)',
-    'rgba(255, 255, 255, 0.18)'
-  ]);
-  const darkBorder = useTransform(scrollY, [0, 50], [
-    'rgba(239, 68, 68, 0.12)',
-    'rgba(239, 68, 68, 0.35)'
-  ]);
-  const navbarBorder = isSitePage ? darkBorder : (isDark ? darkNavBorder : lightBorder);
+  const navbarBg = 'transparent';
+  const navbarBorder = 'transparent';
 
   // Animation variants
   const logoVariants = {

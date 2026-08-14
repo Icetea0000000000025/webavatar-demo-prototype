@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   Users, Mic, Globe, Laptop,
   Building2, FileText, Layers, ArrowRight,
-  ChevronDown, Plus
+  ChevronDown
 } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AppFooter from '../components/AppFooter';
@@ -217,58 +217,89 @@ export default function Home() {
 
         <div className="home-section-container relative z-10">
           <div className="home-stats-grid">
-            <SemiCircleGauge
-              value={5000}
-              suffix="+"
-              percentage={92}
-              label={t('home.stats_clients')}
-              icon={<Users className="size-5" />}
-              gradientId="gauge-clients"
-              colorStart="#0284c7"
-              colorEnd="#6366f1"
-              badgeBg="bg-sky-50 dark:bg-sky-950/60"
-              badgeText="text-sky-600 dark:text-sky-400"
-              badgeBorder="border border-sky-200/80 dark:border-sky-800/80"
-            />
-            <SemiCircleGauge
-              value={100}
-              suffix="+"
-              percentage={85}
-              label={t('home.stats_voices')}
-              icon={<Mic className="size-5" />}
-              gradientId="gauge-voices"
-              colorStart="#10b981"
-              colorEnd="#06b6d4"
-              badgeBg="bg-emerald-50 dark:bg-emerald-950/60"
-              badgeText="text-emerald-600 dark:text-emerald-400"
-              badgeBorder="border border-emerald-200/80 dark:border-emerald-800/80"
-            />
-            <SemiCircleGauge
-              value={10}
-              suffix="+"
-              percentage={95}
-              label={t('home.stats_languages')}
-              icon={<Globe className="size-5" />}
-              gradientId="gauge-languages"
-              colorStart="#8b5cf6"
-              colorEnd="#d946ef"
-              badgeBg="bg-purple-50 dark:bg-purple-950/60"
-              badgeText="text-purple-600 dark:text-purple-400"
-              badgeBorder="border border-purple-200/80 dark:border-purple-800/80"
-            />
-            <SemiCircleGauge
-              value={20}
-              suffix="+"
-              percentage={90}
-              label="Demo Projects"
-              icon={<Layers className="size-5" />}
-              gradientId="gauge-projects"
-              colorStart="#06b6d4"
-              colorEnd="#8b5cf6"
-              badgeBg="bg-teal-50 dark:bg-teal-950/60"
-              badgeText="text-teal-600 dark:text-teal-400"
-              badgeBorder="border border-teal-200/80 dark:border-teal-800/80"
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SemiCircleGauge
+                value={5000}
+                suffix="+"
+                percentage={92}
+                label={t('home.stats_clients')}
+                icon={<Users className="size-5" />}
+                gradientId="gauge-clients"
+                colorStart="#0284c7"
+                colorEnd="#6366f1"
+                badgeBg="bg-sky-50 dark:bg-sky-950/60"
+                badgeText="text-sky-600 dark:text-sky-400"
+                badgeBorder="border border-sky-200/80 dark:border-sky-800/80"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SemiCircleGauge
+                value={100}
+                suffix="+"
+                percentage={85}
+                label={t('home.stats_voices')}
+                icon={<Mic className="size-5" />}
+                gradientId="gauge-voices"
+                colorStart="#10b981"
+                colorEnd="#06b6d4"
+                badgeBg="bg-emerald-50 dark:bg-emerald-950/60"
+                badgeText="text-emerald-600 dark:text-emerald-400"
+                badgeBorder="border border-emerald-200/80 dark:border-emerald-800/80"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: 0.31, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SemiCircleGauge
+                value={10}
+                suffix="+"
+                percentage={95}
+                label={t('home.stats_languages')}
+                icon={<Globe className="size-5" />}
+                gradientId="gauge-languages"
+                colorStart="#8b5cf6"
+                colorEnd="#d946ef"
+                badgeBg="bg-purple-50 dark:bg-purple-950/60"
+                badgeText="text-purple-600 dark:text-purple-400"
+                badgeBorder="border border-purple-200/80 dark:border-purple-800/80"
+              />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 35, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.7, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <SemiCircleGauge
+                value={20}
+                suffix="+"
+                percentage={90}
+                label="Demo Projects"
+                icon={<Layers className="size-5" />}
+                gradientId="gauge-projects"
+                colorStart="#06b6d4"
+                colorEnd="#8b5cf6"
+                badgeBg="bg-teal-50 dark:bg-teal-950/60"
+                badgeText="text-teal-600 dark:text-teal-400"
+                badgeBorder="border border-teal-200/80 dark:border-teal-800/80"
+              />
+            </motion.div>
           </div>
         </div>
       </section>
@@ -318,11 +349,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <Link to="/flight-demo" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-flight-demo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_flight_title')}>
                     <div className="bento-icon-box bento-icon-air">
                       <img src={botnoiAirLogo} alt="Botnoi Air" className="w-full h-full object-contain p-1" />
                     </div>
-                    <h3>{t('home.card_flight_title')}</h3>
+                    <h3 title={t('home.card_flight_title')}>{t('home.card_flight_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -333,7 +364,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['flight'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['flight'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['flight'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -374,11 +405,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <Link to="/food-demo" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-food-demo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_food_title')}>
                     <div className="bento-icon-box bento-icon-restaurant">
                       <img src={botnoiRestaurantLogo} alt="Botnoi Restaurant" className="w-full h-full object-contain p-1" />
                     </div>
-                    <h3>{t('home.card_food_title')}</h3>
+                    <h3 title={t('home.card_food_title')}>{t('home.card_food_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -389,7 +420,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['food'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['food'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['food'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -430,11 +461,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <Link to="/it-store-demo" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-itstore-demo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_itstore_title')}>
                     <div className="bento-icon-box bento-icon-air">
                       <Laptop className="size-6" />
                     </div>
-                    <h3>{t('home.card_itstore_title')}</h3>
+                    <h3 title={t('home.card_itstore_title')}>{t('home.card_itstore_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -445,7 +476,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['itstore'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['itstore'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['itstore'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -486,11 +517,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <a href="https://botnoi-hotel-two.vercel.app/" target="_blank" rel="noopener noreferrer" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-hotel-demo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_hotel_title')}>
                     <div className="bento-icon-box bento-icon-air">
                       <Building2 className="size-6" />
                     </div>
-                    <h3>{t('home.card_hotel_title')}</h3>
+                    <h3 title={t('home.card_hotel_title')}>{t('home.card_hotel_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -501,7 +532,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['hotel'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['hotel'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['hotel'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -542,11 +573,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <Link to="/contact" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-contact-demo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_contact_title')}>
                     <div className="bento-icon-box bento-icon-air">
                       <FileText className="size-6" />
                     </div>
-                    <h3>{t('home.card_contact_title')}</h3>
+                    <h3 title={t('home.card_contact_title')}>{t('home.card_contact_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -557,7 +588,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['contact'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['contact'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['contact'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 
@@ -598,11 +629,11 @@ export default function Home() {
               <span className="card-liquid-bg" />
               <Link to="/all-demo" className="block h-full w-full p-6 text-left no-underline text-inherit relative z-10" id="link-alldemo">
                 <div className="bento-card-header">
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-3 min-w-0 flex-1" title={t('home.card_alldemo_title')}>
                     <div className="bento-icon-box bento-icon-air">
                       <Layers className="size-6" />
                     </div>
-                    <h3>{t('home.card_alldemo_title')}</h3>
+                    <h3 title={t('home.card_alldemo_title')}>{t('home.card_alldemo_title')}</h3>
                   </div>
 
                   {/* Plus (+) Action Button Aligned Vertically with Title */}
@@ -613,7 +644,7 @@ export default function Home() {
                     tabIndex={0}
                     title={expandedCards['alldemo'] ? 'Hide Details' : 'Show Details'}
                   >
-                    <Plus className={`size-4 transition-transform duration-300 ${expandedCards['alldemo'] ? 'rotate-45 text-sky-500 font-bold' : 'group-hover:rotate-90'}`} />
+                    <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['alldemo'] ? 'rotate-180' : ''}`} />
                   </div>
                 </div>
 

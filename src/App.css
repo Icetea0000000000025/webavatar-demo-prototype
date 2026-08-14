@@ -9,9 +9,9 @@
   isolation: isolate;
 }
 
-/* Glassmorphic Premium Navbar (Floating Card) */
+/* Transparent Navbar (Floating sans-card) */
 .navbar {
-  position: fixed;
+  position: absolute;
   top: 1rem;
   left: 50%;
   transform: translateX(-50%) translate3d(0, 0, 0);
@@ -22,19 +22,15 @@
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   padding: 0.85rem 2.5rem;
-  background: rgba(250, 251, 252, 0.75);
-  backdrop-filter: blur(20px) saturate(190%);
-  -webkit-backdrop-filter: blur(20px) saturate(190%);
-  border: 1px solid rgba(228, 228, 231, 0.4);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
   border-radius: 20px;
-  box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.02);
+  box-shadow: none !important;
   transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
               top 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-              width 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-              border-radius 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-              background-color 0.3s ease, 
-              border-color 0.3s ease, 
-              box-shadow 0.3s ease;
+              width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   min-width: 0;
@@ -46,7 +42,9 @@
   width: calc(100% - 1.5rem);
   padding: 0.65rem 2rem;
   border-radius: 16px;
-  box-shadow: 0 12px 35px -8px rgba(99, 102, 241, 0.12), 0 2px 5px 0 rgba(0, 0, 0, 0.03);
+  box-shadow: none !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 .navbar.sandbox-navbar {
@@ -1093,9 +1091,9 @@
    DARK MODE NAVBAR & HEADER HIGH CONTRAST
    ═══════════════════════════════════════ */
 .dark .navbar {
-  background: rgba(17, 24, 39, 0.88);
-  border-color: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6), 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .dark .logo-text,

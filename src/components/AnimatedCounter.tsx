@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useMotionValue, useTransform, animate, useInView } from 'framer-motion';
+import { useMotionValue, useTransform, animate, useInView, MotionValue } from 'framer-motion';
 
 interface AnimatedCounterProps {
   value: number;
@@ -11,47 +11,42 @@ interface AnimatedCounterProps {
 
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
-  duration = 2,
+  duration = 2.2,
   prefix = '',
   suffix = '',
   className = '',
 }) => {
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
-
-  useEffect(() => {
-    const mobileOrTablet = window.innerWidth < 1024 || /Mobi|Android|iPhone|iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document;
-    setIsMobileOrTablet(mobileOrTablet);
-  }, []);
-
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest).toLocaleString());
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-50px' });
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
-    if (isMobileOrTablet || !inView) return;
+    if (inView && !hasStarted) {
+      setHasStarted(true);
+      const controls = animate(count, value, {
+        duration: duration,
+        ease: [0.16, 1, 0.3, 1], // Smooth easeOutExpo curve
+      });
+      return () => controls.stop();
+    }
+  }, [inView, hasStarted, value, duration, count]);
 
-    const controls = animate(count, value, {
-      duration: duration,
-      ease: [0.16, 1, 0.3, 1], // easeOutExpo
-    });
-    return () => controls.stop();
-  }, [inView, value, duration, count, isMobileOrTablet]);
+  // Fallback timer guarantees counter triggers even if scroll observer is slow
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!hasStarted) {
+        setHasStarted(true);
+        animate(count, value, {
+          duration: duration,
+          ease: [0.16, 1, 0.3, 1],
+        });
+      }
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [hasStarted, value, duration, count]);
 
-  // On mobile/tablet, render a static number immediately to save processing and observers
-  if (isMobileOrTablet) {
-    return (
-      <span className={className}>
-        {prefix}
-        <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-          {value.toLocaleString()}
-        </span>
-        {suffix}
-      </span>
-    );
-  }
-
-  // Ref is placed on motion.span to observe the scroll trigger
   return (
     <span ref={ref} className={className}>
       {prefix}
@@ -63,13 +58,11 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   );
 };
 
-// Helper component to render the motion value as string content in React
-import { MotionValue } from 'framer-motion';
 const AnimatedSpan = ({ text }: { text: MotionValue<any> }) => {
   const spanRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    return text.on("change", (latest: any) => {
+    return text.on('change', (latest: any) => {
       if (spanRef.current) {
         spanRef.current.textContent = String(latest);
       }

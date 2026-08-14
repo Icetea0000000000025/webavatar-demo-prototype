@@ -93,7 +93,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
             animate={{ pathLength: animatedRatio }}
-            transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
             style={{
               WebkitTransform: 'translateZ(0)',
               transform: 'translateZ(0)',
