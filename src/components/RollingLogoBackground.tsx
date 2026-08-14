@@ -46,13 +46,18 @@ export const RollingLogoBackground: React.FC = () => {
     };
 
     const resizeCanvas = () => {
-      if (!canvas || !canvas.parentElement) return;
-      const rect = canvas.parentElement.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      if (!canvas) return;
+      const parent = canvas.parentElement;
+      const w = parent?.clientWidth || window.innerWidth || 800;
+      const h = parent?.clientHeight || window.innerHeight || 600;
+      if (w > 0 && h > 0) {
+        canvas.width = w;
+        canvas.height = h;
+      }
     };
 
     resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
     const resizeObserver = new ResizeObserver(() => resizeCanvas());
     if (canvas.parentElement) {
       resizeObserver.observe(canvas.parentElement);
@@ -267,10 +272,19 @@ export const RollingLogoBackground: React.FC = () => {
           // Use Deep Midnight Slate (#0f172a) for indigo theme so the light blue logo pops with 100% contrast!
           ctx.fillStyle = c.theme === 'indigo' ? '#0f172a' : '#ffffff';
           ctx.beginPath();
-          if (ctx.roundRect) {
-            ctx.roundRect(-halfS, -halfS, c.size, c.size, cornerRadius);
+          if (typeof (ctx as any).roundRect === 'function') {
+            (ctx as any).roundRect(-halfS, -halfS, c.size, c.size, cornerRadius);
           } else {
-            ctx.rect(-halfS, -halfS, c.size, c.size);
+            const rx = -halfS, ry = -halfS, rw = c.size, rh = c.size, rr = cornerRadius;
+            ctx.moveTo(rx + rr, ry);
+            ctx.lineTo(rx + rw - rr, ry);
+            ctx.quadraticCurveTo(rx + rw, ry, rx + rw, ry + rr);
+            ctx.lineTo(rx + rw, ry + rh - rr);
+            ctx.quadraticCurveTo(rx + rw, ry + rh, rx + rw - rr, ry + rh);
+            ctx.lineTo(rx + rr, ry + rh);
+            ctx.quadraticCurveTo(rx, ry + rh, rx, ry + rh - rr);
+            ctx.lineTo(rx, ry + rr);
+            ctx.quadraticCurveTo(rx, ry, rx + rr, ry);
           }
           ctx.fill();
 
@@ -303,6 +317,7 @@ export const RollingLogoBackground: React.FC = () => {
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', resizeCanvas);
       if (canvas) {
         canvas.removeEventListener('mouseleave', handleMouseLeave);
       }

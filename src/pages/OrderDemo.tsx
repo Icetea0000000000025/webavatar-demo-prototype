@@ -390,7 +390,7 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
       style={{
         boxShadow: "0 10px 25px -8px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04)",
       }}
-      whileHover={{ y: -6, scale: 1.02, rotate: house.id % 2 === 0 ? 0.8 : -0.8 }}
+      whileHover={{ y: 0, scale: 1.02, rotate: 0 }}
     >
       {/* Top Demo Image Thumbnail Preview Box with Image-Only Hover Overlay */}
       <div className="relative w-full h-36 sm:h-40 overflow-hidden bg-slate-900 border-b border-border/60">
