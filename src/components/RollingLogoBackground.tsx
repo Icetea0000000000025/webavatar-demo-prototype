@@ -34,10 +34,11 @@ export const RollingLogoBackground: React.FC = () => {
     if (!ctx) return;
 
     let animationFrameId: number;
+    let lastTime = performance.now();
 
-    const mouse = { x: -1000, y: -1000, radius: 140 };
+    const mouse = { x: -1000, y: -1000, radius: 150 };
 
-    // Load logo-new-light-blue-02 image
+    // Load logo image
     const img = new Image();
     img.src = logoLightBlue;
     let isImageLoaded = false;
@@ -45,14 +46,22 @@ export const RollingLogoBackground: React.FC = () => {
       isImageLoaded = true;
     };
 
+    let displayWidth = 800;
+    let displayHeight = 600;
+
     const resizeCanvas = () => {
       if (!canvas) return;
       const parent = canvas.parentElement;
       const w = parent?.clientWidth || window.innerWidth || 800;
       const h = parent?.clientHeight || window.innerHeight || 600;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      displayWidth = w;
+      displayHeight = h;
+
       if (w > 0 && h > 0) {
-        canvas.width = w;
-        canvas.height = h;
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
       }
     };
 
@@ -64,22 +73,24 @@ export const RollingLogoBackground: React.FC = () => {
     }
 
     const isMobile = window.innerWidth < 768;
-    const coinSize = isMobile ? 38 : 52;
+    const coinSize = isMobile ? 40 : 54;
+    const baseVx = isMobile ? 1.8 : 2.4;
 
-    // Create square coins alternating between Indigo (Request Demo color) and White
+    // Create square coins alternating between Indigo and White
     const maxCoins = 4;
     const coins: SquareCoinParticle[] = [];
     const themes: SquareCoinParticle['theme'][] = ['indigo', 'white', 'indigo', 'white'];
 
     for (let i = 0; i < maxCoins; i++) {
+      const spacing = isMobile ? 240 : 360;
       coins.push({
-        x: -coinSize * 3 - i * 400,
-        y: -coinSize * 2 - i * 200,
-        vx: 1.0,
+        x: -coinSize * 2 - i * spacing,
+        y: -coinSize * 1.5,
+        vx: baseVx,
         vy: 0.2,
         size: coinSize,
         rotation: 0,
-        vRot: 0.02,
+        vRot: 0.03,
         theme: themes[i % themes.length],
         active: true,
       });
@@ -91,16 +102,16 @@ export const RollingLogoBackground: React.FC = () => {
       const count = 3 + Math.floor(Math.random() * 3);
       for (let s = 0; s < count; s++) {
         const angle = -Math.PI * (0.2 + Math.random() * 0.6);
-        const spd = 0.5 + Math.random() * 1.5;
+        const spd = 0.8 + Math.random() * 1.8;
         sparks.push({
           x,
           y,
           vx: Math.cos(angle) * spd,
           vy: Math.sin(angle) * spd,
-          size: 1.2 + Math.random() * 1.8,
+          size: 1.5 + Math.random() * 2.0,
           color,
-          alpha: 0.85,
-          decay: 0.015 + Math.random() * 0.02,
+          alpha: 0.9,
+          decay: 0.02 + Math.random() * 0.02,
         });
       }
     };
@@ -119,18 +130,26 @@ export const RollingLogoBackground: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseleave', handleMouseLeave);
 
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const render = (now: number) => {
+      // Calculate delta time normalized to 60fps (16.67ms = 1.0)
+      const rawDt = (now - lastTime) / 16.6667;
+      const dt = Math.min(Math.max(rawDt, 0.2), 2.0); // Clamp dt between 0.2 and 2.0
+      lastTime = now;
 
-      const w = canvas.width;
-      const h = canvas.height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, displayWidth, displayHeight);
+
+      const w = displayWidth;
+      const h = displayHeight;
       const numSteps = isMobile ? 6 : 9;
       const stepW = w / numSteps;
       const stepH = h / numSteps;
 
       // 1. Draw Glassmorphic Stairs Line Structure
       ctx.save();
-      ctx.lineWidth = 1.8;
+      ctx.lineWidth = 2.0;
 
       for (let i = 0; i < numSteps; i++) {
         const tx1 = i * stepW;
@@ -141,12 +160,12 @@ export const RollingLogoBackground: React.FC = () => {
 
         // Tread (horizontal step line)
         const treadGrad = ctx.createLinearGradient(tx1, ty1, tx2, ty2);
-        treadGrad.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
-        treadGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.3)');
-        treadGrad.addColorStop(1, 'rgba(6, 182, 212, 0.2)');
+        treadGrad.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
+        treadGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.35)');
+        treadGrad.addColorStop(1, 'rgba(6, 182, 212, 0.25)');
 
         ctx.strokeStyle = treadGrad;
-        ctx.shadowColor = 'rgba(99, 102, 241, 0.3)';
+        ctx.shadowColor = 'rgba(99, 102, 241, 0.35)';
         ctx.shadowBlur = 6;
         ctx.beginPath();
         ctx.moveTo(tx1, ty1);
@@ -155,8 +174,8 @@ export const RollingLogoBackground: React.FC = () => {
 
         // Riser (vertical step line)
         const riserGrad = ctx.createLinearGradient(tx2, ty2, tx2, ry2);
-        riserGrad.addColorStop(0, 'rgba(168, 85, 247, 0.2)');
-        riserGrad.addColorStop(1, 'rgba(99, 102, 241, 0.1)');
+        riserGrad.addColorStop(0, 'rgba(168, 85, 247, 0.25)');
+        riserGrad.addColorStop(1, 'rgba(99, 102, 241, 0.15)');
 
         ctx.strokeStyle = riserGrad;
         ctx.beginPath();
@@ -165,9 +184,9 @@ export const RollingLogoBackground: React.FC = () => {
         ctx.stroke();
 
         // Step corner dot
-        ctx.fillStyle = 'rgba(199, 210, 254, 0.4)';
+        ctx.fillStyle = 'rgba(199, 210, 254, 0.5)';
         ctx.beginPath();
-        ctx.arc(tx2, ty2, 2.5, 0, Math.PI * 2);
+        ctx.arc(tx2, ty2, 3, 0, Math.PI * 2);
         ctx.fill();
       }
       ctx.restore();
@@ -175,10 +194,10 @@ export const RollingLogoBackground: React.FC = () => {
       // 2. Update & Draw Sparkles
       for (let i = sparks.length - 1; i >= 0; i--) {
         const sp = sparks[i];
-        sp.x += sp.vx;
-        sp.y += sp.vy;
-        sp.vy += 0.06;
-        sp.alpha -= sp.decay;
+        sp.x += sp.vx * dt;
+        sp.y += sp.vy * dt;
+        sp.vy += 0.08 * dt;
+        sp.alpha -= sp.decay * dt;
 
         if (sp.alpha <= 0) {
           sparks.splice(i, 1);
@@ -197,37 +216,42 @@ export const RollingLogoBackground: React.FC = () => {
       }
 
       // 3. Process Square Coins Tumbling Down Stairs
+      const gravity = 0.18;
+
       coins.forEach((c) => {
         const halfS = c.size / 2;
         const effRadius = halfS * 0.95;
 
-        // Slow Physics
-        c.vy += 0.08;
-        c.x += c.vx;
-        c.y += c.vy;
+        // Apply physics normalized with delta time dt
+        c.vy += gravity * dt;
+        c.x += c.vx * dt;
+        c.y += c.vy * dt;
 
-        // Current step index
-        const stepIdx = Math.floor(c.x / stepW);
+        // Clamp step index so when c.x < 0, it ALWAYS targets step 0 (treadY = 0)
+        // This completely prevents coins from missing step 0 and falling off left of mobile screens!
+        const rawStepIdx = Math.floor(c.x / stepW);
+        const stepIdx = Math.max(0, Math.min(numSteps - 1, rawStepIdx));
         const treadY = stepIdx * stepH;
 
-        // Tread Collision
-        if (c.x >= stepIdx * stepW && c.x < (stepIdx + 1) * stepW) {
-          if (c.y + effRadius >= treadY && c.y - c.vy + effRadius <= treadY + 16) {
+        // Tread Collision Detection
+        if (c.y + effRadius >= treadY) {
+          // Verify coin is above or at current tread level (prevent clipping from underneath)
+          if (c.y - effRadius <= treadY + stepH * 0.6) {
             c.y = treadY - effRadius;
-            if (c.vy > 0.6) {
-              c.vy = -c.vy * 0.28; // Soft bounce
+            if (c.vy > 0.8) {
+              c.vy = -c.vy * 0.25; // Soft bounce
               const sparkColor = c.theme === 'indigo' ? '#a5b4fc' : '#ffffff';
               addSparks(c.x, treadY, sparkColor);
             } else {
               c.vy = 0;
-              c.vx = Math.min(c.vx + 0.03, 1.25); // Slow steady roll
+              c.vx = Math.min(c.vx + 0.04 * dt, baseVx * 1.35); // Smooth forward roll
             }
             c.vRot = c.vx / effRadius;
           }
         }
 
         // Tumbling rotation
-        c.rotation += c.vRot;
+        c.rotation += c.vRot * dt;
 
         // Mouse Interactivity
         const dx = mouse.x - c.x;
@@ -237,27 +261,28 @@ export const RollingLogoBackground: React.FC = () => {
           const dist = Math.sqrt(distSq);
           if (dist > 0) {
             const force = (mouse.radius - dist) / mouse.radius;
-            c.vx -= (dx / dist) * force * 0.6;
-            c.vy -= (dy / dist) * force * 0.8;
+            c.vx -= (dx / dist) * force * 0.6 * dt;
+            c.vy -= (dy / dist) * force * 0.8 * dt;
           }
         }
 
-        // Reset Loop when square coin exits bottom right screen
-        if (c.x > w + c.size * 3 || c.y > h + c.size * 3) {
+        // Reset Loop when square coin exits bottom right of screen
+        if (c.x > w + c.size * 2 || c.y > h + c.size * 2) {
           let minX = c.x;
           coins.forEach((other) => {
             if (other.x < minX) minX = other.x;
           });
 
-          c.x = Math.min(-c.size * 3, minX - (380 + Math.random() * 120));
-          c.y = c.x * (h / w) - c.size;
-          c.vx = 0.9 + Math.random() * 0.2;
+          const spacing = isMobile ? 220 : 320;
+          c.x = Math.min(-c.size * 2, minX - spacing - Math.random() * 80);
+          c.y = -c.size * 1.5;
+          c.vx = baseVx + Math.random() * 0.3;
           c.vy = 0.2;
           c.rotation = 0;
         }
 
         // Render Flat 2D Square Particle
-        if (c.x > -c.size * 4 && c.x < w + c.size * 4) {
+        if (c.x > -c.size * 3 && c.x < w + c.size * 3) {
           ctx.save();
           ctx.translate(c.x, c.y);
           ctx.rotate(c.rotation);
@@ -269,7 +294,6 @@ export const RollingLogoBackground: React.FC = () => {
           ctx.shadowBlur = 10;
 
           // Clean High-Contrast Background Card
-          // Use Deep Midnight Slate (#0f172a) for indigo theme so the light blue logo pops with 100% contrast!
           ctx.fillStyle = c.theme === 'indigo' ? '#0f172a' : '#ffffff';
           ctx.beginPath();
           if (typeof (ctx as any).roundRect === 'function') {
@@ -309,10 +333,11 @@ export const RollingLogoBackground: React.FC = () => {
         }
       });
 
+      ctx.restore();
       animationFrameId = requestAnimationFrame(render);
     };
 
-    render();
+    animationFrameId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
