@@ -9,7 +9,7 @@ import {
 import { useTranslation } from '../lib/LanguageContext';
 import AppFooter from '../components/AppFooter';
 import SemiCircleGauge from '../components/SemiCircleGauge';
-import RollingLogoBackground from '../components/RollingLogoBackground';
+import InteractiveBoxesBackground from '../components/InteractiveBoxesBackground';
 import './Pages.css';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import botnoiAirLogo from '../assets/BOTNOI-AIR-logo.png';
@@ -133,8 +133,8 @@ export default function Home() {
         {/* About Us Style Ambient Glows */}
         <div className="bg-glow-purple" />
         <div className="bg-glow-blue" />
-        {/* Glassmorphic Staircase Canvas */}
-        <RollingLogoBackground />
+        {/* Custom 3D Interactive Boxes Background */}
+        <InteractiveBoxesBackground />
         {/* Hero Content */}
         <motion.div className="home-hero-content" style={{ opacity: heroOpacity }}>
 
