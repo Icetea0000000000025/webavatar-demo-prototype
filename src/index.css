@@ -39,9 +39,9 @@
   --color-cta-foreground: var(--cta-foreground);
   --color-success: var(--success);
 
-  --font-sans: "Noto Sans Thai", "Noto Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Noto Sans Thai", "Noto Sans", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Noto Sans Thai", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Thonburi", "Sukhumvit Set", "Leelawadee UI", "Leelawadee", "Tahoma", sans-serif;
+  --font-display: "Noto Sans Thai", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Thonburi", "Sukhumvit Set", "Leelawadee UI", "Leelawadee", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
 }
 
@@ -50,9 +50,9 @@
    Linear & Stripe caliber
    ═══════════════════════════════════════ */
 :root {
-  --font-sans: "Noto Sans Thai", "Noto Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-display: "Noto Sans Thai", "Noto Sans", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --font-sans: "Noto Sans Thai", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Thonburi", "Sukhumvit Set", "Leelawadee UI", "Leelawadee", "Tahoma", sans-serif;
+  --font-display: "Noto Sans Thai", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Thonburi", "Sukhumvit Set", "Leelawadee UI", "Leelawadee", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 100%;
   /* Scales all rem font-sizes and spacings globally. Adjust this percentage to scale up/down. */
   --radius: 1rem;
@@ -173,9 +173,13 @@
   html,
   body {
     font-family: var(--font-sans);
-    font-feature-settings: "kern";
+    font-feature-settings: "liga" 1, "calt" 1;
+    font-variant-ligatures: contextual;
+    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    letter-spacing: normal;
+    word-spacing: normal;
   }
 
   body {
@@ -206,37 +210,23 @@
     font-family: var(--font-mono) !important;
   }
 
-  /* Fix Thai typography & prevent wide tracking from breaking Thai character spacing */
+  /* ════════════════════════════════════════════════════════════════════
+     CROSS-PLATFORM THAI & CJK CHARACTER SPACING SAFEGUARD
+     Prevents wide tracking/letter-spacing from breaking Thai vowel/tone marks
+     and separating words with unnatural gaps on Windows, Mac, Linux & Mobile.
+     ════════════════════════════════════════════════════════════════════ */
   :lang(th),
-  [lang="th"] {
-    font-family: var(--font-sans);
+  [lang="th"],
+  :lang(th) *,
+  [lang="th"] *,
+  html[lang="th"] *,
+  .font-thai,
+  [data-thai] {
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
   }
 
-  :lang(th) p,
-  :lang(th) span,
-  :lang(th) h1,
-  :lang(th) h2,
-  :lang(th) h3,
-  :lang(th) h4,
-  :lang(th) h5,
-  :lang(th) h6,
-  :lang(th) a,
-  :lang(th) button,
-  :lang(th) div,
-  [lang="th"] p,
-  [lang="th"] span,
-  [lang="th"] h1,
-  [lang="th"] h2,
-  [lang="th"] h3,
-  [lang="th"] h4,
-  [lang="th"] h5,
-  [lang="th"] h6,
-  [lang="th"] a,
-  [lang="th"] button,
-  [lang="th"] div {
-    letter-spacing: normal;
-  }
-
+  /* Controlled and safe heading typography */
   h1,
   h2,
   h3,
@@ -246,14 +236,14 @@
     font-family: var(--font-display);
     font-weight: 800;
     color: var(--card-foreground);
-    line-height: 1.2;
+    line-height: 1.25;
     text-wrap: balance;
-    /* Web Interface Guidelines */
+    letter-spacing: -0.01em;
   }
 
   h1 {
     font-size: clamp(2.75rem, 6vw, 4.5rem);
-    letter-spacing: -0.04em;
+    letter-spacing: -0.02em;
     background: var(--grad-text);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -262,37 +252,72 @@
 
   h2 {
     font-size: clamp(2rem, 4vw, 2.5rem);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.015em;
     margin-bottom: 1rem;
   }
 
   h3 {
     font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     margin-bottom: 0.75rem;
   }
 
+  /* Safe tracking utility overrides so uppercase labels don't get over-spaced on Windows */
+  .tracking-tighter { letter-spacing: -0.025em; }
+  .tracking-tight { letter-spacing: -0.015em; }
+  .tracking-normal { letter-spacing: 0; }
+  .tracking-wide { letter-spacing: 0.015em; }
+  .tracking-wider { letter-spacing: 0.025em; }
+  .tracking-widest { letter-spacing: 0.035em; }
+
+  html[lang="th"] .tracking-tighter,
+  html[lang="th"] .tracking-tight,
+  html[lang="th"] .tracking-wide,
+  html[lang="th"] .tracking-wider,
+  html[lang="th"] .tracking-widest,
+  :lang(th) .tracking-tighter,
+  :lang(th) .tracking-tight,
+  :lang(th) .tracking-wide,
+  :lang(th) .tracking-wider,
+  :lang(th) .tracking-widest {
+    letter-spacing: 0 !important;
+  }
+
   a {
-    color: var(--primary);
+    color: inherit;
     text-decoration: none;
     transition: var(--transition-fast);
   }
 
-  a:hover {
-    color: var(--cta);
-  }
-
-  /* Focus States for Web Interface Guidelines */
+  /* Focus States & Browser Surfaces Polish */
   *:focus-visible {
     outline: 2px solid var(--primary);
-    outline-offset: 4px;
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--primary) 28%, transparent);
+    color: var(--foreground);
+  }
+
+  input,
+  textarea,
+  [contenteditable="true"] {
+    caret-color: var(--primary);
   }
 }
 
-/* Beautiful Scrollbars */
+/* Tabular numbers for clean aligned metrics */
+.tabular-nums,
+[data-numeric],
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Beautiful Themed Scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -300,13 +325,22 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E4E4E7;
+  background: color-mix(in srgb, var(--muted-foreground) 25%, transparent);
   border-radius: 9999px;
   border: 2px solid var(--background);
+  transition: background-color 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A1A1AA;
+  background: color-mix(in srgb, var(--primary) 60%, transparent);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
 /* Hide scrollbar utility */
