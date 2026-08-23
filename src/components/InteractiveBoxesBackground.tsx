@@ -27,6 +27,56 @@ interface Ripple {
   speed: number;
 }
 
+// ═══════════════════════════════════════════════════════════
+// PRE-COMPUTED COLOR PALETTES (ZERO STRING ALLOCATIONS IN RAF)
+// ═══════════════════════════════════════════════════════════
+const GLOW_STEPS = 10;
+
+// Pre-generated color lookup arrays to eliminate GC pressure
+const COLOR_TABLE_DARK = {
+  front: [
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${(0.45 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(4, 120, 87, ${(0.45 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(109, 40, 217, ${(0.45 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+  ],
+  frontIdle: 'rgba(15, 23, 42, 0.65)',
+  right: [
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(99, 102, 241, ${(0.35 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(13, 148, 136, ${(0.35 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(147, 51, 234, ${(0.35 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+  ],
+  rightIdle: 'rgba(10, 15, 30, 0.75)',
+  top: [
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(56, 189, 248, ${(0.6 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(16, 185, 129, ${(0.65 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(168, 85, 247, ${(0.65 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+  ],
+  topIdle: 'rgba(30, 41, 59, 0.6)',
+  outline: [
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(56, 189, 248, ${(0.85 + (i / GLOW_STEPS) * 0.15).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(52, 211, 153, ${(0.85 + (i / GLOW_STEPS) * 0.15).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(216, 180, 254, ${(0.85 + (i / GLOW_STEPS) * 0.15).toFixed(3)})`),
+  ],
+  outlineIdle: 'rgba(99, 102, 241, 0.18)',
+  dotRing: [
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(56, 189, 248, ${((i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(16, 185, 129, ${((i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+    Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(168, 85, 247, ${((i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+  ],
+};
+
+const COLOR_TABLE_LIGHT = {
+  front: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${(0.25 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+  frontIdle: 'rgba(219, 234, 254, 0.45)',
+  right: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(14, 165, 233, ${(0.22 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+  rightIdle: 'rgba(191, 219, 254, 0.35)',
+  top: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(186, 230, 253, ${(0.65 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+  topIdle: 'rgba(255, 255, 255, 0.65)',
+  outline: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${(0.75 + (i / GLOW_STEPS) * 0.25).toFixed(3)})`),
+  outlineIdle: 'rgba(99, 102, 241, 0.15)',
+  dotRing: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${((i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+};
+
 export const InteractiveBoxesBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -36,7 +86,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
     if (!ctx) return;
 
     let animId: number = 0;
@@ -46,8 +96,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
     // Viewport dimensions
     let width = container.clientWidth || window.innerWidth;
     let height = container.clientHeight || window.innerHeight;
+    let cachedRect = canvas.getBoundingClientRect();
 
-    // Mouse coordinates (decoupled from event handler to prevent event thrashing)
+    // Mouse coordinates (decoupled to eliminate mouse event lag)
     const mouse = {
       rawX: -9999,
       rawY: -9999,
@@ -61,19 +112,19 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
     const ripples: Ripple[] = [];
 
-    // Grid configuration with optimized block count for buttery 60+ FPS on all devices
+    // Highly optimized grid layout with reduced count for smooth 60+ FPS on all devices
     const getGridConfig = (w: number) => {
       const isMobile = w < 640;
       const isTablet = w >= 640 && w < 1024;
       return {
-        cols: isMobile ? 9 : isTablet ? 13 : 16,
-        rows: isMobile ? 10 : isTablet ? 12 : 14,
-        boxSize: isMobile ? 38 : isTablet ? 48 : 56,
-        boxHeight: isMobile ? 18 : isTablet ? 24 : 30,
+        cols: isMobile ? 6 : isTablet ? 8 : 10,
+        rows: isMobile ? 7 : isTablet ? 8 : 9,
+        boxSize: isMobile ? 46 : isTablet ? 56 : 66,
+        boxHeight: isMobile ? 20 : isTablet ? 26 : 32,
         gap: isMobile ? 12 : isTablet ? 16 : 20,
-        influenceRadius: isMobile ? 150 : isTablet ? 210 : 260,
-        maxLift: isMobile ? 45 : 68,
-        maxTilt: 0.32,
+        influenceRadius: isMobile ? 160 : isTablet ? 220 : 270,
+        maxLift: isMobile ? 45 : 65,
+        maxTilt: 0.3,
         cameraPitch: 58 * (Math.PI / 180),
         cameraYaw: -18 * (Math.PI / 180),
       };
@@ -81,7 +132,6 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
     let config = getGridConfig(width);
     let boxes: Box3D[] = [];
-    // Pre-sorted draw indices (Painter's algorithm: back-to-front depth order is static for fixed isometric angle)
     let sortedIndices: number[] = [];
 
     const initBoxes = () => {
@@ -133,7 +183,6 @@ export const InteractiveBoxesBackground: React.FC = () => {
         .sort((a, b) => {
           const ba = boxes[a];
           const bb = boxes[b];
-          // In isometric yaw -18deg, pitch 58deg: depth is primarily determined by (r - c * 0.3)
           const depthA = ba.gy - ba.gx * 0.32;
           const depthB = bb.gy - bb.gx * 0.32;
           return depthA - depthB;
@@ -144,9 +193,10 @@ export const InteractiveBoxesBackground: React.FC = () => {
       if (!container || !canvas) return;
       width = container.clientWidth || window.innerWidth;
       height = container.clientHeight || window.innerHeight;
+      cachedRect = canvas.getBoundingClientRect();
 
-      // Cap DPR to 1.5 max to eliminate GPU fillrate bottleneck on 4K/Retina/low-end laptops
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      // Cap DPR to 1.25 max to drastically eliminate fillrate bottleneck on laptops & 4K displays
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
 
@@ -156,8 +206,11 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
     handleResize();
     window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', () => {
+      if (canvas) cachedRect = canvas.getBoundingClientRect();
+    }, { passive: true });
 
-    // Fast 3D projection without object allocations
+    // 3D projection trigonometry
     const cosPitch = Math.cos(config.cameraPitch);
     const sinPitch = Math.sin(config.cameraPitch);
     const cosYaw = Math.cos(config.cameraYaw);
@@ -218,11 +271,10 @@ export const InteractiveBoxesBackground: React.FC = () => {
       { sx: 0, sy: 0 },
     ];
 
-    // Mouse event handlers (ultra-lightweight: just record position)
+    // High performance mouse tracking using cached rect
     const onMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.rawX = e.clientX - rect.left;
-      mouse.rawY = e.clientY - rect.top;
+      mouse.rawX = e.clientX - cachedRect.left;
+      mouse.rawY = e.clientY - cachedRect.top;
       mouse.isHovered = true;
     };
 
@@ -235,9 +287,8 @@ export const InteractiveBoxesBackground: React.FC = () => {
     };
 
     const onClick = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const clickX = e.clientX - rect.left;
-      const clickY = e.clientY - rect.top;
+      const clickX = e.clientX - cachedRect.left;
+      const clickY = e.clientY - cachedRect.top;
 
       const centerX = width * 0.52;
       const centerY = height * 0.48;
@@ -246,14 +297,14 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
       const { wx, wy } = unprojectMouseToGround(clickX, clickY, centerX, centerY, focalLength, camDist);
 
-      if (ripples.length < 4) {
+      if (ripples.length < 3) {
         ripples.push({
           x: wx,
           y: wy,
           radius: 5,
-          maxRadius: config.influenceRadius * 2.2,
-          strength: 45,
-          speed: 15,
+          maxRadius: config.influenceRadius * 2.0,
+          strength: 40,
+          speed: 16,
         });
       }
     };
@@ -262,7 +313,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
     canvas.addEventListener('mouseleave', onMouseLeave, { passive: true });
     canvas.addEventListener('click', onClick, { passive: true });
 
-    // Pause rendering when hero is out of screen viewport (saves 100% CPU/GPU when user scrolls down)
+    // IntersectionObserver to pause 100% of calculations when scrolled away
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -284,17 +335,17 @@ export const InteractiveBoxesBackground: React.FC = () => {
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
-    // Main Performance-Engine Render Loop
+    // Main 60+ FPS Render Loop
     const render = (now: number) => {
       if (!isVisible) {
         animId = 0;
         return;
       }
 
-      const dt = Math.min((now - lastTime) * 0.001, 0.04);
+      const dt = Math.min((now - lastTime) * 0.001, 0.033);
       lastTime = now;
 
-      // Smooth mouse position interpolation & speed calculation
+      // Mouse smoothing
       if (mouse.isHovered) {
         const dx = mouse.rawX - mouse.prevX;
         const dy = mouse.rawY - mouse.prevY;
@@ -306,7 +357,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
       }
 
       const isDark = document.documentElement.classList.contains('dark');
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.25);
 
       ctx.save();
       ctx.scale(dpr, dpr);
@@ -324,14 +375,14 @@ export const InteractiveBoxesBackground: React.FC = () => {
         mouseWorldX = unproj.wx;
         mouseWorldY = unproj.wy;
 
-        if (mouse.speed > 35 && ripples.length < 3) {
+        if (mouse.speed > 45 && ripples.length < 2) {
           ripples.push({
             x: mouseWorldX,
             y: mouseWorldY,
             radius: 8,
-            maxRadius: config.influenceRadius * 1.5,
-            strength: Math.min(mouse.speed * 0.3, 24),
-            speed: 12,
+            maxRadius: config.influenceRadius * 1.4,
+            strength: Math.min(mouse.speed * 0.25, 20),
+            speed: 14,
           });
         }
       }
@@ -340,7 +391,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rip = ripples[i];
         rip.radius += rip.speed;
-        rip.strength *= 0.93;
+        rip.strength *= 0.92;
         if (rip.radius > rip.maxRadius || rip.strength < 0.3) {
           ripples.splice(i, 1);
         }
@@ -350,10 +401,10 @@ export const InteractiveBoxesBackground: React.FC = () => {
       const { boxSize, boxHeight, maxLift, maxTilt, influenceRadius } = config;
       const halfS = boxSize * 0.5;
 
-      // Update Physics & Simulation
+      // Update Physics
       for (let i = 0; i < boxes.length; i++) {
         const b = boxes[i];
-        const idleWave = Math.sin(timeSec * 1.6 + b.idlePhase) * 3.0;
+        const idleWave = Math.sin(timeSec * 1.5 + b.idlePhase) * 2.5;
 
         let mouseLift = 0;
         let mouseGlow = 0;
@@ -389,8 +440,8 @@ export const InteractiveBoxesBackground: React.FC = () => {
           const dy = b.y - rip.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const diff = Math.abs(dist - rip.radius);
-          if (diff < 40) {
-            const wave = Math.cos((diff / 40) * (Math.PI / 2)) * rip.strength;
+          if (diff < 35) {
+            const wave = Math.cos((diff / 35) * (Math.PI / 2)) * rip.strength;
             rippleLift += wave;
             mouseGlow = Math.min(mouseGlow + wave * 0.025, 1.0);
           }
@@ -401,21 +452,21 @@ export const InteractiveBoxesBackground: React.FC = () => {
         b.targetRotX = tiltX;
         b.targetRotY = tiltY;
 
-        // Smooth spring damped physics
+        // Smooth spring physics
         const force = (b.targetZ - b.z) * 18.0;
         b.vz = (b.vz + force * dt) * 0.82;
         b.z += b.vz * dt;
 
-        b.glow += (b.targetGlow - b.glow) * 0.2;
-        b.rotX += (b.targetRotX - b.rotX) * 0.24;
-        b.rotY += (b.targetRotY - b.rotY) * 0.24;
+        b.glow += (b.targetGlow - b.glow) * 0.22;
+        b.rotX += (b.targetRotX - b.rotX) * 0.25;
+        b.rotY += (b.targetRotY - b.rotY) * 0.25;
       }
 
       // Base Corner Offsets
       const cLx = [-halfS, halfS, halfS, -halfS];
       const cLy = [-halfS, -halfS, halfS, halfS];
 
-      // Draw all 3D boxes in pre-sorted depth order (zero array sort overhead per frame)
+      // Draw all 3D boxes in pre-sorted depth order
       for (let s = 0; s < sortedIndices.length; s++) {
         const b = boxes[sortedIndices[s]];
         const h = boxHeight + Math.max(0, b.z * 0.35);
@@ -467,6 +518,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
         const glow = b.glow;
         const isHover = glow > 0.03;
+        const glowStep = Math.min(GLOW_STEPS, Math.max(0, Math.round(glow * GLOW_STEPS)));
         const theme = b.colorTheme;
 
         // ── 1. Front Face (South Face) ──
@@ -478,23 +530,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.closePath();
 
         if (isDark) {
-          if (isHover) {
-            if (theme === 0) {
-              ctx.fillStyle = `rgba(2, 132, 199, ${0.45 + glow * 0.35})`;
-            } else if (theme === 1) {
-              ctx.fillStyle = `rgba(4, 120, 87, ${0.45 + glow * 0.35})`;
-            } else {
-              ctx.fillStyle = `rgba(109, 40, 217, ${0.45 + glow * 0.35})`;
-            }
-          } else {
-            ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_DARK.front[theme][glowStep] : COLOR_TABLE_DARK.frontIdle;
         } else {
-          if (isHover) {
-            ctx.fillStyle = `rgba(2, 132, 199, ${0.25 + glow * 0.3})`;
-          } else {
-            ctx.fillStyle = 'rgba(219, 234, 254, 0.45)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_LIGHT.front[glowStep] : COLOR_TABLE_LIGHT.frontIdle;
         }
         ctx.fill();
 
@@ -507,23 +545,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.closePath();
 
         if (isDark) {
-          if (isHover) {
-            if (theme === 0) {
-              ctx.fillStyle = `rgba(99, 102, 241, ${0.35 + glow * 0.35})`;
-            } else if (theme === 1) {
-              ctx.fillStyle = `rgba(13, 148, 136, ${0.35 + glow * 0.35})`;
-            } else {
-              ctx.fillStyle = `rgba(147, 51, 234, ${0.35 + glow * 0.35})`;
-            }
-          } else {
-            ctx.fillStyle = 'rgba(10, 15, 30, 0.75)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_DARK.right[theme][glowStep] : COLOR_TABLE_DARK.rightIdle;
         } else {
-          if (isHover) {
-            ctx.fillStyle = `rgba(14, 165, 233, ${0.22 + glow * 0.3})`;
-          } else {
-            ctx.fillStyle = 'rgba(191, 219, 254, 0.35)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_LIGHT.right[glowStep] : COLOR_TABLE_LIGHT.rightIdle;
         }
         ctx.fill();
 
@@ -536,65 +560,33 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.closePath();
 
         if (isDark) {
-          if (isHover) {
-            if (theme === 0) {
-              ctx.fillStyle = `rgba(56, 189, 248, ${0.6 + glow * 0.35})`;
-            } else if (theme === 1) {
-              ctx.fillStyle = `rgba(16, 185, 129, ${0.65 + glow * 0.3})`;
-            } else {
-              ctx.fillStyle = `rgba(168, 85, 247, ${0.65 + glow * 0.3})`;
-            }
-          } else {
-            ctx.fillStyle = 'rgba(30, 41, 59, 0.6)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_DARK.top[theme][glowStep] : COLOR_TABLE_DARK.topIdle;
         } else {
-          if (isHover) {
-            ctx.fillStyle = `rgba(186, 230, 253, ${0.65 + glow * 0.3})`;
-          } else {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
-          }
+          ctx.fillStyle = isHover ? COLOR_TABLE_LIGHT.top[glowStep] : COLOR_TABLE_LIGHT.topIdle;
         }
         ctx.fill();
 
         // ── 4. Crisp Top Face Edge Outline ──
-        ctx.lineWidth = isHover ? 1.4 : 0.8;
+        ctx.lineWidth = isHover ? 1.3 : 0.8;
         if (isDark) {
-          if (isHover) {
-            ctx.strokeStyle =
-              theme === 0
-                ? `rgba(56, 189, 248, ${0.85 + glow * 0.15})`
-                : theme === 1
-                ? `rgba(52, 211, 153, ${0.85 + glow * 0.15})`
-                : `rgba(216, 180, 254, ${0.85 + glow * 0.15})`;
-          } else {
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.18)';
-          }
+          ctx.strokeStyle = isHover ? COLOR_TABLE_DARK.outline[theme][glowStep] : COLOR_TABLE_DARK.outlineIdle;
         } else {
-          if (isHover) {
-            ctx.strokeStyle = `rgba(2, 132, 199, ${0.75 + glow * 0.25})`;
-          } else {
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)';
-          }
+          ctx.strokeStyle = isHover ? COLOR_TABLE_LIGHT.outline[glowStep] : COLOR_TABLE_LIGHT.outlineIdle;
         }
         ctx.stroke();
 
         // ── 5. Center Accent Micro Glow Dot (Rendered cleanly without shadowBlur) ──
-        if (isHover && glow > 0.12) {
+        if (isHover && glow > 0.15) {
           const midX = (tv[0].sx + tv[2].sx) * 0.5;
           const midY = (tv[0].sy + tv[2].sy) * 0.5;
-          const dotRadius = 2.2 + glow * 1.5;
+          const dotRadius = 2.0 + glow * 1.4;
 
           // Outer luminous ring
           ctx.beginPath();
-          ctx.arc(midX, midY, dotRadius * 2.2, 0, Math.PI * 2);
-          ctx.fillStyle =
-            isDark
-              ? theme === 0
-                ? `rgba(56, 189, 248, ${glow * 0.35})`
-                : theme === 1
-                ? `rgba(16, 185, 129, ${glow * 0.35})`
-                : `rgba(168, 85, 247, ${glow * 0.35})`
-              : `rgba(2, 132, 199, ${glow * 0.3})`;
+          ctx.arc(midX, midY, dotRadius * 2.0, 0, Math.PI * 2);
+          ctx.fillStyle = isDark
+            ? COLOR_TABLE_DARK.dotRing[theme][glowStep]
+            : COLOR_TABLE_LIGHT.dotRing[glowStep];
           ctx.fill();
 
           // Inner solid core
@@ -668,4 +660,3 @@ export const InteractiveBoxesBackground: React.FC = () => {
 };
 
 export default InteractiveBoxesBackground;
-
