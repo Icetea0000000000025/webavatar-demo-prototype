@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, MapPin, Phone, Mail, ExternalLink, Check } from 'lucide-react';
+import { Download, MapPin, Phone, Mail, ArrowUpRight, Check, ChevronDown } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
@@ -61,12 +61,9 @@ function Contact() {
 
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastDetails, setToastDetails] = useState({ name: '', email: '', inquiryType: 'contact', formNumber: 0, message: '' });
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [activeCard, setActiveCard] = useState<string | null>(null);
   const [copiedCard, setCopiedCard] = useState<string | null>(null);
 
   const handleContactCardClick = (type: 'address' | 'phone' | 'email', actionUrl?: string, textToCopy?: string) => {
-    setActiveCard(type);
     if (textToCopy) {
       navigator.clipboard?.writeText(textToCopy);
       setCopiedCard(type);
@@ -81,7 +78,6 @@ function Contact() {
     }
   };
 
-  // Auto-hide success toast after 5 seconds
   useEffect(() => {
     if (showSuccessToast) {
       const timer = setTimeout(() => {
@@ -118,7 +114,6 @@ function Contact() {
     }
 
     const formNumber = submissions.length + 1;
-    // Build unique persistent entry
     const newInquiry: Submission = {
       id: Date.now(),
       formNumber,
@@ -133,7 +128,6 @@ function Contact() {
     setSubmissions(updatedSubmissions);
     localStorage.setItem('botnoi_inquiries', JSON.stringify(updatedSubmissions));
 
-    // Show visual confirmation toast with form state details before clearing
     setToastDetails({
       name: formData.name,
       email: formData.email,
@@ -143,17 +137,12 @@ function Contact() {
     });
     setShowSuccessToast(true);
 
-    // Reset all form inputs immediately
     setFormData({
       name: '',
       email: '',
       inquiryType: 'contact',
       message: ''
     });
-  };
-
-  const toggleFaq = (index: number) => {
-    setOpenFaq(openFaq === index ? null : index);
   };
 
   const handleDownloadList = () => {
@@ -199,473 +188,495 @@ function Contact() {
     URL.revokeObjectURL(url);
   };
 
-  const faqs = [
-    {
-      q: t('contact.faq_q1'),
-      a: t('contact.faq_a1')
-    },
-    {
-      q: t('contact.faq_q2'),
-      a: t('contact.faq_a2')
-    },
-    {
-      q: t('contact.faq_q3'),
-      a: t('contact.faq_a3')
-    },
-    {
-      q: t('contact.faq_q4'),
-      a: t('contact.faq_a4')
-    }
-  ];
-
   return (
-    <div style={{ position: 'relative', overflow: 'hidden', width: '100%' }}>
+    <div className="contact-page-wrapper w-full relative overflow-hidden bg-transparent text-foreground">
 
-      {/* CONTACT HERO */}
-      <section className="hero-section" id="contact-hero" style={{ paddingBottom: '3rem' }} aria-label="Contact Hero">
-        <AnimatedSection direction="up" duration={0.8}>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 border border-indigo-100 text-indigo-600 mb-6 shadow-sm">
-            {t('contact.badge')}
-          </span>
-          <h1 className="leading-tight text-wrap-balance">{t('contact.title')}</h1>
-          <p className="hero-subtitle" style={{ margin: '0 auto' }}>
+      {/* ══════════════════════════════════════════
+          1. HEADER TITLE (SHARED WITH NAVBAR DYNAMIC BACKGROUND)
+      ══════════════════════════════════════════ */}
+      <div className="pt-20 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto text-left" id="contact-hero" aria-label="Contact Hero">
+        <AnimatedSection direction="up" duration={0.6}>
+          <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-widest text-primary uppercase mb-3 select-none">
+            <span className="inline-block w-5 h-px bg-primary"></span>
+            <span>{t('contact.badge')}</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-foreground leading-[1.08] max-w-3xl mb-4">
+            {t('contact.title')}
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl leading-relaxed">
             {t('contact.subtitle')}
           </p>
         </AnimatedSection>
-      </section>
+      </div>
 
-      {/* TWO COLUMN GRID FOR CONTACT & FORM */}
-      <section className="section-wrapper relative z-10" style={{ paddingTop: '1rem' }} id="contact-form-section" aria-label="Contact Information and Inquiry Form">
-        <div className="contact-container" style={{ padding: '0 1.5rem', maxWidth: '1150px', margin: '0 auto' }}>
-          
-          {/* LEFT COLUMN: OFFICE DETAILS */}
-          <AnimatedSection direction="right" duration={0.8} className="contact-info-cards" id="office-location">
-            <div style={{ marginBottom: '1.5rem' }}>
-              <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', background: 'var(--grad-text)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
-                {t('contact.office_heading')}
-              </h2>
-              <p style={{ fontSize: '0.95rem', color: 'var(--muted-foreground)', margin: 0 }}>
-                {t('contact.office_subheading')}
-              </p>
-            </div>
+      {/* ══════════════════════════════════════════
+          2. UNIFIED DYNAMIC BACKGROUND FOR THE ENTIRE PAGE
+      ══════════════════════════════════════════ */}
+      <div className="w-full bg-transparent relative z-10">
 
-            {/* Card 1: Address (Orange Tone / Amber) */}
-            <motion.div
-              className={`contact-info-card group ${activeCard === 'address' ? 'active' : ''}`}
-              id="contact-address"
-              whileHover={{ y: -4, scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '21 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
-            >
-              <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/80 group-hover:border-amber-400 group-hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] group-hover:scale-110 transition-all duration-300">
-                  <MapPin className="size-5" />
-                </div>
-                <div className="contact-card-content flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">Address</h4>
-                    {copiedCard === 'address' && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
-                        <Check className="size-3" /> Copied!
-                      </span>
-                    )}
-                  </div>
-                  <p>
-                    21 Asok Building, 253 Asok Montri Rd,<br />
-                    Khlong Toei Nuea, Watthana, Bangkok 10110
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
-                <span>Map</span>
-                <ExternalLink className="size-3.5" />
-              </div>
-            </motion.div>
-
-            {/* Card 2: Phone (Green / Emerald) */}
-            <motion.div
-              className={`contact-info-card group ${activeCard === 'phone' ? 'active' : ''}`}
-              id="contact-phone"
-              whileHover={{ y: -4, scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              onClick={() => handleContactCardClick('phone', 'tel:0641922433', '0641922433')}
-            >
-              <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800/80 group-hover:border-emerald-400 group-hover:shadow-[0_0_18px_rgba(16,185,129,0.45)] group-hover:scale-110 transition-all duration-300">
-                  <Phone className="size-5" />
-                </div>
-                <div className="contact-card-content flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Phone</h4>
-                    {copiedCard === 'phone' && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
-                        <Check className="size-3" /> Copied!
-                      </span>
-                    )}
-                  </div>
-                  <p>064 192 2433 • Office Hours (Mon-Fri, 9:00 - 18:00 ICT)</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
-                <span>Call</span>
-                <ExternalLink className="size-3.5" />
-              </div>
-            </motion.div>
-
-            {/* Card 3: Email (Sky Blue) */}
-            <motion.div
-              className={`contact-info-card group ${activeCard === 'email' ? 'active' : ''}`}
-              id="contact-email"
-              whileHover={{ y: -4, scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              onClick={() => handleContactCardClick('email', 'mailto:admin@botnoigroup.com', 'admin@botnoigroup.com')}
-            >
-              <div className="flex items-center gap-3.5 flex-1 min-w-0">
-                <div className="contact-card-icon bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200/80 dark:border-sky-800/80 group-hover:border-sky-400 group-hover:shadow-[0_0_18px_rgba(14,165,233,0.45)] group-hover:scale-110 transition-all duration-300">
-                  <Mail className="size-5" />
-                </div>
-                <div className="contact-card-content flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h4 className="group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">Email</h4>
-                    {copiedCard === 'email' && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
-                        <Check className="size-3" /> Copied!
-                      </span>
-                    )}
-                  </div>
-                  <p>admin@botnoigroup.com</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-sky-600 dark:text-sky-400 opacity-80 group-hover:opacity-100 group-hover:translate-x-1 transition-all shrink-0 ml-2">
-                <span>Email</span>
-                <ExternalLink className="size-3.5" />
-              </div>
-            </motion.div>
-          </AnimatedSection>
-
-          {/* RIGHT COLUMN: LEAD FORM OR SUCCESS STATE */}
-          <AnimatedSection direction="left" duration={0.8} className="glass-panel" style={{ minHeight: '450px', display: 'flex', flexDirection: 'column', justifyContent: 'center', transition: 'none' }}>
-            <AnimatePresence>
-              {showSuccessToast && (
-                <motion.div 
-                  className="success-toast" 
-                  style={{
-                    background: '#ECFDF5',
-                    border: '1px solid rgba(16, 185, 129, 0.2)',
-                    borderRadius: '12px',
-                    padding: '1.25rem',
-                    marginBottom: '1.5rem',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '0.75rem',
-                    position: 'relative',
-                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.05)'
-                  }}
-                  initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                >
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    background: 'rgba(16, 185, 129, 0.2)',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--success)',
-                    fontWeight: '800',
-                    flexShrink: 0
-                  }}>✓</div>
-                  <div style={{ flexGrow: 1, textAlign: 'left' }}>
-                    <h4 style={{ margin: '0 0 0.25rem 0', color: 'var(--accent-foreground)', fontSize: '0.9rem', fontWeight: '800' }}>
-                      {t('contact.toast_title')}
-                    </h4>
-                    <p style={{ margin: '0 0 0.75rem 0', fontSize: '0.8rem', color: 'var(--muted-foreground)' }}>
-                      {t('contact.toast_desc')}
-                    </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem 1rem', fontSize: '0.75rem', borderTop: '1px dashed rgba(16,185,129,0.2)', paddingTop: '0.5rem' }}>
-                      <div><strong>{t('contact.toast_detail_name')}:</strong> {toastDetails.name}</div>
-                      <div><strong>{t('contact.toast_detail_email')}:</strong> {toastDetails.email}</div>
-                      <div><strong>{t('contact.toast_detail_type')}:</strong> {getInquiryTypeLabel(toastDetails.inquiryType)}</div>
-                      <div><strong>{t('contact.toast_detail_num')}:</strong> #{toastDetails.formNumber}</div>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => setShowSuccessToast(false)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: 'var(--muted-foreground)',
-                      cursor: 'pointer',
-                      fontSize: '1rem',
-                      position: 'absolute',
-                      top: '10px',
-                      right: '12px'
-                    }}
-                    aria-label={t('contact.toast_close')}
-                  >×</button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-              <div style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.4rem', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: 'var(--card-foreground)' }}>
-                  {t('contact.form_heading')}
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: 'var(--muted-foreground)', margin: 0 }}>
-                  {t('contact.form_subheading')}
-                </p>
-              </div>
-
-              <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
-                <label htmlFor="input-name" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted-foreground)', marginBottom: '0.5rem' }}>
-                  {t('contact.form_name')} <span style={{ color: 'var(--destructive)' }}>*</span>
-                </label>
-                <input 
-                  type="text" 
-                  id="input-name" 
-                  name="name" 
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder={t('contact.form_name_placeholder')}
-                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
-                    formData.name ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
-                  }`}
-                />
-              </div>
-
-              <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
-                <label htmlFor="input-email" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted-foreground)', marginBottom: '0.5rem' }}>
-                  {t('contact.form_email')} <span style={{ color: 'var(--destructive)' }}>*</span>
-                </label>
-                <input 
-                  type="email" 
-                  id="input-email" 
-                  name="email" 
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder={t('contact.form_email_placeholder')}
-                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
-                    formData.email ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
-                  }`}
-                />
-              </div>
-
-              <div className="form-group" style={{ marginBottom: '1.25rem', textAlign: 'left' }}>
-                <label htmlFor="select-inquiry" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted-foreground)', marginBottom: '0.5rem' }}>
-                  {t('contact.form_type')}
-                </label>
-                <div style={{ position: 'relative' }}>
-                  <select 
-                    id="select-inquiry" 
-                    name="inquiryType"
-                    value={formData.inquiryType}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 appearance-none cursor-pointer focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
-                      formData.inquiryType ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
-                    }`}
-                  >
-                    <option value="contact" className="bg-card text-foreground">{t('contact.inquiry_label_contact')}</option>
-                    <option value="webavatar" className="bg-card text-foreground">{t('contact.inquiry_label_webavatar')}</option>
-                    <option value="chatbot" className="bg-card text-foreground">{t('contact.inquiry_label_chatbot')}</option>
-                    <option value="voice" className="bg-card text-foreground">{t('contact.inquiry_label_voice')}</option>
-                    <option value="enterprise" className="bg-card text-foreground">{t('contact.inquiry_label_enterprise')}</option>
-                  </select>
-                  <div style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    pointerEvents: 'none',
-                    color: 'var(--muted-foreground)',
-                    fontSize: '0.75rem'
-                  }}>▼</div>
-                </div>
-                <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted-foreground)', marginTop: '0.35rem', opacity: 0.85 }}>
-                  {t('contact.form_type_helper')}
-                </span>
-              </div>
-
-              <div className="form-group" style={{ marginBottom: '1.75rem', textAlign: 'left' }}>
-                <label htmlFor="textarea-message" style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--muted-foreground)', marginBottom: '0.5rem' }}>
-                  {t('contact.form_message')}
-                </label>
-                <textarea 
-                  id="textarea-message" 
-                  name="message" 
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder={t('contact.form_message_placeholder')}
-                  rows={4}
-                  className={`w-full px-4 py-3 rounded-xl border text-foreground text-sm outline-none transition-all duration-300 resize-y focus:border-sky-500 focus:ring-4 focus:ring-sky-500/25 focus:shadow-[0_0_20px_rgba(14,165,233,0.35)] ${
-                    formData.message ? 'border-sky-500/70 bg-sky-500/5 shadow-[0_0_12px_rgba(14,165,233,0.15)]' : 'border-border bg-card/60 hover:border-sky-400/40'
-                  }`}
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-primary"
-                style={{ width: '100%', padding: '0.8rem' }}
-                id="submit-inquiry-button"
-              >
-                {t('contact.form_submit')}
-              </button>
-            </form>
-          </AnimatedSection>
+        {/* Clean Minimal Hairline Divider */}
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="w-full h-px bg-border/40"></div>
         </div>
-      </section>
 
-      {/* REACTIVE STATE DRAFT SUMMARY */}
-      <section className="section-wrapper relative z-10" id="contact-ledger" style={{ margin: '4rem auto', maxWidth: '1150px', padding: '0 1.5rem' }} aria-label="Inquiry Log">
-        <AnimatedSection direction="up" duration={0.8}>
-          <div className="glass-panel" style={{ padding: '3rem', transition: 'none' }}>
-            <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', background: 'var(--grad-text)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', letterSpacing: '-0.02em' }}>
+        {/* ══════════════════════════════════════════
+            3. UNIFIED CONTACT & SANDBOX CARD
+        ══════════════════════════════════════════ */}
+        <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto" id="contact-form-section" aria-label="Contact Information and Inquiry Form">
+          <AnimatedSection direction="up" duration={0.6}>
+            <div className="bg-card/90 dark:bg-card/85 backdrop-blur-md border border-border/70 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-sm">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+                
+                {/* LEFT COLUMN: OFFICE CHANNELS (5 COLS) */}
+                <div className="lg:col-span-5 flex flex-col gap-6 lg:border-r lg:border-border/40 lg:pr-10" id="office-location">
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-2">
+                      {t('contact.office_heading')}
+                    </h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {t('contact.office_subheading')}
+                    </p>
+                  </div>
+
+                  {/* Contact Channels List without individual box frames */}
+                  <div className="flex flex-col divide-y divide-border/40">
+                    
+                    {/* Item 1: Address */}
+                    <div 
+                      className="py-4 first:pt-0 last:pb-0 group cursor-pointer transition-colors"
+                      onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '21 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
+                    >
+                      <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
+                        <span className="flex items-center gap-1.5 text-amber-500 font-bold uppercase tracking-wider">
+                          <MapPin className="size-3.5" />
+                          Location
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
+                          Open Map <ArrowUpRight className="size-3.5" />
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
+                          21 Asok Building
+                        </h3>
+                        {copiedCard === 'address' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
+                            <Check className="size-3" /> Copied
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110
+                      </p>
+                    </div>
+
+                    {/* Item 2: Phone */}
+                    <div 
+                      className="py-4 first:pt-0 last:pb-0 group cursor-pointer transition-colors"
+                      onClick={() => handleContactCardClick('phone', 'tel:0641922433', '0641922433')}
+                    >
+                      <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
+                        <span className="flex items-center gap-1.5 text-emerald-500 font-bold uppercase tracking-wider">
+                          <Phone className="size-3.5" />
+                          Hotline
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
+                          Call Now <ArrowUpRight className="size-3.5" />
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-lg font-bold font-mono text-foreground group-hover:text-primary transition-colors">
+                          064 192 2433
+                        </h3>
+                        {copiedCard === 'phone' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
+                            <Check className="size-3" /> Copied
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Mon–Fri, 9:00–18:00 ICT (Business Operations)
+                      </p>
+                    </div>
+
+                    {/* Item 3: Email */}
+                    <div 
+                      className="py-4 first:pt-0 last:pb-0 group cursor-pointer transition-colors"
+                      onClick={() => handleContactCardClick('email', 'mailto:admin@botnoigroup.com', 'admin@botnoigroup.com')}
+                    >
+                      <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
+                        <span className="flex items-center gap-1.5 text-sky-500 font-bold uppercase tracking-wider">
+                          <Mail className="size-3.5" />
+                          Electronic Mail
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
+                          Send Email <ArrowUpRight className="size-3.5" />
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-lg font-bold font-mono text-foreground group-hover:text-primary transition-colors">
+                          admin@botnoigroup.com
+                        </h3>
+                        {copiedCard === 'email' && (
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
+                            <Check className="size-3" /> Copied
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Enterprise partnerships, AI avatar demos, and solutions
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN: SANDBOX INQUIRY FORM (7 COLS) */}
+                <div className="lg:col-span-7 flex flex-col gap-6">
+                  
+                  {/* Minimal Toast Notification */}
+                  <AnimatePresence>
+                    {showSuccessToast && (
+                      <motion.div 
+                        className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-left flex items-start justify-between gap-3"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold text-sm mb-1">
+                            <Check className="size-4" />
+                            <span>{t('contact.toast_title')}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground mb-2">
+                            {t('contact.toast_desc')}
+                          </p>
+                          <div className="text-xs font-mono text-muted-foreground space-y-0.5">
+                            <div>Name: {toastDetails.name} ({toastDetails.email})</div>
+                            <div>Type: {getInquiryTypeLabel(toastDetails.inquiryType)} • Ref: #{toastDetails.formNumber}</div>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => setShowSuccessToast(false)}
+                          className="text-muted-foreground hover:text-foreground text-sm cursor-pointer p-1"
+                        >×</button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  <div className="text-left">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-2">
+                      {t('contact.form_heading')}
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                      {t('contact.form_subheading')}
+                    </p>
+                  </div>
+
+                  {/* Framed Card Input Form */}
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    
+                    {/* Two-Column Name & Email */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      {/* Name Input */}
+                      <div className="text-left">
+                        <label htmlFor="input-name" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                          {t('contact.form_name')} <span className="text-rose-500">*</span>
+                        </label>
+                        <input 
+                          type="text" 
+                          id="input-name" 
+                          name="name" 
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          placeholder={t('contact.form_name_placeholder')}
+                          className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-2xs"
+                        />
+                      </div>
+
+                      {/* Email Input */}
+                      <div className="text-left">
+                        <label htmlFor="input-email" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                          {t('contact.form_email')} <span className="text-rose-500">*</span>
+                        </label>
+                        <input 
+                          type="email" 
+                          id="input-email" 
+                          name="email" 
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          placeholder={t('contact.form_email_placeholder')}
+                          className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-2xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Inquiry Type Select */}
+                    <div className="text-left">
+                      <label htmlFor="select-inquiry" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                        {t('contact.form_type')}
+                      </label>
+                      <div className="relative">
+                        <select 
+                          id="select-inquiry" 
+                          name="inquiryType"
+                          value={formData.inquiryType}
+                          onChange={handleChange}
+                          className="w-full appearance-none bg-background border border-border/80 rounded-xl pl-4 pr-11 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 cursor-pointer shadow-2xs"
+                        >
+                          <option value="contact" className="bg-background text-foreground">{t('contact.inquiry_label_contact')}</option>
+                          <option value="webavatar" className="bg-background text-foreground">{t('contact.inquiry_label_webavatar')}</option>
+                          <option value="chatbot" className="bg-background text-foreground">{t('contact.inquiry_label_chatbot')}</option>
+                          <option value="voice" className="bg-background text-foreground">{t('contact.inquiry_label_voice')}</option>
+                          <option value="enterprise" className="bg-background text-foreground">{t('contact.inquiry_label_enterprise')}</option>
+                        </select>
+                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none transition-colors" />
+                      </div>
+                    </div>
+
+                    {/* Message Textarea */}
+                    <div className="text-left">
+                      <label htmlFor="textarea-message" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                        {t('contact.form_message')}
+                      </label>
+                      <textarea 
+                        id="textarea-message" 
+                        name="message" 
+                        value={formData.message}
+                        onChange={handleChange}
+                        placeholder={t('contact.form_message_placeholder')}
+                        rows={4}
+                        className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 resize-y placeholder:text-muted-foreground/50 shadow-2xs"
+                      />
+                    </div>
+
+                    {/* Submit Action */}
+                    <div className="pt-2 flex justify-start">
+                      <button 
+                        type="submit" 
+                        className="btn btn-outline-primary cursor-pointer"
+                        id="submit-inquiry-button"
+                      >
+                        <span>{t('contact.form_submit')}</span>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </section>
+
+      {/* Clean Minimal Hairline Divider */}
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full h-px bg-border/40"></div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          3. BORDERLESS INQUIRY LEDGER TABLE
+      ══════════════════════════════════════════ */}
+      <section className="py-14 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto" id="contact-ledger" aria-label="Inquiry Log">
+        <AnimatedSection direction="up" duration={0.6}>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div className="text-left">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-1">
                 {t('contact.roster_heading')}
               </h2>
-              <p style={{ fontSize: '0.92rem', color: 'var(--muted-foreground)', margin: 0 }}>
+              <p className="text-sm text-muted-foreground">
                 {t('contact.roster_subheading')}
               </p>
             </div>
 
-            <div className="ledger-table-container">
-              <table className="ledger-table">
-                <thead>
-                  <tr>
-                    <th>{t('contact.th_id')}</th>
-                    <th>{t('contact.th_name')}</th>
-                    <th>{t('contact.th_email')}</th>
-                    <th>{t('contact.th_type')}</th>
-                    <th>{t('contact.th_time')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* REACTIVE ACTIVE DRAFT ROW (IF USER STARTED FILLING) */}
-                  <AnimatePresence>
-                    {(formData.name.trim() || formData.email.trim()) && (
-                      <motion.tr 
-                        className="ledger-draft-row"
-                        initial={{ opacity: 0, background: 'rgba(99, 102, 241, 0.05)' }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        style={{ color: 'var(--primary)', fontWeight: '500' }}
-                      >
-                        <td>[DRAFT]</td>
-                        <td>{formatRedactedName(formData.name) || <em style={{ opacity: 0.5 }}>Typing name...</em>}</td>
-                        <td>{formatRedactedEmail(formData.email) || <em style={{ opacity: 0.5 }}>Typing email...</em>}</td>
-                        <td>{getInquiryTypeLabel(formData.inquiryType)}</td>
-                        <td>--:--</td>
-                      </motion.tr>
-                    )}
-                  </AnimatePresence>
-
-                  {/* HISTORIC SUBMISSIONS */}
-                  {submissions.length > 0 ? (
-                    submissions.map((sub) => (
-                      <tr 
-                        key={sub.id} 
-                        className="ledger-row-hover"
-                      >
-                        <td>#{sub.formNumber}</td>
-                        <td style={{ fontWeight: '600' }}>{formatRedactedName(sub.name)}</td>
-                        <td>{formatRedactedEmail(sub.email)}</td>
-                        <td>{getInquiryTypeLabel(sub.inquiryType)}</td>
-                        <td>{sub.timestamp}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    !formData.name.trim() && !formData.email.trim() && (
-                      <tr>
-                        <td colSpan={5} style={{ padding: '3.5rem 1rem', textAlign: 'center', color: 'var(--muted-foreground)' }}>
-                          {t('contact.no_submissions')}
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
             <button 
               type="button"
               onClick={handleDownloadList}
-              className="btn btn-secondary cursor-pointer hover:bg-primary hover:text-white transition-all shadow-sm flex items-center gap-2" 
-              style={{ 
-                borderRadius: '10px',
-                padding: '0.6rem 1.4rem',
-                fontSize: '0.85rem',
-                fontWeight: '700',
-              }}
+              className="self-start sm:self-auto inline-flex items-center gap-2 text-xs font-mono font-bold text-muted-foreground hover:text-primary transition-colors cursor-pointer py-1.5" 
               id="download-ledger-button"
             >
               <Download className="size-4" />
-              <span>{t('contact.btn_download_list')}</span>
+              <span>Export CSV</span>
             </button>
+          </div>
+
+          {/* Minimal Borderless Data Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="border-b border-border text-xs font-mono font-bold text-muted-foreground/80 uppercase">
+                  <th className="py-3 px-2">ID</th>
+                  <th className="py-3 px-4">Name</th>
+                  <th className="py-3 px-4">Email</th>
+                  <th className="py-3 px-4">Topic</th>
+                  <th className="py-3 px-2 text-right">Time</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/30">
+                {/* Live Reactive Draft Row */}
+                <AnimatePresence>
+                  {(formData.name.trim() || formData.email.trim()) && (
+                    <motion.tr 
+                      className="text-primary font-medium bg-primary/5"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <td className="py-3.5 px-2 font-mono font-bold">[DRAFT]</td>
+                      <td className="py-3.5 px-4">{formatRedactedName(formData.name) || <span className="opacity-40 italic">Typing name...</span>}</td>
+                      <td className="py-3.5 px-4">{formatRedactedEmail(formData.email) || <span className="opacity-40 italic">Typing email...</span>}</td>
+                      <td className="py-3.5 px-4"><span className="text-xs font-mono">{getInquiryTypeLabel(formData.inquiryType)}</span></td>
+                      <td className="py-3.5 px-2 font-mono text-xs text-right opacity-60">--:--</td>
+                    </motion.tr>
+                  )}
+                </AnimatePresence>
+
+                {/* Submissions List */}
+                {submissions.length > 0 ? (
+                  submissions.map((sub) => (
+                    <tr key={sub.id} className="hover:bg-muted/20 transition-colors">
+                      <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground">#{sub.formNumber}</td>
+                      <td className="py-3.5 px-4 font-semibold text-foreground">{formatRedactedName(sub.name)}</td>
+                      <td className="py-3.5 px-4 text-muted-foreground">{formatRedactedEmail(sub.email)}</td>
+                      <td className="py-3.5 px-4">
+                        <span className="text-xs font-mono text-primary font-semibold">
+                          {getInquiryTypeLabel(sub.inquiryType)}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground text-right tabular-nums">{sub.timestamp}</td>
+                    </tr>
+                  ))
+                ) : (
+                  !formData.name.trim() && !formData.email.trim() && (
+                    <tr>
+                      <td colSpan={5} className="py-10 text-center text-sm text-muted-foreground/60">
+                        {t('contact.no_submissions')}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
           </div>
         </AnimatedSection>
       </section>
 
-      {/* FAQ ACCORDION SECTION */}
-      <section className="section-wrapper relative z-10" id="contact-faq" style={{ paddingBottom: '6rem', margin: '4rem auto', maxWidth: '1150px', paddingLeft: '1.5rem', paddingRight: '1.5rem' }} aria-label="Frequently Asked Questions">
-        <AnimatedSection direction="up" duration={0.8}>
-          <div className="section-header">
-            <h2>{t('contact.faq_heading')}</h2>
-            <p>{t('contact.faq_subheading')}</p>
+      {/* Clean Minimal Hairline Divider */}
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full h-px bg-border/60"></div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          4. MINIMAL HAIRLINE FAQ ACCORDION
+      {/* ══════════════════════════════════════════
+          4. BENTO GRID FAQ SECTION
+      ══════════════════════════════════════════ */}
+      <section className="py-16 pb-28 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto" id="contact-faq" aria-label="Frequently Asked Questions">
+        <AnimatedSection direction="up" duration={0.6}>
+          <div className="text-left mb-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground mb-3">
+              {t('contact.faq_heading')}
+            </h2>
+            <p className="text-base text-muted-foreground max-w-2xl leading-relaxed">
+              {t('contact.faq_subheading')}
+            </p>
           </div>
         </AnimatedSection>
 
-        <div className="faq-accordion">
-          {faqs.map((faq, index) => (
-            <div 
-              key={index} 
-              className={`faq-item ${openFaq === index ? 'open' : ''}`}
-              id={`faq-item-${index}`}
-            >
-              <div 
-                className="faq-question" 
-                onClick={() => toggleFaq(index)} 
-                id={`faq-question-${index}`} 
-                aria-expanded={openFaq === index}
-              >
-                <span>{faq.q}</span>
-                <motion.span 
-                  className="faq-toggle font-mono"
-                  animate={{ rotate: openFaq === index ? 45 : 0 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  +
-                </motion.span>
-              </div>
-              <AnimatePresence initial={false}>
-                {openFaq === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    <div className="faq-answer-content">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+        {/* Bento Grid Layout (Asymmetric 12-Column Grid) */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          
+          {/* Bento Tile 1: Core WebAvatar Platform & SDK (7 cols) */}
+          <motion.div 
+            className="md:col-span-7 bg-card/90 dark:bg-card/85 backdrop-blur-md border border-border/70 rounded-3xl p-7 sm:p-8 flex flex-col justify-between hover:border-sky-500/40 transition-all duration-300 shadow-sm hover:shadow-md group"
+            whileHover={{ y: -2 }}
+            id="faq-bento-1"
+          >
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-4">
+                {t('contact.faq_q1')}
+              </h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {t('contact.faq_a1')}
+              </p>
             </div>
-          ))}
+            <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-xs font-mono text-muted-foreground">
+              <span>Lightweight JS SDK • DOM Reactive</span>
+              <span className="text-sky-500 font-bold">SPA Ready ↗</span>
+            </div>
+          </motion.div>
+
+          {/* Bento Tile 2: Continuous Voice Acoustics (5 cols) */}
+          <motion.div 
+            className="md:col-span-5 bg-card/90 dark:bg-card/85 backdrop-blur-md border border-border/70 rounded-3xl p-7 sm:p-8 flex flex-col justify-between hover:border-sky-500/40 transition-all duration-300 shadow-sm hover:shadow-md group"
+            whileHover={{ y: -2 }}
+            id="faq-bento-2"
+          >
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-3">
+                {t('contact.faq_q2')}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {t('contact.faq_a2')}
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-xs font-mono text-muted-foreground">
+              <span>Thai NLP Engine</span>
+              <span className="text-sky-500 font-bold">Continuous Speech</span>
+            </div>
+          </motion.div>
+
+          {/* Bento Tile 3: 3D Customization & Brand Persona (5 cols) */}
+          <motion.div 
+            className="md:col-span-5 bg-card/90 dark:bg-card/85 backdrop-blur-md border border-border/70 rounded-3xl p-7 sm:p-8 flex flex-col justify-between hover:border-sky-500/40 transition-all duration-300 shadow-sm hover:shadow-md group"
+            whileHover={{ y: -2 }}
+            id="faq-bento-3"
+          >
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold tracking-tight text-foreground group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-3">
+                {t('contact.faq_q3')}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {t('contact.faq_a3')}
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-xs font-mono text-muted-foreground">
+              <span>3D Rigging • Mascots</span>
+              <span className="text-sky-500 font-bold">Brand Persona</span>
+            </div>
+          </motion.div>
+
+          {/* Bento Tile 4: Leadership & Research Labs (7 cols) */}
+          <motion.div 
+            className="md:col-span-7 bg-card/90 dark:bg-card/85 backdrop-blur-md border border-border/70 rounded-3xl p-7 sm:p-8 flex flex-col justify-between hover:border-sky-500/40 transition-all duration-300 shadow-sm hover:shadow-md group"
+            whileHover={{ y: -2 }}
+            id="faq-bento-4"
+          >
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors mb-4">
+                {t('contact.faq_q4')}
+              </h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {t('contact.faq_a4')}
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-xs font-mono text-muted-foreground">
+              <span>Bangkok Headquarters</span>
+              <span className="text-sky-500 font-bold">Dr. Winn &amp; AI Labs</span>
+            </div>
+          </motion.div>
+
         </div>
       </section>
 
       <AppFooter />
+      </div>
     </div>
   );
 }
 
 export default Contact;
+
+
+

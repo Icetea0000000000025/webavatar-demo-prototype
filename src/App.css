@@ -57,7 +57,7 @@
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   z-index: 50;
   transition: none !important;
 }
@@ -92,7 +92,7 @@
   line-height: 1;
   font-size: 1.25rem;
   font-weight: 900;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   background: var(--grad-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -102,7 +102,7 @@
   font-size: 0.75rem;
   color: var(--muted-foreground);
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   border-left: 1px solid var(--border);
   padding-left: 0.75rem;
@@ -607,7 +607,7 @@
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: #fafbfc;
+  background: var(--background);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -619,8 +619,8 @@
   align-items: center;
   gap: 2rem;
   padding: 0.85rem 3rem;
-  border-bottom: 1px solid #e4e4e7;
-  background: rgba(250, 251, 252, 0.95);
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
   flex-shrink: 0;
 }
 

@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 interface Box3D {
-  gx: number; // Grid X
-  gy: number; // Grid Y
-  x: number;  // Base World X
-  y: number;  // Base World Y
-  baseZ: number;
+  gx: number;
+  gy: number;
+  x: number;
+  y: number;
   z: number;
   targetZ: number;
   vz: number;
@@ -15,9 +14,8 @@ interface Box3D {
   targetRotY: number;
   glow: number;
   targetGlow: number;
-  hueOffset: number;
   idlePhase: number;
-  colorTheme: 0 | 1 | 2; // 0: Active Clients (Sky/Indigo), 1: Realistic Voices (Emerald/Cyan), 2: Supported Languages (Purple/Fuchsia)
+  colorTheme: 0 | 1 | 2; // 0: Sky/Indigo, 1: Emerald/Cyan, 2: Purple/Fuchsia
 }
 
 interface Ripple {
@@ -30,57 +28,61 @@ interface Ripple {
 }
 
 export const InteractiveBoxesBackground: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let animId: number;
+    let animId: number = 0;
     let lastTime = performance.now();
+    let isVisible = true;
 
-    // Canvas size
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    // Viewport dimensions
+    let width = container.clientWidth || window.innerWidth;
+    let height = container.clientHeight || window.innerHeight;
 
-    // Mouse state
+    // Mouse coordinates (decoupled from event handler to prevent event thrashing)
     const mouse = {
+      rawX: -9999,
+      rawY: -9999,
       x: -9999,
       y: -9999,
-      worldX: -9999,
-      worldY: -9999,
-      isHovered: false,
-      lastMoveTime: 0,
       prevX: 0,
       prevY: 0,
       speed: 0,
+      isHovered: false,
     };
 
-    // Ripples array
     const ripples: Ripple[] = [];
 
-    // Configuration
+    // Grid configuration with optimized block count for buttery 60+ FPS on all devices
     const getGridConfig = (w: number) => {
-      const isMobile = w < 768;
-      const isTablet = w >= 768 && w < 1100;
+      const isMobile = w < 640;
+      const isTablet = w >= 640 && w < 1024;
       return {
-        cols: isMobile ? 12 : isTablet ? 18 : 24,
-        rows: isMobile ? 12 : isTablet ? 16 : 20,
-        boxSize: isMobile ? 32 : isTablet ? 42 : 50,
-        boxHeight: isMobile ? 16 : isTablet ? 22 : 28,
-        gap: isMobile ? 10 : isTablet ? 14 : 18,
-        influenceRadius: isMobile ? 160 : 260,
-        maxLift: isMobile ? 55 : 85,
-        maxTilt: 0.38, // radians
-        cameraPitch: 58 * (Math.PI / 180), // 58 degrees tilt
-        cameraYaw: -18 * (Math.PI / 180),  // -18 degrees isometric rotation
+        cols: isMobile ? 9 : isTablet ? 13 : 16,
+        rows: isMobile ? 10 : isTablet ? 12 : 14,
+        boxSize: isMobile ? 38 : isTablet ? 48 : 56,
+        boxHeight: isMobile ? 18 : isTablet ? 24 : 30,
+        gap: isMobile ? 12 : isTablet ? 16 : 20,
+        influenceRadius: isMobile ? 150 : isTablet ? 210 : 260,
+        maxLift: isMobile ? 45 : 68,
+        maxTilt: 0.32,
+        cameraPitch: 58 * (Math.PI / 180),
+        cameraYaw: -18 * (Math.PI / 180),
       };
     };
 
     let config = getGridConfig(width);
     let boxes: Box3D[] = [];
+    // Pre-sorted draw indices (Painter's algorithm: back-to-front depth order is static for fixed isometric angle)
+    let sortedIndices: number[] = [];
 
     const initBoxes = () => {
       boxes = [];
@@ -95,18 +97,14 @@ export const InteractiveBoxesBackground: React.FC = () => {
           const by = startY + r * spacing;
           const distFromCenter = Math.sqrt(bx * bx + by * by);
 
-          // 3 Distinct Territorial Color Zones:
-          // Zone 0 (Left): Active Clients (Sky/Indigo)
-          // Zone 1 (Center): Realistic Voices (Emerald/Cyan)
-          // Zone 2 (Right): Supported Languages (Purple/Fuchsia)
           const zoneRatio = (c + (rows - 1 - r) * 0.25) / ((cols - 1) + (rows - 1) * 0.25);
           let theme: 0 | 1 | 2;
           if (zoneRatio < 0.36) {
-            theme = 0; // Active Clients (Sky Blue -> Indigo)
+            theme = 0; // Sky Blue -> Indigo
           } else if (zoneRatio < 0.68) {
-            theme = 1; // Realistic Voices (Emerald -> Cyan)
+            theme = 1; // Emerald -> Cyan
           } else {
-            theme = 2; // Supported Languages (Purple -> Fuchsia)
+            theme = 2; // Purple -> Fuchsia
           }
 
           boxes.push({
@@ -114,7 +112,6 @@ export const InteractiveBoxesBackground: React.FC = () => {
             gy: r,
             x: bx,
             y: by,
-            baseZ: 0,
             z: 0,
             targetZ: 0,
             vz: 0,
@@ -124,21 +121,32 @@ export const InteractiveBoxesBackground: React.FC = () => {
             targetRotY: 0,
             glow: 0,
             targetGlow: 0,
-            hueOffset: (c * 7 + r * 11) % 40,
-            idlePhase: distFromCenter * 0.015 + (c + r) * 0.2,
+            idlePhase: distFromCenter * 0.015 + (c + r) * 0.22,
             colorTheme: theme,
           });
         }
       }
+
+      // Pre-compute isometric render order (Back-to-Front: lowest row first, highest col first)
+      sortedIndices = boxes
+        .map((_, idx) => idx)
+        .sort((a, b) => {
+          const ba = boxes[a];
+          const bb = boxes[b];
+          // In isometric yaw -18deg, pitch 58deg: depth is primarily determined by (r - c * 0.3)
+          const depthA = ba.gy - ba.gx * 0.32;
+          const depthB = bb.gy - bb.gx * 0.32;
+          return depthA - depthB;
+        });
     };
 
     const handleResize = () => {
-      if (!canvas) return;
-      const parent = canvas.parentElement;
-      width = parent?.clientWidth || window.innerWidth;
-      height = parent?.clientHeight || window.innerHeight;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (!container || !canvas) return;
+      width = container.clientWidth || window.innerWidth;
+      height = container.clientHeight || window.innerHeight;
 
+      // Cap DPR to 1.5 max to eliminate GPU fillrate bottleneck on 4K/Retina/low-end laptops
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
 
@@ -148,113 +156,80 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    const resizeObserver = new ResizeObserver(() => handleResize());
-    if (canvas.parentElement) {
-      resizeObserver.observe(canvas.parentElement);
-    }
 
-    // 3D Matrix Projection Helpers
-    const project3D = (
-      x: number,
-      y: number,
-      z: number,
-      centerX: number,
-      centerY: number,
-      pitch: number,
-      yaw: number,
-      focalLength: number,
-      camDist: number
+    // Fast 3D projection without object allocations
+    const cosPitch = Math.cos(config.cameraPitch);
+    const sinPitch = Math.sin(config.cameraPitch);
+    const cosYaw = Math.cos(config.cameraYaw);
+    const sinYaw = Math.sin(config.cameraYaw);
+
+    const projectPoint = (
+      px: number,
+      py: number,
+      pz: number,
+      cx: number,
+      cy: number,
+      focal: number,
+      camDist: number,
+      out: { sx: number; sy: number }
     ) => {
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-      const x1 = x * cosY - y * sinY;
-      const y1 = x * sinY + y * cosY;
-      const z1 = z;
-
-      const cosP = Math.cos(pitch);
-      const sinP = Math.sin(pitch);
-      const x2 = x1;
-      const y2 = y1 * cosP - z1 * sinP;
-      const z2 = y1 * sinP + z1 * cosP + camDist;
-
-      const scale = focalLength / Math.max(z2, 10);
-      const sx = centerX + x2 * scale;
-      const sy = centerY + y2 * scale;
-
-      return { sx, sy, depth: z2, scale };
+      const x1 = px * cosYaw - py * sinYaw;
+      const y1 = px * sinYaw + py * cosYaw;
+      const y2 = y1 * cosPitch - pz * sinPitch;
+      const z2 = y1 * sinPitch + pz * cosPitch + camDist;
+      const scale = focal / (z2 < 10 ? 10 : z2);
+      out.sx = cx + x1 * scale;
+      out.sy = cy + y2 * scale;
     };
 
     const unprojectMouseToGround = (
       mx: number,
       my: number,
-      centerX: number,
-      centerY: number,
-      pitch: number,
-      yaw: number,
-      focalLength: number,
+      cx: number,
+      cy: number,
+      focal: number,
       camDist: number
     ) => {
-      const dx = mx - centerX;
-      const dy = my - centerY;
-
-      const cosP = Math.cos(pitch);
-      const sinP = Math.sin(pitch);
-      const cosY = Math.cos(yaw);
-      const sinY = Math.sin(yaw);
-
-      const denom = dy * sinP + focalLength * cosP;
+      const dx = mx - cx;
+      const dy = my - cy;
+      const denom = dy * sinPitch + focal * cosPitch;
       if (Math.abs(denom) < 0.001) return { wx: 0, wy: 0 };
 
       const worldYCam = (dy * camDist) / denom;
-      const scale = focalLength / (worldYCam * sinP + camDist);
+      const scale = focal / (worldYCam * sinPitch + camDist);
       const worldXCam = dx / scale;
 
-      const wx = worldXCam * cosY + worldYCam * sinY;
-      const wy = -worldXCam * sinY + worldYCam * cosY;
-
+      const wx = worldXCam * cosYaw + worldYCam * sinYaw;
+      const wy = -worldXCam * sinYaw + worldYCam * cosYaw;
       return { wx, wy };
     };
 
+    // Reusable vertex cache (zero GC allocation in render loop)
+    const tv = [
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+    ];
+    const bv = [
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+      { sx: 0, sy: 0 },
+    ];
+
+    // Mouse event handlers (ultra-lightweight: just record position)
     const onMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const currentX = e.clientX - rect.left;
-      const currentY = e.clientY - rect.top;
-
-      const dx = currentX - mouse.prevX;
-      const dy = currentY - mouse.prevY;
-      mouse.speed = Math.sqrt(dx * dx + dy * dy);
-
-      mouse.x = currentX;
-      mouse.y = currentY;
-      mouse.prevX = currentX;
-      mouse.prevY = currentY;
+      mouse.rawX = e.clientX - rect.left;
+      mouse.rawY = e.clientY - rect.top;
       mouse.isHovered = true;
-      mouse.lastMoveTime = performance.now();
-
-      if (mouse.speed > 25 && ripples.length < 5) {
-        const { wx, wy } = unprojectMouseToGround(
-          mouse.x,
-          mouse.y,
-          width * 0.52,
-          height * 0.48,
-          config.cameraPitch,
-          config.cameraYaw,
-          width > 1200 ? 950 : 800,
-          950
-        );
-        ripples.push({
-          x: wx,
-          y: wy,
-          radius: 10,
-          maxRadius: config.influenceRadius * 1.8,
-          strength: Math.min(mouse.speed * 0.4, 30),
-          speed: 12,
-        });
-      }
     };
 
     const onMouseLeave = () => {
       mouse.isHovered = false;
+      mouse.rawX = -9999;
+      mouse.rawY = -9999;
       mouse.x = -9999;
       mouse.y = -9999;
     };
@@ -264,78 +239,121 @@ export const InteractiveBoxesBackground: React.FC = () => {
       const clickX = e.clientX - rect.left;
       const clickY = e.clientY - rect.top;
 
-      const { wx, wy } = unprojectMouseToGround(
-        clickX,
-        clickY,
-        width * 0.52,
-        height * 0.48,
-        config.cameraPitch,
-        config.cameraYaw,
-        width > 1200 ? 950 : 800,
-        950
-      );
+      const centerX = width * 0.52;
+      const centerY = height * 0.48;
+      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 680;
+      const camDist = 950;
 
-      ripples.push({
-        x: wx,
-        y: wy,
-        radius: 5,
-        maxRadius: config.influenceRadius * 2.8,
-        strength: 55,
-        speed: 16,
-      });
+      const { wx, wy } = unprojectMouseToGround(clickX, clickY, centerX, centerY, focalLength, camDist);
+
+      if (ripples.length < 4) {
+        ripples.push({
+          x: wx,
+          y: wy,
+          radius: 5,
+          maxRadius: config.influenceRadius * 2.2,
+          strength: 45,
+          speed: 15,
+        });
+      }
     };
 
-    window.addEventListener('mousemove', onMouseMove);
-    canvas.addEventListener('mouseleave', onMouseLeave);
-    canvas.addEventListener('click', onClick);
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    canvas.addEventListener('mouseleave', onMouseLeave, { passive: true });
+    canvas.addEventListener('click', onClick, { passive: true });
 
-    // Main Render Loop
+    // Pause rendering when hero is out of screen viewport (saves 100% CPU/GPU when user scrolls down)
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animId) {
+          lastTime = performance.now();
+          animId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(container);
+
+    const onVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (isVisible && !animId) {
+        lastTime = performance.now();
+        animId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
+    // Main Performance-Engine Render Loop
     const render = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      if (!isVisible) {
+        animId = 0;
+        return;
+      }
+
+      const dt = Math.min((now - lastTime) * 0.001, 0.04);
       lastTime = now;
 
-      const isDark = document.documentElement.classList.contains('dark');
+      // Smooth mouse position interpolation & speed calculation
+      if (mouse.isHovered) {
+        const dx = mouse.rawX - mouse.prevX;
+        const dy = mouse.rawY - mouse.prevY;
+        mouse.speed = Math.sqrt(dx * dx + dy * dy);
+        mouse.x = mouse.rawX;
+        mouse.y = mouse.rawY;
+        mouse.prevX = mouse.rawX;
+        mouse.prevY = mouse.rawY;
+      }
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const isDark = document.documentElement.classList.contains('dark');
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
       ctx.save();
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
       const centerX = width * 0.52;
       const centerY = height * 0.48;
-      const focalLength = width > 1200 ? 950 : width > 768 ? 850 : 700;
+      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 680;
       const camDist = 950;
 
       let mouseWorldX = -9999;
       let mouseWorldY = -9999;
       if (mouse.isHovered) {
-        const unproj = unprojectMouseToGround(
-          mouse.x,
-          mouse.y,
-          centerX,
-          centerY,
-          config.cameraPitch,
-          config.cameraYaw,
-          focalLength,
-          camDist
-        );
+        const unproj = unprojectMouseToGround(mouse.x, mouse.y, centerX, centerY, focalLength, camDist);
         mouseWorldX = unproj.wx;
         mouseWorldY = unproj.wy;
+
+        if (mouse.speed > 35 && ripples.length < 3) {
+          ripples.push({
+            x: mouseWorldX,
+            y: mouseWorldY,
+            radius: 8,
+            maxRadius: config.influenceRadius * 1.5,
+            strength: Math.min(mouse.speed * 0.3, 24),
+            speed: 12,
+          });
+        }
       }
 
+      // Update ripples
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rip = ripples[i];
         rip.radius += rip.speed;
-        rip.strength *= 0.94;
-        if (rip.radius > rip.maxRadius || rip.strength < 0.2) {
+        rip.strength *= 0.93;
+        if (rip.radius > rip.maxRadius || rip.strength < 0.3) {
           ripples.splice(i, 1);
         }
       }
 
       const timeSec = now * 0.001;
+      const { boxSize, boxHeight, maxLift, maxTilt, influenceRadius } = config;
+      const halfS = boxSize * 0.5;
 
-      boxes.forEach((box) => {
-        const idleWave = Math.sin(timeSec * 1.8 + box.idlePhase) * 3.5;
+      // Update Physics & Simulation
+      for (let i = 0; i < boxes.length; i++) {
+        const b = boxes[i];
+        const idleWave = Math.sin(timeSec * 1.6 + b.idlePhase) * 3.0;
 
         let mouseLift = 0;
         let mouseGlow = 0;
@@ -343,71 +361,64 @@ export const InteractiveBoxesBackground: React.FC = () => {
         let tiltY = 0;
 
         if (mouse.isHovered) {
-          const dx = box.x - mouseWorldX;
-          const dy = box.y - mouseWorldY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dx = b.x - mouseWorldX;
+          const dy = b.y - mouseWorldY;
+          const distSq = dx * dx + dy * dy;
+          const inflSq = influenceRadius * influenceRadius;
 
-          if (dist < config.influenceRadius) {
-            const factor = Math.cos((dist / config.influenceRadius) * (Math.PI / 2));
+          if (distSq < inflSq) {
+            const dist = Math.sqrt(distSq);
+            const factor = Math.cos((dist / influenceRadius) * (Math.PI / 2));
             const factorSq = factor * factor;
 
-            mouseLift = factorSq * config.maxLift;
+            mouseLift = factorSq * maxLift;
             mouseGlow = factorSq;
 
-            if (dist > 2) {
+            if (dist > 3) {
               const angle = Math.atan2(dy, dx);
-              tiltX = -Math.sin(angle) * factor * config.maxTilt;
-              tiltY = Math.cos(angle) * factor * config.maxTilt;
+              tiltX = -Math.sin(angle) * factor * maxTilt;
+              tiltY = Math.cos(angle) * factor * maxTilt;
             }
           }
         }
 
         let rippleLift = 0;
-        ripples.forEach((rip) => {
-          const dx = box.x - rip.x;
-          const dy = box.y - rip.y;
+        for (let r = 0; r < ripples.length; r++) {
+          const rip = ripples[r];
+          const dx = b.x - rip.x;
+          const dy = b.y - rip.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           const diff = Math.abs(dist - rip.radius);
-          if (diff < 45) {
-            const wave = Math.cos((diff / 45) * (Math.PI / 2)) * rip.strength;
+          if (diff < 40) {
+            const wave = Math.cos((diff / 40) * (Math.PI / 2)) * rip.strength;
             rippleLift += wave;
-            mouseGlow = Math.min(mouseGlow + wave * 0.02, 1.0);
+            mouseGlow = Math.min(mouseGlow + wave * 0.025, 1.0);
           }
-        });
+        }
 
-        box.targetZ = idleWave + mouseLift + rippleLift;
-        box.targetGlow = mouseGlow;
-        box.targetRotX = tiltX;
-        box.targetRotY = tiltY;
+        b.targetZ = idleWave + mouseLift + rippleLift;
+        b.targetGlow = mouseGlow;
+        b.targetRotX = tiltX;
+        b.targetRotY = tiltY;
 
-        const springK = 18.0;
-        const damping = 0.82;
-        const force = (box.targetZ - box.z) * springK;
-        box.vz = (box.vz + force * dt) * damping;
-        box.z += box.vz * dt;
+        // Smooth spring damped physics
+        const force = (b.targetZ - b.z) * 18.0;
+        b.vz = (b.vz + force * dt) * 0.82;
+        b.z += b.vz * dt;
 
-        box.glow += (box.targetGlow - box.glow) * 0.18;
-        box.rotX += (box.targetRotX - box.rotX) * 0.22;
-        box.rotY += (box.targetRotY - box.rotY) * 0.22;
-      });
-
-      const { boxSize, boxHeight, cameraPitch, cameraYaw } = config;
-      const halfS = boxSize / 2;
-
-      interface RenderableBox {
-        box: Box3D;
-        depth: number;
-        topVertices: { sx: number; sy: number }[];
-        botVertices: { sx: number; sy: number }[];
-        centerScreen: { sx: number; sy: number };
-        scale: number;
+        b.glow += (b.targetGlow - b.glow) * 0.2;
+        b.rotX += (b.targetRotX - b.rotX) * 0.24;
+        b.rotY += (b.targetRotY - b.rotY) * 0.24;
       }
 
-      const renderList: RenderableBox[] = [];
+      // Base Corner Offsets
+      const cLx = [-halfS, halfS, halfS, -halfS];
+      const cLy = [-halfS, -halfS, halfS, halfS];
 
-      for (let i = 0; i < boxes.length; i++) {
-        const b = boxes[i];
-        const h = boxHeight + Math.max(0, b.z * 0.4);
+      // Draw all 3D boxes in pre-sorted depth order (zero array sort overhead per frame)
+      for (let s = 0; s < sortedIndices.length; s++) {
+        const b = boxes[sortedIndices[s]];
+        const h = boxHeight + Math.max(0, b.z * 0.35);
         const topZ = b.z + h;
         const botZ = 0;
 
@@ -416,87 +427,49 @@ export const InteractiveBoxesBackground: React.FC = () => {
         const cosRy = Math.cos(b.rotY);
         const sinRy = Math.sin(b.rotY);
 
-        const corners = [
-          { lx: -halfS, ly: -halfS },
-          { lx: halfS, ly: -halfS },
-          { lx: halfS, ly: halfS },
-          { lx: -halfS, ly: halfS },
-        ];
-
-        const topVertices: { sx: number; sy: number }[] = [];
-        const botVertices: { sx: number; sy: number }[] = [];
-
         for (let c = 0; c < 4; c++) {
-          const { lx, ly } = corners[c];
+          const lx = cLx[c];
+          const ly = cLy[c];
           const tiltedZ = topZ + (lx * sinRy + ly * sinRx);
 
-          const pTop = project3D(
+          projectPoint(
             b.x + lx * cosRy,
             b.y + ly * cosRx,
             tiltedZ,
             centerX,
             centerY,
-            cameraPitch,
-            cameraYaw,
             focalLength,
-            camDist
+            camDist,
+            tv[c]
           );
-          topVertices.push({ sx: pTop.sx, sy: pTop.sy });
 
-          const pBot = project3D(
+          projectPoint(
             b.x + lx,
             b.y + ly,
             botZ,
             centerX,
             centerY,
-            cameraPitch,
-            cameraYaw,
             focalLength,
-            camDist
+            camDist,
+            bv[c]
           );
-          botVertices.push({ sx: pBot.sx, sy: pBot.sy });
         }
 
-        const centerP = project3D(
-          b.x,
-          b.y,
-          topZ * 0.5,
-          centerX,
-          centerY,
-          cameraPitch,
-          cameraYaw,
-          focalLength,
-          camDist
-        );
-
-        const margin = 120;
+        // View frustum culling
         if (
-          centerP.sx > -margin &&
-          centerP.sx < width + margin &&
-          centerP.sy > -margin &&
-          centerP.sy < height + margin
+          tv[2].sx < -80 ||
+          tv[0].sx > width + 80 ||
+          tv[2].sy < -80 ||
+          bv[2].sy > height + 80
         ) {
-          renderList.push({
-            box: b,
-            depth: centerP.depth,
-            topVertices,
-            botVertices,
-            centerScreen: { sx: centerP.sx, sy: centerP.sy },
-            scale: centerP.scale,
-          });
+          continue;
         }
-      }
 
-      renderList.sort((a, b) => b.depth - a.depth);
-
-      // Render Each 3D Box
-      renderList.forEach((item) => {
-        const { box: b, topVertices: tv, botVertices: bv } = item;
         const glow = b.glow;
-        const isHoverActive = glow > 0.05;
-        const theme = b.colorTheme; // 0: Active Clients, 1: Realistic Voices, 2: Supported Languages
+        const isHover = glow > 0.03;
+        const theme = b.colorTheme;
 
-        // Front Face
+        // ── 1. Front Face (South Face) ──
         ctx.beginPath();
         ctx.moveTo(tv[3].sx, tv[3].sy);
         ctx.lineTo(tv[2].sx, tv[2].sy);
@@ -504,43 +477,28 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.lineTo(bv[3].sx, bv[3].sy);
         ctx.closePath();
 
-        const frontGrad = ctx.createLinearGradient(tv[3].sx, tv[3].sy, bv[3].sx, bv[3].sy);
         if (isDark) {
-          if (isHoverActive) {
-            // Hover: Glows in specific theme color
+          if (isHover) {
             if (theme === 0) {
-              // Active Clients (Sky Blue -> Indigo)
-              frontGrad.addColorStop(0, `rgba(2, 132, 199, ${0.55 + glow * 0.4})`);
-              frontGrad.addColorStop(1, `rgba(15, 23, 42, ${0.88 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(2, 132, 199, ${0.45 + glow * 0.35})`;
             } else if (theme === 1) {
-              // Realistic Voices (Deep Forest Emerald -> Rich Jade)
-              frontGrad.addColorStop(0, `rgba(4, 120, 87, ${0.75 + glow * 0.25})`);
-              frontGrad.addColorStop(1, `rgba(10, 15, 30, ${0.9 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(4, 120, 87, ${0.45 + glow * 0.35})`;
             } else {
-              // Supported Languages (Deep Royal Violet -> Rich Magenta)
-              frontGrad.addColorStop(0, `rgba(109, 40, 217, ${0.75 + glow * 0.25})`);
-              frontGrad.addColorStop(1, `rgba(10, 15, 30, ${0.9 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(109, 40, 217, ${0.45 + glow * 0.35})`;
             }
           } else {
-            // Rest state: Clean, uniform deep navy glass
-            frontGrad.addColorStop(0, 'rgba(30, 41, 59, 0.45)');
-            frontGrad.addColorStop(1, 'rgba(15, 23, 42, 0.7)');
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
           }
         } else {
-          // Light mode: Airy frosted glass
-          if (isHoverActive) {
-            // Active Clients (Sky Blue -> Indigo) exclusively
-            frontGrad.addColorStop(0, `rgba(2, 132, 199, ${0.35 + glow * 0.3})`);
-            frontGrad.addColorStop(1, `rgba(186, 230, 253, ${0.45 + glow * 0.2})`);
+          if (isHover) {
+            ctx.fillStyle = `rgba(2, 132, 199, ${0.25 + glow * 0.3})`;
           } else {
-            frontGrad.addColorStop(0, 'rgba(224, 231, 255, 0.3)');
-            frontGrad.addColorStop(1, 'rgba(199, 210, 254, 0.42)');
+            ctx.fillStyle = 'rgba(219, 234, 254, 0.45)';
           }
         }
-        ctx.fillStyle = frontGrad;
         ctx.fill();
 
-        // Right Face
+        // ── 2. Right Face (East Face) ──
         ctx.beginPath();
         ctx.moveTo(tv[2].sx, tv[2].sy);
         ctx.lineTo(tv[1].sx, tv[1].sy);
@@ -548,38 +506,28 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.lineTo(bv[2].sx, bv[2].sy);
         ctx.closePath();
 
-        const rightGrad = ctx.createLinearGradient(tv[2].sx, tv[2].sy, bv[2].sx, bv[2].sy);
         if (isDark) {
-          if (isHoverActive) {
+          if (isHover) {
             if (theme === 0) {
-              rightGrad.addColorStop(0, `rgba(99, 102, 241, ${0.45 + glow * 0.4})`);
-              rightGrad.addColorStop(1, `rgba(10, 15, 30, ${0.9 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(99, 102, 241, ${0.35 + glow * 0.35})`;
             } else if (theme === 1) {
-              rightGrad.addColorStop(0, `rgba(13, 148, 136, ${0.7 + glow * 0.25})`);
-              rightGrad.addColorStop(1, `rgba(6, 78, 59, ${0.9 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(13, 148, 136, ${0.35 + glow * 0.35})`;
             } else {
-              rightGrad.addColorStop(0, `rgba(147, 51, 234, ${0.7 + glow * 0.25})`);
-              rightGrad.addColorStop(1, `rgba(112, 26, 117, ${0.9 + glow * 0.1})`);
+              ctx.fillStyle = `rgba(147, 51, 234, ${0.35 + glow * 0.35})`;
             }
           } else {
-            // Rest state: Clean, uniform deep navy shadow
-            rightGrad.addColorStop(0, 'rgba(15, 23, 42, 0.55)');
-            rightGrad.addColorStop(1, 'rgba(10, 15, 30, 0.75)');
+            ctx.fillStyle = 'rgba(10, 15, 30, 0.75)';
           }
         } else {
-          // Light mode
-          if (isHoverActive) {
-            rightGrad.addColorStop(0, `rgba(14, 165, 233, ${0.3 + glow * 0.35})`);
-            rightGrad.addColorStop(1, `rgba(165, 180, 252, ${0.4 + glow * 0.2})`);
+          if (isHover) {
+            ctx.fillStyle = `rgba(14, 165, 233, ${0.22 + glow * 0.3})`;
           } else {
-            rightGrad.addColorStop(0, 'rgba(224, 242, 254, 0.25)');
-            rightGrad.addColorStop(1, 'rgba(186, 230, 253, 0.35)');
+            ctx.fillStyle = 'rgba(191, 219, 254, 0.35)';
           }
         }
-        ctx.fillStyle = rightGrad;
         ctx.fill();
 
-        // Top Face
+        // ── 3. Top Face (Main Illuminated Surface) ──
         ctx.beginPath();
         ctx.moveTo(tv[0].sx, tv[0].sy);
         ctx.lineTo(tv[1].sx, tv[1].sy);
@@ -587,107 +535,75 @@ export const InteractiveBoxesBackground: React.FC = () => {
         ctx.lineTo(tv[3].sx, tv[3].sy);
         ctx.closePath();
 
-        const topGrad = ctx.createLinearGradient(tv[0].sx, tv[0].sy, tv[2].sx, tv[2].sy);
         if (isDark) {
-          if (isHoverActive) {
+          if (isHover) {
             if (theme === 0) {
-              // Active Clients: Sky Blue -> Indigo
-              topGrad.addColorStop(0, `rgba(2, 132, 199, ${0.65 + glow * 0.35})`);
-              topGrad.addColorStop(0.5, `rgba(56, 189, 248, ${0.75 + glow * 0.25})`);
-              topGrad.addColorStop(1, `rgba(99, 102, 241, ${0.65 + glow * 0.35})`);
-              ctx.shadowColor = `rgba(56, 189, 248, ${glow * 0.85})`;
+              ctx.fillStyle = `rgba(56, 189, 248, ${0.6 + glow * 0.35})`;
             } else if (theme === 1) {
-              // Realistic Voices: Deep Vibrant Forest Emerald -> Jade
-              topGrad.addColorStop(0, `rgba(4, 120, 87, ${0.85 + glow * 0.15})`);
-              topGrad.addColorStop(0.5, `rgba(5, 150, 105, ${0.9 + glow * 0.1})`);
-              topGrad.addColorStop(1, `rgba(16, 185, 129, ${0.85 + glow * 0.15})`);
-              ctx.shadowColor = `rgba(16, 185, 129, ${glow * 0.95})`;
+              ctx.fillStyle = `rgba(16, 185, 129, ${0.65 + glow * 0.3})`;
             } else {
-              // Supported Languages: Deep Royal Violet -> Rich Electric Purple
-              topGrad.addColorStop(0, `rgba(109, 40, 217, ${0.85 + glow * 0.15})`);
-              topGrad.addColorStop(0.5, `rgba(126, 34, 206, ${0.9 + glow * 0.1})`);
-              topGrad.addColorStop(1, `rgba(162, 28, 175, ${0.85 + glow * 0.15})`);
-              ctx.shadowColor = `rgba(168, 85, 247, ${glow * 0.95})`;
+              ctx.fillStyle = `rgba(168, 85, 247, ${0.65 + glow * 0.3})`;
             }
-            ctx.shadowBlur = 16 * glow;
           } else {
-            // Dark Rest Mode: Uniform, clean, deep high-tech navy glass
-            topGrad.addColorStop(0, 'rgba(30, 41, 59, 0.65)');
-            topGrad.addColorStop(0.6, 'rgba(15, 23, 42, 0.75)');
-            topGrad.addColorStop(1, 'rgba(15, 23, 42, 0.85)');
-            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(30, 41, 59, 0.6)';
           }
         } else {
-          // Light Mode: Exclusively Active Clients (Sky Blue -> Indigo)
-          if (isHoverActive) {
-            topGrad.addColorStop(0, `rgba(186, 230, 253, ${0.75 + glow * 0.25})`);
-            topGrad.addColorStop(0.5, `rgba(224, 231, 255, ${0.85 + glow * 0.15})`);
-            topGrad.addColorStop(1, `rgba(199, 210, 254, ${0.75 + glow * 0.25})`);
-            ctx.shadowColor = `rgba(14, 165, 233, ${glow * 0.5})`;
-            ctx.shadowBlur = 10 * glow;
+          if (isHover) {
+            ctx.fillStyle = `rgba(186, 230, 253, ${0.65 + glow * 0.3})`;
           } else {
-            topGrad.addColorStop(0, 'rgba(255, 255, 255, 0.6)');
-            topGrad.addColorStop(0.5, 'rgba(240, 249, 255, 0.55)');
-            topGrad.addColorStop(1, 'rgba(238, 242, 255, 0.45)');
-            ctx.shadowBlur = 0;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.65)';
           }
         }
-        ctx.fillStyle = topGrad;
         ctx.fill();
 
-        // Top Face Edge Stroke
-        ctx.lineWidth = isHoverActive ? 1.6 : 0.85;
+        // ── 4. Crisp Top Face Edge Outline ──
+        ctx.lineWidth = isHover ? 1.4 : 0.8;
         if (isDark) {
-          if (isHoverActive) {
-            const strokeGrad = ctx.createLinearGradient(tv[0].sx, tv[0].sy, tv[2].sx, tv[2].sy);
-            if (theme === 0) {
-              strokeGrad.addColorStop(0, `rgba(56, 189, 248, ${0.85 + glow * 0.15})`);
-              strokeGrad.addColorStop(1, `rgba(129, 140, 248, ${0.85 + glow * 0.15})`);
-            } else if (theme === 1) {
-              strokeGrad.addColorStop(0, `rgba(16, 185, 129, 0.95)`);
-              strokeGrad.addColorStop(1, `rgba(5, 150, 105, 0.95)`);
-            } else {
-              strokeGrad.addColorStop(0, `rgba(168, 85, 247, 0.95)`);
-              strokeGrad.addColorStop(1, `rgba(217, 70, 239, 0.95)`);
-            }
-            ctx.strokeStyle = strokeGrad;
+          if (isHover) {
+            ctx.strokeStyle =
+              theme === 0
+                ? `rgba(56, 189, 248, ${0.85 + glow * 0.15})`
+                : theme === 1
+                ? `rgba(52, 211, 153, ${0.85 + glow * 0.15})`
+                : `rgba(216, 180, 254, ${0.85 + glow * 0.15})`;
           } else {
-            // Rest state: Clean, uniform subtle indigo glass stroke
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.22)';
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.18)';
           }
         } else {
-          // Light mode: Active Clients Sky-Indigo stroke
-          if (isHoverActive) {
-            const strokeGrad = ctx.createLinearGradient(tv[0].sx, tv[0].sy, tv[2].sx, tv[2].sy);
-            strokeGrad.addColorStop(0, `rgba(2, 132, 199, ${0.85 + glow * 0.15})`);
-            strokeGrad.addColorStop(1, `rgba(79, 70, 229, ${0.85 + glow * 0.15})`);
-            ctx.strokeStyle = strokeGrad;
+          if (isHover) {
+            ctx.strokeStyle = `rgba(2, 132, 199, ${0.75 + glow * 0.25})`;
           } else {
-            ctx.strokeStyle = 'rgba(99, 102, 241, 0.14)';
+            ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)';
           }
         }
         ctx.stroke();
 
-        // Center dot / Micro Accent Glyph on top face
-        if (isHoverActive && glow > 0.15) {
-          const midX = (tv[0].sx + tv[2].sx) / 2;
-          const midY = (tv[0].sy + tv[2].sy) / 2;
-          ctx.beginPath();
-          ctx.arc(midX, midY, 2.4 + glow * 1.6, 0, Math.PI * 2);
+        // ── 5. Center Accent Micro Glow Dot (Rendered cleanly without shadowBlur) ──
+        if (isHover && glow > 0.12) {
+          const midX = (tv[0].sx + tv[2].sx) * 0.5;
+          const midY = (tv[0].sy + tv[2].sy) * 0.5;
+          const dotRadius = 2.2 + glow * 1.5;
 
-          if (isDark) {
-            ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + glow * 0.4})`;
-            ctx.shadowColor = theme === 0 ? '#38bdf8' : theme === 1 ? '#10b981' : '#a855f7';
-          } else {
-            ctx.fillStyle = '#0284c7';
-            ctx.shadowColor = '#38bdf8';
-          }
-          ctx.shadowBlur = 10;
+          // Outer luminous ring
+          ctx.beginPath();
+          ctx.arc(midX, midY, dotRadius * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle =
+            isDark
+              ? theme === 0
+                ? `rgba(56, 189, 248, ${glow * 0.35})`
+                : theme === 1
+                ? `rgba(16, 185, 129, ${glow * 0.35})`
+                : `rgba(168, 85, 247, ${glow * 0.35})`
+              : `rgba(2, 132, 199, ${glow * 0.3})`;
+          ctx.fill();
+
+          // Inner solid core
+          ctx.beginPath();
+          ctx.arc(midX, midY, dotRadius, 0, Math.PI * 2);
+          ctx.fillStyle = isDark ? '#ffffff' : '#0284c7';
           ctx.fill();
         }
-
-        ctx.shadowBlur = 0;
-      });
+      }
 
       ctx.restore();
       animId = requestAnimationFrame(render);
@@ -696,19 +612,21 @@ export const InteractiveBoxesBackground: React.FC = () => {
     animId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       if (canvas) {
         canvas.removeEventListener('mouseleave', onMouseLeave);
         canvas.removeEventListener('click', onClick);
       }
-      resizeObserver.disconnect();
+      observer.disconnect();
     };
   }, []);
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: 'absolute',
         inset: 0,
@@ -733,7 +651,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
         }}
       />
 
-      {/* Subtle bottom fade gradient to seamlessly blend into page sections */}
+      {/* Smooth bottom blend overlay */}
       <div
         style={{
           position: 'absolute',
@@ -750,3 +668,4 @@ export const InteractiveBoxesBackground: React.FC = () => {
 };
 
 export default InteractiveBoxesBackground;
+
