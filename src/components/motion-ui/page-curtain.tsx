@@ -192,7 +192,7 @@ export const PageCurtainStage = forwardRef<HTMLDivElement, PageCurtainStageProps
                     y: [18, 0, 0, -18],
                   }}
                   transition={{ duration: 0.8, times: [0, 0.32, 0.68, 1], ease: [0.22, 1, 0.36, 1] }}
-                  className="text-2xl sm:text-4xl font-extrabold tracking-tight select-none uppercase font-mono px-6 py-3"
+                  className="text-lg sm:text-2xl md:text-3xl font-bold tracking-tight select-none font-sans px-6 py-3 max-w-2xl text-center text-balance leading-snug break-words"
                 >
                   {targetTitle}
                 </motion.span>

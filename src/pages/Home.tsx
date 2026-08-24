@@ -21,13 +21,14 @@ import botnoiRestaurantLogo from '../assets/BOTNOI-Restaurant-logo.png';
    Marquee Strip
 ───────────────────────────────────────────── */
 function MarqueeStrip() {
+  const { t } = useTranslation();
   const items = [
-    { src: botnoiAirLogo, label: 'Botnoi Air' },
-    { src: botnoiRestaurantLogo, label: 'Botnoi Restaurant' },
-    { src: logoNewLightBlue, label: 'WebAvatar' },
-    { src: botnoiAirLogo, label: 'Flight Booking' },
-    { src: botnoiRestaurantLogo, label: 'Food Ordering' },
-    { src: logoNewLightBlue, label: 'Voice AI' },
+    { src: botnoiAirLogo, label: t('marquee.botnoi_air') },
+    { src: botnoiRestaurantLogo, label: t('marquee.botnoi_restaurant') },
+    { src: logoNewLightBlue, label: t('marquee.webavatar') },
+    { src: botnoiAirLogo, label: t('marquee.flight_booking') },
+    { src: botnoiRestaurantLogo, label: t('marquee.food_ordering') },
+    { src: logoNewLightBlue, label: t('marquee.voice_ai') },
   ];
   const doubled = [...items, ...items];
   return (
@@ -290,7 +291,7 @@ export default function Home() {
                 value={20}
                 suffix="+"
                 percentage={90}
-                label="Demo Projects"
+                label={t('home.stats_projects')}
                 icon={<Layers className="size-5" />}
                 gradientId="gauge-projects"
                 colorStart="#06b6d4"
@@ -362,7 +363,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('flight', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['flight'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['flight'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['flight'] ? 'rotate-180' : ''}`} />
                   </div>
@@ -418,7 +419,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('food', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['food'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['food'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['food'] ? 'rotate-180' : ''}`} />
                   </div>
@@ -474,7 +475,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('itstore', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['itstore'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['itstore'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['itstore'] ? 'rotate-180' : ''}`} />
                   </div>
@@ -530,7 +531,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('hotel', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['hotel'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['hotel'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['hotel'] ? 'rotate-180' : ''}`} />
                   </div>
@@ -586,7 +587,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('contact', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['contact'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['contact'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['contact'] ? 'rotate-180' : ''}`} />
                   </div>
@@ -642,7 +643,7 @@ export default function Home() {
                     onClick={(e) => toggleCardExpand('alldemo', e)}
                     role="button"
                     tabIndex={0}
-                    title={expandedCards['alldemo'] ? 'Hide Details' : 'Show Details'}
+                    title={expandedCards['alldemo'] ? t('home.hide_details') : t('home.show_details')}
                   >
                     <ChevronDown className={`size-4 transition-transform duration-300 ${expandedCards['alldemo'] ? 'rotate-180' : ''}`} />
                   </div>

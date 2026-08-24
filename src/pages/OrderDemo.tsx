@@ -26,6 +26,12 @@ import {
   Check,
   Building2,
   ExternalLink,
+  Factory,
+  Store,
+  Bot,
+  Landmark,
+  TrendingUp,
+  Laptop,
   type LucideIcon,
 } from "lucide-react";
 import botnoiAirLogo from "../assets/Screenshot 2026-08-10 140706.png";
@@ -35,17 +41,26 @@ import padKrapaoImage from "../assets/Restarant.png";
 import AppFooter from "../components/AppFooter";
 
 export type ProjectCategory = 
-  | "education"
-  | "skincare"
-  | "map"
-  | "hospital"
-  | "restaurant"
-  | "ac_service"
   | "coffee"
-  | "fitness"
-  | "flight"
+  | "restaurant"
+  | "hospital"
+  | "skincare"
+  | "factory"
+  | "real_estate"
   | "ecommerce"
-  | "accommodation";
+  | "retail"
+  | "home_service"
+  | "education"
+  | "ai"
+  | "fintech"
+  | "investment"
+  | "technology"
+  | "accommodation"
+  | "travel"
+  | "flight"
+  | "map"
+  | "ac_service"
+  | "fitness";
 
 // House Item Interface
 export interface HouseItem {
@@ -84,29 +99,29 @@ export interface Receipt {
 
 // 20 Houses Mock Database mapped to Project Types and URLs
 const projectData: HouseItem[] = [
-  { id: -1, code: 'SANDBOX', name: 'Flight Demo', teamName: 'Botnoi Air Team', style: 'Interactive Sandbox', type: 'flight', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
-  { id: -2, code: 'SANDBOX', name: 'IT Store Demo', teamName: 'Botnoi IT Team', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
-  { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant Food Order', teamName: 'Botnoi Food Team', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
-  { id: -4, code: 'SANDBOX', name: 'Botnoi Grand Hotel & Resort', teamName: 'Botnoi Hotel Team', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
+  { id: -1, code: 'SANDBOX', name: 'Flight Booking', teamName: 'Botnoi Air Team', style: 'Interactive Sandbox', type: 'travel', color: '#0284c7', progress: 100, deployedUrl: '/flight-demo', githubUrl: '' },
+  { id: -2, code: 'SANDBOX', name: 'IT Store E-Commerce', teamName: 'Botnoi IT Team', style: 'Interactive Sandbox', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '/it-store-demo', githubUrl: '' },
+  { id: -3, code: 'SANDBOX', name: 'Botnoi Restaurant', teamName: 'Botnoi Food Team', style: 'Interactive Sandbox', type: 'restaurant', color: '#0284c7', progress: 100, deployedUrl: '/food-demo', githubUrl: '' },
+  { id: -4, code: 'SANDBOX', name: 'Botnoi Hotel', teamName: 'Botnoi Hotel Team', style: 'Interactive Sandbox', type: 'accommodation', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-hotel-two.vercel.app/', githubUrl: 'https://github.com/botnoi-demos/hotel-resort-sandbox' },
   { id: 1, code: 'TN01, TN07', name: 'LearnLab', teamName: ['The-chill-crew', 'steak-game-bros'], style: 'Modern Minimalist', type: 'education', color: '#0284c7', progress: 85, deployedUrl: 'https://ai-learn-hub-22.lovable.app/', githubUrl: 'https://github.com/Icetea0000000000025/ai-learn-hub-22.git  ' },
-  //{ id: 2, code: 'TN02', name: '', teamName: 'Team 02', style: 'Neo-Classical', type: 'flight', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  //{ id: 2, code: 'TN02', name: '', teamName: 'Team 02', style: 'Neo-Classical', type: 'travel', color: '#0284c7', progress: 45, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 3, code: 'TN03', name: 'Skinbot', teamName: 'Controller-kings', style: 'Nordic Timber', type: 'skincare', color: '#0284c7', progress: 90, deployedUrl: 'https://eucerin-mu.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 4, code: 'TN04', name: 'AI Trip Map Planner', teamName: 'The-netflix-hermits', style: 'Brutalist Concrete', type: 'map', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 4, code: 'TN04', name: 'AI Trip Map Planner', teamName: 'The-netflix-hermits', style: 'Brutalist Concrete', type: 'travel', color: '#0284c7', progress: 10, deployedUrl: 'https://trip-planner-botnoi.vercel.app/', githubUrl: 'https://github.com' },
   { id: 5, code: 'TN05', name: 'Demo Health', teamName: 'Aesthetic-dreamers', style: 'Cozy Wood Cabin', type: 'hospital', color: '#0284c7', progress: 100, deployedUrl: 'https://hospital-demo-kohl.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 6, code: 'TN06', name: 'Botnoi API', teamName: 'lo-fi-homebodies', style: 'Glass Contemporary', type: 'ecommerce', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 6, code: 'TN06', name: 'Botnoi API', teamName: 'lo-fi-homebodies', style: 'Glass Contemporary', type: 'ai', color: '#0284c7', progress: 60, deployedUrl: 'https://digital-friendly-companion.lovable.app/', githubUrl: 'https://github.com' },
   { id: 7, code: 'TN07', name: 'DineOS', teamName: 'steak-game-bros', style: 'Organic Earth Dome', type: 'restaurant', color: '#0284c7', progress: 80, deployedUrl: 'https://ranlunggetdemo.vercel.app/', githubUrl: 'https://github.com/ran-lung-get/ran-lung-get-demo' },
-  { id: 8, code: 'TN08, TN19', name: 'Chevi Shop', teamName: ['Vibe-architects', 'ocean-avengers'], style: 'Industrial Brickwork', type: 'ac_service', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
-  { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
-  { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'ac_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 8, code: 'TN08, TN19', name: 'Chevi Shop', teamName: ['Vibe-architects', 'ocean-avengers'], style: 'Industrial Brickwork', type: 'ecommerce', color: '#0284c7', progress: 75, deployedUrl: 'https://chevi-shop.netlify.app/', githubUrl: 'https://github.com' },
+  { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ai', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
+  { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'home_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: 'MediQ', teamName: 'The-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 12, code: 'TN12', name: 'Homiq(Arex-platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'accommodation', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 12, code: 'TN12', name: 'HomiQ (Arex Platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'real_estate', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
   //{ id: 13, code: 'TN13', name: '', teamName: 'Team 13', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 14, code: 'TN14', name: 'BrewAI', teamName: 'The-dungeon-masters', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
-  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'skincare', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
-  { id: 16, code: 'TN16', name: 'Fitder', teamName: 'Blue-hour-society', style: 'Modern Steel Frame', type: 'fitness', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 17, code: 'TN17', name: 'AI Commerce Agent', teamName: 'Midnight-raiders', style: 'Spanish Terracotta', type: 'ecommerce', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
-  //{ id: 18, code: 'TN18', name: '18-indie-mountain-kids', teamName: 'Team 18', style: 'Parametric Fluid', type: 'flight', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
-  //{ id: 19, code: 'TN19', name: '19-ocean-avengers', teamName: 'Team 19', style: 'Victorian Restoration', type: 'ac_service', color: '#0284c7', progress: 100, deployedUrl: '', githubUrl: 'https://github.com' },
+  { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'hospital', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 16, code: 'TN16', name: 'Fitder', teamName: 'Blue-hour-society', style: 'Modern Steel Frame', type: 'education', color: '#0284c7', progress: 70, deployedUrl: 'https://fitder-ai.vercel.app/', githubUrl: 'https://github.com' },
+  { id: 17, code: 'TN17', name: 'AI Commerce Agent', teamName: 'Midnight-raiders', style: 'Spanish Terracotta', type: 'ai', color: '#0284c7', progress: 80, deployedUrl: 'https://ai-e-commerce-brown.vercel.app/', githubUrl: 'https://github.com' },
+  //{ id: 18, code: 'TN18', name: '18-indie-mountain-kids', teamName: 'Team 18', style: 'Parametric Fluid', type: 'travel', color: '#0284c7', progress: 0, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
+  //{ id: 19, code: 'TN19', name: '19-ocean-avengers', teamName: 'Team 19', style: 'Victorian Restoration', type: 'ecommerce', color: '#0284c7', progress: 100, deployedUrl: '', githubUrl: 'https://github.com' },
   //{ id: 20, code: 'TN20', name: '', teamName: 'Team 20', style: 'Waterfront Living', type: 'ecommerce', color: '#0284c7', progress: 40, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' }
 ];
 
@@ -201,17 +216,26 @@ function getTNTypeKey(code: string): string | undefined {
 }
 
 const CATEGORY_STYLES: Record<string, { Icon: LucideIcon; bg: string }> = {
-  education: { Icon: GraduationCap, bg: "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80" },
-  skincare: { Icon: Sparkles, bg: "bg-pink-50 text-pink-700 border-pink-200/50 dark:bg-pink-950/80 dark:text-pink-300 dark:border-pink-800/80" },
-  map: { Icon: Map, bg: "bg-teal-50 text-teal-700 border-teal-200/50 dark:bg-teal-950/80 dark:text-teal-300 dark:border-teal-800/80" },
-  hospital: { Icon: HeartPulse, bg: "bg-rose-50 text-rose-700 border-rose-200/50 dark:bg-rose-950/80 dark:text-rose-300 dark:border-rose-800/80" },
-  restaurant: { Icon: UtensilsCrossed, bg: "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80" },
-  ac_service: { Icon: Wrench, bg: "bg-cyan-50 text-cyan-700 border-cyan-200/50 dark:bg-cyan-950/80 dark:text-cyan-300 dark:border-cyan-800/80" },
-  coffee: { Icon: Coffee, bg: "bg-amber-950/10 text-amber-900 border-amber-800/30 dark:bg-amber-950/90 dark:text-amber-200 dark:border-amber-700/60" },
-  fitness: { Icon: Dumbbell, bg: "bg-purple-50 text-purple-700 border-purple-200/50 dark:bg-purple-950/80 dark:text-purple-300 dark:border-purple-800/80" },
-  flight: { Icon: Plane, bg: "bg-sky-50 text-sky-700 border-sky-200/50 dark:bg-sky-950/80 dark:text-sky-300 dark:border-sky-800/80" },
-  ecommerce: { Icon: ShoppingBag, bg: "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80" },
-  accommodation: { Icon: BedDouble, bg: "bg-orange-50 text-orange-700 border-orange-200/60 dark:bg-orange-950/80 dark:text-orange-300 dark:border-orange-800/80" },
+  coffee: { Icon: Coffee, bg: "bg-lime-50 text-lime-800 border-lime-200/80 dark:bg-lime-950/80 dark:text-lime-200 dark:border-lime-700/80" },
+  restaurant: { Icon: UtensilsCrossed, bg: "bg-emerald-50 text-emerald-800 border-emerald-200/80 dark:bg-emerald-950/80 dark:text-emerald-200 dark:border-emerald-700/80" },
+  hospital: { Icon: HeartPulse, bg: "bg-pink-50 text-pink-700 border-pink-200/80 dark:bg-pink-950/80 dark:text-pink-200 dark:border-pink-700/80" },
+  skincare: { Icon: Sparkles, bg: "bg-rose-50 text-rose-800 border-rose-200/80 dark:bg-rose-950/80 dark:text-rose-200 dark:border-rose-700/80" },
+  factory: { Icon: Factory, bg: "bg-orange-50 text-orange-800 border-orange-200/80 dark:bg-orange-950/80 dark:text-orange-200 dark:border-orange-700/80" },
+  real_estate: { Icon: Building2, bg: "bg-slate-100 text-slate-800 border-slate-300 dark:bg-slate-800/90 dark:text-slate-200 dark:border-slate-600" },
+  ecommerce: { Icon: ShoppingBag, bg: "bg-violet-50 text-violet-700 border-violet-200/80 dark:bg-violet-950/80 dark:text-violet-200 dark:border-violet-700/80" },
+  retail: { Icon: Store, bg: "bg-purple-50 text-purple-900 border-purple-300/80 dark:bg-purple-950/80 dark:text-purple-200 dark:border-purple-700/80" },
+  home_service: { Icon: Wrench, bg: "bg-yellow-50 text-yellow-800 border-yellow-200/80 dark:bg-yellow-950/80 dark:text-yellow-200 dark:border-yellow-700/80" },
+  education: { Icon: GraduationCap, bg: "bg-amber-50 text-amber-900 border-amber-300/80 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700/80" },
+  ai: { Icon: Bot, bg: "bg-sky-50 text-sky-700 border-sky-200/80 dark:bg-sky-950/80 dark:text-sky-200 dark:border-sky-700/80" },
+  fintech: { Icon: Landmark, bg: "bg-indigo-50 text-indigo-900 border-indigo-300/80 dark:bg-indigo-950/80 dark:text-indigo-200 dark:border-indigo-700/80" },
+  investment: { Icon: TrendingUp, bg: "bg-teal-50 text-teal-800 border-teal-200/80 dark:bg-teal-950/80 dark:text-teal-200 dark:border-teal-700/80" },
+  technology: { Icon: Laptop, bg: "bg-blue-50 text-blue-800 border-blue-200/80 dark:bg-blue-950/80 dark:text-blue-200 dark:border-blue-700/80" },
+  accommodation: { Icon: BedDouble, bg: "bg-amber-50 text-amber-800 border-amber-200/80 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700/80" },
+  travel: { Icon: Plane, bg: "bg-orange-50 text-orange-900 border-orange-300/80 dark:bg-orange-950/80 dark:text-orange-200 dark:border-orange-700/80" },
+  map: { Icon: Map, bg: "bg-orange-50 text-orange-900 border-orange-300/80 dark:bg-orange-950/80 dark:text-orange-200 dark:border-orange-700/80" },
+  flight: { Icon: Plane, bg: "bg-orange-50 text-orange-900 border-orange-300/80 dark:bg-orange-950/80 dark:text-orange-200 dark:border-orange-700/80" },
+  ac_service: { Icon: Wrench, bg: "bg-yellow-50 text-yellow-800 border-yellow-200/80 dark:bg-yellow-950/80 dark:text-yellow-200 dark:border-yellow-700/80" },
+  fitness: { Icon: Dumbbell, bg: "bg-amber-50 text-amber-900 border-amber-300/80 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-700/80" },
 };
 
 // Auto-discover any image files placed in src/assets/ (e.g. TN01.png, tn03.jpg, tn07.webp)
@@ -267,49 +291,85 @@ const CATEGORY_COLOR_MAP: Record<
     active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25 dark:bg-sky-900/80 dark:text-sky-100 dark:border-sky-500/60 dark:shadow-sky-950/40",
     hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
   },
+  coffee: {
+    active: "bg-lime-600 text-white border-lime-600 shadow-md shadow-lime-600/25 dark:bg-lime-900/80 dark:text-lime-100 dark:border-lime-500/60 dark:shadow-lime-950/40",
+    hover: "hover:bg-lime-500/15 hover:text-lime-700 dark:hover:text-lime-400 hover:border-lime-400/60 hover:shadow-sm hover:shadow-lime-500/15",
+  },
+  restaurant: {
+    active: "bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/25 dark:bg-emerald-900/80 dark:text-emerald-100 dark:border-emerald-500/60 dark:shadow-emerald-950/40",
+    hover: "hover:bg-emerald-500/15 hover:text-emerald-700 dark:hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-sm hover:shadow-emerald-500/15",
+  },
+  hospital: {
+    active: "bg-pink-500 text-white border-pink-500 shadow-md shadow-pink-500/25 dark:bg-pink-900/80 dark:text-pink-100 dark:border-pink-500/60 dark:shadow-pink-950/40",
+    hover: "hover:bg-pink-500/15 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-400/60 hover:shadow-sm hover:shadow-pink-500/15",
+  },
+  skincare: {
+    active: "bg-rose-600 text-white border-rose-600 shadow-md shadow-rose-600/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
+    hover: "hover:bg-rose-500/15 hover:text-rose-700 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
+  },
+  factory: {
+    active: "bg-orange-600 text-white border-orange-600 shadow-md shadow-orange-600/25 dark:bg-orange-900/80 dark:text-orange-100 dark:border-orange-500/60 dark:shadow-orange-950/40",
+    hover: "hover:bg-orange-500/15 hover:text-orange-700 dark:hover:text-orange-400 hover:border-orange-400/60 hover:shadow-sm hover:shadow-orange-500/15",
+  },
+  real_estate: {
+    active: "bg-slate-600 text-white border-slate-600 shadow-md shadow-slate-600/25 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-500 dark:shadow-slate-950/40",
+    hover: "hover:bg-slate-500/15 hover:text-slate-700 dark:hover:text-slate-300 hover:border-slate-400/60 hover:shadow-sm hover:shadow-slate-500/15",
+  },
+  ecommerce: {
+    active: "bg-violet-500 text-white border-violet-500 shadow-md shadow-violet-500/25 dark:bg-violet-900/80 dark:text-violet-100 dark:border-violet-500/60 dark:shadow-violet-950/40",
+    hover: "hover:bg-violet-500/15 hover:text-violet-600 dark:hover:text-violet-400 hover:border-violet-400/60 hover:shadow-sm hover:shadow-violet-500/15",
+  },
+  retail: {
+    active: "bg-purple-800 text-white border-purple-800 shadow-md shadow-purple-800/25 dark:bg-purple-950 dark:text-purple-100 dark:border-purple-600 dark:shadow-purple-950/40",
+    hover: "hover:bg-purple-500/15 hover:text-purple-800 dark:hover:text-purple-300 hover:border-purple-400/60 hover:shadow-sm hover:shadow-purple-500/15",
+  },
+  home_service: {
+    active: "bg-amber-400 text-amber-950 border-amber-400 shadow-md shadow-amber-400/25 dark:bg-amber-500 dark:text-slate-950 dark:border-amber-400 dark:shadow-amber-950/40",
+    hover: "hover:bg-amber-400/15 hover:text-amber-700 dark:hover:text-amber-300 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-400/15",
+  },
+  education: {
+    active: "bg-amber-600 text-white border-amber-600 shadow-md shadow-amber-600/25 dark:bg-amber-800 dark:text-amber-100 dark:border-amber-500 dark:shadow-amber-950/40",
+    hover: "hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-500/15",
+  },
+  ai: {
+    active: "bg-sky-400 text-slate-900 border-sky-400 shadow-md shadow-sky-400/25 dark:bg-sky-500 dark:text-slate-950 dark:border-sky-400 dark:shadow-sky-950/40",
+    hover: "hover:bg-sky-400/15 hover:text-sky-600 dark:hover:text-sky-300 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-400/15",
+  },
+  fintech: {
+    active: "bg-indigo-800 text-white border-indigo-800 shadow-md shadow-indigo-800/25 dark:bg-indigo-950 dark:text-indigo-100 dark:border-indigo-600 dark:shadow-indigo-950/40",
+    hover: "hover:bg-indigo-500/15 hover:text-indigo-800 dark:hover:text-indigo-300 hover:border-indigo-400/60 hover:shadow-sm hover:shadow-indigo-500/15",
+  },
+  investment: {
+    active: "bg-teal-600 text-white border-teal-600 shadow-md shadow-teal-600/25 dark:bg-teal-900/80 dark:text-teal-100 dark:border-teal-500/60 dark:shadow-teal-950/40",
+    hover: "hover:bg-teal-500/15 hover:text-teal-700 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
+  },
+  technology: {
+    active: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25 dark:bg-blue-900/80 dark:text-blue-100 dark:border-blue-500/60 dark:shadow-blue-950/40",
+    hover: "hover:bg-blue-500/15 hover:text-blue-700 dark:hover:text-blue-400 hover:border-blue-400/60 hover:shadow-sm hover:shadow-blue-500/15",
+  },
   accommodation: {
     active: "bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/25 dark:bg-amber-900/80 dark:text-amber-100 dark:border-amber-500/60 dark:shadow-amber-950/40",
     hover: "hover:bg-amber-500/15 hover:text-amber-600 dark:hover:text-amber-400 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-500/15",
   },
-  education: {
-    active: "bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-600/25 dark:bg-indigo-900/80 dark:text-indigo-100 dark:border-indigo-500/60 dark:shadow-indigo-950/40",
-    hover: "hover:bg-indigo-500/15 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-400/60 hover:shadow-sm hover:shadow-indigo-500/15",
-  },
-  skincare: {
-    active: "bg-pink-500 text-white border-pink-500 shadow-md shadow-pink-500/25 dark:bg-pink-900/80 dark:text-pink-100 dark:border-pink-500/60 dark:shadow-pink-950/40",
-    hover: "hover:bg-pink-500/15 hover:text-pink-600 dark:hover:text-pink-400 hover:border-pink-400/60 hover:shadow-sm hover:shadow-pink-500/15",
+  travel: {
+    active: "bg-orange-700 text-white border-orange-700 shadow-md shadow-orange-700/25 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-600 dark:shadow-orange-950/40",
+    hover: "hover:bg-orange-500/15 hover:text-orange-800 dark:hover:text-orange-300 hover:border-orange-400/60 hover:shadow-sm hover:shadow-orange-500/15",
   },
   map: {
-    active: "bg-teal-500 text-white border-teal-500 shadow-md shadow-teal-500/25 dark:bg-teal-900/80 dark:text-teal-100 dark:border-teal-500/60 dark:shadow-teal-950/40",
-    hover: "hover:bg-teal-500/15 hover:text-teal-600 dark:hover:text-teal-400 hover:border-teal-400/60 hover:shadow-sm hover:shadow-teal-500/15",
-  },
-  hospital: {
-    active: "bg-rose-500 text-white border-rose-500 shadow-md shadow-rose-500/25 dark:bg-rose-900/80 dark:text-rose-100 dark:border-rose-500/60 dark:shadow-rose-950/40",
-    hover: "hover:bg-rose-500/15 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-400/60 hover:shadow-sm hover:shadow-rose-500/15",
-  },
-  restaurant: {
-    active: "bg-emerald-500 text-white border-emerald-500 shadow-md shadow-emerald-500/25 dark:bg-emerald-900/80 dark:text-emerald-100 dark:border-emerald-500/60 dark:shadow-emerald-950/40",
-    hover: "hover:bg-emerald-500/15 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-400/60 hover:shadow-sm hover:shadow-emerald-500/15",
+    active: "bg-orange-700 text-white border-orange-700 shadow-md shadow-orange-700/25 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-600 dark:shadow-orange-950/40",
+    hover: "hover:bg-orange-500/15 hover:text-orange-800 dark:hover:text-orange-300 hover:border-orange-400/60 hover:shadow-sm hover:shadow-orange-500/15",
   },
   ac_service: {
-    active: "bg-cyan-500 text-white border-cyan-500 shadow-md shadow-cyan-500/25 dark:bg-cyan-900/80 dark:text-cyan-100 dark:border-cyan-500/60 dark:shadow-cyan-950/40",
-    hover: "hover:bg-cyan-500/15 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-400/60 hover:shadow-sm hover:shadow-cyan-500/15",
-  },
-  coffee: {
-    active: "bg-amber-700 text-white border-amber-700 shadow-md shadow-amber-700/25 dark:bg-amber-900/80 dark:text-amber-100 dark:border-amber-600/60 dark:shadow-amber-950/40",
-    hover: "hover:bg-amber-700/15 hover:text-amber-800 dark:hover:text-amber-400 hover:border-amber-600/60 hover:shadow-sm hover:shadow-amber-700/15",
-  },
-  fitness: {
-    active: "bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/25 dark:bg-purple-900/80 dark:text-purple-100 dark:border-purple-500/60 dark:shadow-purple-950/40",
-    hover: "hover:bg-purple-500/15 hover:text-purple-600 dark:hover:text-purple-400 hover:border-purple-400/60 hover:shadow-sm hover:shadow-purple-500/15",
+    active: "bg-amber-400 text-amber-950 border-amber-400 shadow-md shadow-amber-400/25 dark:bg-amber-500 dark:text-slate-950 dark:border-amber-400 dark:shadow-amber-950/40",
+    hover: "hover:bg-amber-400/15 hover:text-amber-700 dark:hover:text-amber-300 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-400/15",
   },
   flight: {
-    active: "bg-sky-500 text-white border-sky-500 shadow-md shadow-sky-500/25 dark:bg-sky-900/80 dark:text-sky-100 dark:border-sky-500/60 dark:shadow-sky-950/40",
-    hover: "hover:bg-sky-500/15 hover:text-sky-600 dark:hover:text-sky-400 hover:border-sky-400/60 hover:shadow-sm hover:shadow-sky-500/15",
+    active: "bg-orange-700 text-white border-orange-700 shadow-md shadow-orange-700/25 dark:bg-orange-900 dark:text-orange-100 dark:border-orange-600 dark:shadow-orange-950/40",
+    hover: "hover:bg-orange-500/15 hover:text-orange-800 dark:hover:text-orange-300 hover:border-orange-400/60 hover:shadow-sm hover:shadow-orange-500/15",
   },
-  ecommerce: {
-    active: "bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/25 dark:bg-blue-900/80 dark:text-blue-100 dark:border-blue-500/60 dark:shadow-blue-950/40",
-    hover: "hover:bg-blue-500/15 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-400/60 hover:shadow-sm hover:shadow-blue-500/15",
+  fitness: {
+    active: "bg-amber-600 text-white border-amber-600 shadow-md shadow-amber-600/25 dark:bg-amber-800 dark:text-amber-100 dark:border-amber-500 dark:shadow-amber-950/40",
+    hover: "hover:bg-amber-500/15 hover:text-amber-700 dark:hover:text-amber-400 hover:border-amber-400/60 hover:shadow-sm hover:shadow-amber-500/15",
   },
 };
 
@@ -331,17 +391,17 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 
   if (house.id === -1) {
     typeLabel = t("showcase.type_flight");
-    typeBg = "bg-blue-50 text-blue-700 border-blue-200/50 dark:bg-blue-950/80 dark:text-blue-300 dark:border-blue-800/80";
+    typeBg = CATEGORY_STYLES.travel.bg;
     cardDescription = t("showcase.desc_flight");
     displayName = t("showcase.flight_demo_name");
   } else if (house.id === -2) {
     typeLabel = t("showcase.type_ecommerce");
-    typeBg = "bg-indigo-50 text-indigo-700 border-indigo-200/50 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border-indigo-800/80";
+    typeBg = CATEGORY_STYLES.ecommerce.bg;
     cardDescription = t("showcase.desc_ecommerce");
     displayName = t("showcase.itstore_demo_name");
   } else if (house.id === -3) {
     typeLabel = t("showcase.type_restaurant");
-    typeBg = "bg-emerald-50 text-emerald-700 border-emerald-200/50 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800/80";
+    typeBg = CATEGORY_STYLES.restaurant.bg;
     cardDescription = t("showcase.desc_restaurant");
     displayName = t("food.title");
   } else if (house.id === -4) {
@@ -541,13 +601,54 @@ function DemoCard({ house, t }: { house: HouseItem; t: (key: any) => string }) {
 
 const BUSINESS_TYPE_OPTIONS = [
   { id: "all", translationKey: "showcase.cat_all" as const },
+  { id: "food_beverage", translationKey: "showcase.biz_food_beverage" as const },
+  { id: "health_wellness", translationKey: "showcase.biz_health_wellness" as const },
   { id: "manufacturing", translationKey: "showcase.biz_manufacturing" as const },
-  { id: "retail", translationKey: "showcase.biz_retail" as const },
-  { id: "service", translationKey: "showcase.biz_service" as const },
-  { id: "ecommerce", translationKey: "showcase.biz_ecommerce" as const },
-  { id: "realestate", translationKey: "showcase.biz_realestate" as const },
-  { id: "finance", translationKey: "showcase.biz_finance" as const },
+  { id: "property_realestate", translationKey: "showcase.biz_property_realestate" as const },
+  { id: "retail_ecommerce", translationKey: "showcase.biz_retail_ecommerce" as const },
+  { id: "service_maintenance", translationKey: "showcase.biz_service_maintenance" as const },
+  { id: "tech_finance", translationKey: "showcase.biz_tech_finance" as const },
+  { id: "travel_accommodation", translationKey: "showcase.biz_travel_accommodation" as const },
 ];
+
+function matchesHouseCategory(house: HouseItem, catId: string): boolean {
+  if (catId === "all") return true;
+  if (catId === "coffee") return house.code === "TN14";
+  if (catId === "restaurant") return house.id === -3 || (house.code === "TN07" && house.id === 7);
+  if (catId === "hospital") return house.code === "TN05" || house.code === "TN11" || house.code === "TN15";
+  if (catId === "skincare") return house.code === "TN03";
+  if (catId === "factory") return false;
+  if (catId === "real_estate") return house.code === "TN12";
+  if (catId === "ecommerce") return house.id === -2 || (house.code.includes("TN08") && house.id === 8);
+  if (catId === "retail") return false;
+  if (catId === "home_service") return house.code === "TN10";
+  if (catId === "education") return (house.code.includes("TN01") && house.id === 1) || house.code === "TN16";
+  if (catId === "ai") return house.code === "TN06" || house.code === "TN09" || house.code === "TN17";
+  if (catId === "fintech") return false;
+  if (catId === "investment") return false;
+  if (catId === "technology") return false;
+  if (catId === "accommodation") return house.id === -4;
+  if (catId === "travel") return house.id === -1 || house.code === "TN04";
+  return false;
+}
+
+const BUSINESS_TYPE_SUBCATEGORIES: Record<string, string[]> = {
+  food_beverage: ["coffee", "restaurant"],
+  health_wellness: ["hospital", "skincare"],
+  manufacturing: ["factory"],
+  property_realestate: ["real_estate"],
+  retail_ecommerce: ["ecommerce", "retail"],
+  service_maintenance: ["home_service", "education"],
+  tech_finance: ["ai", "fintech", "investment", "technology"],
+  travel_accommodation: ["accommodation", "travel"],
+};
+
+function matchesHouseBusinessType(house: HouseItem, filter: string): boolean {
+  if (filter === "all") return true;
+  const subCats = BUSINESS_TYPE_SUBCATEGORIES[filter];
+  if (!subCats) return true;
+  return subCats.some(catId => matchesHouseCategory(house, catId));
+}
 
 // ─── Page Component ───────────────────────────────────────────────────────────
 export default function OrderDemo() {
@@ -587,19 +688,33 @@ export default function OrderDemo() {
   // Dynamically compute available categories based on active demo pool (appliedSortBy / appliedBusinessTypeFilter)
   const availableCategories = useMemo(() => {
     const allCategories = [
-      { id: "all", translationKey: "showcase.cat_all" as const, icon: Sparkles },
-      { id: "accommodation", translationKey: "showcase.cat_accommodation" as const, icon: BedDouble },
-      { id: "education", translationKey: "showcase.cat_education" as const, icon: GraduationCap },
-      { id: "skincare", translationKey: "showcase.cat_skincare" as const, icon: Sparkles },
-      { id: "map", translationKey: "showcase.cat_map" as const, icon: Map },
-      { id: "hospital", translationKey: "showcase.cat_hospital" as const, icon: HeartPulse },
-      { id: "restaurant", translationKey: "showcase.cat_restaurant" as const, icon: UtensilsCrossed },
-      { id: "ac_service", translationKey: "showcase.cat_ac_service" as const, icon: Wrench },
-      { id: "coffee", translationKey: "showcase.cat_coffee" as const, icon: Coffee },
-      { id: "fitness", translationKey: "showcase.cat_fitness" as const, icon: Dumbbell },
-      { id: "flight", translationKey: "showcase.cat_flight" as const, icon: Plane },
-      { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const, icon: ShoppingBag },
+      { id: "all", translationKey: "showcase.cat_all" as const },
+      { id: "coffee", translationKey: "showcase.cat_coffee" as const },
+      { id: "restaurant", translationKey: "showcase.cat_restaurant" as const },
+      { id: "hospital", translationKey: "showcase.cat_hospital" as const },
+      { id: "skincare", translationKey: "showcase.cat_skincare" as const },
+      { id: "factory", translationKey: "showcase.cat_factory" as const },
+      { id: "real_estate", translationKey: "showcase.cat_real_estate" as const },
+      { id: "ecommerce", translationKey: "showcase.cat_ecommerce" as const },
+      { id: "retail", translationKey: "showcase.cat_retail" as const },
+      { id: "home_service", translationKey: "showcase.cat_home_service" as const },
+      { id: "education", translationKey: "showcase.cat_education" as const },
+      { id: "ai", translationKey: "showcase.cat_ai" as const },
+      { id: "fintech", translationKey: "showcase.cat_fintech" as const },
+      { id: "investment", translationKey: "showcase.cat_investment" as const },
+      { id: "technology", translationKey: "showcase.cat_technology" as const },
+      { id: "accommodation", translationKey: "showcase.cat_accommodation" as const },
+      { id: "travel", translationKey: "showcase.cat_travel" as const },
     ];
+
+    if (appliedBusinessTypeFilter === "all" && appliedSortBy === "all") {
+      return allCategories;
+    }
+
+    if (appliedBusinessTypeFilter !== "all" && appliedSortBy === "all") {
+      const allowedCats = BUSINESS_TYPE_SUBCATEGORIES[appliedBusinessTypeFilter];
+      return allCategories.filter(cat => cat.id === "all" || (allowedCats ? allowedCats.includes(cat.id) : true));
+    }
 
     let pool = projectData;
     if (appliedSortBy === "sandbox") {
@@ -609,19 +724,10 @@ export default function OrderDemo() {
     }
 
     if (appliedBusinessTypeFilter !== "all") {
-      pool = pool.filter(h => {
-        if (appliedBusinessTypeFilter === "manufacturing") return h.type === "ac_service" || h.style.toLowerCase().includes("manufacturing");
-        if (appliedBusinessTypeFilter === "retail") return h.type === "skincare" || h.type === "coffee" || h.type === "restaurant";
-        if (appliedBusinessTypeFilter === "service") return h.type === "hospital" || h.type === "education" || h.type === "map" || h.type === "fitness" || h.type === "ac_service" || h.type === "flight";
-        if (appliedBusinessTypeFilter === "ecommerce") return h.type === "ecommerce" || h.id === -2;
-        if (appliedBusinessTypeFilter === "realestate") return h.type === "accommodation" || h.id === -4;
-        if (appliedBusinessTypeFilter === "finance") return h.type === "map" || h.code === "TN06";
-        return true;
-      });
+      pool = pool.filter(h => matchesHouseBusinessType(h, appliedBusinessTypeFilter));
     }
 
-    const presentTypes = new Set(pool.map(h => h.type));
-    return allCategories.filter(cat => cat.id === "all" || presentTypes.has(cat.id as any));
+    return allCategories.filter(cat => cat.id === "all" || pool.some(h => matchesHouseCategory(h, cat.id)));
   }, [appliedSortBy, appliedBusinessTypeFilter]);
 
   // Reset selected categories if current selections are no longer present in availableCategories
@@ -647,10 +753,13 @@ export default function OrderDemo() {
         overviewText = `${t("food.title")} ${t("showcase.desc_restaurant")}`;
       } else if (house.id === -4) {
         overviewText = t("showcase.desc_accommodation");
-      } else if (TN_CUSTOM_DESC_KEYS[house.code]) {
-        overviewText = t(TN_CUSTOM_DESC_KEYS[house.code] as any);
-      } else if (!NO_DESC_CODES.has(house.code)) {
-        overviewText = t(`showcase.desc_${house.type}` as any);
+      } else {
+        const customDescKey = getTNCustomDescKey(house.code);
+        if (customDescKey) {
+          overviewText = t(customDescKey as any);
+        } else if (!NO_DESC_CODES.has(house.code)) {
+          overviewText = t(`showcase.desc_${house.type}` as any);
+        }
       }
 
       const teamText = Array.isArray(house.teamName) ? house.teamName.join(' ') : (house.teamName || '');
@@ -665,31 +774,45 @@ export default function OrderDemo() {
 
       // Tag & Keyword Aliases Dictionary (Thai & English)
       const tagAliases: Record<string, string[]> = {
-        flight: ['flight', 'air', 'เครื่องบิน', 'ตั๋ว', 'สายการบิน', 'การบิน', 'จองตั๋ว', 'botnoi air', 'บิน', 'การเดินทาง'],
-        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'กิน', 'โภชนาการ', 'บอทน้อย'],
-        accommodation: ['hotel', 'resort', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก', 'บ้าน', 'ที่อยู่อาศัย'],
-        ecommerce: ['it', 'store', 'shop', 'ecommerce', 'อีคอมเมิร์ซ', 'ร้านค้า', 'ขายของ', 'สินค้า', 'ไอที', 'ช้อป', 'ออนไลน์'],
-        education: ['education', 'learn', 'การศึกษา', 'เรียน', 'โรงเรียน', 'ความรู้', 'ติว', 'สอบ', 'มหาวิทยาลัย'],
-        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'คลินิก'],
-        hospital: ['hospital', 'health', 'หมอ', 'โรงพยาบาล', 'คลินิก', 'สุขภาพ', 'แพทย์', 'พยาบาล', 'รักษา', 'ยา'],
-        map: ['map', 'trip', 'แผนที่', 'ท่องเที่ยว', 'วางแผน', 'นำทาง', 'พิกัด', 'เที่ยว'],
-        ac_service: ['ac', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'เครื่องปรับอากาศ'],
         coffee: ['coffee', 'cafe', 'กาแฟ', 'คาเฟ่', 'เครื่องดื่ม', 'ชา', 'ร้านกาแฟ'],
-        fitness: ['fitness', 'gym', 'ฟิตเนส', 'ยิม', 'ออกกำลังกาย', 'กล้าม', 'สุขภาพ', 'ออกกำลัง'],
+        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'กิน', 'โภชนาการ', 'บอทน้อย'],
+        hospital: ['hospital', 'health', 'หมอ', 'โรงพยาบาล', 'คลินิก', 'สุขภาพ', 'แพทย์', 'พยาบาล', 'รักษา', 'ยา', 'healthcare'],
+        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'คลินิก', 'beauty'],
+        factory: ['factory', 'production', 'โรงงาน', 'ผลิต', 'อุตสาหกรรม', 'manufacturing', 'industrial'],
+        real_estate: ['real estate', 'realestate', 'property', 'arex', 'homiq', 'อสังหา', 'อสังหาริมทรัพย์', 'บ้าน', 'คอนโด', 'ที่ดิน'],
+        ecommerce: ['ecommerce', 'e-commerce', 'อีคอมเมิร์ซ', 'ร้านค้าออนไลน์', 'ขายของ', 'สินค้า', 'ช้อป', 'ออนไลน์'],
+        retail: ['retail', 'store', 'shop', 'ค้าปลีก', 'ร้านค้า', 'สินค้า'],
+        home_service: ['home service', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'ซ่อมแซม', 'บ้าน'],
+        education: ['education', 'course', 'online course', 'การศึกษา', 'เรียน', 'คอร์สเรียน', 'โรงเรียน', 'ความรู้', 'ติว', 'สอบ', 'มหาวิทยาลัย'],
+        ai: ['ai', 'artificial intelligence', 'ปัญญาประดิษฐ์', 'เอไอ', 'โมเดล', 'bot', 'gpt', 'llm'],
+        fintech: ['fintech', 'finance', 'การเงิน', 'ฟินเทค', 'จ่ายเงิน', 'payment', 'wallet'],
+        investment: ['investment', 'invest', 'การลงทุน', 'หุ้น', 'พอร์ต', 'อสังหา', 'asset'],
+        technology: ['technology', 'tech', 'เทคโนโลยี', 'ซอฟต์แวร์', 'api', 'ดิจิทัล', 'developer', 'code'],
+        accommodation: ['hotel', 'resort', 'accommodation', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก', 'บ้าน', 'ที่อยู่อาศัย'],
+        travel: ['travel', 'flight', 'trip', 'map', 'เที่ยว', 'การเดินทาง', 'การท่องเที่ยว', 'ตั๋วเครื่องบิน', 'สายการบิน', 'บิน', 'นำทาง'],
       };
 
       const categoryKeyMap: Record<string, string> = {
-        flight: 'showcase.cat_flight',
-        restaurant: 'showcase.cat_restaurant',
-        accommodation: 'showcase.cat_accommodation',
-        ecommerce: 'showcase.cat_ecommerce',
-        education: 'showcase.cat_education',
-        skincare: 'showcase.cat_skincare',
-        hospital: 'showcase.cat_hospital',
-        map: 'showcase.cat_map',
-        ac_service: 'showcase.cat_ac_service',
         coffee: 'showcase.cat_coffee',
-        fitness: 'showcase.cat_fitness',
+        restaurant: 'showcase.cat_restaurant',
+        hospital: 'showcase.cat_hospital',
+        skincare: 'showcase.cat_skincare',
+        factory: 'showcase.cat_factory',
+        real_estate: 'showcase.cat_real_estate',
+        ecommerce: 'showcase.cat_ecommerce',
+        retail: 'showcase.cat_retail',
+        home_service: 'showcase.cat_home_service',
+        education: 'showcase.cat_education',
+        ai: 'showcase.cat_ai',
+        fintech: 'showcase.cat_fintech',
+        investment: 'showcase.cat_investment',
+        technology: 'showcase.cat_technology',
+        accommodation: 'showcase.cat_accommodation',
+        travel: 'showcase.cat_travel',
+        flight: 'showcase.cat_travel',
+        map: 'showcase.cat_travel',
+        ac_service: 'showcase.cat_home_service',
+        fitness: 'showcase.cat_hospital',
       };
 
       // Check if house matched query
@@ -711,16 +834,9 @@ export default function OrderDemo() {
       const matchesCategory =
         selectedCategories.length === 0 ||
         selectedCategories.includes("all") ||
-        selectedCategories.includes(house.type);
+        selectedCategories.some((catId) => matchesHouseCategory(house, catId));
 
-      const matchesBusinessType =
-        appliedBusinessTypeFilter === "all" ||
-        (appliedBusinessTypeFilter === "manufacturing" && (house.type === "ac_service" || house.style.toLowerCase().includes("manufacturing"))) ||
-        (appliedBusinessTypeFilter === "retail" && (house.type === "skincare" || house.type === "coffee" || house.type === "restaurant")) ||
-        (appliedBusinessTypeFilter === "service" && (house.type === "hospital" || house.type === "education" || house.type === "map" || house.type === "fitness" || house.type === "ac_service" || house.type === "flight")) ||
-        (appliedBusinessTypeFilter === "ecommerce" && (house.type === "ecommerce" || house.id === -2)) ||
-        (appliedBusinessTypeFilter === "realestate" && (house.type === "accommodation" || house.id === -4)) ||
-        (appliedBusinessTypeFilter === "finance" && (house.type === "map" || house.code === "TN06"));
+      const matchesBusinessType = matchesHouseBusinessType(house, appliedBusinessTypeFilter);
 
       return matchesSearch && matchesCategory && matchesBusinessType;
     });
@@ -879,7 +995,7 @@ export default function OrderDemo() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-56 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
+                      className="absolute top-full left-0 mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto custom-scrollbar bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
                     >
                       {BUSINESS_TYPE_OPTIONS.map((opt) => {
                         const isSelected = pendingBusinessTypeFilter === opt.id;
@@ -958,7 +1074,6 @@ export default function OrderDemo() {
             <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2.5 pt-0.5 min-w-0 flex-1 scroll-smooth select-none theme-filter-scrollbar">
               {availableCategories.map((cat) => {
                 const isActive = cat.id === "all" ? isAllCategoryActive : selectedCategories.includes(cat.id);
-                const Icon = cat.icon;
                 const label = t(cat.translationKey as TranslationKey);
                 const colorConfig = CATEGORY_COLOR_MAP[cat.id] || CATEGORY_COLOR_MAP.all;
                 return (
@@ -966,13 +1081,12 @@ export default function OrderDemo() {
                     key={cat.id}
                     type="button"
                     onClick={() => handleCategoryToggle(cat.id)}
-                    className={`h-9 px-3.5 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center gap-1.5 cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
+                    className={`h-9 px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
                       isActive
                         ? `${colorConfig.active} scale-[1.02]`
                         : `text-foreground/80 bg-muted/30 border-border/80 ${colorConfig.hover}`
                     }`}
                   >
-                    <Icon className="size-3.5 shrink-0" />
                     <span>{label}</span>
                   </button>
                 );

@@ -43,14 +43,8 @@ export default function GlobalPageCurtain({ phase, curtainTitle }: GlobalPageCur
               }}
               className="relative z-10 flex flex-col items-center gap-3 px-8 text-center"
             >
-              {/* Category / Platform Tag */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-mono font-bold tracking-widest uppercase select-none">
-                <span className="size-1.5 rounded-full bg-primary" />
-                <span>WebAvatar</span>
-              </div>
-
               {/* Destination Page Title */}
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight select-none uppercase font-mono text-foreground">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight select-none font-sans text-foreground max-w-2xl px-4 text-balance leading-snug break-words">
                 {curtainTitle}
               </h1>
 
