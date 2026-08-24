@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import { motion, useInView, useAnimation, useMotionValue, animate } from 'framer-motion';
 
 interface SemiCircleGaugeProps {
   value: number;
@@ -31,25 +31,56 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
   const controls = useAnimation();
+  const count = useMotionValue(0);
+  const numberRef = useRef<HTMLSpanElement>(null);
+  const animationRef = useRef<{ stop: () => void } | null>(null);
 
   const targetRatio = Math.min(Math.max(percentage, 0), 100) / 100;
   const transitionConfig = { duration: 2.2, ease: [0.16, 1, 0.3, 1] as const };
 
   useEffect(() => {
+    return count.on('change', (latest) => {
+      if (numberRef.current) {
+        numberRef.current.textContent = Math.round(latest).toLocaleString();
+      }
+    });
+  }, [count]);
+
+  const triggerAnimation = () => {
+    // Start arc progress animation
+    controls.start({ pathLength: targetRatio, transition: transitionConfig });
+
+    // Stop any ongoing number animation
+    if (animationRef.current) {
+      animationRef.current.stop();
+    }
+
+    // Reset and animate number
+    count.set(0);
+    if (numberRef.current) {
+      numberRef.current.textContent = '0';
+    }
+    animationRef.current = animate(count, value, {
+      duration: 2.2,
+      ease: [0.16, 1, 0.3, 1],
+    });
+  };
+
+  useEffect(() => {
     if (isInView) {
-      controls.start({ pathLength: targetRatio, transition: transitionConfig });
+      triggerAnimation();
     } else {
       const timer = setTimeout(() => {
-        controls.start({ pathLength: targetRatio, transition: transitionConfig });
+        triggerAnimation();
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isInView, targetRatio, controls]);
+  }, [isInView, targetRatio, value]);
 
   const handleMouseEnter = () => {
     // Reset instantly, then start animation again
     controls.set({ pathLength: 0 });
-    controls.start({ pathLength: targetRatio, transition: transitionConfig });
+    triggerAnimation();
   };
 
   return (
@@ -107,7 +138,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
 
         <div className="absolute bottom-1 left-0 right-0 text-center flex flex-col items-center justify-center pointer-events-none">
           <span className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-none drop-shadow-xs" style={{ fontVariantNumeric: 'tabular-nums' }}>
-            {value.toLocaleString()}{suffix}
+            <span ref={numberRef}>{value.toLocaleString()}</span>{suffix}
           </span>
         </div>
       </div>
