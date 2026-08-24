@@ -114,7 +114,7 @@ const projectData: HouseItem[] = [
   { id: 9, code: 'TN09', name: 'Botnoi Live Translate', teamName: 'Sunset-superfans', style: 'Japanese Zen', type: 'ai', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-live-speak.base44.app/', githubUrl: 'https://github.com' },
   { id: 10, code: 'TN10', name: 'CoolCare Pro', teamName: 'lazy-mermaids', style: 'Modular Container', type: 'home_service', color: '#0284c7', progress: 30, deployedUrl: 'https://b-grim-dashboard.vercel.app/', githubUrl: 'https://github.com' },
   { id: 11, code: 'TN11', name: 'MediQ', teamName: 'The-sharp-cuts', style: 'Mid-Century Gable', type: 'hospital', color: '#0284c7', progress: 80, deployedUrl: 'https://mediq-demo.vercel.app/', githubUrl: 'https://github.com' },
-  { id: 12, code: 'TN12', name: 'HomiQ (Arex Platform)', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'real_estate', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
+  { id: 12, code: 'TN12', name: 'HomiQ', teamName: 'Coastal-avengers', style: 'Tropical Canopy', type: 'real_estate', color: '#0284c7', progress: 95, deployedUrl: 'https://arex-platform.lovable.app/', githubUrl: 'https://github.com' },
   //{ id: 13, code: 'TN13', name: '', teamName: 'Team 13', style: 'Step Architecture', type: 'accommodation', color: '#0284c7', progress: 55, deployedUrl: 'https://example.com', githubUrl: 'https://github.com' },
   { id: 14, code: 'TN14', name: 'BrewAI', teamName: 'The-dungeon-masters', style: 'Atrium Courtyard', type: 'coffee', color: '#0284c7', progress: 100, deployedUrl: 'https://botnoi-brewai-production.up.railway.app/', githubUrl: 'https://github.com' },
   { id: 15, code: 'TN15', name: 'Glow Med Spa', teamName: 'Mountain-mode', style: 'Flat-Roof Minimal', type: 'hospital', color: '#0284c7', progress: 15, deployedUrl: 'https://medspa-booking-buddy.lovable.app/', githubUrl: 'https://github.com' },
@@ -742,53 +742,54 @@ export default function OrderDemo() {
   }, [availableCategories, selectedCategories]);
 
   // Split filtered results into two groups and apply filters/sorting
+  // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
     const allFiltered = projectData.filter(house => {
-      let overviewText = "";
+      const query = searchQuery.trim().toLowerCase();
+
+      // 1. Demo Name & Code (ชื่อ demo)
+      let localizedName = house.name || '';
       if (house.id === -1) {
-        overviewText = t("showcase.desc_flight");
+        localizedName = `${house.name} ${t("showcase.flight_demo_name")}`;
       } else if (house.id === -2) {
-        overviewText = t("showcase.desc_ecommerce");
+        localizedName = `${house.name} ${t("showcase.itstore_demo_name")}`;
       } else if (house.id === -3) {
-        overviewText = `${t("food.title")} ${t("showcase.desc_restaurant")}`;
+        localizedName = `${house.name} ${t("food.title")}`;
       } else if (house.id === -4) {
-        overviewText = t("showcase.desc_accommodation");
+        localizedName = `${house.name} ${t("showcase.hotel_demo_name")}`;
       } else {
-        const customDescKey = getTNCustomDescKey(house.code);
-        if (customDescKey) {
-          overviewText = t(customDescKey as any);
-        } else if (!NO_DESC_CODES.has(house.code)) {
-          overviewText = t(`showcase.desc_${house.type}` as any);
+        const nameKey = getTNNameKey(house.code);
+        if (nameKey) {
+          localizedName = `${house.name} ${t(nameKey as any)}`;
         }
       }
 
-      const teamText = Array.isArray(house.teamName) ? house.teamName.join(' ') : (house.teamName || '');
       const houseCode = (house.code || '').toLowerCase();
       const houseName = (house.name || '').toLowerCase();
-      const houseType = (house.type || '').toLowerCase();
-      const houseStyle = (house.style || '').toLowerCase();
-      const teamString = teamText.toLowerCase();
-      const overviewString = (overviewText || '').toLowerCase();
+      const localizedNameLower = localizedName.toLowerCase();
 
-      const query = searchQuery.trim().toLowerCase();
+      const matchesDemoName =
+        houseCode.includes(query) ||
+        houseName.includes(query) ||
+        localizedNameLower.includes(query);
 
-      // Tag & Keyword Aliases Dictionary (Thai & English)
+      // 2. Demo Tag / Category (tag demo)
       const tagAliases: Record<string, string[]> = {
         coffee: ['coffee', 'cafe', 'กาแฟ', 'คาเฟ่', 'เครื่องดื่ม', 'ชา', 'ร้านกาแฟ'],
-        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'กิน', 'โภชนาการ', 'บอทน้อย'],
+        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'โภชนาการ', 'บอทน้อย'],
         hospital: ['hospital', 'health', 'หมอ', 'โรงพยาบาล', 'คลินิก', 'สุขภาพ', 'แพทย์', 'พยาบาล', 'รักษา', 'ยา', 'healthcare'],
-        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'คลินิก', 'beauty'],
+        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'beauty'],
         factory: ['factory', 'production', 'โรงงาน', 'ผลิต', 'อุตสาหกรรม', 'manufacturing', 'industrial'],
         real_estate: ['real estate', 'realestate', 'property', 'arex', 'homiq', 'อสังหา', 'อสังหาริมทรัพย์', 'บ้าน', 'คอนโด', 'ที่ดิน'],
         ecommerce: ['ecommerce', 'e-commerce', 'อีคอมเมิร์ซ', 'ร้านค้าออนไลน์', 'ขายของ', 'สินค้า', 'ช้อป', 'ออนไลน์'],
         retail: ['retail', 'store', 'shop', 'ค้าปลีก', 'ร้านค้า', 'สินค้า'],
-        home_service: ['home service', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'ซ่อมแซม', 'บ้าน'],
+        home_service: ['home service', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'ซ่อมแซม'],
         education: ['education', 'course', 'online course', 'การศึกษา', 'เรียน', 'คอร์สเรียน', 'โรงเรียน', 'ความรู้', 'ติว', 'สอบ', 'มหาวิทยาลัย'],
         ai: ['ai', 'artificial intelligence', 'ปัญญาประดิษฐ์', 'เอไอ', 'โมเดล', 'bot', 'gpt', 'llm'],
         fintech: ['fintech', 'finance', 'การเงิน', 'ฟินเทค', 'จ่ายเงิน', 'payment', 'wallet'],
-        investment: ['investment', 'invest', 'การลงทุน', 'หุ้น', 'พอร์ต', 'อสังหา', 'asset'],
+        investment: ['investment', 'invest', 'การลงทุน', 'หุ้น', 'พอร์ต', 'asset'],
         technology: ['technology', 'tech', 'เทคโนโลยี', 'ซอฟต์แวร์', 'api', 'ดิจิทัล', 'developer', 'code'],
-        accommodation: ['hotel', 'resort', 'accommodation', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก', 'บ้าน', 'ที่อยู่อาศัย'],
+        accommodation: ['hotel', 'resort', 'accommodation', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก'],
         travel: ['travel', 'flight', 'trip', 'map', 'เที่ยว', 'การเดินทาง', 'การท่องเที่ยว', 'ตั๋วเครื่องบิน', 'สายการบิน', 'บิน', 'นำทาง'],
       };
 
@@ -815,21 +816,33 @@ export default function OrderDemo() {
         fitness: 'showcase.cat_hospital',
       };
 
-      // Check if house matched query
+      const houseType = (house.type || '').toLowerCase();
       const catTranslation = categoryKeyMap[house.type] ? t(categoryKeyMap[house.type] as any).toLowerCase() : '';
+      const customTypeKey = getTNTypeKey(house.code);
+      const customTypeTranslation = customTypeKey ? t(customTypeKey as any).toLowerCase() : '';
       const aliases = tagAliases[house.type] || [];
       const matchesTagAlias = aliases.some(alias => alias.includes(query) || query.includes(alias));
 
+      const matchesTag =
+        houseType.includes(query) ||
+        catTranslation.includes(query) ||
+        customTypeTranslation.includes(query) ||
+        matchesTagAlias;
+
+      // 3. Creator / Author / Team Name (คนทำ)
+      const teamText = Array.isArray(house.teamName) 
+        ? house.teamName.join(' ') 
+        : (house.teamName || (house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team'));
+      const teamString = teamText.toLowerCase();
+
+      const matchesAuthor = teamString.includes(query);
+
+      // Search matches ONLY demo name, demo tag, and creator/team
       const matchesSearch =
         !query ||
-        houseCode.includes(query) ||
-        houseName.includes(query) ||
-        houseType.includes(query) ||
-        teamString.includes(query) ||
-        overviewString.includes(query) ||
-        houseStyle.includes(query) ||
-        catTranslation.includes(query) ||
-        matchesTagAlias;
+        matchesDemoName ||
+        matchesTag ||
+        matchesAuthor;
 
       const matchesCategory =
         selectedCategories.length === 0 ||
@@ -932,7 +945,7 @@ export default function OrderDemo() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
+                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
                     >
                       {[
                         { id: "all", label: t('showcase.cat_all') },
@@ -948,14 +961,14 @@ export default function OrderDemo() {
                               setPendingSortBy(opt.id as any);
                               setIsSortOpen(false);
                             }}
-                            className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
+                            className={`w-full px-3 py-2 rounded-xl text-xs font-bold text-left flex items-center justify-between transition-all cursor-pointer ${
                               isSelected
                                 ? "bg-primary/15 text-primary"
                                 : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
                             }`}
                           >
-                            <span>{opt.label}</span>
-                            {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                            <span className="text-left flex-1 font-sans">{opt.label}</span>
+                            {isSelected && <Check className="size-3.5 text-primary shrink-0 ml-2" />}
                           </button>
                         );
                       })}
@@ -972,13 +985,13 @@ export default function OrderDemo() {
                     setIsStatusOpen(!isStatusOpen);
                     setIsSortOpen(false);
                   }}
-                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95"
+                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95 text-left"
                 >
                   <Building2 className="size-3.5 text-primary shrink-0" />
-                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
+                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider text-left">
                     {t('showcase.business_type' as TranslationKey)}:
                   </span>
-                  <span className="font-extrabold text-foreground">
+                  <span className="font-extrabold text-foreground text-left">
                     {(() => {
                       const opt = BUSINESS_TYPE_OPTIONS.find(o => o.id === pendingBusinessTypeFilter);
                       return opt ? t(opt.translationKey as TranslationKey) : t('showcase.cat_all');
@@ -995,7 +1008,7 @@ export default function OrderDemo() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto custom-scrollbar bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1"
+                      className="absolute top-full left-0 mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto custom-scrollbar bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
                     >
                       {BUSINESS_TYPE_OPTIONS.map((opt) => {
                         const isSelected = pendingBusinessTypeFilter === opt.id;
@@ -1007,14 +1020,14 @@ export default function OrderDemo() {
                               setPendingBusinessTypeFilter(opt.id);
                               setIsStatusOpen(false);
                             }}
-                            className={`w-full px-3 py-2 rounded-xl text-xs font-extrabold flex items-center justify-between transition-all cursor-pointer ${
+                            className={`w-full px-3 py-2 rounded-xl text-xs font-bold text-left flex items-center justify-between transition-all cursor-pointer ${
                               isSelected
                                 ? "bg-primary/15 text-primary"
                                 : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
                             }`}
                           >
-                            <span>{t(opt.translationKey as TranslationKey)}</span>
-                            {isSelected && <Check className="size-3.5 text-primary shrink-0" />}
+                            <span className="text-left flex-1 font-sans">{t(opt.translationKey as TranslationKey)}</span>
+                            {isSelected && <Check className="size-3.5 text-primary shrink-0 ml-2" />}
                           </button>
                         );
                       })}
