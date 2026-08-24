@@ -742,56 +742,58 @@ export default function OrderDemo() {
   }, [availableCategories, selectedCategories]);
 
   // Split filtered results into two groups and apply filters/sorting
-  // Split filtered results into two groups and apply filters/sorting
   const { sandboxDemos, projectDemos } = useMemo(() => {
     const allFiltered = projectData.filter(house => {
       const query = searchQuery.trim().toLowerCase();
 
+      // If query is empty, skip search filter
+      if (!query) {
+        const matchesCategory =
+          selectedCategories.length === 0 ||
+          selectedCategories.includes("all") ||
+          selectedCategories.some((catId) => matchesHouseCategory(house, catId));
+        const matchesBusinessType = matchesHouseBusinessType(house, appliedBusinessTypeFilter);
+        return matchesCategory && matchesBusinessType;
+      }
+
+      // ─────────────────────────────────────────────────────────────
       // 1. Demo Name & Code (ชื่อ demo)
-      let localizedName = house.name || '';
+      // ─────────────────────────────────────────────────────────────
+      const nameTargets: string[] = [
+        house.name,
+        house.code,
+      ];
+
       if (house.id === -1) {
-        localizedName = `${house.name} ${t("showcase.flight_demo_name")}`;
+        nameTargets.push(t("showcase.flight_demo_name"));
       } else if (house.id === -2) {
-        localizedName = `${house.name} ${t("showcase.itstore_demo_name")}`;
+        nameTargets.push(t("showcase.itstore_demo_name"));
       } else if (house.id === -3) {
-        localizedName = `${house.name} ${t("food.title")}`;
+        nameTargets.push(t("food.title"));
       } else if (house.id === -4) {
-        localizedName = `${house.name} ${t("showcase.hotel_demo_name")}`;
+        nameTargets.push(t("showcase.hotel_demo_name"));
       } else {
         const nameKey = getTNNameKey(house.code);
         if (nameKey) {
-          localizedName = `${house.name} ${t(nameKey as any)}`;
+          const transName = t(nameKey as any);
+          const cleanName = transName.replace(/\s*\([^)]*\)/g, '').trim();
+          nameTargets.push(cleanName || transName);
         }
       }
 
-      const houseCode = (house.code || '').toLowerCase();
-      const houseName = (house.name || '').toLowerCase();
-      const localizedNameLower = localizedName.toLowerCase();
+      const matchesDemoName = nameTargets.some(target =>
+        Boolean(target) && target.toLowerCase().includes(query)
+      );
 
-      const matchesDemoName =
-        houseCode.includes(query) ||
-        houseName.includes(query) ||
-        localizedNameLower.includes(query);
-
-      // 2. Demo Tag / Category (tag demo)
-      const tagAliases: Record<string, string[]> = {
-        coffee: ['coffee', 'cafe', 'กาแฟ', 'คาเฟ่', 'เครื่องดื่ม', 'ชา', 'ร้านกาแฟ'],
-        restaurant: ['food', 'restaurant', 'อาหาร', 'สั่งอาหาร', 'ร้านอาหาร', 'กะเพรา', 'เมนู', 'โภชนาการ', 'บอทน้อย'],
-        hospital: ['hospital', 'health', 'หมอ', 'โรงพยาบาล', 'คลินิก', 'สุขภาพ', 'แพทย์', 'พยาบาล', 'รักษา', 'ยา', 'healthcare'],
-        skincare: ['skin', 'skincare', 'ผิว', 'สกินแคร์', 'ความงาม', 'เครื่องสำอาง', 'ใบหน้า', 'beauty'],
-        factory: ['factory', 'production', 'โรงงาน', 'ผลิต', 'อุตสาหกรรม', 'manufacturing', 'industrial'],
-        real_estate: ['real estate', 'realestate', 'property', 'arex', 'homiq', 'อสังหา', 'อสังหาริมทรัพย์', 'บ้าน', 'คอนโด', 'ที่ดิน'],
-        ecommerce: ['ecommerce', 'e-commerce', 'อีคอมเมิร์ซ', 'ร้านค้าออนไลน์', 'ขายของ', 'สินค้า', 'ช้อป', 'ออนไลน์'],
-        retail: ['retail', 'store', 'shop', 'ค้าปลีก', 'ร้านค้า', 'สินค้า'],
-        home_service: ['home service', 'service', 'แอร์', 'ซ่อมแอร์', 'ล้างแอร์', 'บริการ', 'ช่าง', 'ซ่อมแซม'],
-        education: ['education', 'course', 'online course', 'การศึกษา', 'เรียน', 'คอร์สเรียน', 'โรงเรียน', 'ความรู้', 'ติว', 'สอบ', 'มหาวิทยาลัย'],
-        ai: ['ai', 'artificial intelligence', 'ปัญญาประดิษฐ์', 'เอไอ', 'โมเดล', 'bot', 'gpt', 'llm'],
-        fintech: ['fintech', 'finance', 'การเงิน', 'ฟินเทค', 'จ่ายเงิน', 'payment', 'wallet'],
-        investment: ['investment', 'invest', 'การลงทุน', 'หุ้น', 'พอร์ต', 'asset'],
-        technology: ['technology', 'tech', 'เทคโนโลยี', 'ซอฟต์แวร์', 'api', 'ดิจิทัล', 'developer', 'code'],
-        accommodation: ['hotel', 'resort', 'accommodation', 'โรงแรม', 'ที่พัก', 'ห้องพัก', 'จองโรงแรม', 'รีสอร์ท', 'หอพัก'],
-        travel: ['travel', 'flight', 'trip', 'map', 'เที่ยว', 'การเดินทาง', 'การท่องเที่ยว', 'ตั๋วเครื่องบิน', 'สายการบิน', 'บิน', 'นำทาง'],
-      };
+      // ─────────────────────────────────────────────────────────────
+      // 2. Demo Tag / Category / Badge (tag ของ demo)
+      // ─────────────────────────────────────────────────────────────
+      const tagTargets: string[] = [
+        house.code.startsWith('TN') ? 'StartUP' : 'SANDBOX',
+        house.code.startsWith('TN') ? 'Startup' : 'Sandbox',
+        house.code.startsWith('TN') ? t('showcase.startup_badge' as any) : '',
+        house.type,
+      ];
 
       const categoryKeyMap: Record<string, string> = {
         coffee: 'showcase.cat_coffee',
@@ -816,33 +818,91 @@ export default function OrderDemo() {
         fitness: 'showcase.cat_hospital',
       };
 
-      const houseType = (house.type || '').toLowerCase();
-      const catTranslation = categoryKeyMap[house.type] ? t(categoryKeyMap[house.type] as any).toLowerCase() : '';
-      const customTypeKey = getTNTypeKey(house.code);
-      const customTypeTranslation = customTypeKey ? t(customTypeKey as any).toLowerCase() : '';
-      const aliases = tagAliases[house.type] || [];
-      const matchesTagAlias = aliases.some(alias => alias.includes(query) || query.includes(alias));
+      if (categoryKeyMap[house.type]) {
+        tagTargets.push(t(categoryKeyMap[house.type] as any));
+      }
 
-      const matchesTag =
-        houseType.includes(query) ||
-        catTranslation.includes(query) ||
-        customTypeTranslation.includes(query) ||
-        matchesTagAlias;
+      const typeKey = getTNTypeKey(house.code);
+      if (typeKey) {
+        tagTargets.push(t(typeKey as any));
+      } else {
+        tagTargets.push(t(`showcase.type_${house.type}` as any));
+      }
 
+      // Standard tag keyword aliases in Thai & English directly corresponding to tags
+      const tagKeywordsMap: Record<string, string[]> = {
+        coffee: ['coffee', 'cafe', 'กาแฟ', 'คาเฟ่'],
+        restaurant: ['restaurant', 'food', 'ร้านอาหาร', 'อาหาร'],
+        hospital: ['hospital', 'healthcare', 'health', 'โรงพยาบาล', 'การแพทย์', 'สุขภาพ', 'สปา', 'เภสัชกรรม', 'คลินิก'],
+        skincare: ['skincare', 'skin', 'สกินแคร์'],
+        factory: ['factory', 'production', 'โรงงาน', 'การผลิต'],
+        real_estate: ['real estate', 'property', 'อสังหาริมทรัพย์', 'อสังหา'],
+        ecommerce: ['ecommerce', 'e-commerce', 'อีคอมเมิร์ซ', 'ไอที', 'it', 'furniture', 'เฟอร์นิเจอร์'],
+        retail: ['retail', 'ค้าปลีก'],
+        home_service: ['home service', 'บริการล้างแอร์', 'ล้างแอร์', 'แอร์'],
+        education: ['education', 'e-learning', 'learning', 'การศึกษา', 'คอร์สเรียนออนไลน์', 'คอร์สเรียน', 'ฟิตเนส', 'fitness'],
+        ai: ['ai', 'ai service', 'บริการ ai', 'แปลภาษา', 'translation', 'commerce'],
+        fintech: ['fintech', 'ฟินเทค', 'การเงิน'],
+        investment: ['investment', 'การลงทุน'],
+        technology: ['technology', 'tech', 'เทคโนโลยี', 'it', 'ไอที'],
+        accommodation: ['accommodation', 'hotel', 'โรงแรม', 'ที่พัก'],
+        travel: ['travel', 'flight', 'ท่องเที่ยว', 'การเดินทาง', 'สายการบิน', 'เที่ยวบิน', 'map', 'แผนที่'],
+      };
+
+      if (tagKeywordsMap[house.type]) {
+        tagTargets.push(...tagKeywordsMap[house.type]);
+      }
+
+      if (house.code === 'TN08' || house.code === 'TN19' || house.code.includes('TN08')) {
+        tagTargets.push('furniture', 'เฟอร์นิเจอร์');
+      }
+      if (house.code === 'TN09') {
+        tagTargets.push('ai voice translation', 'translation', 'แปลภาษาเสียง', 'แปลภาษา');
+      }
+      if (house.code === 'TN10') {
+        tagTargets.push('ac maintenance', 'ล้างแอร์', 'แอร์');
+      }
+      if (house.code === 'TN11') {
+        tagTargets.push('pharmacy', 'ร้านขายยา', 'เภสัชกรรม');
+      }
+      if (house.code === 'TN14') {
+        tagTargets.push('cafe', 'คาเฟ่', 'กาแฟ', 'coffee');
+      }
+      if (house.code === 'TN15') {
+        tagTargets.push('spa', 'wellness', 'สปา', 'สุขภาพ');
+      }
+      if (house.code === 'TN16') {
+        tagTargets.push('fitness', 'ฟิตเนส');
+      }
+      if (house.code === 'TN17') {
+        tagTargets.push('ai commerce', 'เอไอคอมเมิร์ซ');
+      }
+
+      const matchesTag = tagTargets.some(target =>
+        Boolean(target) && target.toLowerCase().includes(query)
+      );
+
+      // ─────────────────────────────────────────────────────────────
       // 3. Creator / Author / Team Name (คนทำ)
-      const teamText = Array.isArray(house.teamName) 
-        ? house.teamName.join(' ') 
-        : (house.teamName || (house.code.startsWith('TN') ? `Team ${house.code.replace('TN', '')}` : 'Botnoi Team'));
-      const teamString = teamText.toLowerCase();
+      // ─────────────────────────────────────────────────────────────
+      const teamTargets: string[] = [];
+      if (Array.isArray(house.teamName)) {
+        teamTargets.push(...house.teamName);
+      } else if (house.teamName) {
+        teamTargets.push(house.teamName);
+      } else if (house.code.startsWith('TN')) {
+        const num = house.code.replace('TN', '');
+        teamTargets.push(`Team ${num}`);
+      } else {
+        teamTargets.push('Botnoi Team');
+      }
 
-      const matchesAuthor = teamString.includes(query);
+      const matchesAuthor = teamTargets.some(target =>
+        Boolean(target) && target.toLowerCase().includes(query)
+      );
 
-      // Search matches ONLY demo name, demo tag, and creator/team
-      const matchesSearch =
-        !query ||
-        matchesDemoName ||
-        matchesTag ||
-        matchesAuthor;
+      // Search matches ONLY demo name, demo tag, or creator/team (descriptions and styles are NOT searched)
+      const matchesSearch = matchesDemoName || matchesTag || matchesAuthor;
 
       const matchesCategory =
         selectedCategories.length === 0 ||
