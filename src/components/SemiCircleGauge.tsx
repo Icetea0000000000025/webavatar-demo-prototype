@@ -33,7 +33,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
   const controls = useAnimation();
 
   const targetRatio = Math.min(Math.max(percentage, 0), 100) / 100;
-  const transitionConfig = { duration: 2.2, ease: [0.16, 1, 0.3, 1] };
+  const transitionConfig = { duration: 2.2, ease: [0.16, 1, 0.3, 1] as const };
 
   useEffect(() => {
     if (isInView) {
