@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import AnimatedCounter from './AnimatedCounter';
+import React, { useEffect, useRef } from 'react';
+import { motion, useInView, useAnimation } from 'framer-motion';
 
 interface SemiCircleGaugeProps {
   value: number;
@@ -31,26 +30,32 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.1 });
-  const [animatedRatio, setAnimatedRatio] = useState(0);
+  const controls = useAnimation();
 
   const targetRatio = Math.min(Math.max(percentage, 0), 100) / 100;
+  const transitionConfig = { duration: 2.2, ease: [0.16, 1, 0.3, 1] };
 
   useEffect(() => {
-    // macOS Safari WebKit fallback: If IntersectionObserver is delayed or browser restricts scroll events
     if (isInView) {
-      setAnimatedRatio(targetRatio);
+      controls.start({ pathLength: targetRatio, transition: transitionConfig });
     } else {
-      // Fallback timer ensures arc displays even if scroll observer stalls in Safari
       const timer = setTimeout(() => {
-        setAnimatedRatio(targetRatio);
+        controls.start({ pathLength: targetRatio, transition: transitionConfig });
       }, 400);
       return () => clearTimeout(timer);
     }
-  }, [isInView, targetRatio]);
+  }, [isInView, targetRatio, controls]);
+
+  const handleMouseEnter = () => {
+    // Reset instantly, then start animation again
+    controls.set({ pathLength: 0 });
+    controls.start({ pathLength: targetRatio, transition: transitionConfig });
+  };
 
   return (
     <div
       ref={containerRef}
+      onMouseEnter={handleMouseEnter}
       className="relative group p-4 flex flex-col items-center justify-between text-center cursor-default bg-transparent border-0 shadow-none transition-all duration-300 hover:-translate-y-1"
     >
 
@@ -92,8 +97,7 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
             strokeWidth="10"
             strokeLinecap="round"
             initial={{ pathLength: 0 }}
-            animate={{ pathLength: animatedRatio }}
-            transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
+            animate={controls}
             style={{
               WebkitTransform: 'translateZ(0)',
               transform: 'translateZ(0)',
@@ -101,13 +105,10 @@ export const SemiCircleGauge: React.FC<SemiCircleGaugeProps> = ({
           />
         </svg>
 
-        {/* Number Counter in Gauge Center */}
         <div className="absolute bottom-1 left-0 right-0 text-center flex flex-col items-center justify-center pointer-events-none">
-          <AnimatedCounter
-            value={value}
-            suffix={suffix}
-            className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-none drop-shadow-xs"
-          />
+          <span className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-none drop-shadow-xs" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            {value.toLocaleString()}{suffix}
+          </span>
         </div>
       </div>
 
