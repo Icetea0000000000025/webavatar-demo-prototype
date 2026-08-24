@@ -122,6 +122,7 @@ export default function NiaSite2026() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.6 }}
               id="site2026-hero-logo"
+              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
             />
           </div>
 
@@ -393,6 +394,12 @@ export default function NiaSite2026() {
                   className="w-full max-h-[14rem] sm:max-h-[18rem] md:max-h-[22rem] lg:max-h-[26rem] object-contain"
                   id={`partner-logo-${index}`}
                   loading="lazy"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.alt = `${partner.name} (image unavailable)`;
+                    target.style.opacity = '0.3';
+                    target.style.filter = 'grayscale(1)';
+                  }}
                 />
               </div>
             </AnimatedSection>

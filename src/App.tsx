@@ -39,8 +39,8 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   '/flight-demo': 'nav.flight',
   '/flight-demo/admin': 'flight.nav_admin',
   '/all-demo': 'nav.all_demos',
-  '/food-demo': 'nav.order',
-  '/food-demo/admin': 'nav.order',
+  '/food-demo': 'nav.food_demo',
+  '/food-demo/admin': 'nav.food_demo',
   '/it-store-demo': 'nav.itstore',
   '/it-store-demo/admin': 'nav.itstore',
   '/nia-site-2026': 'nav.site2026',
@@ -56,7 +56,10 @@ function AppRoutes() {
   const prevPathRef = useRef(location.pathname);
   const isFirstRender = useRef(true);
   const targetLocationRef = useRef(location);
-  targetLocationRef.current = location;
+  // Keep targetLocationRef in sync with latest location without mutating during render
+  useEffect(() => {
+    targetLocationRef.current = location;
+  });
 
   useEffect(() => {
     // Initial mount - render immediately without curtain

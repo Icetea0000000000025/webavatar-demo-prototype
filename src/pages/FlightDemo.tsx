@@ -309,6 +309,10 @@ export default function FlightDemo() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (form.from === form.to) {
+      toast.error(t('flight.err_same_city') || 'กรุณาเลือกเมืองต้นทางและปลายทางที่แตกต่างกัน');
+      return;
+    }
     if (!form.departDate) {
       toast.error(t('flight.err_dep_date'));
       return;
@@ -1110,8 +1114,8 @@ export default function FlightDemo() {
                       </div>
                     )}
                     <div className="flex justify-between items-center pt-2 text-sm font-display">
-                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.summary_fare_per_person')}:</span>
-                      <span className="font-extrabold text-sky-950 dark:text-white">฿{((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)).toLocaleString()}</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.summary_fare_per_person')} × {form.passengers}:</span>
+                      <span className="font-extrabold text-sky-950 dark:text-white">฿{(((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)) * form.passengers).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

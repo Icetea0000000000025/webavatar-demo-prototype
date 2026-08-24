@@ -109,7 +109,7 @@ function Contact() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.email) {
-      alert(t('flight.booking_error'));
+      alert(t('contact.error_required' as any) || 'Please fill in your name and email.');
       return;
     }
 
@@ -121,7 +121,7 @@ function Contact() {
       email: formData.email,
       inquiryType: formData.inquiryType,
       message: formData.message,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
     };
 
     const updatedSubmissions = [newInquiry, ...submissions];

@@ -339,8 +339,8 @@ export default function Home() {
               style={{
                 '--card-theme': '#0ea5e9',
                 '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #0284c7 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -393,10 +393,10 @@ export default function Home() {
               className="bento-card col-3 group relative overflow-hidden bento-card-interactive"
               id="card-food-demo"
               style={{
-                '--card-theme': '#0ea5e9',
-                '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-theme': '#f97316',
+                '--card-glow': 'rgba(249, 115, 22, 0.35)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #f97316 0%, #ef4444 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #c2410c 0%, #b91c1c 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -449,10 +449,10 @@ export default function Home() {
               className="bento-card col-3 group relative overflow-hidden bento-card-interactive"
               id="card-itstore-demo"
               style={{
-                '--card-theme': '#0ea5e9',
-                '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-theme': '#8b5cf6',
+                '--card-glow': 'rgba(139, 92, 246, 0.35)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #7c3aed 0%, #4338ca 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -505,10 +505,10 @@ export default function Home() {
               className="bento-card col-3 group relative overflow-hidden bento-card-interactive"
               id="card-hotel-demo"
               style={{
-                '--card-theme': '#0ea5e9',
-                '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-theme': '#14b8a6',
+                '--card-glow': 'rgba(20, 184, 166, 0.35)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #14b8a6 0%, #0ea5e9 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0d9488 0%, #0369a1 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -561,10 +561,10 @@ export default function Home() {
               className="bento-card col-6 group relative overflow-hidden bento-card-interactive"
               id="card-contact-demo"
               style={{
-                '--card-theme': '#0ea5e9',
-                '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-theme': '#f43f5e',
+                '--card-glow': 'rgba(244, 63, 94, 0.35)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #f43f5e 0%, #fb923c 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #e11d48 0%, #ea580c 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}
@@ -617,10 +617,10 @@ export default function Home() {
               className="bento-card col-6 group relative overflow-hidden bento-card-interactive"
               id="card-alldemo-card"
               style={{
-                '--card-theme': '#0ea5e9',
-                '--card-glow': 'rgba(14, 165, 233, 0.35)',
-                '--card-liquid-grad': 'linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)',
-                '--card-liquid-dark-grad': 'linear-gradient(135deg, #0369a1 0%, #4338ca 100%)',
+                '--card-theme': '#6366f1',
+                '--card-glow': 'rgba(99, 102, 241, 0.35)',
+                '--card-liquid-grad': 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+                '--card-liquid-dark-grad': 'linear-gradient(135deg, #4338ca 0%, #7e22ce 100%)',
               } as React.CSSProperties}
               onMouseMove={handleCardMouseMove}
               onMouseLeave={handleCardMouseLeave}

@@ -45,8 +45,12 @@ export default function AppNavbar() {
   const openDrawer = () => setDrawerOpen(true);
   const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
-  /* Close drawer on route change */
-  useEffect(() => { closeDrawer(); }, [location, closeDrawer]);
+  /* Close drawer and language dropdowns on route change */
+  useEffect(() => {
+    closeDrawer();
+    setLangMenuOpen(false);
+    setMobileLangMenuOpen(false);
+  }, [location, closeDrawer]);
 
   /* Close drawer on Escape key */
   useEffect(() => {
@@ -152,7 +156,7 @@ export default function AppNavbar() {
         </Link>
 
         {/* Desktop nav */}
-        <nav ref={navRef} aria-label="Main Navigation">
+        <nav ref={navRef} aria-label="Main Navigation" style={{ justifySelf: 'start', marginLeft: '6rem' }}>
           <ul className="nav-links">
             {mainNavPages.map((page, index) => {
               const path = page.path;
@@ -225,7 +229,7 @@ export default function AppNavbar() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.25, duration: 0.5 }}
-          style={{ marginLeft: '8rem' }}
+          style={{ marginLeft: 'auto' }}
         >
           {/* Dark / Light Theme Toggle */}
           <ThemeToggle isSitePage={isSitePage} />
@@ -395,15 +399,6 @@ export default function AppNavbar() {
             <span className="widget-dot"></span>
             <span>{t('nav.live')}</span>
           </div>
-          <Link
-            className="btn btn-primary"
-            to="/contact"
-            onClick={() => window.scrollTo(0, 0)}
-            style={{ padding: '0.45rem 1.25rem', fontSize: '0.8rem', borderRadius: '10px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-            id="nav-cta-button"
-          >
-            {t('nav.request')}
-          </Link>
         </motion.div>
 
         {/* Hamburger (mobile only) */}

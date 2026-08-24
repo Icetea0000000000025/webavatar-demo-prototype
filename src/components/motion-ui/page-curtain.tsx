@@ -60,11 +60,13 @@ export function usePageCurtain({
     },
   });
 
-  // Sync latest state into controller
-  controllerRef.current.page = page;
-  controllerRef.current.isPending = isPending;
-  controllerRef.current.targetTitle = targetTitle;
-  controllerRef.current.direction = direction;
+  // Sync latest state into controller (inside useEffect to avoid mutating ref during render)
+  useEffect(() => {
+    controllerRef.current.page = page;
+    controllerRef.current.isPending = isPending;
+    controllerRef.current.targetTitle = targetTitle;
+    controllerRef.current.direction = direction;
+  });
 
   const go = useCallback(
     (index: number) => {
@@ -102,7 +104,11 @@ export function usePageCurtain({
   );
 
   const ref = domRef as PageCurtainRef;
-  ref._curtainController = controllerRef.current;
+
+  // Sync controller onto the DOM ref (inside useEffect to avoid mutating ref during render)
+  useEffect(() => {
+    ref._curtainController = controllerRef.current;
+  });
 
   return {
     page,

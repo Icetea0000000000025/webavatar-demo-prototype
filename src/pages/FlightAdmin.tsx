@@ -89,21 +89,21 @@ export default function FlightAdmin() {
 
         {filtered.length === 0 ? (
           <motion.div 
-            className="rounded-3xl border border-slate-200 bg-white p-16 text-center shadow-md"
+            className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-16 text-center shadow-md"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <p className="font-display text-lg font-bold text-slate-800">{t('flight_admin.no_bookings')}</p>
+            <p className="font-display text-lg font-bold text-slate-800 dark:text-slate-200">{t('flight_admin.no_bookings')}</p>
           </motion.div>
         ) : (
           <motion.div 
-            className="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white shadow-lg"
+            className="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
             <table className="w-full text-xs">
-              <thead className="bg-slate-50 text-slate-600 text-left border-b border-slate-200">
+              <thead className="bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-left border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th className="px-5 py-4 font-bold uppercase tracking-wider">{t('flight_admin.th_date')}</th>
                   <th className="px-5 py-4 font-bold uppercase tracking-wider">{t('flight_admin.th_passenger')}</th>
@@ -115,19 +115,19 @@ export default function FlightAdmin() {
                   <th className="px-5 py-4"></th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                 <AnimatePresence initial={false}>
                   {filtered.map((b) => (
                     <motion.tr 
                       key={b.id} 
-                      className="hover:bg-slate-50/50 transition-colors"
+                      className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
                       layout
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <td className="px-5 py-4 text-slate-500 font-mono">
+                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400 font-mono">
                         {new Date(b.createdAt).toLocaleString(language === 'th' ? "th-TH" : "en-US", {
                           year: "numeric",
                           month: "short",
@@ -136,22 +136,22 @@ export default function FlightAdmin() {
                           minute: "2-digit"
                         })}
                       </td>
-                      <td className="px-5 py-4 font-bold text-slate-900">{b.passengerName}</td>
-                      <td className="px-5 py-4 font-medium text-slate-800">
+                      <td className="px-5 py-4 font-bold text-slate-900 dark:text-slate-100">{b.passengerName}</td>
+                      <td className="px-5 py-4 font-medium text-slate-800 dark:text-slate-200">
                         {getCityLabel(b.from)} → {getCityLabel(b.to)}{" "}
-                        <span className="text-[10px] bg-sky-50 text-sky-700 font-semibold px-2 py-0.5 rounded-full ml-1">
+                        <span className="text-[10px] bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-400 font-semibold px-2 py-0.5 rounded-full ml-1">
                           {b.tripType === "round" ? t('flight.round_trip') : t('flight.one_way')}
                         </span>
                       </td>
-                      <td className="px-5 py-4 font-semibold text-slate-800">{b.departDate}{b.returnDate ? ` / ${b.returnDate}` : ""}</td>
-                      <td className="px-5 py-4 font-mono font-bold text-slate-900">{b.passengers}</td>
+                      <td className="px-5 py-4 font-semibold text-slate-800 dark:text-slate-200">{b.departDate}{b.returnDate ? ` / ${b.returnDate}` : ""}</td>
+                      <td className="px-5 py-4 font-mono font-bold text-slate-900 dark:text-slate-100">{b.passengers}</td>
                       <td className="px-5 py-4">
-                        <div className="font-semibold text-slate-950">{b.email}</div>
-                        <div className="text-[10px] text-slate-500 mt-0.5 font-mono">{b.phone}</div>
+                        <div className="font-semibold text-slate-950 dark:text-slate-100">{b.email}</div>
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-mono">{b.phone}</div>
                       </td>
                       <td className="px-5 py-4">
                         {b.promoCode ? (
-                          <span className="bg-indigo-50 text-indigo-700 border border-indigo-100 font-extrabold px-2.5 py-1 rounded text-[10px] tracking-wide">
+                          <span className="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-100 dark:border-indigo-800 font-extrabold px-2.5 py-1 rounded text-[10px] tracking-wide">
                             {b.promoCode}
                           </span>
                         ) : (
