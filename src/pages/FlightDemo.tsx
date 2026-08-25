@@ -85,6 +85,24 @@ export function getCityLabelForLang(city: string, language: string) {
   return enMap[city] || city;
 }
 
+export function getTodayString() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+export function getNextDayString(dateStr: string) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr + 'T00:00:00');
+  date.setDate(date.getDate() + 1);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 interface BookingForm {
   from: string;
   to: string;
@@ -100,6 +118,7 @@ interface BookingForm {
 
 export default function FlightDemo() {
   const { t, language } = useTranslation();
+  const today = useMemo(() => getTodayString(), []);
   const { scrollY } = useScroll();
   const heroParallax = useTransform(scrollY, [0, 500], [0, 150]);
   const getCityLabel = (city: string) => getCityLabelForLang(city, language);
@@ -313,13 +332,28 @@ export default function FlightDemo() {
       toast.error(t('flight.err_same_city') || 'กรุณาเลือกเมืองต้นทางและปลายทางที่แตกต่างกัน');
       return;
     }
+    if (!form.passengers || form.passengers < 1) {
+      toast.error(t('flight.err_min_passengers') || 'จำนวนผู้โดยสารต้องมีอย่างน้อย 1 ท่าน');
+      setForm((prev) => ({ ...prev, passengers: 1 }));
+      return;
+    }
     if (!form.departDate) {
       toast.error(t('flight.err_dep_date'));
       return;
     }
-    if (tripType === "round" && !form.returnDate) {
-      toast.error(t('flight.err_ret_date'));
+    if (form.departDate < today) {
+      toast.error(t('flight.err_past_date') || 'ไม่สามารถเลือกวันเดินทางย้อนหลังได้');
       return;
+    }
+    if (tripType === "round") {
+      if (!form.returnDate) {
+        toast.error(t('flight.err_ret_date'));
+        return;
+      }
+      if (form.returnDate <= form.departDate) {
+        toast.error(t('flight.err_invalid_return_date') || 'วันเดินทางกลับต้องอยู่หลังวันเดินทางไปอย่างน้อย 1 วัน');
+        return;
+      }
     }
     setSelectedOutboundFlight(null);
     setSelectedInboundFlight(null);
@@ -333,8 +367,30 @@ export default function FlightDemo() {
 
   const handlePassengerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.passengers || form.passengers < 1) {
+      toast.error(t('flight.err_min_passengers') || 'จำนวนผู้โดยสารต้องมีอย่างน้อย 1 ท่าน');
+      setForm((prev) => ({ ...prev, passengers: 1 }));
+      return;
+    }
+    if (!form.departDate || form.departDate < today) {
+      toast.error(t('flight.err_past_date') || 'ไม่สามารถเลือกวันเดินทางย้อนหลังได้');
+      return;
+    }
+    if (tripType === "round" && (!form.returnDate || form.returnDate <= form.departDate)) {
+      toast.error(t('flight.err_invalid_return_date') || 'วันเดินทางกลับต้องอยู่หลังวันเดินทางไปอย่างน้อย 1 วัน');
+      return;
+    }
     if (!form.passengerName || !form.email) {
       toast.error(t('flight.booking_error'));
+      return;
+    }
+    if (!form.phone || form.phone.length !== 10) {
+      toast.error(t('flight.err_phone_length') || 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
+      return;
+    }
+    if (!form.seat) {
+      toast.error(t('flight.seat_please_select') || 'กรุณาเลือกที่นั่ง');
+      setSeatMapOpen(true);
       return;
     }
 
@@ -599,8 +655,16 @@ export default function FlightDemo() {
                       id="departDate"
                       name="departDate"
                       required
+                      min={today}
                       value={form.departDate}
-                      onChange={(e) => setForm({ ...form, departDate: e.target.value })}
+                      onChange={(e) => {
+                        const newDepart = e.target.value;
+                        setForm((prev) => ({
+                          ...prev,
+                          departDate: newDepart,
+                          returnDate: prev.returnDate && prev.returnDate <= newDepart ? "" : prev.returnDate,
+                        }));
+                      }}
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display cursor-pointer"
                     />
                   </Field>
@@ -612,7 +676,7 @@ export default function FlightDemo() {
                         id="returnDate"
                         name="returnDate"
                         required
-                        min={form.departDate}
+                        min={getNextDayString(form.departDate) || getNextDayString(today)}
                         value={form.returnDate}
                         onChange={(e) => setForm({ ...form, returnDate: e.target.value })}
                         className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display cursor-pointer"
@@ -630,31 +694,38 @@ export default function FlightDemo() {
                       id="passengers"
                       name="passengers"
                       value={form.passengers}
+                      placeholder="1"
                       onChange={(e) => {
                         // 1. กรองเอาเฉพาะตัวเลข
                         const rawValue = e.target.value.replace(/[^0-9]/g, '');
 
-                        // 2. ถ้าเป็นค่าว่าง ให้ใส่ 1 หรือค่าว่างเพื่อรองรับตอนกด Backspace ลบทั้งหมด
+                        // 2. ถ้าผู้ใช้กดลบจนว่าง ให้เก็บ 0 ชั่วคราวเพื่อให้พิมพ์ตัวเลขใหม่ได้
                         if (!rawValue) {
-                          setForm({ ...form, passengers: 0 }); // หรือ 1
+                          setForm({ ...form, passengers: 0 });
                           return;
                         }
 
-                        // 3. แปลงเป็น Number เพื่อตัดเลข 0 นำหน้าออกอัตโนมัติ (เช่น "025" -> 25)
+                        // 3. แปลงเป็น Number
                         let num = parseInt(rawValue, 10);
 
-                        // 4. คุมไม่ให้เกิน 60
-                        if (num > 60) num = 60;
+                        // 4. ถ้าใส่ 0 ให้แจ้งเตือนทันที
+                        if (num === 0) {
+                          toast.error(t('flight.err_min_passengers') || 'จำนวนผู้โดยสารต้องมีอย่างน้อย 1 ท่าน');
+                          setForm({ ...form, passengers: 0 });
+                          return;
+                        }
 
+                        if (num > 60) num = 60;
                         setForm({ ...form, passengers: num });
                       }}
                       onBlur={() => {
-                        // ถ้าผู้ใช้ลบจนว่างแล้ววนออกนอกช่อง ให้คืนค่าเป็น 1 เสมอ
+                        // ถ้าคลิกออกนอกช่องขณะที่เป็น 0 หรือว่าง ให้เตือนและปรับกลับเป็น 1
                         if (!form.passengers || form.passengers < 1) {
+                          toast.error(t('flight.err_min_passengers') || 'จำนวนผู้โดยสารต้องมีอย่างน้อย 1 ท่าน');
                           setForm({ ...form, passengers: 1 });
                         }
                       }}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display"
+                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
                   </Field>
 
@@ -1176,20 +1247,18 @@ export default function FlightDemo() {
                       placeholder="you@email.com"
                     />
                   </Field>
-                  <Field label={t('flight.phone')} htmlFor="phone">
+                  <Field label={t('flight.phone')} htmlFor="phone" required>
                     <input
                       id="phone"
                       name="phone"
                       type="tel"
                       inputMode="numeric"
+                      maxLength={10}
+                      required
                       value={form.phone || ''}
                       onChange={(e) => {
-                        // คัดเอาเฉพาะตัวเลข (0-9) เท่านั้น ลบตัวอักษรหรือสัญลักษณ์อื่นทิ้งทันที
-                        const cleanValue = e.target.value.replace(/[^0-9]/g, '');
-
-                        // (Optional) จำกัดความยาวไม่เกิน 10 หลัก (ถ้าต้องการเปิดใช้ ให้เอา comment ออกได้ครับ)
-                        // if (cleanValue.length > 10) return;
-
+                        // คัดเอาเฉพาะตัวเลข (0-9) เท่านั้น และจำกัดไม่เกิน 10 หลัก
+                        const cleanValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
                         setForm((prev) => ({ ...prev, phone: cleanValue }));
                       }}
                       onPaste={(e) => {
@@ -1197,18 +1266,19 @@ export default function FlightDemo() {
                         e.preventDefault();
                         const pastedText = e.clipboardData.getData('text');
                         const cleanValue = pastedText.replace(/[^0-9]/g, '');
-                        setForm((prev) => ({ ...prev, phone: (prev.phone || '') + cleanValue }));
+                        setForm((prev) => ({ ...prev, phone: ((prev.phone || '') + cleanValue).slice(0, 10) }));
                       }}
                       className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      placeholder="08X-XXX-XXXX"
+                      placeholder="08XXXXXXXX"
                     />
                   </Field>
                   <Field
                     label={t('flight.modal_seat') || "Seat"}
                     onClick={() => setSeatMapOpen(true)}
+                    required
                   >
                     <div className="py-0.5 select-none font-display">
-                      <span className="font-bold text-slate-800 text-sm truncate block">
+                      <span className={`font-bold text-sm truncate block ${form.seat ? "text-sky-600 dark:text-sky-400 font-extrabold" : "text-slate-500 dark:text-slate-400"}`}>
                         {form.seat || t('flight.not_selected')}
                       </span>
                     </div>
@@ -1394,7 +1464,7 @@ function Field({ label, htmlFor, children, onClick, required }: { label: string;
     <div
       onClick={onClick}
       className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${onClick
-        ? "cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-850/60 hover:border-[var(--primary)] hover:shadow-md hover:ring-2 hover:ring-[var(--primary)]/10 active:scale-98"
+        ? "cursor-pointer hover:bg-slate-100/70 dark:hover:bg-slate-800/80 hover:border-sky-500 dark:hover:border-sky-400 hover:shadow-md hover:ring-2 hover:ring-sky-500/20 active:scale-98"
         : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
         }`}
     >
@@ -1622,41 +1692,41 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border-none p-0 sm:max-w-md bg-white text-slate-800 shadow-2xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 p-0 sm:max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl">
         <div className="p-6 relative select-none">
           {/* Header */}
           <div className="text-center mb-6">
-            <h3 className="font-display font-black text-xl text-sky-950 tracking-tight">
+            <h3 className="font-display font-black text-xl text-sky-950 dark:text-white tracking-tight">
               {t('flight.seat_picker_title')}
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-slate-400 dark:text-slate-400 mt-1">
               {getCode(fromCity)} → {getCode(toCity)}
             </p>
           </div>
 
           {/* Seat Legend */}
-          <div className="flex justify-center gap-6 text-xs mb-6 bg-slate-50 py-3 rounded-2xl border border-slate-100">
+          <div className="flex justify-center gap-6 text-xs mb-6 bg-slate-50 dark:bg-slate-800/60 py-3 rounded-2xl border border-slate-100 dark:border-slate-700/60">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#cbdcf7] border border-[#cbdcf7]"></div>
-              <span className="text-[#0f3460] font-medium">{t('flight.seat_available')}</span>
+              <div className="w-4 h-4 rounded-full bg-[#cbdcf7] dark:bg-sky-900/60 border border-[#cbdcf7] dark:border-sky-700"></div>
+              <span className="text-[#0f3460] dark:text-sky-300 font-medium">{t('flight.seat_available')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center"><span className="text-[8px] text-slate-400 line-through">✕</span></div>
-              <span className="text-slate-400">{t('flight.seat_occupied')}</span>
+              <div className="w-4 h-4 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center"><span className="text-[8px] text-slate-400 dark:text-slate-500 line-through">✕</span></div>
+              <span className="text-slate-400 dark:text-slate-400">{t('flight.seat_occupied')}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#0f3460] border border-[#0f3460]"></div>
-              <span className="text-[#0f3460] font-bold">{t('flight.seat_selected')}</span>
+              <div className="w-4 h-4 rounded-full bg-[#0f3460] dark:bg-sky-600 border border-[#0f3460] dark:border-sky-500"></div>
+              <span className="text-[#0f3460] dark:text-sky-300 font-bold">{t('flight.seat_selected')}</span>
             </div>
           </div>
 
           {/* Airplane Seat Map Container */}
-          <div className="max-w-[340px] mx-auto bg-slate-50 border border-slate-100 rounded-3xl p-4 pt-8 relative overflow-hidden">
+          <div className="max-w-[340px] mx-auto bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/60 rounded-3xl p-4 pt-8 relative overflow-hidden">
             {/* Mock Cockpit at the top */}
-            <div className="w-32 h-10 border-t-2 border-x-2 border-slate-200 rounded-t-full mx-auto mb-6 flex items-center justify-center bg-white relative">
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-200 absolute left-4 bottom-2"></div>
-              <div className="w-1.5 h-1.5 rounded-full bg-slate-200 absolute right-4 bottom-2"></div>
-              <span className="text-[9px] font-bold text-slate-400 tracking-widest uppercase">{t('flight.cockpit')}</span>
+            <div className="w-32 h-10 border-t-2 border-x-2 border-slate-200 dark:border-slate-700 rounded-t-full mx-auto mb-6 flex items-center justify-center bg-white dark:bg-slate-800 relative">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-600 absolute left-4 bottom-2"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-200 dark:bg-slate-600 absolute right-4 bottom-2"></div>
+              <span className="text-[9px] font-bold text-slate-400 dark:text-slate-400 tracking-widest uppercase">{t('flight.cockpit')}</span>
             </div>
 
             {/* Cabin Seats Rows */}
@@ -1676,10 +1746,10 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
                         disabled={isOccupied}
                         onClick={() => handleSeatClick(seatId)}
                         className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${isOccupied
-                          ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
+                          ? "bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-400/60 dark:text-slate-500 line-through cursor-not-allowed"
                           : isSelected
-                            ? "bg-[#0f3460] border-[#0f3460] text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20"
-                            : "bg-[#cbdcf7]/70 border-[#cbdcf7] text-[#0f3460] hover:bg-[#cbdcf7] hover:border-[#9abcee]"
+                            ? "bg-[#0f3460] dark:bg-sky-600 border-[#0f3460] dark:border-sky-500 text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20 dark:shadow-sky-600/30"
+                            : "bg-[#cbdcf7]/70 dark:bg-sky-950/60 border-[#cbdcf7] dark:border-sky-800 text-[#0f3460] dark:text-sky-200 hover:bg-[#cbdcf7] dark:hover:bg-sky-900/80 hover:border-[#9abcee] dark:hover:border-sky-600"
                           }`}
                       >
                         {seatId}
@@ -1703,10 +1773,10 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
                         disabled={isOccupied}
                         onClick={() => handleSeatClick(seatId)}
                         className={`w-10 h-10 rounded-full text-[10px] font-bold border transition-all cursor-pointer flex items-center justify-center ${isOccupied
-                          ? "bg-slate-100 border-slate-200 text-slate-400/60 line-through cursor-not-allowed"
+                          ? "bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-400/60 dark:text-slate-500 line-through cursor-not-allowed"
                           : isSelected
-                            ? "bg-[#0f3460] border-[#0f3460] text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20"
-                            : "bg-[#cbdcf7]/70 border-[#cbdcf7] text-[#0f3460] hover:bg-[#cbdcf7] hover:border-[#9abcee]"
+                            ? "bg-[#0f3460] dark:bg-sky-600 border-[#0f3460] dark:border-sky-500 text-white font-extrabold shadow-md scale-105 shadow-[#0f3460]/20 dark:shadow-sky-600/30"
+                            : "bg-[#cbdcf7]/70 dark:bg-sky-950/60 border-[#cbdcf7] dark:border-sky-800 text-[#0f3460] dark:text-sky-200 hover:bg-[#cbdcf7] dark:hover:bg-sky-900/80 hover:border-[#9abcee] dark:hover:border-sky-600"
                           }`}
                       >
                         {seatId}
@@ -1718,7 +1788,7 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
             </div>
 
             {/* Exit indicators at the bottom */}
-            <div className="flex justify-between items-center mt-6 text-[9px] font-bold text-slate-400 px-4">
+            <div className="flex justify-between items-center mt-6 text-[9px] font-bold text-slate-400 dark:text-slate-500 px-4">
               <span className="flex items-center gap-1">◀ EXIT</span>
               <span className="flex items-center gap-1">EXIT ▶</span>
             </div>
@@ -1727,11 +1797,11 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
           {/* Confirm Button */}
           <div className="mt-8 flex flex-col gap-3">
             {selectedSeat ? (
-              <div className="text-center text-xs text-[#0f3460] font-bold bg-[#cbdcf7]/30 border border-[#cbdcf7]/40 py-2.5 rounded-2xl">
+              <div className="text-center text-xs text-[#0f3460] dark:text-sky-300 font-bold bg-[#cbdcf7]/30 dark:bg-sky-950/50 border border-[#cbdcf7]/40 dark:border-sky-800/60 py-2.5 rounded-2xl">
                 {t('flight.seat_selected_label')} {selectedSeat}
               </div>
             ) : (
-              <div className="text-center text-xs text-rose-600 font-bold bg-rose-50 border border-rose-200/50 py-2.5 rounded-2xl">
+              <div className="text-center text-xs text-rose-600 dark:text-rose-400 font-bold bg-rose-50 dark:bg-rose-950/40 border border-rose-200/50 dark:border-rose-900/60 py-2.5 rounded-2xl">
                 {t('flight.seat_please_select')}
               </div>
             )}
@@ -1741,8 +1811,8 @@ function SeatMapModal({ open, onClose, selectedSeat, onSelectSeat, fromCity, toC
               disabled={!selectedSeat}
               onClick={onClose}
               className={`w-full py-3.5 font-display font-bold text-xs rounded-2xl shadow-md transition-all cursor-pointer ${selectedSeat
-                ? "bg-[#0f3460] hover:bg-[#0c2a50] text-white hover:shadow-lg active:scale-98"
-                : "bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200"
+                ? "bg-[#0f3460] dark:bg-sky-600 hover:bg-[#0c2a50] dark:hover:bg-sky-500 text-white hover:shadow-lg active:scale-98"
+                : "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed border border-slate-200 dark:border-slate-700"
                 }`}
             >
               {t('flight.seat_confirm')}
