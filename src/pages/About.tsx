@@ -1,14 +1,10 @@
-import { Link } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence, type Variants } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import {
   Languages,
   AudioLines,
   Workflow,
-  LayoutTemplate,
-  ArrowRight,
-  Compass,
-  Sparkles
+  LayoutTemplate
 } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
@@ -273,11 +269,6 @@ function About() {
         ═══════════════════════════════════════ */}
         <section className="about3-hero-section" id="about-hero" aria-label="About Us Hero">
           <AnimatedSection direction="up" duration={0.8} className="about3-hero-centered-box">
-            <div className="about3-pill-badge">
-              <span className="about3-badge-dot" />
-              <span>{t('about.badge')}</span>
-            </div>
-
             <h1 className="about3-hero-headline">
               {t('about.title')}
             </h1>
@@ -285,13 +276,6 @@ function About() {
             <p className="about3-hero-subtitle">
               {t('about.subtitle')}
             </p>
-
-            <div className="about3-hero-cta-wrap">
-              <Link to="/contact" className="about3-hero-cta-btn" id="about-hero-cta">
-                <span>{t('about.vision_cta')}</span>
-                <ArrowRight size={16} />
-              </Link>
-            </div>
           </AnimatedSection>
         </section>
 
@@ -301,11 +285,8 @@ function About() {
         <section className="about3-mission-section" id="mission-section" aria-label="Our Mission and Purpose">
           <AnimatedSection direction="up" duration={0.8}>
             <div className="about3-mission-pill-card">
-              {/* Circular Badge Header */}
+              {/* Section Header */}
               <div className="about3-section-badge-row">
-                <div className="about3-icon-bubble-badge" style={{ background: 'linear-gradient(135deg, #6366F1, #818CF8)' }}>
-                  <Compass size={16} color="#FFFFFF" />
-                </div>
                 <h2>{t('about.purpose_title')}</h2>
               </div>
 
@@ -315,9 +296,6 @@ function About() {
 
                 {/* Vision Box Inside Pill Card */}
                 <div className="about3-vision-callout-box">
-                  <div className="about3-callout-icon">
-                    <Sparkles size={18} color="var(--primary)" />
-                  </div>
                   <div>
                     <h4>{t('about.vision_title')}</h4>
                     <p>{t('about.vision_desc')}</p>

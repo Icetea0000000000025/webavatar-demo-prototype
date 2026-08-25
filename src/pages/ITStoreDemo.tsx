@@ -497,6 +497,14 @@ export default function ITStoreDemo() {
     });
   };
 
+  const removeItem = (id: string) => {
+    setCart((prev) => {
+      const updated = { ...prev };
+      delete updated[id];
+      return updated;
+    });
+  };
+
   const checkout = () => {
     if (cartItems.length === 0) return;
     const newOrder: ITOrder = {
@@ -910,12 +918,24 @@ export default function ITStoreDemo() {
                     <ShoppingCart size={18} style={{ color: "#6366f1" }} />
                     <span className="font-extrabold text-foreground text-sm">{t("itstore.cart_title")}</span>
                   </div>
-                  <span
-                    className="px-2 py-0.5 rounded-full text-xs font-extrabold text-white"
-                    style={{ background: "#6366f1", minWidth: 22, textAlign: "center" }}
-                  >
-                    {itemCount}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {cartItems.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setCart({})}
+                        className="text-[11px] font-bold text-foreground/40 hover:text-red-500 transition-colors cursor-pointer mr-1"
+                        title={language === 'th' ? "ล้างสินค้าทั้งหมดในตะกร้า" : "Clear all items"}
+                      >
+                        {language === 'th' ? 'ล้างตะกร้า' : 'Clear'}
+                      </button>
+                    )}
+                    <span
+                      className="px-2 py-0.5 rounded-full text-xs font-extrabold text-white"
+                      style={{ background: "#6366f1", minWidth: 22, textAlign: "center" }}
+                    >
+                      {itemCount}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Cart items */}
@@ -955,21 +975,37 @@ export default function ITStoreDemo() {
                             </div>
                             <div className="text-xs text-foreground/60 mt-0.5">{money.format(item.price)}</div>
                           </div>
-                          <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-0.5 bg-foreground/5 rounded-full p-0.5 border border-foreground/10">
+                              <button
+                                type="button"
+                                onClick={() => changeQty(item.id, -1)}
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-foreground/70 hover:bg-foreground/10 hover:text-foreground cursor-pointer transition-colors"
+                                id={`cart-minus-${item.id}`}
+                                title="ลดจำนวน"
+                              >
+                                <Minus size={9} />
+                              </button>
+                              <span className="text-xs font-bold w-4 text-center text-foreground">{item.quantity}</span>
+                              <button
+                                type="button"
+                                onClick={() => changeQty(item.id, 1)}
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-foreground/70 hover:bg-foreground/10 hover:text-foreground cursor-pointer transition-colors"
+                                id={`cart-plus-${item.id}`}
+                                title="เพิ่มจำนวน"
+                              >
+                                <Plus size={9} />
+                              </button>
+                            </div>
                             <button
-                              onClick={() => changeQty(item.id, -1)}
-                              className="w-6 h-6 rounded-full border border-foreground/10 flex items-center justify-center text-foreground/60 hover:border-red-400 hover:text-red-500 transition-colors"
-                              id={`cart-minus-${item.id}`}
+                              type="button"
+                              onClick={() => removeItem(item.id)}
+                              className="w-7 h-7 rounded-full flex items-center justify-center text-foreground/40 hover:text-red-500 hover:bg-red-500/10 cursor-pointer transition-all ml-0.5"
+                              id={`cart-remove-${item.id}`}
+                              title={language === 'th' ? "ลบสินค้านี้ออกจากตะกร้า" : "Remove item"}
+                              aria-label={`Remove ${item.name}`}
                             >
-                              {item.quantity === 1 ? <Trash2 size={10} /> : <Minus size={10} />}
-                            </button>
-                            <span className="text-xs font-bold w-4 text-center text-foreground">{item.quantity}</span>
-                            <button
-                              onClick={() => changeQty(item.id, 1)}
-                              className="w-6 h-6 rounded-full border border-foreground/10 flex items-center justify-center text-foreground/60 hover:border-indigo-400 hover:text-indigo-500 transition-colors"
-                              id={`cart-plus-${item.id}`}
-                            >
-                              <Plus size={10} />
+                              <Trash2 size={13} />
                             </button>
                           </div>
                         </motion.div>

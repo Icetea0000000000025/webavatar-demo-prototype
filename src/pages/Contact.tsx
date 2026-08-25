@@ -162,11 +162,18 @@ function Contact() {
       : [];
 
     if (dataToExport.length === 0) {
-      alert("ยังไม่มีรายการติดต่อในระบบ กรุณากรอกแบบฟอร์มเพื่อทดลองดาวน์โหลด (No submissions to download yet)");
+      alert(t('contact.download_no_data'));
       return;
     }
 
-    const headers = ["Form ID", "Name", "Email", "Inquiry Type", "Message", "Timestamp"];
+    const headers = [
+      t('contact.th_id'),
+      t('contact.th_name'),
+      t('contact.th_email'),
+      t('contact.th_topic'),
+      t('contact.th_msg'),
+      t('contact.th_time')
+    ];
     const rows = dataToExport.map(sub => [
       `"#${sub.formNumber}"`,
       `"${(sub.name || '').replace(/"/g, '""')}"`,
@@ -249,10 +256,10 @@ function Contact() {
                       <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
                         <span className="flex items-center gap-1.5 text-amber-500 font-bold uppercase tracking-wider">
                           <MapPin className="size-3.5" />
-                          Location
+                          {t('contact.channel_location')}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
-                          Open Map <ArrowUpRight className="size-3.5" />
+                          {t('contact.action_open_map')} <ArrowUpRight className="size-3.5" />
                         </span>
                       </div>
                       <div className="flex items-center gap-2 mb-1">
@@ -261,7 +268,7 @@ function Contact() {
                         </h3>
                         {copiedCard === 'address' && (
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
-                            <Check className="size-3" /> Copied
+                            <Check className="size-3" /> {t('contact.copied')}
                           </span>
                         )}
                       </div>
@@ -278,10 +285,10 @@ function Contact() {
                       <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
                         <span className="flex items-center gap-1.5 text-emerald-500 font-bold uppercase tracking-wider">
                           <Phone className="size-3.5" />
-                          Hotline
+                          {t('contact.channel_hotline')}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
-                          Call Now <ArrowUpRight className="size-3.5" />
+                          {t('contact.action_call_now')} <ArrowUpRight className="size-3.5" />
                         </span>
                       </div>
                       <div className="flex items-center gap-2 mb-1">
@@ -290,12 +297,12 @@ function Contact() {
                         </h3>
                         {copiedCard === 'phone' && (
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
-                            <Check className="size-3" /> Copied
+                            <Check className="size-3" /> {t('contact.copied')}
                           </span>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Mon–Fri, 9:00–18:00 ICT (Business Operations)
+                        {t('contact.channel_phone_hours')}
                       </p>
                     </div>
 
@@ -307,10 +314,10 @@ function Contact() {
                       <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
                         <span className="flex items-center gap-1.5 text-sky-500 font-bold uppercase tracking-wider">
                           <Mail className="size-3.5" />
-                          Electronic Mail
+                          {t('contact.channel_email')}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all text-primary">
-                          Send Email <ArrowUpRight className="size-3.5" />
+                          {t('contact.action_send_email')} <ArrowUpRight className="size-3.5" />
                         </span>
                       </div>
                       <div className="flex items-center gap-2 mb-1">
@@ -319,12 +326,12 @@ function Contact() {
                         </h3>
                         {copiedCard === 'email' && (
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
-                            <Check className="size-3" /> Copied
+                            <Check className="size-3" /> {t('contact.copied')}
                           </span>
                         )}
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Enterprise partnerships, AI avatar demos, and solutions
+                        {t('contact.channel_email_desc')}
                       </p>
                     </div>
 
@@ -497,7 +504,7 @@ function Contact() {
               id="download-ledger-button"
             >
               <Download className="size-4" />
-              <span>Export CSV</span>
+              <span>{t('contact.export_csv')}</span>
             </button>
           </div>
 
@@ -506,11 +513,11 @@ function Contact() {
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-border text-xs font-mono font-bold text-muted-foreground/80 uppercase">
-                  <th className="py-3 px-2">ID</th>
-                  <th className="py-3 px-4">Name</th>
-                  <th className="py-3 px-4">Email</th>
-                  <th className="py-3 px-4">Topic</th>
-                  <th className="py-3 px-2 text-right">Time</th>
+                  <th className="py-3 px-2">{t('contact.th_id')}</th>
+                  <th className="py-3 px-4">{t('contact.th_name')}</th>
+                  <th className="py-3 px-4">{t('contact.th_email')}</th>
+                  <th className="py-3 px-4">{t('contact.th_topic')}</th>
+                  <th className="py-3 px-2 text-right">{t('contact.th_time')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/30">
@@ -523,9 +530,9 @@ function Contact() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      <td className="py-3.5 px-2 font-mono font-bold">[DRAFT]</td>
-                      <td className="py-3.5 px-4">{formatRedactedName(formData.name) || <span className="opacity-40 italic">Typing name...</span>}</td>
-                      <td className="py-3.5 px-4">{formatRedactedEmail(formData.email) || <span className="opacity-40 italic">Typing email...</span>}</td>
+                      <td className="py-3.5 px-2 font-mono font-bold">{t('contact.draft_badge')}</td>
+                      <td className="py-3.5 px-4">{formatRedactedName(formData.name) || <span className="opacity-40 italic">{t('contact.draft_typing_name')}</span>}</td>
+                      <td className="py-3.5 px-4">{formatRedactedEmail(formData.email) || <span className="opacity-40 italic">{t('contact.draft_typing_email')}</span>}</td>
                       <td className="py-3.5 px-4"><span className="text-xs font-mono">{getInquiryTypeLabel(formData.inquiryType)}</span></td>
                       <td className="py-3.5 px-2 font-mono text-xs text-right opacity-60">--:--</td>
                     </motion.tr>
