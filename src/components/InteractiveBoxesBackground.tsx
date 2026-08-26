@@ -133,15 +133,15 @@ export const InteractiveBoxesBackground: React.FC = () => {
 
       if (isMobile) {
         return {
-          cols: 7,
-          rows: 7,
-          boxSize: 42,
-          boxHeight: 18,
-          gap: 9,
-          influenceRadius: 150,
+          cols: 10,
+          rows: 12,
+          boxSize: 34,
+          boxHeight: 16,
+          gap: 8,
+          influenceRadius: 170,
           maxLift: 38,
           maxTilt: 0.25,
-          cameraPitch: 58 * (Math.PI / 180),
+          cameraPitch: 56 * (Math.PI / 180),
           cameraYaw: -18 * (Math.PI / 180),
         };
       }
@@ -233,9 +233,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
       const startX = -((cols - 1) * spacing) / 2;
       const startY = -((rows - 1) * spacing) / 2;
 
-      const centerX = width * 0.52;
-      const centerY = height * 0.48;
-      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 680;
+      const centerX = width < 640 ? width * 0.5 : width * 0.52;
+      const centerY = width < 640 ? height * 0.5 : height * 0.48;
+      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 640;
       const camDist = 950;
 
       const halfS = boxSize * 0.5;
@@ -532,9 +532,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
-      const centerX = width * 0.52;
-      const centerY = height * 0.48;
-      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 680;
+      const centerX = width < 640 ? width * 0.5 : width * 0.52;
+      const centerY = width < 640 ? height * 0.5 : height * 0.48;
+      const focalLength = width > 1200 ? 920 : width > 768 ? 820 : 640;
       const camDist = 950;
 
       let mouseWorldX = -9999;
