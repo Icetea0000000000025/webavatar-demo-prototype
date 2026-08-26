@@ -1,0 +1,7 @@
+Techsauce Global Summit 2026,Vibe / AI Avatar Knowledge Sheet
+Use,Upload this XLSX to Google Sheets or use it as a Vibe data source.
+Current structured tabs,"Workshops, Exhibitors, Awards"
+Agenda status,Final visual QA is still required before agenda rows are marked verified.
+Important,Do not treat OCR-only agenda text as verified.
+Truncated names,Names containing ... are preserved exactly as displayed in the screenshots.
+Goal,"Make the data easy to inspect, edit, filter, and feed to the AI Avatar."
