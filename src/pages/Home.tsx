@@ -14,6 +14,7 @@ import './Pages.css';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import botnoiAirLogo from '../assets/BOTNOI-AIR-logo.png';
 import botnoiRestaurantLogo from '../assets/BOTNOI-Restaurant-logo.png';
+import { triggerWebAvatarCall } from '../lib/webavatarService';
 
 
 
@@ -59,6 +60,35 @@ export default function Home() {
 
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+  const [isAvatarConnected, setIsAvatarConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+
+  useEffect(() => {
+    const handleConnect = () => {
+      setIsAvatarConnected(true);
+      setIsConnecting(false);
+    };
+    const handleDisconnect = () => {
+      setIsAvatarConnected(false);
+      setIsConnecting(false);
+    };
+
+    window.addEventListener('onConnect', handleConnect);
+    window.addEventListener('onDisconnect', handleDisconnect);
+
+    return () => {
+      window.removeEventListener('onConnect', handleConnect);
+      window.removeEventListener('onDisconnect', handleDisconnect);
+    };
+  }, []);
+
+  const handleAvatarLogoClick = () => {
+    if (!isAvatarConnected) {
+      setIsConnecting(true);
+      setTimeout(() => setIsConnecting(false), 6000);
+    }
+    triggerWebAvatarCall();
+  };
 
   const toggleCardExpand = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -70,6 +100,12 @@ export default function Home() {
   };
 
   const getCardStatus = () => {
+    if (isAvatarConnected) {
+      return { label: 'VOICE AGENT CONNECTED', color: '#10b981', dotColor: '#34d399', class: 'halo-connected' };
+    }
+    if (isConnecting) {
+      return { label: 'CONNECTING TO AVATAR...', color: '#f59e0b', dotColor: '#fbbf24', class: 'halo-focus' };
+    }
     if (activeCard === 0) return { label: 'EVENT ROUTING ACTIVE', color: '#6366f1', dotColor: '#818cf8', class: 'halo-event' };
     if (activeCard === 1) return { label: 'FOCUS HOOKS ACTIVE', color: '#0ea5e9', dotColor: '#38bdf8', class: 'halo-focus' };
     if (activeCard === 2) return { label: 'INPUT VALIDATION ACTIVE', color: '#10b981', dotColor: '#34d399', class: 'halo-validation' };
@@ -794,23 +830,35 @@ export default function Home() {
                 <div className="home-avatar-ring ring-1 transition-colors duration-500" style={{ borderColor: statusInfo.color }} />
                 
                 <motion.div
+                  role="button"
+                  tabIndex={0}
+                  id="home-avatar-call-trigger"
                   className="home-avatar-circle transition-all duration-500"
-                  animate={activeCard !== null ? { scale: 1.12 } : { scale: 1 }}
+                  onClick={handleAvatarLogoClick}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleAvatarLogoClick(); }}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.94 }}
+                  animate={activeCard !== null || isAvatarConnected || isConnecting ? { scale: 1.12 } : { scale: 1 }}
                   transition={{ type: 'spring', stiffness: 320, damping: 20 }}
                   style={{
                     borderColor: statusInfo.color,
-                    boxShadow: activeCard !== null
+                    boxShadow: isAvatarConnected
+                      ? `0 0 60px #10b98180, 0 0 100px #10b98140`
+                      : activeCard !== null
                       ? `0 0 60px ${statusInfo.color}80, 0 0 100px ${statusInfo.color}40`
                       : `0 0 45px ${statusInfo.color}40, 0 4px 25px ${statusInfo.color}25`,
+                    cursor: 'pointer',
                   }}
+                  title={isAvatarConnected ? "WebAvatar is connected" : "Click to Start Voice Call with WebAvatar"}
+                  aria-label={isAvatarConnected ? "WebAvatar is connected" : "Click to Start Voice Call with WebAvatar"}
                 >
                   <img
                     src={logoNewLightBlue}
                     alt="WebAvatar"
                     className="home-avatar-logo transition-all duration-500"
                     style={{
-                      transform: activeCard !== null ? 'scale(1.22)' : 'scale(1)',
-                      filter: activeCard !== null ? `drop-shadow(0 0 12px ${statusInfo.color})` : 'none',
+                      transform: activeCard !== null || isAvatarConnected || isConnecting ? 'scale(1.22)' : 'scale(1)',
+                      filter: activeCard !== null || isAvatarConnected || isConnecting ? `drop-shadow(0 0 12px ${statusInfo.color})` : 'none',
                     }}
                   />
                 </motion.div>
@@ -821,9 +869,9 @@ export default function Home() {
                   <motion.span
                     key={i}
                     className="home-avatar-bar transition-colors duration-500"
-                    animate={{ scaleY: activeCard !== null ? [0.15, 1.7, 0.15] : [0.3, 1, 0.3] }}
+                    animate={{ scaleY: activeCard !== null || isAvatarConnected || isConnecting ? [0.15, 1.7, 0.15] : [0.3, 1, 0.3] }}
                     transition={{
-                      duration: activeCard !== null ? 0.3 + (i % 3) * 0.08 : 1 + (i % 5) * 0.3,
+                      duration: activeCard !== null || isAvatarConnected || isConnecting ? 0.3 + (i % 3) * 0.08 : 1 + (i % 5) * 0.3,
                       repeat: Infinity,
                       ease: 'easeInOut',
                       delay: i * 0.03,
@@ -831,23 +879,33 @@ export default function Home() {
                     style={{
                       height: `${h}%`,
                       background: `linear-gradient(180deg, ${statusInfo.color} 0%, #06b6d4 100%)`,
-                      boxShadow: activeCard !== null ? `0 0 10px ${statusInfo.color}` : 'none',
+                      boxShadow: activeCard !== null || isAvatarConnected || isConnecting ? `0 0 10px ${statusInfo.color}` : 'none',
                     }}
                   />
                 ))}
               </div>
 
               <motion.div
-                className="home-avatar-status transition-colors duration-300"
+                className="home-avatar-status transition-colors duration-300 flex flex-col items-center gap-1 cursor-pointer"
                 style={{ color: statusInfo.color }}
-                animate={activeCard !== null ? { scale: 1.08 } : { scale: 1 }}
+                onClick={handleAvatarLogoClick}
+                animate={activeCard !== null || isAvatarConnected || isConnecting ? { scale: 1.08 } : { scale: 1 }}
                 transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                title="Click to Connect with WebAvatar"
               >
-                <span
-                  className="home-avatar-status-dot transition-colors duration-300"
-                  style={{ background: statusInfo.dotColor, boxShadow: `0 0 14px ${statusInfo.dotColor}` }}
-                />
-                <span className="font-mono tracking-wider font-bold">{statusInfo.label}</span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className="home-avatar-status-dot transition-colors duration-300"
+                    style={{ background: statusInfo.dotColor, boxShadow: `0 0 14px ${statusInfo.dotColor}` }}
+                  />
+                  <span className="font-mono tracking-wider font-bold">{statusInfo.label}</span>
+                </div>
+                {!isAvatarConnected && !isConnecting && activeCard === null && (
+                  <span className="text-[11px] tracking-wide opacity-80 font-medium text-muted-foreground hover:text-indigo-400 transition-colors flex items-center gap-1.5 mt-0.5">
+                    <span className="animate-pulse">📞</span>
+                    <span>{t('home.click_to_call')}</span>
+                  </span>
+                )}
               </motion.div>
             </motion.div>
 
