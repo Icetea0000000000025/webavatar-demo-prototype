@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
   Users, Mic, Globe, Laptop,
   Building2, FileText, Layers, ArrowRight,
@@ -54,6 +54,7 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
   const [typedText, setTypedText] = useState('');
+  const [isTyping, setIsTyping] = useState(true);
   const fullText = t('home.hero_title');
 
   const [activeCard, setActiveCard] = useState<number | null>(null);
@@ -103,15 +104,25 @@ export default function Home() {
   useEffect(() => {
     let i = 0;
     setTypedText('');
+    setIsTyping(true);
+    let doneTimer: ReturnType<typeof setTimeout> | undefined;
+
     const timer = setInterval(() => {
       if (i < fullText.length) {
         setTypedText(fullText.slice(0, i + 1));
         i++;
       } else {
         clearInterval(timer);
+        doneTimer = setTimeout(() => {
+          setIsTyping(false);
+        }, 600);
       }
     }, 38);
-    return () => clearInterval(timer);
+
+    return () => {
+      clearInterval(timer);
+      if (doneTimer) clearTimeout(doneTimer);
+    };
   }, [fullText]);
 
   const renderRuleBullets = (text: string) => {
@@ -147,11 +158,17 @@ export default function Home() {
             transition={{ duration: 0.3, delay: 0.25 }}
           >
             {typedText}
-            <motion.span
-              className="home-hero-cursor"
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
-            >|</motion.span>
+            <AnimatePresence>
+              {isTyping && (
+                <motion.span
+                  className="home-hero-cursor"
+                  initial={{ opacity: 1 }}
+                  animate={{ opacity: [1, 0] }}
+                  exit={{ opacity: 0, transition: { duration: 0.2 } }}
+                  transition={{ duration: 0.5, repeat: Infinity, repeatType: 'reverse' }}
+                >|</motion.span>
+              )}
+            </AnimatePresence>
           </motion.h1>
 
           {/* Subtitle */}

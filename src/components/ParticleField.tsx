@@ -50,11 +50,15 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    const isMobile = window.innerWidth < 768;
+    const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
+    let width = (canvas.width = Math.floor(window.innerWidth * dpr));
+    let height = (canvas.height = Math.floor(window.innerHeight * dpr));
 
     const particles: Particle[] = [];
-    const particleCount = Math.min(Math.floor((width * height) / 9000), 80);
+    const particleCount = isMobile
+      ? Math.min(Math.floor((window.innerWidth * window.innerHeight) / 22000), 24)
+      : Math.min(Math.floor((window.innerWidth * window.innerHeight) / 9000), 75);
 
     const mouse = {
       x: -1000,
@@ -74,9 +78,9 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
       constructor() {
         this.x = Math.random() * width;
         this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.2;
-        this.vy = (Math.random() - 0.5) * 0.2 - 0.05;
-        this.radius = Math.random() * 2.5 + 2.5;
+        this.vx = (Math.random() - 0.5) * 0.2 * dpr;
+        this.vy = ((Math.random() - 0.5) * 0.2 - 0.05) * dpr;
+        this.radius = (Math.random() * 2.5 + 2.5) * dpr;
         this.baseOpacity = Math.random() * 0.25 + 0.22;
         this.opacity = this.baseOpacity;
       }
@@ -95,12 +99,12 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distSq = dx * dx + dy * dy;
-        const radiusSq = mouse.radius * mouse.radius;
+        const radiusSq = (mouse.radius * dpr) * (mouse.radius * dpr);
 
         if (distSq < radiusSq) {
           const dist = Math.sqrt(distSq);
           if (dist > 0) {
-            const force = (mouse.radius - dist) / mouse.radius;
+            const force = (mouse.radius * dpr - dist) / (mouse.radius * dpr);
             this.x -= (dx / dist) * force * 3.5;
             this.y -= (dy / dist) * force * 3.5;
           }
@@ -114,7 +118,7 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
 
       draw(c: CanvasRenderingContext2D, currentScrollY: number) {
         // Draw with scroll parallax offset
-        let drawY = this.y - (currentScrollY * 0.12);
+        let drawY = this.y - (currentScrollY * 0.12 * dpr);
         
         // Wrap drawY inside screen height bounds
         drawY = ((drawY % height) + height) % height;
@@ -135,9 +139,8 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
     }
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Since canvas covers full screen fixed at (0,0), we can use clientX/Y directly and avoid getBoundingClientRect() which triggers style recalculations.
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      mouse.x = e.clientX * dpr;
+      mouse.y = e.clientY * dpr;
     };
 
     const handleMouseLeave = () => {
@@ -147,8 +150,8 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        mouse.x = e.touches[0].clientX;
-        mouse.y = e.touches[0].clientY;
+        mouse.x = e.touches[0].clientX * dpr;
+        mouse.y = e.touches[0].clientY * dpr;
       }
     };
 
@@ -157,21 +160,36 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
       mouse.y = -1000;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    canvas.addEventListener('mouseleave', handleMouseLeave, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: true });
     window.addEventListener('touchstart', handleTouchMove, { passive: true });
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = canvas.width = Math.floor(window.innerWidth * dpr);
+      height = canvas.height = Math.floor(window.innerHeight * dpr);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    let isRunning = true;
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        isRunning = false;
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        if (!isRunning) {
+          isRunning = true;
+          animationFrameId = requestAnimationFrame(animate);
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     const animate = () => {
+      if (!isRunning) return;
       ctx.clearRect(0, 0, width, height);
 
       particles.forEach((p) => {
@@ -186,6 +204,7 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('mousemove', handleMouseMove);
       if (canvas) {
         canvas.removeEventListener('mouseleave', handleMouseLeave);

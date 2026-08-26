@@ -180,6 +180,8 @@
     -moz-osx-font-smoothing: grayscale;
     letter-spacing: normal;
     word-spacing: normal;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -188,6 +190,17 @@
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
+  }
+
+  button,
+  input,
+  select,
+  textarea,
+  a,
+  [role="button"],
+  .btn,
+  .bento-card-interactive {
+    touch-action: manipulation;
   }
 
   button,
