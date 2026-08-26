@@ -20,6 +20,7 @@ import OrderAdmin from './pages/OrderAdmin';
 import ITStoreDemo from './pages/ITStoreDemo';
 import ITStoreAdmin from './pages/ITStoreAdmin';
 import NiaSite2026 from './pages/NiaSite2026';
+import TechsauceEvent from './pages/TechsauceEvent';
 import { pagesConfig } from './config/pages';
 import './App.css';
 
@@ -32,6 +33,8 @@ const pageComponents: Record<string, ReactNode> = {
   '/all-demo': <OrderDemo />,
   '/it-store-demo': <ITStoreDemo />,
   '/nia-site-2026': <NiaSite2026 />,
+  '/event': <TechsauceEvent />,
+  '/techsauce-2026': <TechsauceEvent />,
 };
 
 const ROUTE_TITLE_MAP: Record<string, string> = {
@@ -47,6 +50,8 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   '/it-store-demo': 'nav.itstore',
   '/it-store-demo/admin': 'nav.itstore',
   '/nia-site-2026': 'nav.site2026',
+  '/event': 'nav.event',
+  '/techsauce-2026': 'nav.event',
 };
 
 function AppRoutes() {

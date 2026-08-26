@@ -74,6 +74,11 @@ export const AppFooter: React.FC = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/event" className="text-muted-foreground hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
+                    {t('nav.event')}
+                  </Link>
+                </li>
+                <li>
                   <Link to="/contact" className="text-muted-foreground hover:text-sky-500 dark:hover:text-sky-400 transition-colors">
                     {t('footer.contact_leads')}
                   </Link>
