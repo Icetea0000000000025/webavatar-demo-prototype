@@ -5728,6 +5728,14 @@ textarea.form-control {
   box-shadow: 0 0 40px rgba(99,102,241,0.18), 0 4px 20px rgba(99,102,241,0.1);
   z-index: 2;
   position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.home-avatar-circle:hover {
+  cursor: pointer;
+  box-shadow: 0 0 50px rgba(99,102,241,0.5), 0 0 80px rgba(14,165,233,0.35);
+  border-color: #6366f1;
 }
 .home-avatar-logo {
   width: 72px; height: 72px;
@@ -5863,7 +5871,7 @@ textarea.form-control {
   width: 100%;
   position: relative;
   overflow-x: hidden;
-  background-color: var(--background);
+  background: transparent;
   color: var(--foreground);
 }
 
@@ -5878,34 +5886,10 @@ textarea.form-control {
 /* Hero Section */
 .techsauce-hero {
   position: relative;
-  padding: 8rem 0 4rem;
+  padding: 5rem 0 3.5rem;
   overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 12%, transparent) 0%, transparent 70%);
-}
-
-.techsauce-hero-glow-1 {
-  position: absolute;
-  top: -10%;
-  left: 10%;
-  width: clamp(300px, 45vw, 600px);
-  height: clamp(300px, 45vw, 600px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-.techsauce-hero-glow-2 {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  width: clamp(280px, 40vw, 550px);
-  height: clamp(280px, 40vw, 550px);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
-  filter: blur(80px);
-  pointer-events: none;
+  text-align: center;
+  background: transparent;
 }
 
 .techsauce-hero-content {
@@ -5974,7 +5958,9 @@ textarea.form-control {
   gap: 0.85rem;
   padding: 0.85rem 1.1rem;
   border-radius: 14px;
-  background: var(--card);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   text-align: left;
@@ -6012,7 +5998,9 @@ textarea.form-control {
 .techsauce-stat-card {
   padding: 1rem;
   border-radius: 14px;
-  background: var(--card);
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border);
   text-align: center;
 }
@@ -6040,7 +6028,9 @@ textarea.form-control {
   width: 100%;
   max-width: 680px;
   padding: 0.6rem 1.25rem;
-  background: var(--card);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 2px solid color-mix(in srgb, var(--primary) 40%, var(--border));
   border-radius: 9999px;
   box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.2);
@@ -6701,18 +6691,26 @@ textarea.form-control {
 
 .techsauce-award-items-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
 }
 
 .techsauce-award-item-card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.75rem;
-  padding: 0.85rem 1.15rem;
-  border-radius: 12px;
+  padding: 1.15rem 1.25rem;
+  border-radius: 16px;
   background: var(--muted);
   border: 1px solid var(--border);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.techsauce-award-item-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.12);
 }
 
 .techsauce-award-item-icon {
@@ -6720,9 +6718,41 @@ textarea.form-control {
 }
 
 .techsauce-award-item-text {
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--foreground);
+  line-height: 1.35;
+}
+
+.techsauce-award-meta-box {
+  width: 100%;
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+
+.techsauce-award-meta-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.4;
+}
+
+.techsauce-award-meta-label {
+  font-weight: 600;
+  color: var(--foreground);
+  opacity: 0.85;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.techsauce-award-meta-val {
+  color: var(--muted-foreground);
 }
 
 /* OCR Trace Layer */
@@ -6754,18 +6784,23 @@ textarea.form-control {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.75rem;
   margin-bottom: 0.75rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .techsauce-pill-review {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
   font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
   background: rgba(245, 158, 11, 0.12);
   color: #d97706;
   border: 1px solid rgba(245, 158, 11, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .techsauce-ocr-text {

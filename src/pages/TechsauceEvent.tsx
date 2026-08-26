@@ -6,12 +6,10 @@ import {
 import {
   techsauceData,
   answerEventQuestion,
-  generateWorkshopsCSV,
-  generateExhibitorsCSV,
-  generateAwardsCSV,
   type Workshop,
   type Exhibitor,
   type EventAIAnswer,
+  type SupportedLanguage,
 } from '../lib/techsauceData';
 import { useTranslation } from '../lib/LanguageContext';
 import AppFooter from '../components/AppFooter';
@@ -20,8 +18,8 @@ import './Pages.css';
 export default function TechsauceEvent() {
   const { t, language } = useTranslation();
 
-  // Active Tab: 'qa' | 'workshops' | 'exhibitors' | 'awards' | 'sheet_view' | 'ocr'
-  const [activeTab, setActiveTab] = useState<'qa' | 'workshops' | 'exhibitors' | 'awards' | 'sheet_view' | 'ocr'>('qa');
+  // Active Tab: 'qa' | 'workshops' | 'exhibitors' | 'awards' | 'ocr'
+  const [activeTab, setActiveTab] = useState<'qa' | 'workshops' | 'exhibitors' | 'awards' | 'ocr'>('qa');
 
   // View Mode: 'cards' | 'table'
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
@@ -30,7 +28,7 @@ export default function TechsauceEvent() {
   const [currentQuestion, setCurrentQuestion] = useState('BOTNOI GROUP');
   const [inputQuery, setInputQuery] = useState('');
   const [activeAIAnswer, setActiveAIAnswer] = useState<EventAIAnswer>(() =>
-    answerEventQuestion('BOTNOI GROUP')
+    answerEventQuestion('BOTNOI GROUP', 'en')
   );
 
   // Text-To-Speech (TTS) state
@@ -54,22 +52,19 @@ export default function TechsauceEvent() {
   // Bookmarked workshops
   const [bookmarkedWorkshops, setBookmarkedWorkshops] = useState<string[]>([]);
 
-  // Vibe Sheet Info Modal
-  const [sheetInfoOpen, setSheetInfoOpen] = useState(false);
-
   const presetQuestions = useMemo(() => [
-    { label: t('event.qa_preset_1'), query: language === 'th' ? "บูธ BOTNOI GROUP อยู่ตรงไหน?" : "Where is BOTNOI GROUP booth located?" },
-    { label: t('event.qa_preset_2'), query: language === 'th' ? "มีเวิร์กช็อปอะไรของ OpenAI บ้าง และใครเป็นผู้บรรยาย?" : "What workshops does OpenAI have and who is the speaker?" },
-    { label: t('event.qa_preset_3'), query: language === 'th' ? "เวิร์กช็อป Google Cloud Gemini Enterprise จัดวันไหนและห้องอะไร?" : "When and where is Google Cloud Gemini Enterprise workshop?" },
-    { label: t('event.qa_preset_4'), query: language === 'th' ? "รางวัล Techsauce Awards ในหมวด AI Transformation มีรางวัลอะไรบ้าง?" : "What are the AI Transformation award categories?" },
-    { label: t('event.qa_preset_5'), query: language === 'th' ? "งาน Techsauce Global Summit 2026 จัดวันที่เท่าไหร่ และจัดที่ไหน?" : "What are the dates and venue of Techsauce Global Summit 2026?" },
-    { label: t('event.qa_preset_6'), query: language === 'th' ? "เวิร์กช็อปไหนที่ต้องจองล่วงหน้า Reserve บ้าง?" : "Which workshops require advance reservation?" },
-  ], [t, language]);
+    { label: t('event.qa_preset_1'), query: t('event.preset_query_1') },
+    { label: t('event.qa_preset_2'), query: t('event.preset_query_2') },
+    { label: t('event.qa_preset_3'), query: t('event.preset_query_3') },
+    { label: t('event.qa_preset_4'), query: t('event.preset_query_4') },
+    { label: t('event.qa_preset_5'), query: t('event.preset_query_5') },
+    { label: t('event.qa_preset_6'), query: t('event.preset_query_6') },
+  ], [t]);
 
   const handleAskQuestion = (question: string) => {
     if (!question.trim()) return;
     setCurrentQuestion(question);
-    const answer = answerEventQuestion(question);
+    const answer = answerEventQuestion(question, language);
     setActiveAIAnswer(answer);
     setInputQuery('');
     // Stop any ongoing speech when new question is asked
@@ -79,15 +74,37 @@ export default function TechsauceEvent() {
     }
   };
 
-  const currentAnswerHeadline = useMemo(() => {
-    if (!activeAIAnswer) return '';
-    return language === 'th' ? activeAIAnswer.headlineTh : (activeAIAnswer.headlineEn || activeAIAnswer.headlineTh);
+  // Re-synthesize current answer whenever language changes
+  useEffect(() => {
+    if (currentQuestion) {
+      setActiveAIAnswer(answerEventQuestion(currentQuestion, language));
+    }
+  }, [language, currentQuestion]);
+
+  const currentLocalizedContent = useMemo(() => {
+    if (!activeAIAnswer) return null;
+    const lang = (['en', 'th', 'zh', 'ja', 'ko', 'es', 'fr'].includes(language) ? language : 'en') as SupportedLanguage;
+    if (activeAIAnswer.localized && activeAIAnswer.localized[lang]) {
+      return activeAIAnswer.localized[lang];
+    }
+    return {
+      headline: language === 'th' ? activeAIAnswer.headlineTh : (activeAIAnswer.headlineEn || activeAIAnswer.headlineTh),
+      answer: language === 'th' ? activeAIAnswer.answerTh : (activeAIAnswer.answerEn || activeAIAnswer.answerTh),
+      categoryTag: activeAIAnswer.categoryTag,
+      keyBadges: activeAIAnswer.keyBadges || [],
+      suggestedQuestions: activeAIAnswer.suggestedQuestions || [],
+    };
   }, [activeAIAnswer, language]);
 
+  const currentAnswerHeadline = useMemo(() => {
+    if (!currentLocalizedContent) return '';
+    return currentLocalizedContent.headline.replace(/\*\*/g, '');
+  }, [currentLocalizedContent]);
+
   const currentAnswerBody = useMemo(() => {
-    if (!activeAIAnswer) return '';
-    return language === 'th' ? activeAIAnswer.answerTh : (activeAIAnswer.answerEn || activeAIAnswer.answerTh);
-  }, [activeAIAnswer, language]);
+    if (!currentLocalizedContent) return '';
+    return currentLocalizedContent.answer.replace(/\*\*/g, '');
+  }, [currentLocalizedContent]);
 
   const handleSpeechToggle = (textToSpeak: string) => {
     if (!('speechSynthesis' in window)) return;
@@ -135,18 +152,6 @@ export default function TechsauceEvent() {
     );
   };
 
-  // CSV Downloader
-  const downloadCSV = (content: string, filename: string) => {
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   // Filtered Workshops
   const filteredWorkshops = useMemo(() => {
     return techsauceData.workshops.filter((w) => {
@@ -184,14 +189,11 @@ export default function TechsauceEvent() {
   }, []);
 
   return (
-    <div className="techsauce-page-root">
+    <div className="techsauce-page-root w-full relative overflow-hidden bg-transparent text-foreground">
       {/* ═══════════════════════════════════════
           HERO SECTION — LIVE EVENT Q&A SHOWCASE CONCIERGE
           ═══════════════════════════════════════ */}
-      <section className="techsauce-hero">
-        <div className="techsauce-hero-glow-1" />
-        <div className="techsauce-hero-glow-2" />
-
+      <section className="techsauce-hero bg-transparent">
         <div className="techsauce-container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -328,7 +330,7 @@ export default function TechsauceEvent() {
                   <div className="techsauce-ai-response-header">
                     <div>
                       <div className="techsauce-response-category">
-                        {activeAIAnswer.categoryTag}
+                        {currentLocalizedContent?.categoryTag || activeAIAnswer.categoryTag}
                       </div>
                       <h3 className="techsauce-response-title">
                         {currentAnswerHeadline}
@@ -373,9 +375,9 @@ export default function TechsauceEvent() {
                   </div>
 
                   {/* Highlighted Key Information Badges */}
-                  {activeAIAnswer.keyBadges && activeAIAnswer.keyBadges.length > 0 && (
+                  {(currentLocalizedContent?.keyBadges || activeAIAnswer.keyBadges)?.length > 0 && (
                     <div className="techsauce-badges-strip">
-                      {activeAIAnswer.keyBadges.map((badge, bIdx) => (
+                      {(currentLocalizedContent?.keyBadges || activeAIAnswer.keyBadges).map((badge, bIdx) => (
                         <div key={bIdx} className="techsauce-key-badge">
                           <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{badge.label}:</span>
                           <span className="font-extrabold text-xs text-foreground">{badge.value}</span>
@@ -423,7 +425,7 @@ export default function TechsauceEvent() {
                           <div key={exIdx} className="p-2.5 rounded-xl bg-card border border-border flex items-center justify-between">
                             <div>
                               <div className="font-bold text-xs text-foreground">{ex.company}</div>
-                              <div className="text-[10px] text-muted-foreground font-mono">Location: {ex.booth || t('event.booth_not_shown')}</div>
+                              <div className="text-[10px] text-muted-foreground font-mono">{t('event.location_label')} {ex.booth || t('event.booth_not_shown')}</div>
                             </div>
                             <span className="techsauce-booth-pill booth-botnoi">
                               {ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')}
@@ -435,10 +437,10 @@ export default function TechsauceEvent() {
                   )}
 
                   {/* Suggested Follow-up Questions */}
-                  {activeAIAnswer.suggestedQuestions.length > 0 && (
+                  {(currentLocalizedContent?.suggestedQuestions || activeAIAnswer.suggestedQuestions)?.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-border flex items-center gap-2 flex-wrap text-xs">
                       <span className="text-muted-foreground font-bold">{t('event.follow_up_label')}</span>
-                      {activeAIAnswer.suggestedQuestions.map((sq, sqIdx) => (
+                      {(currentLocalizedContent?.suggestedQuestions || activeAIAnswer.suggestedQuestions).map((sq, sqIdx) => (
                         <button
                           key={sqIdx}
                           type="button"
@@ -453,77 +455,6 @@ export default function TechsauceEvent() {
                 </motion.div>
               )}
             </div>
-
-            {/* Knowledge Sheet Export Controls */}
-            <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-              <button
-                type="button"
-                onClick={() => downloadCSV(generateWorkshopsCSV(), 'Techsauce_2026_Workshops.csv')}
-                className="btn btn-secondary text-xs"
-              >
-                <span>{t('event.download_workshops_csv')}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => downloadCSV(generateExhibitorsCSV(), 'Techsauce_2026_Exhibitors.csv')}
-                className="btn btn-secondary text-xs"
-              >
-                <span>{t('event.download_exhibitors_csv')}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => downloadCSV(generateAwardsCSV(), 'Techsauce_2026_Awards.csv')}
-                className="btn btn-secondary text-xs"
-              >
-                <span>{t('event.download_awards_csv')}</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setSheetInfoOpen(!sheetInfoOpen)}
-                className="btn btn-secondary text-xs text-muted-foreground"
-              >
-                <span>{t('event.vibe_spec_btn')}</span>
-              </button>
-            </div>
-
-            {/* Vibe Sheet Spec Drawer / Card */}
-            {sheetInfoOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="techsauce-vibe-spec-card mt-4 text-left"
-              >
-                <div className="flex items-center justify-between pb-2 border-b border-border mb-3">
-                  <span className="font-bold text-xs uppercase tracking-wider text-primary">
-                    Vibe / AI Avatar Knowledge Sheet Specification
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setSheetInfoOpen(false)}
-                    className="text-xs text-muted-foreground hover:text-foreground"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-muted-foreground">
-                  <div>
-                    <strong className="text-foreground">Goal:</strong> Make data easy to inspect, edit, filter, and feed to the AI Avatar for live Q&A.
-                  </div>
-                  <div>
-                    <strong className="text-foreground">Structured Tabs:</strong> Workshops, Exhibitors, Awards.
-                  </div>
-                  <div>
-                    <strong className="text-foreground">Truncated Names:</strong> Names containing <code>...</code> are preserved verbatim as displayed in original screenshots.
-                  </div>
-                  <div>
-                    <strong className="text-foreground">Production AI Priority:</strong> Prioritizes curated structured collections over raw OCR trace layers.
-                  </div>
-                </div>
-              </motion.div>
-            )}
           </motion.div>
         </div>
       </section>
@@ -578,16 +509,6 @@ export default function TechsauceEvent() {
               <button
                 type="button"
                 role="tab"
-                aria-selected={activeTab === 'sheet_view'}
-                onClick={() => setActiveTab('sheet_view')}
-                className={`techsauce-tab-pill ${activeTab === 'sheet_view' ? 'active' : ''}`}
-              >
-                <span>{t('event.tab_sheet')}</span>
-              </button>
-
-              <button
-                type="button"
-                role="tab"
                 aria-selected={activeTab === 'ocr'}
                 onClick={() => setActiveTab('ocr')}
                 className={`techsauce-tab-pill ${activeTab === 'ocr' ? 'active' : ''}`}
@@ -632,15 +553,15 @@ export default function TechsauceEvent() {
             {/* Knowledge Base Note */}
             <div className="techsauce-notice-card">
               <div className="techsauce-notice-content">
-                <h3 className="text-base font-bold text-foreground">AI Avatar Event Q&A Knowledge Specification</h3>
+                <h3 className="text-base font-bold text-foreground">{t('event.notice_title')}</h3>
                 <p className="text-sm text-muted-foreground mt-1">
                   {t('event.theme_desc')}
                 </p>
                 <div className="techsauce-notice-tags mt-2.5">
-                  <span className="techsauce-badge-verified">✓ 15 Curated Workshops</span>
-                  <span className="techsauce-badge-verified">✓ 215 Verified Exhibitors</span>
-                  <span className="techsauce-badge-verified">✓ 6 Award Categories (18 Honors)</span>
-                  <span className="techsauce-badge-ocr">⚠ OCR Trace Layer (Needs Review)</span>
+                  <span className="techsauce-badge-verified">{t('event.notice_tag_workshops')}</span>
+                  <span className="techsauce-badge-verified">{t('event.notice_tag_exhibitors')}</span>
+                  <span className="techsauce-badge-verified">{t('event.notice_tag_awards')}</span>
+                  <span className="techsauce-badge-ocr">{t('event.notice_tag_ocr')}</span>
                 </div>
               </div>
             </div>
@@ -652,12 +573,12 @@ export default function TechsauceEvent() {
                 <div className="techsauce-overview-card-header">
                   <div>
                     <h3 className="font-bold text-lg text-foreground">{t('event.tab_workshops')}</h3>
-                    <p className="text-xs text-muted-foreground">15 hands-on AI & Enterprise sessions</p>
+                    <p className="text-xs text-muted-foreground">{t('event.overview_workshops_sub')}</p>
                   </div>
                 </div>
                 <div className="techsauce-overview-card-body">
                   <p className="text-sm text-muted-foreground">
-                    OpenAI (Tyler Ryu), Google Cloud (Gemini Enterprise), Couchbase, Microsoft Copilot, Canva, and top venture builders.
+                    {t('event.overview_workshops_desc')}
                   </p>
                   <button
                     type="button"
@@ -674,17 +595,17 @@ export default function TechsauceEvent() {
                 <div className="techsauce-overview-card-header">
                   <div>
                     <h3 className="font-bold text-lg text-foreground">{t('event.tab_exhibitors')}</h3>
-                    <p className="text-xs text-muted-foreground">215 booths and innovative companies</p>
+                    <p className="text-xs text-muted-foreground">{t('event.overview_exhibitors_sub')}</p>
                   </div>
                 </div>
                 <div className="techsauce-overview-card-body">
                   <p className="text-sm text-muted-foreground">
-                    Find BOTNOI GROUP (Booth A63), True Digital Park (Booth 7), Boomi (Booth B12), Synology, and international pavilions.
+                    {t('event.overview_exhibitors_desc')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setActiveTab('exhibitors')}
-                    className="btn btn-secondary text-xs w-full mt-4"
+                    className="btn btn-primary text-xs w-full mt-4"
                   >
                     {t('event.tab_exhibitors')} (215) →
                   </button>
@@ -696,17 +617,17 @@ export default function TechsauceEvent() {
                 <div className="techsauce-overview-card-header">
                   <div>
                     <h3 className="font-bold text-lg text-foreground">{t('event.tab_awards')}</h3>
-                    <p className="text-xs text-muted-foreground">The premier innovation recognition</p>
+                    <p className="text-xs text-muted-foreground">{t('event.overview_awards_sub')}</p>
                   </div>
                 </div>
                 <div className="techsauce-overview-card-body">
                   <p className="text-sm text-muted-foreground">
-                    6 Categories honoring People, Technology, AI Transformation (with ETDA), ESG Impact, Entrepreneurs, and Ecosystem Catalysts.
+                    {t('event.overview_awards_desc')}
                   </p>
                   <button
                     type="button"
                     onClick={() => setActiveTab('awards')}
-                    className="btn btn-secondary text-xs w-full mt-4"
+                    className="btn btn-primary text-xs w-full mt-4"
                   >
                     {t('event.tab_awards')} →
                   </button>
@@ -718,8 +639,8 @@ export default function TechsauceEvent() {
             <div className="mt-12">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-xl font-extrabold text-foreground">Featured AI Workshops</h3>
-                  <p className="text-xs text-muted-foreground">High-demand sessions in the knowledge base</p>
+                  <h3 className="text-xl font-extrabold text-foreground">{t('event.featured_workshops_title')}</h3>
+                  <p className="text-xs text-muted-foreground">{t('event.featured_workshops_sub')}</p>
                 </div>
                 <button
                   type="button"
@@ -805,8 +726,8 @@ export default function TechsauceEvent() {
                     className="techsauce-select"
                   >
                     <option value="all">{t('event.filter_all_rooms')}</option>
-                    <option value="Workshop Room A">Workshop Room A</option>
-                    <option value="Workshop Room B">Workshop Room B</option>
+                    <option value="Workshop Room A">{t('event.room_a')}</option>
+                    <option value="Workshop Room B">{t('event.room_b')}</option>
                   </select>
                 </div>
 
@@ -818,26 +739,18 @@ export default function TechsauceEvent() {
                     className="techsauce-select"
                   >
                     <option value="all">{t('event.filter_all_access')}</option>
-                    <option value="Reserve">Reserve</option>
-                    <option value="Invitation only">Invitation Only</option>
-                    <option value="Walk-in">Walk-in</option>
+                    <option value="Reserve">{t('event.access_reserve')}</option>
+                    <option value="Invitation only">{t('event.access_invitation')}</option>
+                    <option value="Walk-in">{t('event.access_walkin')}</option>
                   </select>
                 </div>
               </div>
             </div>
 
-            {/* Results count & reset & CSV Download */}
+            {/* Results count & reset */}
             <div className="flex items-center justify-between my-4 text-xs text-muted-foreground flex-wrap gap-2">
               <span>{t('event.showing_workshops').replace('{count}', String(filteredWorkshops.length))}</span>
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => downloadCSV(generateWorkshopsCSV(), 'Techsauce_2026_Workshops.csv')}
-                  className="text-primary hover:underline font-semibold cursor-pointer"
-                >
-                  {t('event.download_workshops_csv')}
-                </button>
-
                 {(selectedDay !== 'all' || selectedRoom !== 'all' || selectedAccess !== 'all') && (
                   <button
                     type="button"
@@ -860,13 +773,13 @@ export default function TechsauceEvent() {
                 <table className="techsauce-sheet-table">
                   <thead>
                     <tr>
-                      <th>Date</th>
-                      <th>Time</th>
-                      <th>Workshop Title</th>
+                      <th>{t('event.table_date')}</th>
+                      <th>{t('event.table_time')}</th>
+                      <th>{t('event.table_title')}</th>
                       <th>{t('event.speakers_label')}</th>
                       <th>{t('event.filter_room')}</th>
                       <th>{t('event.filter_access')}</th>
-                      <th>Actions</th>
+                      <th>{t('event.table_actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -885,7 +798,7 @@ export default function TechsauceEvent() {
                               ))}
                             </div>
                           ) : (
-                            <span className="text-xs text-muted-foreground italic">Panel / Open Session</span>
+                            <span className="text-xs text-muted-foreground italic">{t('event.panel_open_session')}</span>
                           )}
                         </td>
                         <td>
@@ -932,7 +845,7 @@ export default function TechsauceEvent() {
 
             {filteredWorkshops.length === 0 && (
               <div className="techsauce-empty-state">
-                <p>No workshops match the selected criteria.</p>
+                <p>{t('event.no_workshops_match')}</p>
               </div>
             )}
           </div>
@@ -1023,16 +936,9 @@ export default function TechsauceEvent() {
               </div>
             </div>
 
-            {/* Note regarding preserved names & CSV download */}
+            {/* Note regarding preserved names */}
             <div className="flex items-center justify-between text-xs text-muted-foreground my-3 flex-wrap gap-2">
-              <span>* Company names containing "..." are preserved verbatim from the official event records. {t('event.showing_exhibitors').replace('{count}', String(filteredExhibitors.length))}.</span>
-              <button
-                type="button"
-                onClick={() => downloadCSV(generateExhibitorsCSV(), 'Techsauce_2026_Exhibitors.csv')}
-                className="text-primary hover:underline font-semibold cursor-pointer"
-              >
-                {t('event.download_exhibitors_csv')}
-              </button>
+              <span>{t('event.exhibitor_note')} {t('event.showing_exhibitors').replace('{count}', String(filteredExhibitors.length))}.</span>
             </div>
 
             {/* Table View Mode */}
@@ -1042,9 +948,9 @@ export default function TechsauceEvent() {
                   <thead>
                     <tr>
                       <th style={{ width: '80px' }}>#</th>
-                      <th>Company / Exhibitor</th>
-                      <th style={{ width: '180px' }}>Booth Location</th>
-                      <th style={{ width: '120px' }}>Actions</th>
+                      <th>{t('event.table_company')}</th>
+                      <th style={{ width: '180px' }}>{t('event.table_booth_location')}</th>
+                      <th style={{ width: '120px' }}>{t('event.table_actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -1088,6 +994,7 @@ export default function TechsauceEvent() {
                     boothLabel={t('event.booth')}
                     boothNotShownLabel={t('event.booth_not_shown')}
                     featuredAiLabel={t('event.featured_ai')}
+                    copyTitle={t('event.copy_booth_title')}
                   />
                 ))}
               </div>
@@ -1095,7 +1002,7 @@ export default function TechsauceEvent() {
 
             {filteredExhibitors.length === 0 && (
               <div className="techsauce-empty-state">
-                <p>No exhibitors match "{exhibitorSearch}".</p>
+                <p>{t('event.no_exhibitors_match').replace('{query}', exhibitorSearch)}</p>
               </div>
             )}
           </div>
@@ -1136,18 +1043,53 @@ export default function TechsauceEvent() {
                 .map((cat) => (
                   <div key={cat} className="techsauce-award-category-block">
                     <div className="techsauce-award-category-title-row">
-                      <div>
-                        <h3 className="text-lg font-bold text-foreground">{cat}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {t('event.award_honors_count').replace('{count}', String(techsauceData.techsauce_awards.categories[cat].length))}
-                        </p>
+                      <div className="flex-1 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-bold text-foreground">{cat}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {t('event.award_honors_count').replace('{count}', String(techsauceData.techsauce_awards.categories[cat].length))}
+                          </p>
+                        </div>
+
+                        {/* Category Metadata Badges */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-500 font-medium text-xs">
+                            <span>{t('event.nomination_period_label')}: {techsauceData.techsauce_awards.nomination_period}</span>
+                          </span>
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-500 font-medium text-xs">
+                            <span>{t('event.announcement_date_label')}: {techsauceData.techsauce_awards.announcement_date}</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
 
                     <div className="techsauce-award-items-grid">
                       {techsauceData.techsauce_awards.categories[cat].map((awardName, i) => (
                         <div key={i} className="techsauce-award-item-card">
-                          <div className="techsauce-award-item-text">{awardName}</div>
+                          <div className="w-full">
+                            <span className="inline-block text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">
+                              {cat}
+                            </span>
+                            <div className="techsauce-award-item-text">{awardName}</div>
+                          </div>
+
+                          {/* Metadata Information Box */}
+                          <div className="techsauce-award-meta-box">
+                            <div className="techsauce-award-meta-row">
+                              <span className="techsauce-award-meta-label">{t('event.nomination_period_label')}: </span>
+                              <span className="techsauce-award-meta-val">{techsauceData.techsauce_awards.nomination_period}</span>
+                            </div>
+
+                            <div className="techsauce-award-meta-row">
+                              <span className="techsauce-award-meta-label">{t('event.announcement_date_label')}: </span>
+                              <span className="techsauce-award-meta-val font-mono font-bold text-amber-500">{techsauceData.techsauce_awards.announcement_date}</span>
+                            </div>
+
+                            <div className="techsauce-award-meta-row">
+                              <span className="techsauce-award-meta-label">{t('event.venue_label')}: </span>
+                              <span className="techsauce-award-meta-val text-[11px] leading-tight block mt-0.5">{techsauceData.techsauce_awards.venue}</span>
+                            </div>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -1159,140 +1101,7 @@ export default function TechsauceEvent() {
       )}
 
       {/* ═══════════════════════════════════════
-          TAB 5: SPREADSHEET / SHEET VIEW
-          ═══════════════════════════════════════ */}
-      {activeTab === 'sheet_view' && (
-        <section className="techsauce-tab-content">
-          <div className="techsauce-container">
-            {/* Sheet 1: Workshops Table */}
-            <div className="mb-10">
-              <h3 className="text-lg font-bold text-foreground mb-3">
-                <span>Tab 1: Workshops.csv ({techsauceData.workshops.length} records)</span>
-              </h3>
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Time</th>
-                      <th>Workshop Title</th>
-                      <th>Speaker</th>
-                      <th>Role / Position</th>
-                      <th>Company</th>
-                      <th>Room</th>
-                      <th>Access</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {techsauceData.workshops.flatMap((w, wIdx) => {
-                      if (w.speakers.length === 0) {
-                        return (
-                          <tr key={`${wIdx}-0`}>
-                            <td className="font-mono text-xs">{w.date}</td>
-                            <td className="font-mono text-xs">{w.time}</td>
-                            <td className="font-semibold text-xs">{w.title}</td>
-                            <td className="text-xs text-muted-foreground">—</td>
-                            <td className="text-xs text-muted-foreground">—</td>
-                            <td className="text-xs text-muted-foreground">—</td>
-                            <td><span className="techsauce-room-pill techsauce-room-b">{w.room}</span></td>
-                            <td><span className="techsauce-access-pill techsauce-access-walkin">{w.access}</span></td>
-                          </tr>
-                        );
-                      }
-                      return w.speakers.map((s, sIdx) => (
-                        <tr key={`${wIdx}-${sIdx}`}>
-                          <td className="font-mono text-xs">{w.date}</td>
-                          <td className="font-mono text-xs">{w.time}</td>
-                          <td className="font-semibold text-xs">{w.title}</td>
-                          <td className="font-bold text-xs text-foreground">{s.name}</td>
-                          <td className="text-xs text-muted-foreground">{s.role}</td>
-                          <td className="text-xs font-semibold text-primary">{s.company}</td>
-                          <td><span className="techsauce-room-pill techsauce-room-a">{w.room}</span></td>
-                          <td><span className="techsauce-access-pill techsauce-access-reserve">{w.access}</span></td>
-                        </tr>
-                      ));
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Sheet 2: Exhibitors Table Preview */}
-            <div className="mb-10">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-bold text-foreground">
-                  <span>Tab 2: Exhibitors.csv (215 records)</span>
-                </h3>
-              </div>
-              <div className="techsauce-sheet-table-wrap" style={{ maxHeight: '420px', overflowY: 'auto' }}>
-                <table className="techsauce-sheet-table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '60px' }}>Row</th>
-                      <th>Company / Exhibitor</th>
-                      <th>Booth</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {techsauceData.exhibitors.map((ex, idx) => (
-                      <tr key={idx} className={ex.company.toLowerCase().includes('botnoi') ? 'bg-primary/10' : ''}>
-                        <td className="font-mono text-xs text-muted-foreground">{idx + 1}</td>
-                        <td className="font-bold text-xs">
-                          {ex.company}
-                          {ex.company.toLowerCase().includes('botnoi') && (
-                            <span className="ml-2 techsauce-featured-badge">{t('event.featured_ai')}</span>
-                          )}
-                        </td>
-                        <td>
-                          <span className="font-mono text-xs font-bold text-primary">
-                            {ex.booth || t('event.booth_not_shown')}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Sheet 3: Awards Table */}
-            <div>
-              <h3 className="text-lg font-bold text-foreground mb-3">
-                <span>Tab 3: Awards.csv (18 Honors across 6 Categories)</span>
-              </h3>
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table">
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Award Name</th>
-                      <th>Nomination Period</th>
-                      <th>Announcement Date</th>
-                      <th>Venue</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(techsauceData.techsauce_awards.categories).flatMap(([category, awardsList]) =>
-                      awardsList.map((award, aIdx) => (
-                        <tr key={`${category}-${aIdx}`}>
-                          <td className="font-bold text-xs text-primary">{category}</td>
-                          <td className="font-bold text-xs text-foreground">{award}</td>
-                          <td className="text-xs text-muted-foreground">{techsauceData.techsauce_awards.nomination_period}</td>
-                          <td className="font-mono text-xs text-muted-foreground">{techsauceData.techsauce_awards.announcement_date}</td>
-                          <td className="text-xs text-muted-foreground truncate max-w-[200px]">{techsauceData.techsauce_awards.venue}</td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* ═══════════════════════════════════════
-          TAB 6: RAW SOURCE TEXT & OCR TRACE LAYER
+          TAB 5: RAW SOURCE TEXT & OCR TRACE LAYER
           ═══════════════════════════════════════ */}
       {activeTab === 'ocr' && (
         <section className="techsauce-tab-content">
@@ -1300,9 +1109,9 @@ export default function TechsauceEvent() {
             {/* Caution Banner */}
             <div className="techsauce-alert-banner">
               <div>
-                <h4 className="font-bold text-amber-700 dark:text-amber-300">OCR Trace Layer Notice</h4>
+                <h4 className="font-bold text-amber-700 dark:text-amber-300">{t('event.ocr_notice_title')}</h4>
                 <p className="text-xs text-amber-800 dark:text-amber-200 mt-0.5">
-                  `raw_source_text` is an OCR trace layer for the remaining agenda screenshots and is marked <strong>needs_review</strong>. For production AI answers, prioritize the curated structured collections above over OCR text.
+                  {t('event.ocr_notice_desc')}
                 </p>
               </div>
             </div>
@@ -1312,12 +1121,12 @@ export default function TechsauceEvent() {
               {techsauceData.raw_source_text.map((ocr, idx) => (
                 <div key={idx} className="techsauce-ocr-card">
                   <div className="techsauce-ocr-header">
-                    <div>
-                      <span className="font-mono text-xs text-muted-foreground truncate max-w-[200px]">
+                    <div className="flex-1 min-w-0 pr-2">
+                      <span className="font-mono text-xs text-muted-foreground block truncate" title={ocr.source_image}>
                         {ocr.source_image}
                       </span>
                     </div>
-                    <span className="techsauce-pill-review">
+                    <span className="techsauce-pill-review flex-shrink-0 whitespace-nowrap">
                       {ocr.verification_status}
                     </span>
                   </div>
@@ -1469,6 +1278,7 @@ interface ExhibitorCardProps {
   boothLabel: string;
   boothNotShownLabel: string;
   featuredAiLabel: string;
+  copyTitle: string;
 }
 
 function ExhibitorCard({
@@ -1478,6 +1288,7 @@ function ExhibitorCard({
   boothLabel,
   boothNotShownLabel,
   featuredAiLabel,
+  copyTitle,
 }: ExhibitorCardProps) {
   const isBotnoi = exhibitor.company.toLowerCase().includes('botnoi');
   const boothDisplay = exhibitor.booth
@@ -1503,7 +1314,7 @@ function ExhibitorCard({
         type="button"
         onClick={() => onCopy(`${exhibitor.company} (${boothDisplay})`)}
         className="techsauce-exhibitor-copy"
-        title="Copy booth location"
+        title={copyTitle}
       >
         {copiedText === `${exhibitor.company} (${boothDisplay})` ? (
           <Check className="w-3 h-3 text-emerald-500" />
