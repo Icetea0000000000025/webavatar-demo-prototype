@@ -46,6 +46,11 @@ export const RollingLogoBackground: React.FC = () => {
       isImageLoaded = true;
     };
 
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+    const isMobile = (typeof window !== 'undefined' && window.innerWidth < 768) || isTouchDevice;
+
     let displayWidth = 800;
     let displayHeight = 600;
 
@@ -54,7 +59,7 @@ export const RollingLogoBackground: React.FC = () => {
       const parent = canvas.parentElement;
       const w = parent?.clientWidth || window.innerWidth || 800;
       const h = parent?.clientHeight || window.innerHeight || 600;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
 
       displayWidth = w;
       displayHeight = h;
@@ -66,18 +71,17 @@ export const RollingLogoBackground: React.FC = () => {
     };
 
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', resizeCanvas, { passive: true });
     const resizeObserver = new ResizeObserver(() => resizeCanvas());
     if (canvas.parentElement) {
       resizeObserver.observe(canvas.parentElement);
     }
 
-    const isMobile = window.innerWidth < 768;
     const coinSize = isMobile ? 40 : 54;
     const baseVx = isMobile ? 1.8 : 2.4;
 
     // Create square coins alternating between Indigo and White
-    const maxCoins = 4;
+    const maxCoins = isMobile ? 3 : 4;
     const coins: SquareCoinParticle[] = [];
     const themes: SquareCoinParticle['theme'][] = ['indigo', 'white', 'indigo', 'white'];
 
@@ -99,7 +103,7 @@ export const RollingLogoBackground: React.FC = () => {
     const sparks: SparkParticle[] = [];
 
     const addSparks = (x: number, y: number, color: string) => {
-      const count = 3 + Math.floor(Math.random() * 3);
+      const count = isMobile ? (1 + Math.floor(Math.random() * 2)) : (3 + Math.floor(Math.random() * 3));
       for (let s = 0; s < count; s++) {
         const angle = -Math.PI * (0.2 + Math.random() * 0.6);
         const spd = 0.8 + Math.random() * 1.8;
@@ -122,21 +126,59 @@ export const RollingLogoBackground: React.FC = () => {
       mouse.y = e.clientY - rect.top;
     };
 
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const rect = canvas.getBoundingClientRect();
+        mouse.x = e.touches[0].clientX - rect.left;
+        mouse.y = e.touches[0].clientY - rect.top;
+      }
+    };
+
     const handleMouseLeave = () => {
       mouse.x = -1000;
       mouse.y = -1000;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    canvas.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchstart', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleMouseLeave, { passive: true });
+
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animationFrameId) {
+          lastTime = performance.now();
+          animationFrameId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.05 }
+    );
+    if (canvas.parentElement) observer.observe(canvas.parentElement);
+
+    const onVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (isVisible && !animationFrameId) {
+        lastTime = performance.now();
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     const render = (now: number) => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
+
       // Calculate delta time normalized to 60fps (16.67ms = 1.0)
       const rawDt = (now - lastTime) / 16.6667;
       const dt = Math.min(Math.max(rawDt, 0.2), 2.0); // Clamp dt between 0.2 and 2.0
       lastTime = now;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.5);
       ctx.save();
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, displayWidth, displayHeight);
@@ -165,8 +207,10 @@ export const RollingLogoBackground: React.FC = () => {
         treadGrad.addColorStop(1, 'rgba(6, 182, 212, 0.25)');
 
         ctx.strokeStyle = treadGrad;
-        ctx.shadowColor = 'rgba(99, 102, 241, 0.35)';
-        ctx.shadowBlur = 6;
+        if (!isMobile) {
+          ctx.shadowColor = 'rgba(99, 102, 241, 0.35)';
+          ctx.shadowBlur = 6;
+        }
         ctx.beginPath();
         ctx.moveTo(tx1, ty1);
         ctx.lineTo(tx2, ty2);
@@ -207,8 +251,10 @@ export const RollingLogoBackground: React.FC = () => {
         ctx.save();
         ctx.globalAlpha = Math.max(0, sp.alpha);
         ctx.fillStyle = sp.color;
-        ctx.shadowColor = sp.color;
-        ctx.shadowBlur = 6;
+        if (!isMobile) {
+          ctx.shadowColor = sp.color;
+          ctx.shadowBlur = 6;
+        }
         ctx.beginPath();
         ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
         ctx.fill();
@@ -228,14 +274,12 @@ export const RollingLogoBackground: React.FC = () => {
         c.y += c.vy * dt;
 
         // Clamp step index so when c.x < 0, it ALWAYS targets step 0 (treadY = 0)
-        // This completely prevents coins from missing step 0 and falling off left of mobile screens!
         const rawStepIdx = Math.floor(c.x / stepW);
         const stepIdx = Math.max(0, Math.min(numSteps - 1, rawStepIdx));
         const treadY = stepIdx * stepH;
 
         // Tread Collision Detection
         if (c.y + effRadius >= treadY) {
-          // Verify coin is above or at current tread level (prevent clipping from underneath)
           if (c.y - effRadius <= treadY + stepH * 0.6) {
             c.y = treadY - effRadius;
             if (c.vy > 0.8) {
@@ -253,7 +297,7 @@ export const RollingLogoBackground: React.FC = () => {
         // Tumbling rotation
         c.rotation += c.vRot * dt;
 
-        // Mouse Interactivity
+        // Mouse/Touch Interactivity
         const dx = mouse.x - c.x;
         const dy = mouse.y - c.y;
         const distSq = dx * dx + dy * dy;
@@ -289,9 +333,11 @@ export const RollingLogoBackground: React.FC = () => {
 
           const cornerRadius = c.size * 0.18;
 
-          // High Contrast Shadow Glow
-          ctx.shadowColor = c.theme === 'indigo' ? 'rgba(56, 189, 248, 0.5)' : 'rgba(99, 102, 241, 0.35)';
-          ctx.shadowBlur = 10;
+          // High Contrast Shadow Glow (on desktop only for max mobile performance)
+          if (!isMobile) {
+            ctx.shadowColor = c.theme === 'indigo' ? 'rgba(56, 189, 248, 0.5)' : 'rgba(99, 102, 241, 0.35)';
+            ctx.shadowBlur = 10;
+          }
 
           // Clean High-Contrast Background Card
           ctx.fillStyle = c.theme === 'indigo' ? '#0f172a' : '#ffffff';
@@ -317,14 +363,16 @@ export const RollingLogoBackground: React.FC = () => {
           ctx.strokeStyle = c.theme === 'indigo' ? 'rgba(56, 189, 248, 0.85)' : 'rgba(99, 102, 241, 0.7)';
           ctx.stroke();
 
-          // Draw Logo inside Block with high-contrast drop shadow
+          // Draw Logo inside Block
           if (isImageLoaded || img.complete) {
             const logoWidth = c.size * 0.68;
             const logoHeight = logoWidth;
 
             ctx.save();
-            ctx.shadowColor = c.theme === 'indigo' ? 'rgba(56, 189, 248, 0.6)' : 'rgba(15, 23, 42, 0.25)';
-            ctx.shadowBlur = 6;
+            if (!isMobile) {
+              ctx.shadowColor = c.theme === 'indigo' ? 'rgba(56, 189, 248, 0.6)' : 'rgba(15, 23, 42, 0.25)';
+              ctx.shadowBlur = 6;
+            }
             ctx.drawImage(img, -logoWidth / 2, -logoHeight / 2, logoWidth, logoHeight);
             ctx.restore();
           }
@@ -340,13 +388,18 @@ export const RollingLogoBackground: React.FC = () => {
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchstart', handleTouchMove);
+      window.removeEventListener('touchend', handleMouseLeave);
       window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       if (canvas) {
         canvas.removeEventListener('mouseleave', handleMouseLeave);
       }
       resizeObserver.disconnect();
+      observer.disconnect();
     };
   }, []);
 

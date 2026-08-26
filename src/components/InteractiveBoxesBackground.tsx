@@ -97,7 +97,12 @@ export const InteractiveBoxesBackground: React.FC = () => {
       typeof window !== 'undefined' &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const isTouchDevice =
+      typeof window !== 'undefined' &&
+      (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+
     const isLowPowerDevice =
+      isTouchDevice ||
       (typeof navigator !== 'undefined' && (navigator.hardwareConcurrency || 4) <= 4) ||
       (typeof navigator !== 'undefined' && (navigator as any).deviceMemory && (navigator as any).deviceMemory < 4);
 
@@ -106,7 +111,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
     let height = container.clientHeight || window.innerHeight;
     let cachedRect = canvas.getBoundingClientRect();
 
-    // Mouse coordinates (decoupled from event handlers)
+    // Mouse & touch coordinates (decoupled from event handlers)
     const mouse = {
       rawX: -9999,
       rawY: -9999,
@@ -126,29 +131,44 @@ export const InteractiveBoxesBackground: React.FC = () => {
       const isTablet = w >= 640 && w < 1024;
       const isDesktop = w >= 1024 && w < 1440;
 
-      if (isLowPowerDevice) {
+      if (isMobile) {
         return {
-          cols: isMobile ? 8 : isTablet ? 12 : isDesktop ? 15 : 18,
-          rows: isMobile ? 8 : isTablet ? 10 : isDesktop ? 12 : 14,
-          boxSize: isMobile ? 38 : isTablet ? 44 : isDesktop ? 48 : 52,
-          boxHeight: isMobile ? 16 : isTablet ? 20 : isDesktop ? 24 : 26,
-          gap: isMobile ? 8 : isTablet ? 11 : isDesktop ? 13 : 15,
-          influenceRadius: isMobile ? 160 : isTablet ? 220 : isDesktop ? 260 : 300,
-          maxLift: isMobile ? 40 : 55,
+          cols: 7,
+          rows: 7,
+          boxSize: 42,
+          boxHeight: 18,
+          gap: 9,
+          influenceRadius: 150,
+          maxLift: 38,
           maxTilt: 0.25,
           cameraPitch: 58 * (Math.PI / 180),
           cameraYaw: -18 * (Math.PI / 180),
         };
       }
 
+      if (isTablet || isLowPowerDevice) {
+        return {
+          cols: isTablet ? 11 : 14,
+          rows: isTablet ? 9 : 11,
+          boxSize: isTablet ? 44 : 48,
+          boxHeight: isTablet ? 20 : 22,
+          gap: isTablet ? 11 : 13,
+          influenceRadius: isTablet ? 210 : 250,
+          maxLift: isTablet ? 48 : 55,
+          maxTilt: 0.26,
+          cameraPitch: 58 * (Math.PI / 180),
+          cameraYaw: -18 * (Math.PI / 180),
+        };
+      }
+
       return {
-        cols: isMobile ? 10 : isTablet ? 14 : isDesktop ? 18 : 22,
-        rows: isMobile ? 10 : isTablet ? 12 : isDesktop ? 14 : 16,
-        boxSize: isMobile ? 36 : isTablet ? 42 : isDesktop ? 46 : 50,
-        boxHeight: isMobile ? 16 : isTablet ? 20 : isDesktop ? 24 : 26,
-        gap: isMobile ? 8 : isTablet ? 11 : isDesktop ? 13 : 15,
-        influenceRadius: isMobile ? 180 : isTablet ? 240 : isDesktop ? 280 : 320,
-        maxLift: isMobile ? 45 : 65,
+        cols: isDesktop ? 18 : 22,
+        rows: isDesktop ? 14 : 16,
+        boxSize: isDesktop ? 46 : 50,
+        boxHeight: isDesktop ? 24 : 26,
+        gap: isDesktop ? 13 : 15,
+        influenceRadius: isDesktop ? 280 : 320,
+        maxLift: 65,
         maxTilt: 0.3,
         cameraPitch: 58 * (Math.PI / 180),
         cameraYaw: -18 * (Math.PI / 180),
@@ -384,9 +404,36 @@ export const InteractiveBoxesBackground: React.FC = () => {
       mouse.y = -9999;
     };
 
-    const onClick = (e: MouseEvent) => {
-      const clickX = e.clientX - cachedRect.left;
-      const clickY = e.clientY - cachedRect.top;
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        cachedRect = canvas.getBoundingClientRect();
+        mouse.rawX = e.touches[0].clientX - cachedRect.left;
+        mouse.rawY = e.touches[0].clientY - cachedRect.top;
+        mouse.isHovered = true;
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouse.rawX = e.touches[0].clientX - cachedRect.left;
+        mouse.rawY = e.touches[0].clientY - cachedRect.top;
+        mouse.isHovered = true;
+      }
+    };
+
+    const onTouchEnd = () => {
+      mouse.isHovered = false;
+      mouse.rawX = -9999;
+      mouse.rawY = -9999;
+      mouse.x = -9999;
+      mouse.y = -9999;
+    };
+
+    const onClick = (e: MouseEvent | TouchEvent) => {
+      const clientX = 'touches' in e && e.touches.length > 0 ? e.touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = 'touches' in e && e.touches.length > 0 ? e.touches[0].clientY : (e as MouseEvent).clientY;
+      const clickX = clientX - cachedRect.left;
+      const clickY = clientY - cachedRect.top;
 
       const centerX = width * 0.52;
       const centerY = height * 0.48;
@@ -410,6 +457,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     canvas.addEventListener('mouseleave', onMouseLeave, { passive: true });
     canvas.addEventListener('click', onClick, { passive: true });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
 
     // IntersectionObserver to pause when hero is offscreen
     const observer = new IntersectionObserver(
@@ -743,6 +793,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       document.removeEventListener('visibilitychange', onVisibilityChange);
       if (canvas) {
         canvas.removeEventListener('mouseleave', onMouseLeave);

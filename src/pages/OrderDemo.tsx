@@ -942,13 +942,13 @@ export default function OrderDemo() {
     >
       {/* Search & Filtering Controls */}
       <section className="max-w-7xl mx-auto w-full px-4 md:px-8 mt-6 relative z-40" aria-label="Search and Filter Demos" id="search-filter-section">
-        {/* Main Container: Single container with a two-row layout */}
-        <div className="flex flex-col gap-4.5 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all relative z-40">
+        {/* Main Container: Single container with a responsive two-row layout */}
+        <div className="flex flex-col gap-4 bg-card/80 dark:bg-slate-950/70 backdrop-blur-xl border border-border/80 p-4 sm:p-5 md:p-6 rounded-[24px] shadow-lg shadow-black/5 transition-all relative z-40 w-full max-w-full min-w-0">
           
-          {/* Top Row: Extended Search input, inline dropdowns ('Sort by' & 'Business Type') next to OK & Clear buttons */}
-          <div className="flex flex-wrap items-center justify-between gap-3 md:gap-4 w-full">
-            {/* Search Input (Expands to fill available width up to Sort by) */}
-            <div className="relative flex-1 min-w-[200px] sm:min-w-[260px] flex items-center group">
+          {/* Top Row: Search input + Controls ('Sort by', 'Business Type', 'OK', 'Clear') */}
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 md:gap-4 w-full min-w-0">
+            {/* Search Input (Full width on mobile/tablet, expands flex-1 on desktop) */}
+            <div className="relative w-full lg:flex-1 min-w-0 flex items-center group">
               <label htmlFor="demo-search-input" className="sr-only">
                 {t('showcase.search_placeholder')}
               </label>
@@ -975,26 +975,28 @@ export default function OrderDemo() {
               )}
             </div>
 
-            {/* Controls Group: Sort by, Business Type, OK & Clear Buttons (Aligned Together) */}
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            {/* Controls Group: Sort by, Business Type, OK & Clear Buttons (Responsive 2-col grid on mobile, inline on tablet/desktop) */}
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 w-full lg:w-auto shrink-0 min-w-0">
               {/* Custom Styled Dropdown: Sort by */}
-              <div className="relative z-50">
+              <div className="relative z-50 min-w-0">
                 <button
                   type="button"
                   onClick={() => {
                     setIsSortOpen(!isSortOpen);
                     setIsStatusOpen(false);
                   }}
-                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95"
+                  className="w-full sm:w-auto h-10 px-3 sm:px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center justify-between sm:justify-start gap-1.5 sm:gap-2 shadow-2xs active:scale-95 min-w-0"
                 >
-                  <ArrowUpDown className="size-3.5 text-primary shrink-0" />
-                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider">
-                    {t('showcase.sort_heading')}:
-                  </span>
-                  <span className="font-extrabold text-foreground">
-                    {pendingSortBy === "sandbox" ? t('showcase.sort_sandbox' as TranslationKey) : pendingSortBy === "startup" ? t('showcase.sort_startup' as TranslationKey) : t('showcase.cat_all')}
-                  </span>
-                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isSortOpen ? "rotate-180 text-primary" : ""}`} />
+                  <div className="flex items-center gap-1.5 min-w-0 truncate">
+                    <ArrowUpDown className="size-3.5 text-primary shrink-0" />
+                    <span className="text-muted-foreground font-mono text-[10px] sm:text-[11px] uppercase tracking-wider shrink-0">
+                      {t('showcase.sort_heading')}:
+                    </span>
+                    <span className="font-extrabold text-foreground truncate">
+                      {pendingSortBy === "sandbox" ? t('showcase.sort_sandbox' as TranslationKey) : pendingSortBy === "startup" ? t('showcase.sort_startup' as TranslationKey) : t('showcase.cat_all')}
+                    </span>
+                  </div>
+                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 shrink-0 ${isSortOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
 
                 {isSortOpen && (
@@ -1005,7 +1007,7 @@ export default function OrderDemo() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-48 bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
+                      className="absolute top-full left-0 mt-2 w-52 max-w-[calc(100vw-2.5rem)] bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
                     >
                       {[
                         { id: "all", label: t('showcase.cat_all') },
@@ -1027,7 +1029,7 @@ export default function OrderDemo() {
                                 : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
                             }`}
                           >
-                            <span className="text-left flex-1 font-sans">{opt.label}</span>
+                            <span className="text-left flex-1 font-sans truncate">{opt.label}</span>
                             {isSelected && <Check className="size-3.5 text-primary shrink-0 ml-2" />}
                           </button>
                         );
@@ -1038,26 +1040,28 @@ export default function OrderDemo() {
               </div>
 
               {/* Custom Styled Dropdown: Business Type */}
-              <div className="relative z-50">
+              <div className="relative z-50 min-w-0">
                 <button
                   type="button"
                   onClick={() => {
                     setIsStatusOpen(!isStatusOpen);
                     setIsSortOpen(false);
                   }}
-                  className="h-10 px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center gap-2 shadow-2xs active:scale-95 text-left"
+                  className="w-full sm:w-auto h-10 px-3 sm:px-3.5 bg-muted/40 hover:bg-muted/70 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 hover:border-primary/50 rounded-2xl text-xs font-bold text-foreground transition-all cursor-pointer flex items-center justify-between sm:justify-start gap-1.5 sm:gap-2 shadow-2xs active:scale-95 min-w-0 text-left"
                 >
-                  <Building2 className="size-3.5 text-primary shrink-0" />
-                  <span className="text-muted-foreground font-mono text-[11px] uppercase tracking-wider text-left">
-                    {t('showcase.business_type' as TranslationKey)}:
-                  </span>
-                  <span className="font-extrabold text-foreground text-left">
-                    {(() => {
-                      const opt = BUSINESS_TYPE_OPTIONS.find(o => o.id === pendingBusinessTypeFilter);
-                      return opt ? t(opt.translationKey as TranslationKey) : t('showcase.cat_all');
-                    })()}
-                  </span>
-                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 ${isStatusOpen ? "rotate-180 text-primary" : ""}`} />
+                  <div className="flex items-center gap-1.5 min-w-0 truncate">
+                    <Building2 className="size-3.5 text-primary shrink-0" />
+                    <span className="text-muted-foreground font-mono text-[10px] sm:text-[11px] uppercase tracking-wider shrink-0">
+                      {t('showcase.business_type' as TranslationKey)}:
+                    </span>
+                    <span className="font-extrabold text-foreground truncate">
+                      {(() => {
+                        const opt = BUSINESS_TYPE_OPTIONS.find(o => o.id === pendingBusinessTypeFilter);
+                        return opt ? t(opt.translationKey as TranslationKey) : t('showcase.cat_all');
+                      })()}
+                    </span>
+                  </div>
+                  <ChevronDown className={`size-3.5 text-muted-foreground transition-transform duration-200 shrink-0 ${isStatusOpen ? "rotate-180 text-primary" : ""}`} />
                 </button>
 
                 {isStatusOpen && (
@@ -1068,7 +1072,7 @@ export default function OrderDemo() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 6, scale: 0.96 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute top-full left-0 mt-2 w-72 sm:w-80 max-h-80 overflow-y-auto custom-scrollbar bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
+                      className="absolute top-full left-auto right-0 sm:left-0 sm:right-auto mt-2 w-72 sm:w-80 max-w-[calc(100vw-2.5rem)] max-h-80 overflow-y-auto custom-scrollbar bg-card/95 dark:bg-slate-900/95 backdrop-blur-xl border border-border/80 rounded-2xl shadow-xl shadow-black/10 p-1.5 z-50 flex flex-col gap-1 text-left"
                     >
                       {BUSINESS_TYPE_OPTIONS.map((opt) => {
                         const isSelected = pendingBusinessTypeFilter === opt.id;
@@ -1086,7 +1090,7 @@ export default function OrderDemo() {
                                 : "text-foreground/80 hover:bg-muted/60 hover:text-foreground"
                             }`}
                           >
-                            <span className="text-left flex-1 font-sans">{t(opt.translationKey as TranslationKey)}</span>
+                            <span className="text-left flex-1 font-sans truncate">{t(opt.translationKey as TranslationKey)}</span>
                             {isSelected && <Check className="size-3.5 text-primary shrink-0 ml-2" />}
                           </button>
                         );
@@ -1103,7 +1107,7 @@ export default function OrderDemo() {
                   setAppliedSortBy(pendingSortBy);
                   setAppliedBusinessTypeFilter(pendingBusinessTypeFilter);
                 }}
-                className={`h-10 px-6 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 active:scale-95 ${
+                className={`w-full sm:w-auto h-10 px-5 sm:px-6 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-1.5 shrink-0 active:scale-95 ${
                   hasPendingChanges
                     ? "bg-primary text-primary-foreground border border-primary/90 shadow-md shadow-primary/30"
                     : "bg-muted/40 hover:bg-muted text-muted-foreground border border-border/80"
@@ -1124,10 +1128,10 @@ export default function OrderDemo() {
                   setAppliedSortBy("all");
                 }}
                 title="Clear all filters"
-                className="h-10 px-3.5 bg-muted/40 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 rounded-2xl text-xs font-bold text-foreground/80 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
+                className="w-full sm:w-auto h-10 px-3.5 bg-muted/40 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 dark:bg-slate-900/60 dark:hover:bg-slate-900 border border-border/80 rounded-2xl text-xs font-bold text-foreground/80 transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs active:scale-95 shrink-0"
               >
                 <RotateCcw className="size-3.5 shrink-0" />
-                <span>{t('showcase.clear_all' as TranslationKey)}</span>
+                <span className="truncate">{t('showcase.clear_all' as TranslationKey)}</span>
               </button>
             </div>
           </div>
@@ -1136,15 +1140,15 @@ export default function OrderDemo() {
           <div className="h-px bg-border/60 w-full" />
 
           {/* Bottom Row: 'PROJECT CATEGORY' text label & category pills flex-wrap */}
-          <div className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-2.5 w-full min-w-0 max-w-full">
             <div className="flex items-center justify-between gap-2">
               <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest font-mono flex items-center gap-1.5">
-                <SlidersHorizontal className="size-3.5 text-primary" />
-                {t('showcase.project_category' as TranslationKey)}
+                <SlidersHorizontal className="size-3.5 text-primary shrink-0" />
+                <span className="truncate">{t('showcase.project_category' as TranslationKey)}</span>
               </span>
             </div>
 
-            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2.5 pt-0.5 min-w-0 flex-1 scroll-smooth select-none theme-filter-scrollbar">
+            <div className="flex flex-nowrap items-center gap-2 overflow-x-auto pb-2 pt-0.5 w-full max-w-full min-w-0 scroll-smooth select-none theme-filter-scrollbar touch-pan-x -mx-1 px-1">
               {availableCategories.map((cat) => {
                 const isActive = cat.id === "all" ? isAllCategoryActive : selectedCategories.includes(cat.id);
                 const label = t(cat.translationKey as TranslationKey);
@@ -1154,7 +1158,7 @@ export default function OrderDemo() {
                     key={cat.id}
                     type="button"
                     onClick={() => handleCategoryToggle(cat.id)}
-                    className={`h-9 px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
+                    className={`h-9 px-3.5 sm:px-4 rounded-xl text-xs font-extrabold transition-all duration-200 flex items-center justify-center cursor-pointer border whitespace-nowrap shrink-0 active:scale-95 ${
                       isActive
                         ? `${colorConfig.active} scale-[1.02]`
                         : `text-foreground/80 bg-muted/30 border-border/80 ${colorConfig.hover}`

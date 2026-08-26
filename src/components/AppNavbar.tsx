@@ -81,9 +81,21 @@ export default function AppNavbar() {
   }, [drawerOpen]);
 
   const [scrolled, setScrolled] = useState(false);
+  const scrolledRef = useRef(false);
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const isScrolled = window.scrollY > 10;
+          if (scrolledRef.current !== isScrolled) {
+            scrolledRef.current = isScrolled;
+            setScrolled(isScrolled);
+          }
+          ticking = false;
+        });
+      }
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
