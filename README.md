@@ -2,7 +2,7 @@
 
 Interactive Sandbox และ Web Application ต้นแบบสำหรับทดสอบการเชื่อมต่อระบบ **Botnoi WebAvatar (3D Conversational AI)** เข้ากับ Web Application จริง พร้อมจำลอง Use Case ธุรกิจหลากหลายรูปแบบ (จองตั๋วเครื่องบิน, สั่งอาหาร, ร้านค้าไอที, พอร์ทัลบริการ)
 
------
+--------
 
 ## 📌 ภาพรวมโปรเจกต์ (Overview)
 

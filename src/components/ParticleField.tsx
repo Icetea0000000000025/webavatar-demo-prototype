@@ -117,8 +117,9 @@ export const ParticleField: React.FC<ParticleFieldProps> = ({ scrollY }) => {
       }
 
       draw(c: CanvasRenderingContext2D, currentScrollY: number) {
-        // Draw with scroll parallax offset
-        let drawY = this.y - (currentScrollY * 0.12 * dpr);
+        // Draw with scroll parallax offset (clamped to 0 to prevent negative overscroll glitches)
+        const safeScrollY = Math.max(0, currentScrollY);
+        let drawY = this.y - (safeScrollY * 0.12 * dpr);
         
         // Wrap drawY inside screen height bounds
         drawY = ((drawY % height) + height) % height;

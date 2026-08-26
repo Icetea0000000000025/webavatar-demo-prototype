@@ -6,11 +6,26 @@ import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
 import './Pages.css';
 
+const GOOGLE_SHEETS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxh8xERcIDX5WfFshPDA1-uXMRFHGzBYAbuDOKVCkYrc-4biV_AE5B0hxNDP6LEcBRs/exec';
+
+const GOOGLE_SHEETS_TOPIC_LABELS: Record<string, string> = {
+  contact: 'Contact Us',
+  webavatar: 'Deploy WebAvatar Agent',
+  chatbot: 'Custom Botnoi AI Chatbot',
+  voice: 'Speech Synthesis & Voice Cloning',
+  enterprise: 'On-Premise Enterprise Solutions'
+};
+
+const SHOW_INQUIRY_ROSTER = false;
+const ENABLE_LOCAL_INQUIRY_STORAGE = false;
+
 interface Submission {
   id: number;
   formNumber: number;
   name: string;
+  corporateName: string;
   email: string;
+  phoneNumber: string;
   inquiryType: string;
   message: string;
   timestamp: string;
@@ -39,17 +54,36 @@ const formatRedactedEmail = (email: string) => {
   return `${firstLetter}***@***.com`;
 };
 
+const formatPhoneForSubmission = (phoneNumber: string) => {
+  const trimmedPhoneNumber = phoneNumber.trim();
+
+  if (trimmedPhoneNumber.startsWith('+66')) {
+    return trimmedPhoneNumber;
+  }
+
+  const digitsOnly = trimmedPhoneNumber.replace(/\D/g, '');
+  if (/^0\d{9}$/.test(digitsOnly)) {
+    return `${digitsOnly.slice(0, 3)}-${digitsOnly.slice(3)}`;
+  }
+
+  return trimmedPhoneNumber;
+};
+
 function Contact() {
   const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
     name: '',
+    corporateName: '',
     email: '',
+    phoneNumber: '',
     inquiryType: 'contact',
     message: ''
   });
 
   const [submissions, setSubmissions] = useState<Submission[]>(() => {
+    if (!ENABLE_LOCAL_INQUIRY_STORAGE) return [];
+
     try {
       const saved = localStorage.getItem('botnoi_inquiries');
       return saved ? JSON.parse(saved) : [];
@@ -62,6 +96,8 @@ function Contact() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [toastDetails, setToastDetails] = useState({ name: '', email: '', inquiryType: 'contact', formNumber: 0, message: '' });
   const [copiedCard, setCopiedCard] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   const handleContactCardClick = (type: 'address' | 'phone' | 'email', actionUrl?: string, textToCopy?: string) => {
     if (textToCopy) {
@@ -106,43 +142,76 @@ function Contact() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.email) {
       alert(t('contact.error_required' as any) || 'Please fill in your name and email.');
       return;
     }
 
-    const formNumber = submissions.length + 1;
-    const newInquiry: Submission = {
-      id: Date.now(),
-      formNumber,
-      name: formData.name,
-      email: formData.email,
-      inquiryType: formData.inquiryType,
-      message: formData.message,
-      timestamp: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
-    };
+    setIsSubmitting(true);
+    setSubmissionError(null);
 
-    const updatedSubmissions = [newInquiry, ...submissions];
-    setSubmissions(updatedSubmissions);
-    localStorage.setItem('botnoi_inquiries', JSON.stringify(updatedSubmissions));
+    const requestBody = new FormData();
+    requestBody.append('fullName', formData.name);
+    requestBody.append('corporateName', formData.corporateName);
+    requestBody.append('email', formData.email);
+    requestBody.append('phoneNumber', formatPhoneForSubmission(formData.phoneNumber));
+    requestBody.append('topic', GOOGLE_SHEETS_TOPIC_LABELS[formData.inquiryType] ?? formData.inquiryType);
+    requestBody.append('message', formData.message);
 
-    setToastDetails({
-      name: formData.name,
-      email: formData.email,
-      inquiryType: formData.inquiryType,
-      formNumber,
-      message: formData.message
-    });
-    setShowSuccessToast(true);
+    try {
+      const response = await fetch(GOOGLE_SHEETS_SCRIPT_URL, {
+        method: 'POST',
+        body: requestBody
+      });
 
-    setFormData({
-      name: '',
-      email: '',
-      inquiryType: 'contact',
-      message: ''
-    });
+      if (!response.ok) {
+        throw new Error(`Google Sheets submission failed with status ${response.status}`);
+      }
+
+      const formNumber = submissions.length + 1;
+      const newInquiry: Submission = {
+        id: Date.now(),
+        formNumber,
+        name: formData.name,
+        corporateName: formData.corporateName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        inquiryType: formData.inquiryType,
+        message: formData.message,
+        timestamp: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+      };
+
+      const updatedSubmissions = [newInquiry, ...submissions];
+      setSubmissions(updatedSubmissions);
+      if (ENABLE_LOCAL_INQUIRY_STORAGE) {
+        localStorage.setItem('botnoi_inquiries', JSON.stringify(updatedSubmissions));
+      }
+
+      setToastDetails({
+        name: formData.name,
+        email: formData.email,
+        inquiryType: formData.inquiryType,
+        formNumber,
+        message: formData.message
+      });
+      setShowSuccessToast(true);
+
+      setFormData({
+        name: '',
+        corporateName: '',
+        email: '',
+        phoneNumber: '',
+        inquiryType: 'contact',
+        message: ''
+      });
+    } catch (error) {
+      setSubmissionError('Something went wrong! Please try to submit again.');
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDownloadList = () => {
@@ -251,7 +320,7 @@ function Contact() {
                     {/* Item 1: Address */}
                     <div 
                       className="py-4 first:pt-0 last:pb-0 group cursor-pointer transition-colors"
-                      onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '21 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
+                      onClick={() => handleContactCardClick('address', 'https://maps.google.com/?q=253+Asok+Montri+Rd+Bangkok', '22 Asok Building, 253 Asok Montri Rd, Khlong Toei Nuea, Watthana, Bangkok 10110')}
                     >
                       <div className="flex items-center justify-between text-xs font-mono text-muted-foreground mb-1.5">
                         <span className="flex items-center gap-1.5 text-amber-500 font-bold uppercase tracking-wider">
@@ -264,7 +333,7 @@ function Contact() {
                       </div>
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors">
-                          21 Asok Building
+                          22 Asok Building
                         </h3>
                         {copiedCard === 'address' && (
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 font-bold flex items-center gap-1">
@@ -384,7 +453,7 @@ function Contact() {
                   {/* Framed Card Input Form */}
                   <form onSubmit={handleSubmit} className="space-y-5">
                     
-                    {/* Two-Column Name & Email */}
+                    {/* Two-Column Name & Corporate Name */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       {/* Name Input */}
                       <div className="text-left">
@@ -403,6 +472,25 @@ function Contact() {
                         />
                       </div>
 
+                      {/* Corporate Name Input */}
+                      <div className="text-left">
+                        <label htmlFor="input-corporate-name" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                          {t('contact.form_corporate_name')}
+                        </label>
+                        <input 
+                          type="text" 
+                          id="input-corporate-name" 
+                          name="corporateName" 
+                          value={formData.corporateName}
+                          onChange={handleChange}
+                          placeholder={t('contact.form_corporate_name_placeholder')}
+                          className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-2xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Two-Column Email & Phone */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       {/* Email Input */}
                       <div className="text-left">
                         <label htmlFor="input-email" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
@@ -416,6 +504,23 @@ function Contact() {
                           value={formData.email}
                           onChange={handleChange}
                           placeholder={t('contact.form_email_placeholder')}
+                          className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-2xs"
+                        />
+                      </div>
+
+                      {/* Phone Number Input */}
+                      <div className="text-left">
+                        <label htmlFor="input-phone-number" className="block text-xs font-mono font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                          {t('contact.form_phone')} <span className="text-rose-500">*</span>
+                        </label>
+                        <input 
+                          type="tel" 
+                          id="input-phone-number" 
+                          name="phoneNumber" 
+                          required
+                          value={formData.phoneNumber}
+                          onChange={handleChange}
+                          placeholder={t('contact.form_phone_placeholder')}
                           className="w-full bg-background border border-border/80 rounded-xl px-4 py-3 text-sm text-foreground outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-2xs"
                         />
                       </div>
@@ -461,14 +566,20 @@ function Contact() {
                     </div>
 
                     {/* Submit Action */}
-                    <div className="pt-2 flex justify-start">
+                    <div className="pt-2 flex flex-col items-start gap-2">
                       <button 
                         type="submit" 
-                        className="btn btn-outline-primary cursor-pointer"
+                        disabled={isSubmitting}
+                        className="btn btn-outline-primary cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         id="submit-inquiry-button"
                       >
-                        <span>{t('contact.form_submit')}</span>
+                        <span>{isSubmitting ? (t('contact.form_filling') || 'Submitting...') : t('contact.form_submit')}</span>
                       </button>
+                      {submissionError && (
+                        <p className="text-sm text-rose-500 font-medium" role="alert">
+                          {submissionError}
+                        </p>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -485,7 +596,8 @@ function Contact() {
       {/* ══════════════════════════════════════════
           3. BORDERLESS INQUIRY LEDGER TABLE
       ══════════════════════════════════════════ */}
-      <section className="py-14 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto" id="contact-ledger" aria-label="Inquiry Log">
+      {SHOW_INQUIRY_ROSTER && (
+        <section className="py-14 pb-16 px-4 sm:px-6 lg:px-8 max-w-[1240px] mx-auto" id="contact-ledger" aria-label="Inquiry Log">
         <AnimatedSection direction="up" duration={0.6}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div className="text-left">
@@ -567,15 +679,14 @@ function Contact() {
             </table>
           </div>
         </AnimatedSection>
-      </section>
+        </section>
+      )}
 
       {/* Clean Minimal Hairline Divider */}
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full h-px bg-border/60"></div>
       </div>
 
-      {/* ══════════════════════════════════════════
-          4. MINIMAL HAIRLINE FAQ ACCORDION
       {/* ══════════════════════════════════════════
           4. BENTO GRID FAQ SECTION
       ══════════════════════════════════════════ */}
@@ -684,6 +795,3 @@ function Contact() {
 }
 
 export default Contact;
-
-
-
