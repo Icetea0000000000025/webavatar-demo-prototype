@@ -63,15 +63,15 @@ const COLOR_TABLE_DARK = {
 };
 
 const COLOR_TABLE_LIGHT = {
-  front: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${(0.25 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
-  frontIdle: 'rgba(219, 234, 254, 0.45)',
-  right: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(14, 165, 233, ${(0.22 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
-  rightIdle: 'rgba(191, 219, 254, 0.35)',
-  top: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(186, 230, 253, ${(0.65 + (i / GLOW_STEPS) * 0.3).toFixed(3)})`),
-  topIdle: 'rgba(255, 255, 255, 0.65)',
-  outline: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${(0.75 + (i / GLOW_STEPS) * 0.25).toFixed(3)})`),
-  outlineIdle: 'rgba(99, 102, 241, 0.15)',
-  dotRing: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(2, 132, 199, ${((i / GLOW_STEPS) * 0.3).toFixed(3)})`),
+  front: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(99, 102, 241, ${(0.15 + (i / GLOW_STEPS) * 0.25).toFixed(3)})`),
+  frontIdle: 'rgba(224, 231, 255, 0.40)',
+  right: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(79, 70, 229, ${(0.12 + (i / GLOW_STEPS) * 0.25).toFixed(3)})`),
+  rightIdle: 'rgba(199, 210, 254, 0.35)',
+  top: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(224, 231, 255, ${(0.70 + (i / GLOW_STEPS) * 0.25).toFixed(3)})`),
+  topIdle: 'rgba(255, 255, 255, 0.85)',
+  outline: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(99, 102, 241, ${(0.35 + (i / GLOW_STEPS) * 0.35).toFixed(3)})`),
+  outlineIdle: 'rgba(99, 102, 241, 0.14)',
+  dotRing: Array.from({ length: GLOW_STEPS + 1 }, (_, i) => `rgba(99, 102, 241, ${((i / GLOW_STEPS) * 0.25).toFixed(3)})`),
 };
 
 export const InteractiveBoxesBackground: React.FC = () => {
@@ -83,7 +83,7 @@ export const InteractiveBoxesBackground: React.FC = () => {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animId: number = 0;
@@ -528,9 +528,9 @@ export const InteractiveBoxesBackground: React.FC = () => {
       const isDark = document.documentElement.classList.contains('dark');
       const dpr = isLowPowerDevice ? 1.0 : Math.min(window.devicePixelRatio || 1, 1.25);
 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
       ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, width, height);
 
       const centerX = width < 640 ? width * 0.5 : width * 0.52;
       const centerY = width < 640 ? height * 0.5 : height * 0.48;

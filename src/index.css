@@ -182,6 +182,11 @@
     word-spacing: normal;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: none;
+    background-color: var(--background);
+  }
+
+  html {
+    background-color: var(--background);
   }
 
   body {

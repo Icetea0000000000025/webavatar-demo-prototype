@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FAFBFC" />
   <title>Botnoi WebAvatar — Premium Interactive Agent Sandbox</title>
   <meta name="description"
     content="Next-generation conversational AI WebAvatar showcase by Botnoi Group. Experience high-fidelity interactive digital representatives, automated navigation, and premium sandboxed demos." />
@@ -14,17 +15,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&display=swap"
     rel="stylesheet">
-  <style>
-    body.avatar-hidden body > div:not(#root) canvas,
-    body.avatar-hidden [class*="bcw"] canvas,
-    body.avatar-hidden [id*="bcw"] canvas,
-    body.avatar-hidden .bcw-avatar-container {
-      display: none !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-  </style>
 </head>
 <body>
   <div id="root"></div>
@@ -32,7 +22,6 @@
 
   <!-- Inject WebAvatar Widget JSSDK -->
   <script>
-     document.body.classList.add('avatar-hidden');
       window.ChatWidgetConfig = {
       mode: "realtime-widget",
       avatarUrl: "Botnoi",
@@ -74,43 +63,6 @@
       'SalsaDanceloop','SambaDance1loop','SambaDanceloop','ShowFullBody','ToothlessLoop'];
 
       var resetTimeout = null;
-       function showAvatar() {
-        document.body.classList.remove('avatar-hidden');
-        document.body.classList.add('avatar-visible');
-      }
-      function hideAvatar() {
-        document.body.classList.remove('avatar-visible');
-        document.body.classList.add('avatar-hidden');
-      }
-      // Delegate click event to reveal avatar ONLY when the widget's call button is clicked
-      // We check that the clicked element (or any ancestor) is OUTSIDE #root (i.e., the widget overlay)
-      // and belongs to the widget by checking for bcw/fab/widget-specific class patterns.
-      document.addEventListener('click', function (e) {
-        var target = e.target;
-        // If the click originated inside #root (React app), ignore it completely.
-        var root = document.getElementById('root');
-        if (root && root.contains(target)) return;
-
-        // Walk up from click target looking for widget call button markers
-        var el = target;
-        while (el && el !== document.body) {
-          var cls = (el.className && typeof el.className === 'string') ? el.className : '';
-          var id  = el.id ? el.id : '';
-          if (
-            cls.indexOf('bcw') !== -1 ||
-            cls.indexOf('fab') !== -1 ||
-            cls.indexOf('widget-call') !== -1 ||
-            cls.indexOf('widget-connect') !== -1 ||
-            cls.indexOf('chat-widget') !== -1 ||
-            id.indexOf('bcw') !== -1 ||
-            id.indexOf('widget') !== -1
-          ) {
-            showAvatar();
-            break;
-          }
-          el = el.parentElement;
-        }
-      }, true);
 
       // Parse list parameter if defined in config animations
       if (window.ChatWidgetConfig && window.ChatWidgetConfig.animations) {
@@ -173,29 +125,25 @@
 
       // Listeners
       window.addEventListener('avatar-widget-ready', function () {
-        console.log('[Demo] Avatar widget ready.');
+        console.log('[Demo] Avatar widget ready. Starting idle animations if disconnected.');
         if (!isConnected) {
-          hideAvatar();
           startAnimations();
-        } else {
-          showAvatar();
         }
       });
 
       window.addEventListener('onConnect', function () {
-        console.log('[Demo] Connected. Showing avatar.');
+        console.log('[Demo] Connected. Stopping idle animations.');
         isConnected = true;
-        showAvatar();
         stopAnimations();
       });
 
       window.addEventListener('onDisconnect', function () {
-        console.log('[Demo] Disconnected. Hiding avatar.');
+        console.log('[Demo] Disconnected. Restarting idle animations.');
         isConnected = false;
-        hideAvatar();
         startAnimations();
       });
     })();
   </script>
 </body>
 </html>
+

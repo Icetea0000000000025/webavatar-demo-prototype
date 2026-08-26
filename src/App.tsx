@@ -11,6 +11,7 @@ import GlobalPageCurtain from './components/motion-ui/GlobalPageCurtain';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import AISales from './pages/AISales';
 import FlightDemo from './pages/FlightDemo';
 import FlightAdmin from './pages/FlightAdmin';
 import OrderDemo from './pages/OrderDemo';
@@ -26,6 +27,7 @@ const pageComponents: Record<string, ReactNode> = {
   '/': <Home />,
   '/about': <About />,
   '/contact': <Contact />,
+  '/ai-sales': <AISales />,
   '/flight-demo': <FlightDemo />,
   '/all-demo': <OrderDemo />,
   '/it-store-demo': <ITStoreDemo />,
@@ -36,6 +38,7 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   '/': 'nav.home',
   '/about': 'nav.about',
   '/contact': 'nav.contact',
+  '/ai-sales': 'nav.ai_sales',
   '/flight-demo': 'nav.flight',
   '/flight-demo/admin': 'flight.nav_admin',
   '/all-demo': 'nav.all_demos',
