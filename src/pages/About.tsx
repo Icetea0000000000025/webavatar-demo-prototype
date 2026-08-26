@@ -46,7 +46,7 @@ interface TimelineMilestone {
 
 function About() {
   const timelineRef = useRef<HTMLDivElement>(null);
-  const { t, language } = useTranslation();
+  const { t } = useTranslation();
 
   // ═══════════════════════════════════════════════════
   // AUTO-ROTATING CLOCKWISE PRESET STATE FOR THE EXPERTISE GAP
@@ -171,7 +171,7 @@ function About() {
   const pillarKnowledge = {
     id: 'scale',
     title: t('about.pillar1_title'),
-    tag: language === 'th' ? 'ขยายความเชี่ยวชาญ' : 'SCALE EXPERTISE',
+    tag: t('about.pillar1_tag'),
     icon: <Brain size={21} className="icon-anim-nlp" />,
     color: 'var(--primary)',
     desc: t('about.pillar1_desc'),
@@ -180,7 +180,7 @@ function About() {
   const pillarService = {
     id: 'voice',
     title: t('about.pillar2_title'),
-    tag: language === 'th' ? 'บริการ 24/7' : '24/7 SERVICE',
+    tag: t('about.pillar2_tag'),
     icon: (
       <svg
         width="21"
@@ -204,7 +204,7 @@ function About() {
   const pillarInnovation = {
     id: 'agent',
     title: t('about.pillar3_title'),
-    tag: language === 'th' ? 'นวัตกรรม' : 'INNOVATION',
+    tag: t('about.pillar3_tag'),
     icon: <Lightbulb size={21} className="icon-anim-lightbulb" />,
     color: '#A855F7',
     desc: t('about.pillar3_desc'),
@@ -213,7 +213,7 @@ function About() {
   const pillarEfficiency = {
     id: 'dom',
     title: t('about.pillar4_title'),
-    tag: language === 'th' ? 'ประสิทธิภาพสูง' : 'HIGH EFFICIENCY',
+    tag: t('about.pillar4_tag'),
     icon: (
       <svg
         width="21"
@@ -305,289 +305,181 @@ function About() {
     {
       id: 'agent-builder',
       name: 'AI Agent Builder Platform',
-      industry: language === 'th' ? 'การสร้าง AI Agent & ระบบอัตโนมัติ' : 'AI Agents & Automation',
+      industry: t('about.prod_agent_builder_industry'),
       tagColor: '#0284C7',
       icon: <Bot size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์มสร้าง AI Agent สำหรับงานบริการลูกค้าและระบบอัตโนมัติของธุรกิจ'
-        : 'A platform to build AI agents for customer service and business automation.',
-      features: language === 'th'
-        ? [
-            'เชื่อมต่อทุกช่องทางได้ในคลิกเดียว',
-            'ได้รับความไว้วางใจจาก 100+ องค์กร & 10,000+ SMEs',
-            'รองรับ Private Cloud & On-Premise',
-            'เครื่องยนต์ Hybrid AI + Rule-based'
-          ]
-        : [
-            'One-click Channel Integration',
-            'Trusted by 100+ Enterprises & 10,000+ SMEs',
-            'Private Cloud & On-Premise Deployment',
-            'Hybrid AI + Rule-based Engine'
-          ],
+      desc: t('about.prod_agent_builder_desc'),
+      features: [
+        t('about.prod_agent_builder_feat1'),
+        t('about.prod_agent_builder_feat2'),
+        t('about.prod_agent_builder_feat3'),
+        t('about.prod_agent_builder_feat4')
+      ],
       link: 'https://botnoi.ai'
     },
     {
       id: 'voicebot',
       name: 'AI Voicebot',
-      industry: language === 'th' ? 'โทรศัพท์เสียง AI ระดับองค์กร' : 'Enterprise Voicebot',
+      industry: t('about.prod_voicebot_industry'),
       tagColor: '#2563EB',
       icon: <PhoneCall size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์มเสียง AI ระดับองค์กรสำหรับการโต้ตอบทางโทรศัพท์อัตโนมัติ'
-        : 'Enterprise AI voice platform for automated phone interactions.',
-      features: language === 'th'
-        ? [
-            'สนทนาด้วยเสียง AI เสมือนมนุษย์จริง',
-            'เชื่อมต่อระบบโทรศัพท์ระดับองค์กร',
-            'รองรับการสื่อสารหลายภาษา',
-            'รองรับ Private Cloud & On-Premise'
-          ]
-        : [
-            'Human-like AI Voice Conversations',
-            'Enterprise Telephony Integration',
-            'Multi-language Support',
-            'Private Cloud & On-Premise Deployment'
-          ],
+      desc: t('about.prod_voicebot_desc'),
+      features: [
+        t('about.prod_voicebot_feat1'),
+        t('about.prod_voicebot_feat2'),
+        t('about.prod_voicebot_feat3'),
+        t('about.prod_voicebot_feat4')
+      ],
       link: 'https://voicebot-stg.botnoigroup.com'
     },
     {
       id: 'botnoi-voice',
       name: 'Botnoi Voice',
-      industry: language === 'th' ? 'เสียงสังเคราะห์ AI & การโคลนเสียง' : 'AI Speech & Voice Cloning',
+      industry: t('about.prod_voice_industry'),
       tagColor: '#38BDF8',
       icon: <Mic size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์มเสียง AI สำหรับสร้างเสียงพูดเสมือนจริงและแอปพลิเคชันเสียง'
-        : 'AI voice platform for lifelike speech generation and voice applications.',
-      features: language === 'th'
-        ? [
-            'เทคโนโลยีการโคลนนิ่งเสียงสมจริง',
-            'รองรับหลากหลายภาษาและเสียงพูด',
-            'เชื่อมต่อด้วย API & SDK ยืดหยุ่น',
-            'พร้อมสำหรับการติดตั้งระดับองค์กร'
-          ]
-        : [
-            'Voice Cloning Technology',
-            'Multi-language & Voice Support',
-            'Flexible API & SDK Integration',
-            'Enterprise-ready Deployment'
-          ],
+      desc: t('about.prod_voice_desc'),
+      features: [
+        t('about.prod_voice_feat1'),
+        t('about.prod_voice_feat2'),
+        t('about.prod_voice_feat3'),
+        t('about.prod_voice_feat4')
+      ],
       link: 'https://voice.botnoi.ai'
     },
     {
       id: 'live-translation',
       name: 'Botnoi Live Translation',
-      industry: language === 'th' ? 'การแปลภาษาเรียลไทม์ & การประชุม' : 'Real-time AI Translation',
+      industry: t('about.prod_translation_industry'),
       tagColor: '#0EA5E9',
       icon: <Languages size={26} />,
-      desc: language === 'th'
-        ? 'ระบบแปลภาษา AI แบบเรียลไทม์สำหรับการประชุม กิจกรรม และการสื่อสารสากล'
-        : 'Real-time AI translation for meetings, events, and global communication.',
-      features: language === 'th'
-        ? [
-            'แปลเสียงพูดสดแบบเรียลไทม์',
-            'ล่าม AI แปลภาษาได้หลากหลาย',
-            'ประมวลผลความหน่วงต่ำ (Low-latency)',
-            'รองรับ Private Cloud & On-Premise'
-          ]
-        : [
-            'Real-time Speech Translation',
-            'Multi-language AI Interpretation',
-            'Low-latency AI Processing',
-            'Private Cloud & On-Premise Deployment'
-          ],
+      desc: t('about.prod_translation_desc'),
+      features: [
+        t('about.prod_translation_feat1'),
+        t('about.prod_translation_feat2'),
+        t('about.prod_translation_feat3'),
+        t('about.prod_translation_feat4')
+      ],
       link: 'https://botnoi.live'
     },
     {
       id: 'ai-avatar',
       name: 'AI Avatar',
-      industry: language === 'th' ? 'มนุษย์เสมือน 3D & ดิจิทัลอินเตอร์แอคทีฟ' : 'Interactive Digital Humans',
+      industry: t('about.prod_avatar_industry'),
       tagColor: '#6366F1',
       icon: <UserCheck size={26} />,
-      desc: language === 'th'
-        ? 'สร้างอวตาร AI เสมือนจริงเพื่อประสบการณ์ดิจิทัลที่โต้ตอบได้'
-        : 'Create lifelike AI avatars for interactive digital experiences.',
-      features: language === 'th'
-        ? [
-            'การแสดงสีหน้าและอารมณ์เสมือนจริง',
-            'แอนิเมชันขยับปากตรงตามเสียง (Lip Sync)',
-            'ปรับแต่งมนุษย์ดิจิทัลเฉพาะบุคคล',
-            'รองรับเว็บไซต์ คีออสก์ และจอแสดงผล'
-          ]
-        : [
-            'Realistic Facial Expressions',
-            'Voice & Lip Sync Animation',
-            'Personalized Digital Humans',
-            'Website, Kiosk & Digital Display Support'
-          ],
+      desc: t('about.prod_avatar_desc'),
+      features: [
+        t('about.prod_avatar_feat1'),
+        t('about.prod_avatar_feat2'),
+        t('about.prod_avatar_feat3'),
+        t('about.prod_avatar_feat4')
+      ],
       link: 'https://navigation-test-webavatar.vercel.app'
     },
     {
       id: 'collecto',
       name: 'Collecto',
-      industry: language === 'th' ? 'การเงิน & การติดตามหนี้' : 'Finance & Debt Recovery',
+      industry: t('about.prod_collecto_industry'),
       tagColor: '#0284C7',
       icon: <Coins size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์ม AI อัจฉริยะสำหรับงานบริหารและติดตามทวงถามหนี้แบบครบวงจร'
-        : 'AI-powered platform for intelligent debt collection and recovery.',
-      features: language === 'th'
-        ? [
-            'ระบบติดตามหนี้ขับเคลื่อนด้วย AI',
-            'เวิร์กโฟลว์การติดตามหนี้อัจฉริยะ',
-            'แดชบอร์ดวิเคราะห์ผลแบบเรียลไทม์',
-            'ระบบโทรติดต่ออัตโนมัติปริมาณสูง'
-          ]
-        : [
-            'AI-powered Debt Collection',
-            'Intelligent Collection Workflows',
-            'Real-time Analytics Dashboard',
-            'High-volume Call Automation'
-          ],
+      desc: t('about.prod_collecto_desc'),
+      features: [
+        t('about.prod_collecto_feat1'),
+        t('about.prod_collecto_feat2'),
+        t('about.prod_collecto_feat3'),
+        t('about.prod_collecto_feat4')
+      ],
       link: 'https://collexaknock.lovable.app'
     },
     {
       id: 'colinsight',
       name: 'Colinsight',
-      industry: language === 'th' ? 'การตรวจสอบคุณภาพ & ความสอดคล้อง' : 'Quality Assurance & Compliance',
+      industry: t('about.prod_colinsight_industry'),
       tagColor: '#4F46E5',
       icon: <ShieldCheck size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์ม SaaS ระดับสากลสำหรับตรวจสอบคุณภาพและควบคุมมาตรฐานการทำงานด้วย AI'
-        : 'Global SaaS platform for AI-powered collection quality assurance.',
-      features: language === 'th'
-        ? [
-            'ถอดเสียงและให้คะแนนการสนทนาด้วย AI',
-            'ประเมินคุณภาพตามนโยบายองค์กร',
-            'รองรับการทำงานร่วมกันหลายภาษา',
-            'รายงานความสอดคล้องพร้อมตรวจสอบ Audit'
-          ]
-        : [
-            'AI Call Transcription & Scoring',
-            'Policy-driven Quality Reviews',
-            'Multilingual Team Collaboration',
-            'Audit-ready Compliance Reports'
-          ],
+      desc: t('about.prod_colinsight_desc'),
+      features: [
+        t('about.prod_colinsight_feat1'),
+        t('about.prod_colinsight_feat2'),
+        t('about.prod_colinsight_feat3'),
+        t('about.prod_colinsight_feat4')
+      ],
       link: 'https://colinsight.com'
     },
     {
       id: 'gogo-service',
       name: 'Gogo Service',
-      industry: language === 'th' ? 'บริการลูกค้าทุกช่องทาง (Omnichannel)' : 'Omnichannel Customer Service',
+      industry: t('about.prod_gogo_industry'),
       tagColor: '#06B6D4',
       icon: <Headphones size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์มบริการลูกค้าด้วย AI สำหรับธุรกิจทุกขนาด'
-        : 'AI customer service platform for businesses of all sizes.',
-      features: language === 'th'
-        ? [
-            'เทมเพลตบริการลูกค้า AI พร้อมใช้งาน',
-            'ดูแลลูกค้าครอบคลุมทุกช่องทาง',
-            'เชื่อมต่อระบบคำสั่งซื้อและ CRM',
-            'จัดการง่ายโดยไม่ต้องเขียนโค้ด (No-code)'
-          ]
-        : [
-            'Ready-to-use AI Service Templates',
-            'Omnichannel Customer Support',
-            'Order & CRM Integration',
-            'Easy No-code Management'
-          ],
+      desc: t('about.prod_gogo_desc'),
+      features: [
+        t('about.prod_gogo_feat1'),
+        t('about.prod_gogo_feat2'),
+        t('about.prod_gogo_feat3'),
+        t('about.prod_gogo_feat4')
+      ],
       link: 'https://gogoservicegroup.lovable.app'
     },
     {
       id: 'staff-scheduling',
       name: 'Smart Staff Scheduling',
-      industry: language === 'th' ? 'การแพทย์ & จัดตารางเวรบุคลากร' : 'Healthcare & Hospital Workforce',
+      industry: t('about.prod_scheduling_industry'),
       tagColor: '#0D9488',
       icon: <CalendarCheck size={26} />,
-      desc: language === 'th'
-        ? 'ระบบจัดตารางเวรและบริหารกำลังคนอัจฉริยะสำหรับโรงพยาบาลและทีมสาธารณสุข'
-        : 'AI-powered workforce scheduling for hospitals and healthcare teams.',
-      features: language === 'th'
-        ? [
-            'จัดตารางเวรทำงานอัตโนมัติด้วย AI',
-            'ระบบแลกเวรด้วยตนเองผ่านมือถือ',
-            'กำหนดกฎการจัดเวรตามแผนก',
-            'จัดการตารางงานบุคลากรผ่านสมาร์ทโฟน'
-          ]
-        : [
-            'Intelligent Shift Scheduling',
-            'Self-service Shift Exchange',
-            'Department-based Scheduling Rules',
-            'Mobile Staff Management'
-          ],
+      desc: t('about.prod_scheduling_desc'),
+      features: [
+        t('about.prod_scheduling_feat1'),
+        t('about.prod_scheduling_feat2'),
+        t('about.prod_scheduling_feat3'),
+        t('about.prod_scheduling_feat4')
+      ],
       link: 'https://hospital-solution.lovable.app/shift-scheduling'
     },
     {
       id: 'vela',
       name: 'Vela',
-      industry: language === 'th' ? 'การแพทย์ & บริหารคลินิกอัจฉริยะ' : 'Healthcare & Clinic Management',
+      industry: t('about.prod_vela_industry'),
       tagColor: '#3B82F6',
       icon: <Stethoscope size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์มบริหารจัดการคลินิกอัจฉริยะ พร้อมระบบสื่อสารและดูแลคนไข้แบบอัตโนมัติ'
-        : 'AI-powered clinic management platform with automated patient engagement.',
-      features: language === 'th'
-        ? [
-            'บริหารจัดการคลินิกครบวงจร',
-            'โทรติดตามคนไข้อัตโนมัติด้วย AI',
-            'ระบบนัดหมายและจัดการคิวเข้ารับบริการ',
-            'ระบบต้อนรับและเวิร์กโฟลว์อัตโนมัติ'
-          ]
-        : [
-            'End-to-end Clinic Management',
-            'AI-powered Patient Calls',
-            'Appointment & Queue Management',
-            'Reception & Workflow Automation'
-          ],
+      desc: t('about.prod_vela_desc'),
+      features: [
+        t('about.prod_vela_feat1'),
+        t('about.prod_vela_feat2'),
+        t('about.prod_vela_feat3'),
+        t('about.prod_vela_feat4')
+      ],
       link: 'https://hospital-solution.lovable.app/vela'
     },
     {
       id: 'botnoikitchen',
       name: 'Botnoikitchen',
-      industry: language === 'th' ? 'ร้านอาหาร & ธุรกิจ F&B' : 'F&B & Restaurant Operations',
+      industry: t('about.prod_kitchen_industry'),
       tagColor: '#0284C7',
       icon: <UtensilsCrossed size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์ม AI สำหรับบริหารจัดการร้านอาหารและบริการลูกค้าหน้าร้าน'
-        : 'AI-powered platform for restaurant service and operations.',
-      features: language === 'th'
-        ? [
-            'ระบบสั่งอาหารและผู้ช่วย AI หน้าร้าน',
-            'แนะนำเมนูอาหารอัจฉริยะตามความชอบ',
-            'จัดการออเดอร์และเชื่อมต่อห้องครัว',
-            'ติดตามสถานะออเดอร์แบบเรียลไทม์'
-          ]
-        : [
-            'AI Ordering & Customer Assistance',
-            'Smart Menu Recommendations',
-            'Kitchen & Order Management',
-            'Real-time Order Tracking'
-          ],
+      desc: t('about.prod_kitchen_desc'),
+      features: [
+        t('about.prod_kitchen_feat1'),
+        t('about.prod_kitchen_feat2'),
+        t('about.prod_kitchen_feat3'),
+        t('about.prod_kitchen_feat4')
+      ],
       link: 'https://botnoikitchen.lovable.app'
     },
     {
       id: 'bokari',
       name: 'Bokari',
-      industry: language === 'th' ? 'การโรงแรม & การจองที่พัก' : 'Hospitality & Hotel Bookings',
+      industry: t('about.prod_bokari_industry'),
       tagColor: '#6366F1',
       icon: <Hotel size={26} />,
-      desc: language === 'th'
-        ? 'แพลตฟอร์ม AI สำหรับธุรกิจโรงแรมและที่พัก ดูแลการสื่อสารและการจองห้องพักอัตโนมัติ'
-        : 'AI-powered hospitality platform for automated guest communication and bookings.',
-      features: language === 'th'
-        ? [
-            'Voicebot & Chatbot ต้อนรับแขก 24/7',
-            'ระบบจองห้องพักอัตโนมัติครบวงจร',
-            'เชื่อมต่อระบบโรงแรม (PMS) เรียลไทม์',
-            'รองรับมากกว่า 40 ภาษาทั่วโลก'
-          ]
-        : [
-            '24/7 AI Voicebot & Chatbot',
-            'End-to-end Booking Automation',
-            'Real-time PMS Integration',
-            '40+ Language Support'
-          ],
+      desc: t('about.prod_bokari_desc'),
+      features: [
+        t('about.prod_bokari_feat1'),
+        t('about.prod_bokari_feat2'),
+        t('about.prod_bokari_feat3'),
+        t('about.prod_bokari_feat4')
+      ],
       link: 'https://bokariproject.vercel.app'
     }
   ];
@@ -1049,7 +941,7 @@ function About() {
                         {/* Features List with Checks */}
                         <div className="product-features-modern">
                           <span className="features-label">
-                            {language === 'th' ? 'คุณสมบัติเด่น:' : 'Key Capabilities:'}
+                            {t('about.prod_features_label')}
                           </span>
                           <ul className="features-list-items">
                             {product.features.map((feat, fIdx) => (
