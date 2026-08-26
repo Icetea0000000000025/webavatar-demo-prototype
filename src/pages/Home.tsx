@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
-  Users, Mic, Globe, Laptop,
+  Mic, Globe, Laptop,
   Building2, FileText, Layers, ArrowRight,
   ChevronDown
 } from 'lucide-react';
@@ -239,28 +239,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 35, scale: 0.95 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.7, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <SemiCircleGauge
-                value={5000}
-                suffix="+"
-                percentage={92}
-                label={t('home.stats_clients')}
-                icon={<Users className="size-5" />}
-                gradientId="gauge-clients"
-                colorStart="#0284c7"
-                colorEnd="#6366f1"
-                badgeBg="bg-sky-50 dark:bg-sky-950/60"
-                badgeText="text-sky-600 dark:text-sky-400"
-                badgeBorder="border border-sky-200/80 dark:border-sky-800/80"
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 35, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.7, delay: 0.18, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             >
               <SemiCircleGauge
                 value={100}

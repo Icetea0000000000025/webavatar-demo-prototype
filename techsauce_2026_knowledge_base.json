@@ -1,0 +1,1398 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Techsauce Global Summit 2026",
+    "dates": [
+      "2026-08-26",
+      "2026-08-27",
+      "2026-08-28"
+    ]
+  },
+  "usage_note": "Structured sections are curated from supplied screenshots. Names ending in ... are intentionally preserved as displayed. raw_source_text is OCR and must not be treated as verified facts without review.",
+  "workshops": [
+    {
+      "date": "2026-08-26",
+      "time": "10:00-12:00",
+      "title": "ChatGPT Work: AI Agents in Action",
+      "speakers": [
+        {
+          "name": "Tyler Ryu",
+          "role": "Applied AI Engineer",
+          "company": "OpenAI"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-26",
+      "time": "13:00-14:30",
+      "title": "Crossing the Pilot-to-Production Divide: An End-to-End Data Plane for AI Agents",
+      "speakers": [
+        {
+          "name": "Sweta Dwivedi",
+          "role": "Solutions Engineer",
+          "company": "Couchbase"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-26",
+      "time": "13:00-14:30",
+      "title": "ChatGPT Work for Reporters",
+      "speakers": [
+        {
+          "name": "Tyler Ryu",
+          "role": "Applied AI Engineer",
+          "company": "OpenAI"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Invitation only"
+    },
+    {
+      "date": "2026-08-26",
+      "time": "15:00-16:30",
+      "title": "From Data to Action: Building an AI-Powered Customer Engine with CDP",
+      "speakers": [
+        {
+          "name": "Wipawasu Tijapornchai",
+          "role": "Co-founder & CEO",
+          "company": "Omega Grit"
+        },
+        {
+          "name": "William Wilson",
+          "role": "Principal Presales Engineer, Product Specialist (Data)",
+          "company": "Twilio"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-26",
+      "time": "15:00-16:30",
+      "title": "The Death of the Technical Founder",
+      "speakers": [
+        {
+          "name": "Minesh Pore",
+          "role": "Co-founder & CEO",
+          "company": "SourcingGPT.ai"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "10:00-12:00",
+      "title": "The Agentic Enterprise: From Hybrid Foundations to AI-Powered Growth",
+      "speakers": [
+        {
+          "name": "Greg McCreanor",
+          "role": "Head of Partner Advisory",
+          "company": "Boomi"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "10:00-11:00",
+      "title": "Own the Answer: How Founders Get Found, Understood and Recommended by AI",
+      "speakers": [
+        {
+          "name": "Tilo Bonow",
+          "role": "Founder & CEO",
+          "company": "PIABO Communications"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "11:30-12:00",
+      "title": "Global Innovation District Alliance: Cross-Regional Collaboration for Next Generation Innovation Districts in Thailand",
+      "speakers": [],
+      "room": "Workshop Room B",
+      "access": "Invitation + Walk-in"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "12:00-12:30",
+      "title": "MOU Signing: CU x Techsauce*",
+      "speakers": [],
+      "room": "Workshop Room B",
+      "access": "Invitation + Walk-in"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "13:00-14:30",
+      "title": "Getting Ready for What Comes Next: A Gamified Futures Decision Lab",
+      "speakers": [
+        {
+          "name": "Martin Wezsky-Stalling",
+          "role": "Senior Advisor, CMU STEP",
+          "company": "Ennova Partners"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "13:00-14:30",
+      "title": "Fundraising 101: How to Raise Your First Round",
+      "speakers": [
+        {
+          "name": "Jirapat (Putter) Samarnsermsuk",
+          "role": "Investment Analyst",
+          "company": "A20 Ventures"
+        },
+        {
+          "name": "Parichat Poochana",
+          "role": "Junior Program Manager",
+          "company": "Venture Spark"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "15:00-16:30",
+      "title": "Create, Analyze, Automate. — Reimagining Work with Microsoft 365 Copilot",
+      "speakers": [
+        {
+          "name": "Chalermvate Pipatpanawong",
+          "role": "CEO",
+          "company": "9Expert Training"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-27",
+      "time": "15:00-17:00",
+      "title": "Tea Reception by British Embassy Bangkok",
+      "speakers": [],
+      "room": "Workshop Room A",
+      "access": "Invitation only"
+    },
+    {
+      "date": "2026-08-28",
+      "time": "10:00-12:00",
+      "title": "FinTech & Financial Services Career Advice (Conducted in Thai)",
+      "speakers": [
+        {
+          "name": "Kittiya (Kit) Phramornchan",
+          "role": "Marketing Manager",
+          "company": "Jobsdb by SEEK"
+        },
+        {
+          "name": "Pattar (Petchon) Phramchai",
+          "role": "Senior Marketing Manager",
+          "company": "Jobsdb by SEEK"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Invitation only"
+    },
+    {
+      "date": "2026-08-28",
+      "time": "13:00-14:30",
+      "title": "Canva Essentials: What's New and Practical Design Tips",
+      "speakers": [
+        {
+          "name": "Manita Pathanapongseangchai",
+          "role": "Country Marketing Lead",
+          "company": "Canva"
+        },
+        {
+          "name": "Nutthaphon Sumuphan",
+          "role": "Marketing Manager",
+          "company": "Canva"
+        },
+        {
+          "name": "Apichaya Tipmontien",
+          "role": "Founder & CEO",
+          "company": "AP Online Marketing | Modern Marketing & Brand Identity Specialist"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-28",
+      "time": "13:00-14:30",
+      "title": "Agentic Transformation: Building Your Intelligent Workplace with Gemini Enterprise",
+      "speakers": [
+        {
+          "name": "Wittawin Waiyaporn",
+          "role": "Customer Solution Consultant",
+          "company": "Google Cloud, Google"
+        }
+      ],
+      "room": "Workshop Room B",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-28",
+      "time": "15:00-16:30",
+      "title": "Social Media Landscape 2026 เจาะอนาคตของยุคใหม่ รู้ทันข่าวจริง (Conducted in Thai)",
+      "speakers": [
+        {
+          "name": "Sarun Bangsuwong",
+          "role": "Co-founder & CEO",
+          "company": "Uppercut Creative"
+        }
+      ],
+      "room": "Workshop Room A",
+      "access": "Reserve"
+    },
+    {
+      "date": "2026-08-28",
+      "time": "15:00-15:30",
+      "title": "Embodied Intelligence: The Key to Real-World Humanoid Applications",
+      "speakers": [],
+      "room": "Workshop Room B",
+      "access": "Walk-in only"
+    }
+  ],
+  "techsauce_awards": {
+    "title": "Techsauce Awards 2026",
+    "theme": "Set New Standards in The Race to The Next",
+    "nomination_period": "Now – 31 July 2026",
+    "announcement_date": "2026-08-27",
+    "venue": "Techsauce Global Summit 2026 (Main Stadium), Queen Sirikit National Convention Center (QSNCC), Bangkok, Thailand",
+    "categories": {
+      "People": [
+        "The Saucest Brand for Talent",
+        "The Saucest Workplace & Culture",
+        "The Saucest Chief People Officer of the Year"
+      ],
+      "Technology": [
+        "The Saucest Tech Solution",
+        "The Saucest Process Transformation",
+        "The Saucest Tech Collab",
+        "The Saucest Tech Scaleup",
+        "The Saucest Infrastructure Enabler",
+        "The Saucest Tech Visionary of the Year",
+        "The Saucest Woman in Tech",
+        "The Saucest Chief Technology Officer"
+      ],
+      "AI Transformation": [
+        "The Saucest AI-Driven Company",
+        "The Saucest AI Governance Leadership Award by ETDA"
+      ],
+      "ESG Impact": [
+        "The Saucest Brand for a Better Planet"
+      ],
+      "Entrepreneur": [
+        "The Saucest Venture",
+        "The Saucest Rising Star Entrepreneur",
+        "The Saucest Founder of the Year"
+      ],
+      "Business Building & Investment": [
+        "The Saucest Ecosystem Catalyst"
+      ]
+    }
+  },
+  "exhibitors": [
+    {
+      "company": "SORASO Hospitality Native",
+      "booth": "A34"
+    },
+    {
+      "company": "SOTI",
+      "booth": "B3-04"
+    },
+    {
+      "company": "SourceCode Co., Ltd.",
+      "booth": "15"
+    },
+    {
+      "company": "Sunsara AI",
+      "booth": "A69"
+    },
+    {
+      "company": "SUPER",
+      "booth": "C6"
+    },
+    {
+      "company": "Superteam Thailand",
+      "booth": "A3"
+    },
+    {
+      "company": "Synology",
+      "booth": "26"
+    },
+    {
+      "company": "SYSTRONICS CO.,LTD.",
+      "booth": "13"
+    },
+    {
+      "company": "Taiwan Startup Terrace",
+      "booth": "C2-12"
+    },
+    {
+      "company": "TechGALA / Central Japan",
+      "booth": "A71"
+    },
+    {
+      "company": "TED FUND",
+      "booth": "3"
+    },
+    {
+      "company": "Teknologi ASV Sdn Bhd",
+      "booth": "C3-04"
+    },
+    {
+      "company": "Thailand Convention and...",
+      "booth": "C5"
+    },
+    {
+      "company": "Thailand Post",
+      "booth": null
+    },
+    {
+      "company": "ThaiLLM",
+      "booth": "A77"
+    },
+    {
+      "company": "Thimphu TechPark Limited",
+      "booth": null
+    },
+    {
+      "company": "TIGERSOFT",
+      "booth": "A75"
+    },
+    {
+      "company": "TMES Company Limited",
+      "booth": "6"
+    },
+    {
+      "company": "Tomazz",
+      "booth": "A6"
+    },
+    {
+      "company": "Tonagena",
+      "booth": "B8-03"
+    },
+    {
+      "company": "Treasure AI",
+      "booth": "33"
+    },
+    {
+      "company": "TREEGAL",
+      "booth": "A61"
+    },
+    {
+      "company": "TRUE DIGITAL PARK",
+      "booth": "7"
+    },
+    {
+      "company": "TRUSTBOX FULFILLMENT",
+      "booth": "A24"
+    },
+    {
+      "company": "TurfSat",
+      "booth": "B8-02"
+    },
+    {
+      "company": "upGrad",
+      "booth": "A2"
+    },
+    {
+      "company": "Vaxion Korea Inc.",
+      "booth": "A23"
+    },
+    {
+      "company": "VectorFlux One by GitHouse",
+      "booth": "C2-10"
+    },
+    {
+      "company": "Vela Software",
+      "booth": "B3-05"
+    },
+    {
+      "company": "VOICERACX",
+      "booth": "12"
+    },
+    {
+      "company": "Whale AI",
+      "booth": "A69"
+    },
+    {
+      "company": "Wineworld",
+      "booth": "B9-04"
+    },
+    {
+      "company": "WIZ AI (THAILAND)_...",
+      "booth": "11"
+    },
+    {
+      "company": "X-DIGITAL @THAILAND",
+      "booth": "C3"
+    },
+    {
+      "company": "Xelware Pte Ltd",
+      "booth": "A60"
+    },
+    {
+      "company": "YDM",
+      "booth": "A53"
+    },
+    {
+      "company": "YenProtek AIOT",
+      "booth": "C2-11"
+    },
+    {
+      "company": "Yindii",
+      "booth": "B9-05"
+    },
+    {
+      "company": "Zanroo Thailand",
+      "booth": "A27"
+    },
+    {
+      "company": "Zipevent",
+      "booth": "38"
+    },
+    {
+      "company": "ZPS CORPORATION CO.,...",
+      "booth": "D3-04"
+    },
+    {
+      "company": "100X CO., LTD.",
+      "booth": "28"
+    },
+    {
+      "company": "2CS MANAGEMENT CO.,...",
+      "booth": "D3-09"
+    },
+    {
+      "company": "ActiveMedia Thailand",
+      "booth": "C1"
+    },
+    {
+      "company": "Advanced Genetics &...",
+      "booth": "B8-06"
+    },
+    {
+      "company": "Advanced iService",
+      "booth": "A42"
+    },
+    {
+      "company": "Advmeds Co., Ltd.",
+      "booth": "C2-01"
+    },
+    {
+      "company": "AgentID",
+      "booth": "B8-06"
+    },
+    {
+      "company": "AI & Intelligent Banking",
+      "booth": "31"
+    },
+    {
+      "company": "AI Rudder",
+      "booth": "A44"
+    },
+    {
+      "company": "AiStyle",
+      "booth": "C2-02"
+    },
+    {
+      "company": "AIVEN",
+      "booth": "A70"
+    },
+    {
+      "company": "AIYA",
+      "booth": "A17"
+    },
+    {
+      "company": "Alpha Reality",
+      "booth": "B9-03"
+    },
+    {
+      "company": "Altotech",
+      "booth": "A29"
+    },
+    {
+      "company": "Amity",
+      "booth": "C4"
+    },
+    {
+      "company": "ANOSUPO AI",
+      "booth": "A20"
+    },
+    {
+      "company": "Apollo Power",
+      "booth": "C2-03"
+    },
+    {
+      "company": "Apposter Inc.",
+      "booth": "C8-03"
+    },
+    {
+      "company": "Avision",
+      "booth": "A37"
+    },
+    {
+      "company": "B CUBE SOLUTION CO., LTD.",
+      "booth": "D3-03"
+    },
+    {
+      "company": "BAMBOO MEDICAL...",
+      "booth": "D3-07"
+    },
+    {
+      "company": "BBOX Limited",
+      "booth": "C2-04"
+    },
+    {
+      "company": "BDI",
+      "booth": null
+    },
+    {
+      "company": "BILLION PRIMA Sdn Bhd",
+      "booth": "C3-06"
+    },
+    {
+      "company": "BIPO",
+      "booth": "16"
+    },
+    {
+      "company": "BNV Solutions Co., Ltd",
+      "booth": "C8-06"
+    },
+    {
+      "company": "Bold Group Thailand",
+      "booth": "A79"
+    },
+    {
+      "company": "Boomi",
+      "booth": "B12"
+    },
+    {
+      "company": "BOTNOI GROUP",
+      "booth": "A63"
+    },
+    {
+      "company": "Braze",
+      "booth": "25"
+    },
+    {
+      "company": "BUZZEBEES",
+      "booth": "6"
+    },
+    {
+      "company": "Canadian Embassy",
+      "booth": "B3"
+    },
+    {
+      "company": "CANS CX CLOUD (Cloud...",
+      "booth": "A16"
+    },
+    {
+      "company": "CarbonClean Energy",
+      "booth": "C2-05"
+    },
+    {
+      "company": "CARBONMICE",
+      "booth": "C5-06"
+    },
+    {
+      "company": "Chess Money",
+      "booth": "A57"
+    },
+    {
+      "company": "ChillPay",
+      "booth": "A22"
+    },
+    {
+      "company": "Chon Works",
+      "booth": "A50"
+    },
+    {
+      "company": "Classiq Technologies",
+      "booth": "B7"
+    },
+    {
+      "company": "Cloud-TA",
+      "booth": "A35"
+    },
+    {
+      "company": "Cloud9Care4Kids",
+      "booth": null
+    },
+    {
+      "company": "Coastal Link",
+      "booth": "A19"
+    },
+    {
+      "company": "Convert Cake",
+      "booth": "A25"
+    },
+    {
+      "company": "Couchbase",
+      "booth": "24"
+    },
+    {
+      "company": "CRADLE",
+      "booth": "C3-07"
+    },
+    {
+      "company": "CU Innovation Hub",
+      "booth": null
+    },
+    {
+      "company": "Czech Republic",
+      "booth": "B8"
+    },
+    {
+      "company": "DataArc",
+      "booth": "A81"
+    },
+    {
+      "company": "Dawn",
+      "booth": "39"
+    },
+    {
+      "company": "DeeMoney",
+      "booth": "B2"
+    },
+    {
+      "company": "DEMETER ICT",
+      "booth": "9"
+    },
+    {
+      "company": "Dentsu FUTURE MANDALA",
+      "booth": "30"
+    },
+    {
+      "company": "Digital Economy Promotio...",
+      "booth": "D3"
+    },
+    {
+      "company": "DMolution Co., Ltd.",
+      "booth": "A7"
+    },
+    {
+      "company": "Doppio Tech",
+      "booth": "A45"
+    },
+    {
+      "company": "Dunita International Sdn...",
+      "booth": "C3-05"
+    },
+    {
+      "company": "Earthology Studio",
+      "booth": "30"
+    },
+    {
+      "company": "ECOTEN urban comfort",
+      "booth": "B8-01"
+    },
+    {
+      "company": "ENVIOSODY TECH CO., LTD.",
+      "booth": "D3-10"
+    },
+    {
+      "company": "ekoXense Enterprise Ltd.",
+      "booth": "C2-06"
+    },
+    {
+      "company": "EventTech.ai",
+      "booth": "C5-02"
+    },
+    {
+      "company": "EXPOPASS",
+      "booth": "C5-09"
+    },
+    {
+      "company": "FACTORIUM",
+      "booth": "A30"
+    },
+    {
+      "company": "Farben Information",
+      "booth": "A56"
+    },
+    {
+      "company": "FastShip",
+      "booth": "A18"
+    },
+    {
+      "company": "FASTWORK",
+      "booth": "A84"
+    },
+    {
+      "company": "Finnomena",
+      "booth": "B13"
+    },
+    {
+      "company": "FITSLOTH CO., LTD.",
+      "booth": "D3-06"
+    },
+    {
+      "company": "FOO-D CO., LTD.",
+      "booth": "D3-11"
+    },
+    {
+      "company": "Forward Insight",
+      "booth": "A11"
+    },
+    {
+      "company": "FOSTERBRIDGE",
+      "booth": "B5"
+    },
+    {
+      "company": "FUJIFILM Business...",
+      "booth": "8"
+    },
+    {
+      "company": "Galenio",
+      "booth": "B8-04"
+    },
+    {
+      "company": "General Magick",
+      "booth": "A68"
+    },
+    {
+      "company": "Godspeed IT Service Ltd.",
+      "booth": "C2-07"
+    },
+    {
+      "company": "Gowajee Co., Ltd",
+      "booth": "A5"
+    },
+    {
+      "company": "H LAB",
+      "booth": "A32"
+    },
+    {
+      "company": "HAPPY THREE CREATION_...",
+      "booth": "A48"
+    },
+    {
+      "company": "Healcerion Co., Ltd.",
+      "booth": "C8-06"
+    },
+    {
+      "company": "Hong Kong Cyberport",
+      "booth": "B9"
+    },
+    {
+      "company": "Hong Kong Trade_...",
+      "booth": "2"
+    },
+    {
+      "company": "HONG KONG TRADE_...",
+      "booth": "2"
+    },
+    {
+      "company": "HR Monster",
+      "booth": "A39"
+    },
+    {
+      "company": "HUAKUN AI COMPUTING...",
+      "booth": "A82"
+    },
+    {
+      "company": "HUMANICA",
+      "booth": "17"
+    },
+    {
+      "company": "Humansoft",
+      "booth": "A31"
+    },
+    {
+      "company": "HUMMIX",
+      "booth": "23"
+    },
+    {
+      "company": "Hyred Recruitment",
+      "booth": "A40"
+    },
+    {
+      "company": "ICONEXT Co., Ltd.",
+      "booth": "A38"
+    },
+    {
+      "company": "IDEVA CORPORATION CO.,...",
+      "booth": "A10"
+    },
+    {
+      "company": "IDYLLIAS CORPORATION_...",
+      "booth": "A9"
+    },
+    {
+      "company": "iFLYTEK Co., Ltd.",
+      "booth": "D1"
+    },
+    {
+      "company": "IN2IT Company Limited",
+      "booth": "A54"
+    },
+    {
+      "company": "Inflight co., ltd.",
+      "booth": "C5-04"
+    },
+    {
+      "company": "International Network...",
+      "booth": "A36"
+    },
+    {
+      "company": "Ipintra Networks Sdn Bhd",
+      "booth": "C3-05"
+    },
+    {
+      "company": "Japan Zone",
+      "booth": null
+    },
+    {
+      "company": "Jetder",
+      "booth": "A58"
+    },
+    {
+      "company": "Jetro (Japan Zone)",
+      "booth": null
+    },
+    {
+      "company": "JUBILANT TECH",
+      "booth": "A4"
+    },
+    {
+      "company": "KA Imaging - Represented...",
+      "booth": "B8-01"
+    },
+    {
+      "company": "Kalguroo",
+      "booth": "A8"
+    },
+    {
+      "company": "KO-EXPERIENCE",
+      "booth": "A72"
+    },
+    {
+      "company": "Kollective",
+      "booth": "C5-08"
+    },
+    {
+      "company": "Lango",
+      "booth": "B9-01"
+    },
+    {
+      "company": "Liberator Securities Co., Ltd.",
+      "booth": "B6"
+    },
+    {
+      "company": "Lightwork AI",
+      "booth": "A41"
+    },
+    {
+      "company": "Limitless Club",
+      "booth": "A73"
+    },
+    {
+      "company": "Lisa AI | by Brandface",
+      "booth": "A83"
+    },
+    {
+      "company": "LOBBYIST",
+      "booth": "A74"
+    },
+    {
+      "company": "LOOLOO TECHNOLOGY CO....",
+      "booth": "D3-01"
+    },
+    {
+      "company": "Loxley Orbit PCL.",
+      "booth": "4"
+    },
+    {
+      "company": "Magic Box Solutions",
+      "booth": "A52"
+    },
+    {
+      "company": "MALAYSIA",
+      "booth": "C3"
+    },
+    {
+      "company": "Manao Software Co., Ltd",
+      "booth": "A78"
+    },
+    {
+      "company": "MarkAny Inc",
+      "booth": "C8-01"
+    },
+    {
+      "company": "MarketingGuru",
+      "booth": "A26"
+    },
+    {
+      "company": "MATCHDAY HUB CO., LTD.",
+      "booth": "D3-12"
+    },
+    {
+      "company": "MEDIS HEALTH ACT CO.,...",
+      "booth": "D3-02"
+    },
+    {
+      "company": "Mek",
+      "booth": "C5-07"
+    },
+    {
+      "company": "Melaka Corp",
+      "booth": "C8-08"
+    },
+    {
+      "company": "Metro Systems Corporation",
+      "booth": "B4"
+    },
+    {
+      "company": "MIND INTERVIEW",
+      "booth": "C2-08"
+    },
+    {
+      "company": "Monti AI Voice Agent",
+      "booth": "A46"
+    },
+    {
+      "company": "My Mooban Co.,Ltd",
+      "booth": "C5-10"
+    },
+    {
+      "company": "NamoWebiz, Inc",
+      "booth": "C8-07"
+    },
+    {
+      "company": "National Telecom Public...",
+      "booth": "B1"
+    },
+    {
+      "company": "NECTEC",
+      "booth": "20"
+    },
+    {
+      "company": "Neversitup Co.,Ltd",
+      "booth": "A14"
+    },
+    {
+      "company": "Newbase Inc.",
+      "booth": "C8-02"
+    },
+    {
+      "company": "NEXTINFRA",
+      "booth": "A21"
+    },
+    {
+      "company": "NextT Asia Accelerator",
+      "booth": "1"
+    },
+    {
+      "company": "NIA",
+      "booth": "35"
+    },
+    {
+      "company": "Norrin Asia Ltd.",
+      "booth": "A62"
+    },
+    {
+      "company": "NPR Digital Partner",
+      "booth": "A13"
+    },
+    {
+      "company": "OLDK Health Delivery",
+      "booth": "A16"
+    },
+    {
+      "company": "Omega Grit x Twilio",
+      "booth": "22"
+    },
+    {
+      "company": "OpenIQ",
+      "booth": null
+    },
+    {
+      "company": "OpenText",
+      "booth": "B5-02"
+    },
+    {
+      "company": "Optiqb AI Technology Ltd.",
+      "booth": "C2-09"
+    },
+    {
+      "company": "Osome",
+      "booth": "18"
+    },
+    {
+      "company": "PACKWORKS CO., LTD.",
+      "booth": "D3-05"
+    },
+    {
+      "company": "PEOPLESIDER",
+      "booth": "A80"
+    },
+    {
+      "company": "PERCEPTRА",
+      "booth": "A47"
+    },
+    {
+      "company": "Placid (Thailand) Ltd.",
+      "booth": "A56"
+    },
+    {
+      "company": "PlayCurio Co., Ltd",
+      "booth": "C8-04"
+    },
+    {
+      "company": "Playtorium Solutions Publi...",
+      "booth": "10"
+    },
+    {
+      "company": "PLOOK",
+      "booth": "A65"
+    },
+    {
+      "company": "Pontosense – Represented...",
+      "booth": "B8-03"
+    },
+    {
+      "company": "Portonics Ltd",
+      "booth": "A51"
+    },
+    {
+      "company": "PRIMO",
+      "booth": "C5-01"
+    },
+    {
+      "company": "Prior Solution Co., Ltd.",
+      "booth": "A67"
+    },
+    {
+      "company": "Prosci",
+      "booth": "34"
+    },
+    {
+      "company": "Quick Transformation",
+      "booth": "32"
+    },
+    {
+      "company": "READY IDC",
+      "booth": "29"
+    },
+    {
+      "company": "RealSmart",
+      "booth": "37"
+    },
+    {
+      "company": "Rich Trees Consultancy Sd...",
+      "booth": "C3-02"
+    },
+    {
+      "company": "rudi (Datability)",
+      "booth": "C5-05"
+    },
+    {
+      "company": "SABLE: WIN WITH AI",
+      "booth": "C5-03"
+    },
+    {
+      "company": "Safira AI",
+      "booth": "A66"
+    },
+    {
+      "company": "SALES TOOLS",
+      "booth": "A33"
+    },
+    {
+      "company": "Sasin School of...",
+      "booth": "A1"
+    },
+    {
+      "company": "SCBX",
+      "booth": "D4"
+    },
+    {
+      "company": "Setsail",
+      "booth": "B9-02"
+    },
+    {
+      "company": "SEVEN PEAKS",
+      "booth": "36"
+    },
+    {
+      "company": "SFETNIC.AI",
+      "booth": "A64"
+    },
+    {
+      "company": "SHIPNITY",
+      "booth": "A12"
+    },
+    {
+      "company": "SIRISOFT",
+      "booth": "19"
+    },
+    {
+      "company": "Six Network",
+      "booth": "14"
+    },
+    {
+      "company": "SM Tech Global",
+      "booth": "21"
+    },
+    {
+      "company": "SMART FINDER CO., LTD.",
+      "booth": "D3-08"
+    },
+    {
+      "company": "SmartOptz Technology Sdn...",
+      "booth": "C3-01"
+    },
+    {
+      "company": "SMRJ (Japan Zone)",
+      "booth": null
+    },
+    {
+      "company": "So Idea",
+      "booth": null
+    }
+  ],
+  "raw_source_text": [
+    {
+      "source_image": "02e83920-ea86-4d25-97ec-bd780db92325.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "i i Se A\n4100x.c0,, 1D. 205 MANAGEMENT CO. ‘ActiveMedia Thailand ‘Advanced Genetics & Saar\naad Sao oe aa eal\n\nA ID © MAMBU A\ngent! lant\n\nDocloops.Al Thinkerfint| AkL\nAdvmeds Co., Ltd_ ‘AgentID: AI & Intelligent Banking “AI Rudder ‘AiStyle\nSen al ad as eed\n\n3 amity\naiven AltoTech\n‘AIVEN AWA ‘pha Reality Attotech ‘amity\nen om Soo = ees\na AA prouo b.ring orennayst\n\nANOSUPO Al arng etter ne\n‘ANOSUPO AT ‘Apollo Power ‘Apposter Inc. = B CUBE SOLUTION CO, LTD.\nas Cae eo a eo"
+    },
+    {
+      "source_image": "085ab922-f650-4254-b1d3-3cb9bcb42d1a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "y y... J\nt\nRealSmart gies\nSABLE\nREADY IDC ReatSmart Rich Trees Consultancy S4_ rudi (Databilty) ‘SABLE: WIN WITH AL\na = aS Seo eo\ny\nx 4\nSCB SET SAIL\nSeite AE SALES TOOLS ‘asin School of scx Setseit\naaa ons oa aad aa\nSIRISOFT x Nerwoek\n‘SEVEN PEAKS ‘SFETNIC AT sHIPNITY siRIsOFT Soc Network\naa rae = aa =\na OTEsgAusE AG TSHSAUSE\nSMTECH GLOBAL\nSH Tech Global ‘SMART FINDER CO.,LTD. ‘SmartOpte Technology Sdn 'SMR3 Glapan Zone) Soldea\na Sao am a at"
+    },
+    {
+      "source_image": "2c3b135b-032a-47d5-bc0a-7868fdc65aec.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Se ne ee ee ee\nQ= Q== @==\nFrye a a\n—\na\na\n@Q =~\na\nes pene meee —e\na a\nee\neee fee\nQE\n$160M Raised: Building a Global AI Player from Thailand\nQa. @\nOpenAl and MHESI: Accelerating Thailand's AI Innovators\naren a —\nQS Q ===\n——\nears —\na\n———————\nQs"
+    },
+    {
+      "source_image": "35fe76ff-a02d-4a8e-a1b8-95b95edb7633.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Health on the Wrist: What We Need to Look Out for in Human Performance Metrics (0 meee (Etats\n\nSere\n‘\\\n\n‘Regenerative Cell and Tissue Therapy for Skeletal Healthspan = =\nSS\n\n‘What Creates Value-based Longevity? Thailand, Singapore and the Future of Healthspan Financingin SEA — =——\n\n(Qe OB) Ene QS\n\n‘The Hospital as an Innovation Engine: Turning AL. Data and Medical Devices into Patient-Centric Healthspan —_— ——\naS\n\ncan We Huy More Healthy Years? Inside the Science and Business of Longevity (9 seems (Fp\n{Soa saa renga ere ag\n\n‘The End of One-Size-Fit-Al Personalizing Breast Cancer Care in Thailand: From Genomics to Ai-Enabled Care = =\nere hide ing tina ox som neti\n(Cictrnat ornare ye pa et ney a Ss,\nsate npr mangos 2. 2 man On apts\nie donachon tench Src Ortega apa Seats te a Engst Hapa\n\nRegulating the Future of Healthspan: From Safe Imovation to Thailand's Medical & Wellness Hub —_— ——\n\na ‘Serovar te elfen nnn Ta)\n\nDecoding the Human: The Rise of Healthspan Economy (9 seems (Fp\nSonesta ining"
+    },
+    {
+      "source_image": "39f0db3c-1e1a-4ed5-9080-0b45a5c26c59.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "11:00 - 11:30 Meet the Czech Startups: Leveraging Central European Innovation Hubs for Growth (2 veers (Dis\n11:38 - 12:00 Al from Hong Kong: Shaping the Future of Digital Transformation (2 mwmrtaisige [11 mechstowoane\n13:00 - 13:55 Ringside with Taiwan Startup Terrace (2 veers (Dis\naz00 - 14:25 Responsible AI Innovation Hackathon (2 mmmaistge | 2 ech showse\n24:30 - 14:45 SET AI Hackathon: Purposeful People Who Transform (2 veers (Dis\n2480-2630 | Global Solutions, Canadian Innovation eS ES\nCollaboration in Action: Global Tech Advocates (2 rmeraistce (tet stowenee\n16:30 - 16:45, Leste Sarma\n+70%0 ead at Global Tech Advocates & o ound tColaborative Working Solitons\n16:45 - 18:15, VENTURE SPARK Demo Day: Shaping the Next Generation of Thai Innovation* (2 mwmrtaisige [11 mechstowoane\nPlaybook of Southeast Asia's Self-reliance amid the Global Race (0 rinse\nha aie, enbaey of suedennsangok Deputy Tce Commision ia Pei South as Aid), ria Goverment ‘Senor ade an Investment Commissioner or Talndand ene, Autralan Trade and estment\n10:40 - 11:30 ‘commision Auta)\n‘cassandre Renevier ammo Pekart\nBY cere reescrtecen emtany ttarbours ‘Speci Abie, embesy of rand Bangin\n4)"
+    },
+    {
+      "source_image": "3a71a800-f90c-46c9-823d-1097923d35ad.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Unlocking Scalable SG : End-to-End Innovation from Local Roots to The World's 4st ReNyln x Resi (9 eee mete\nwetness rita chi em rpongmoon\nsean asso pomrseorersirnen cast (nr ern, xP tiga Tes \"err sce\nY=\nee ge\n‘The Missing Execution Layer: Why Corporates Will Decide What Scales Next Cee Gee\nBre cpntontn et nigga\nInside Japan's Innovation Playbook: A Real-World Look at Corporate Transformation Ce Ga\nsich aia rach One Lada rote omer\nri ver nt a: ence Rs Mi Ren Ensen [Satan capo ting tna Pe ke ne\nre) aoe tn\ncaniecin\nDesigning for the Market: The Playbook for Turning Deep Tech into Commercial Reality (Cen (Ean\not wy mechan} so Pa. pepe ara Dg aoe Mo Wome Herma PD.\nous aso eh erage rosin gee (Sncetouga aya cir fd So eth ghey Lovepennrenetenrrmst ret\ncha Yonge\n‘oor ttaegg tc ee\nA University's Model for Growing Startups (2 eee (tn\n‘at rt hp pmo A. rot sucha sng PD. ta gn\nSereumoamnnn carga Tic ane anon hel ne ont (Stcn token Spe pak bc eprint ea ay\nsear ine inet\n2 crescents\nTechnology Disrupting Sports: Lessons Every Industry Needs to Steal (8 eee teen\nTELS ct oon ce 0 ry Met\n| ‘Beyond Capital: Why We Turned a City Into Our Venture Lab (Cee (Pie |\nY > Vee"
+    },
+    {
+      "source_image": "3c75bb83-645b-49a2-accb-8f09c4604e97.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "a X-DIGITAL\nwiz.al Pin Xelware\nWINE fae\n— — 12 Ar CTHARLAND)_ 2 O1GTTAL @THATLAND a\ncas Sores eas res =n\ne\n— on = Zanro0 Thallnd a\naes aa roe a as\nae Tsangayce\nSree,\nSaray"
+    },
+    {
+      "source_image": "55ff33de-5213-45ab-85c1-7f22e99e033b.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "~~ AWARDS 2026: NOMINATIONS OPEN FOR TECH & INNOVATION LEADERS!\nSet New Standardsin The Race to The Net\n@ TECHSAUCE\n3 AB AWARDS Somes\n72026 ‘esa ne scree nan ey nn ee hen\ntaSauwuriu ayer ate type in perenne nh nes Tafa Th hn nth tng a wn Ge \"nn stn rh\nTechsauce Award 2026 eniaten soreness ad wee\nsaodadqu inalulad wiod ‘yar ene 6 an\n——J - People\n{restr ch ge mn tbe ne\na Technology\nsouauodoqins ERA) 1 Teste Tc Staton\nTéudoduil Fata Ine.\nbene ‘ness tcc\n= Ete ae\n{ne sucat lyatbe\n{eS Chere er\nCm\nae eae\n{sneer al tnemanc np any TDA\n“50 impact\n4 Eatrepreneur\n{thc mings topo\n{© Business Busing &Inventmant\nhe Shc pom iat\n‘yr rpino csonone as ing aint ghost cmp dg sti ory sh rs ons mens\n4 mnt po 3.2 2026\n3 homumcanre 2 hg anne\n4 Avec tl Sin 206 Dn sad Quen St hin Contin ne SNE ang aa\n‘Stor nonin nya psy NS\nSeca ehndey gat tesa eg bra gid"
+    },
+    {
+      "source_image": "5c1686be-413b-4d36-8c4d-ff52a911a1a8.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Unlocking Open Finance: Building Access to Comprehensive Financial Services and Protection (2 see scene (Be\n10:08 - 10:40 Dr. Pucktade Treeratpituk Takeshi Kito\nDirector, Banko! Talend ‘co-founder & £0, clobal ance & Technology Network open\n‘The Future Tech Talent: Building the Next-Gen Workforce Through Cross-Sector Collaboration (2 stm rrone (orc\nPrempreedee Kitiraltrakarn Duangporn Promon ‘Watt Siena\n20, Bresso Ne tanagingOrecor,Jobd by SEEK _Aasitant Managing rector ~ Planing & Performance Management, Communion & Sens,\n10:48 - 11:30 - ational 60\nHathairat Takaniphon ‘Vesupon Thankakan ‘Asst. Prof. Jessada Salathong, Ph.D.\n° ead of ruman Resouces Leming end Development vison Sankof Aye Sie Operating fo. Moto Thlnd tecture chllongtom Univesity\nRacing With a Blueprint: The Race to Next AI-Native Financial Services (2 sm arene (Frome\n11:38 - 12:00 ir Godrich\nrounder, matndunese\nBlockchain in Business: What's Actually Working in Asia (2 peeaee (3 rere\n13:00 - 13:40 Vachara Aemavat ‘Souphaphone (Nana) Souannavond ‘Chancharas (Oi) Chantarokarn\no-0£0, SixNebor Dep c£0 20 Bln Bank g (6208600 of Wie SPV 3 a Wie SV2, | Asctive\nHow Investors Actually Spend Their Money (2 sm arene (Frome\n13:45 - 14:10 Palida Artispong Janessa Carlos\nAng anaging Decor and viedo Porto Growth nd Investor Rlatioa, kung Finnoata Director of zoeyetme and Imation Progra, Tectshake\nUnspoken Facts of Global Payments: How Fintechs Changed the Banking Game (2 peeaee (3 rere\nass -14:35, -Aswin Phiaphongphanich\nam\n)\n| From Tokenized Deposits to Tokenized Investments: Building the Next Financial Market (2 sm arene (Frome |"
+    },
+    {
+      "source_image": "5c2c45f5-872f-4b79-b35b-642da7ed5c83.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘Building Tomorrow's Valu-Sased Care Insights from Australia and New Zealand = =\nRee\n\nHow Early Detection Turns from a Privilege into a Default — =——\n\n(9) Eras\n\nLongevity by Design: Why Healthspan Is the Highest-ROK Investment a Founder Can Make —_— ——\n\nre) Contin hie\n\n‘Breaking the Burnout Loop: Catch Stress Before Stress Catches You = =\n\na6:00-26:40 stom i erthermons\n\nee\n\nAor Growth: How Leaders Should Think About the Next Decade = ee\nBe ee ny\n\nTon EEE —_—\n\nA rence et\n\nWhy Your Best AI Never Left the Lab? = ex\n\n@ eS @ ===.\n\noo ec\nSonesta ining"
+    },
+    {
+      "source_image": "6ec5e4f2-d3c2-4668-b650-596fbdefb744.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "q ‘Geveral Manager, ASEAN, Cobere\n‘A\\case Study: Scaling with AI-What's Behind the Growth Strategies ofa 10,000 Million Baht Enterprise = =\nme\nATCase Study: A Billion Baht Legacy Business = eo\nco ‘creep isis Se penn\n7 tn er ttm ent\n‘ater tenen tengo bern ‘caput pages Dg nsengaasruar tata Sag spn spe\nsoao-s0s | OB) Soyee\na me. rot ai edn\nPeper {Stcyone Greece ty yf tc Ong ent\n‘Why Hong Kong? 5 Things Every Tech Founder Should Know = Es\n2 ead of Startup, vest\nQY Borer\nThe Techno Bridge: From Asia to Bertin —~- Ge\nA geen babe terion\n‘Beyond K:Pop: How Koren Builds Global Tech Champions (Cmca (Team\nQQ) EE temter"
+    },
+    {
+      "source_image": "7733f5d4-2db8-42cc-a0a2-a9c3aad916f8.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "The Chamber as Engine: How Malaysia Empowers Entrepreneurs and Deals with China Its Way (2 einstein\n16:00 - 16:25, Dato’ Loo’ Het Tyme David Lim\nDept resent. The costed chinese Chamba of Conmere and inuty flay ACCC) ‘chairmanct Al Commie, The Asoted Chinese Chamber of Commerce and Induty of Malaya\n‘pocer\nAdvancing Precision Diagnostics to Enable a National Rare Diseases Policy for Thailand (0 rinse\nProf. Vorasuk Shotelersuk, M.D. x Panadia Dhepakson ‘Somrasa Pongpermpruck:\nDex cee ene er Medal ero, Congr vty ‘eve Enper a hcl soenou, Deparment ede res, neyo ube eth ie Cpr i Dect aatzenes Thar\n16:30- 47:10\nDe. Kanapon (Tur) Phumatprapin, M.D.\n£0, Heathat Home\nFintech's Next Cycle : Is it Southeast Asia's Turn? (0 rinse\n17:10 17:30 ‘Jessa (Je) Sookthis\n‘cr 0, Fanomane\n‘The Marketplace War: What Thai SMEs Need to Win at Home (2 creer ena (1 Fomdrach summit\n‘Sorchote Ambhamwong De. Phurth Mitrsomwang wat Chatawittayakut\n‘£0, shop clobal commerce poset, Thaland Poet £0 igthun Wordvide\n10:40 - 21:25, 4 4\nThiraya (9 Thiranakanat\n@) co-eunds creer Dial\nNavigating the Next Wave of Food Innovations (2 creer ena (1 Fomdrach summit\n11:38 - 12:00 De Tunyawat (ud) Kasemsuwan, PRD. ‘Aust Unahaletaka\nhaiman ton ‘eo, Tara een\nThailand's FoodTech Blueprint: From Kitchen of the World to Innovation Hub of Asia (C eenee (renee sie\n13:00 - 43:10 x. Krithpaka Boonfueng\n‘acitve Decor National moran Agency ube Orgsisnson -NIA"
+    },
+    {
+      "source_image": "77a4b3af-e6c5-4f1b-a229-c368c0775a61.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "?\n. BAe? a SHIP\nEventTech “ACTORIUM,\nsooth 05-02 oot: 5-09 oot: 90 oot A Soot a8\nBi tats Bi tats Bi tats\nFastwork FASTWORK Finnomena FITSLOTH CO.,LTD. FO0-DCO., LTD.\noot oot: oot B23 oot: 08 06 soot 09-38\nFOSTER ‘\nB Galenfo [ + J\noot: aaa oot oot: Booth 28-08 soot 8\n]\nGodspeed SS ”\nIT service}\nGodspeed IT service Ltd. Gowajee Co., Lid HUB HAPPY THREE CREATION Healcerion Co.,Ltd.\noot: 2-07 oot A oot: 2 oot sooth 68-05"
+    },
+    {
+      "source_image": "820e49d6-8117-42fe-b094-12087eb611ca.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Feeding the Future with AgriTech: How AI Is Rewiring the Food Supply Chain SE |\n11:00 - 11:20 “Teerapong Wichayaruangrom\nDirector -Date 8, AKONS\n‘Transforming Business Software with Microsoft Cloud & AI Platforms (Conducted in Thai) (Cmte (Ee\n9) Parinya Sinkuakut a ‘Juntima Joondang, a ‘Sutatpan (Aim) Vindubrahmanakla\n‘senor Peter alton Sales Manager -Cloud& AL ltform,mcroeo Thaland ‘rnegone Len, coromela ‘hie Technology Ofer PEAK account.\n11:28 - 12:10\nNaruepon Chansawang\n‘loud solutions Development Spee, Ingram Mio (Thaand)\ny\nAl's Entering the Real World: What We Need to Know about World Models and Physical AI (Cmte (Ee\n13:00 - 13:20 ‘Tipatat Chennavasin\nener arnt, The venir asity Fund\nInside Global AI Deal Flow: Where Venture Capital Is Really Moving (tne eG.\n13:25 - 13:45, Prin (Pi) Vichakal\n0) ee\nFrom AI Pilots to Real Impact: How Do We Scale AI Beyond Experimentation? (Cmte (Ee\noie Decor National Electronic and Compute Tecnology Canter NECTEC) ceo, sente Pus ‘cofounder 20,9\n13:50 - 14:35,\n@ Bibie Chanumya Rayemas\n‘Aarne pecalit- ASEAN Lend\nAI with Accountability: Building Trust in the Intelligent Enterprise (Cmte (Ee\n14:40 - 15:00 Chatchawat Asawarakwong\n‘Yes Chaimnan & Group hi Infomation Sei offox, KASIKORNeusinese-Techvology Group OTC)"
+    },
+    {
+      "source_image": "854640c1-2581-4ca5-b6a4-499f95505e4a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "cuberpictt\ngO eTpOr HK Monster\nSERRE\nHong Kong Cyberport Hong Kong Trede— HONG KONG TRADE HR Monster HUAKUN AI COMPUTING\nscone? ota esta se A28 soot aga\nAG ISSHSAUSE HUM hyred 2 @NEXTEA\n_\nHUMANICA Humansoft unex Hyred Recruitment 1CONEXTCo, Lid.\nseota7 scot Ask soot 28 ote sents\n= Nai |\nTDEVA CORPORATION CO.,— IDYLIAS CORPORATION UTTEK Co, Ltd. IN2TT Company Limited Inflight co. th.\nseotraz0 seata9 sot o2 scot ase seonce-o8\nITNS | BTESHSAUSE s GUSHSAUSE\nInternational Network _ Tpinra Networks Sdn Bhd ‘Japan Zone etaer ‘Jetro (lapan Zone)\nsot n38 sotne2-08 pes eo ns8 ath"
+    },
+    {
+      "source_image": "87483490-8267-4a4d-bb16-e60516ba3074.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "From Tokenized Deposits to Tokenized Investments: Building the Next Financial Market (2 sm arene (Frome\n14:40 - 15:05, -Athit Stumporn Prim Suicsrikaw\nead of Dgtal Chana Sam Commer en 3C=) rounder of rim ist, ATPLUS GA0UP\nAI Fintech Investment: New Money or Just Relabeled? (2 peeaee (3 rere\nHuong TTran Prof Dr Han Ko, PRD. Jasdeep Maan\nFounder & Managing Pre Sigma Vertes President of USAKO Group & Commissioner t conomic Development Commission USA ‘SerorImestment Manage ob Farmers\n15:10 - 15:55,\nPrim Suksrikaw\nrounder of rim ist, ATPLUS GA0UP\nse20-s730 | @hla-D Sion tr rie Domo Day — o-\nWhat If Your Next Employee Isn't Human? Are You Ready to Hire One? (metres Ge\n10:20 - 10:40 kiya Yamamoto\nrounder of Robot, | Founder & CEO of arr Ege | Represents Oretr a Bins AZ\n‘Nbancament Orion\n‘The Next Generation of AI-Native SaaS Products (Cmte (Ee\n10:40 - 11:00 Roy Wekim\nM ciecio chanel and lianoe, i, com\nFeeding the Future with AgriTech: How AI Is Rewiring the Food Supply Chain (tne eG.\n11:00 - 11:20 “Teerapong Wichayaruangrom\nDirector -Date 8, AKONS\n‘Transforming Business Software with Microsoft Cloud & AI Platforms (Conducted in Thai) (Cmte (Ee\nParinya Sinkuakut a ‘Juntima Joondang, a ‘Sutatpan (Ai Vindubrahmanakala\n‘senor Peter alton Sales Manager -Cloud& AL ltform,mcroeo Thaland ‘rnegone Len, coromela ‘hie Technology Ofer PEAK account.\n11:25 - 12:10 )\nhsauce.co/speaker/info?id=6a33a0ee2a7e6e99a67bfb13"
+    },
+    {
+      "source_image": "89ea3f7d-fa02-4a04-b4f6-3166483f5c33.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "A —\nTECHSAUCE GLOBAL SUMMIT 2026 za —\nWORKSHOP vA\n—\nFnToch& Financial Serio Creer Advice (Conducta in Thai) |\noo | Qs Qa\n‘Cana Enea: What's New ad Practical Design Tipe qe =.\nvom |Q = a=\nQ EE\nAgente Tanaformatio: Busing Your Intligam Workplace wih Gemini Enterprise ea =="
+    },
+    {
+      "source_image": "964dddf5-4619-4726-8566-719c2bf0d23b.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Keynote by Wonderful Thailand” ou\nrf) San\nAin Entertainment: Where the Blockbusters Are Really Being Made eo\ns2:00-3528 =o ‘nts chan sone\nex a=\nHow “At for Enterprise” Can Break Pilot Trap (ome\nstaat sept tat ————\n\nSSeS SSS es See eS\n\net goat\n\nae\nTech Evolves Exponentially, But Humans Don't: How Do We Resill at Cloud Speed? =\na Seems\n‘Te Always-On Economy: What happens When AI Stops Waiting fr Prompts ome\na=...\n[oR ES =\ne pee\n‘The AL-First Bank: From Strategy to Execution [4s\nMm a (\\ == @ Sa\n‘The Sovereign Enterprise: What an A-Native Gusiness Is Actually Worth =\n6) Selo"
+    },
+    {
+      "source_image": "9a36e800-155f-4e72-9261-8eca7d4ed089.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "sO TESHAUSE\n\" omegagrit\nMineERP Ah\nNPR Digital Partner OLDK Health Delivery omega Gritx Two pent Opentext\ntrot 23 toot ts tooth 22 oon teeth 3-02\nCorin ) BTESHSAUSE\nrt ' peoplesider PERCEPTRA\n\\ “ A\nOptiqb AI Technology Ltd_ Osome PACKWORKS CO., LTD. PERCEPTRA\ntoot 62-09 tooth 8 tot 03-05 eo: 190 tot: 7\nSS\nle ezecnsaucs\nplayer\nPlacid (Thailand) Ld. PlayCurio Co.,Ltd Playtorium Solutions Pubi_ LOOK Pontosense-— Represented.\noot ss trot e204 toot 30 rot as tec es-08\nPortonics Ltd Primo Prior Solution Co, Ltd. Prosei (Quick Transformation\ntothe toot cs -02 toot 07 ooo toot 32"
+    },
+    {
+      "source_image": "9d4f3ecf-3a40-4614-8a4f-28f87508267d.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Playbook of Southeast Asia's Self-reliance amid the Global Race (0 rinse\n‘Chara, embaseofsuedeninsanghok Deputy Tce Commision ia Pei South as Aid), ria Goverment ‘Senor ade an Investment Commissioner or Talndand ene, Autralan Trade and estment\n10:40 - 11:30 ‘commision Auta)\n‘casandre Renevier Kimmo Peart\nBY cere reescrtecen emtany ttarbours ‘Speci Abie, embesy of rand Bangin\na\nThe Chip Race: Decoupling, Energy, and the New Global Order (onsen\n11:35 - 11:55 Colley Heung\nAss.\n‘The Future is Designed: Foresee Your Business's Next Leap - Looking toward the 2030s through Dentsu FUTURE MANDALA. (2 mein sian\n13:00 - 13:30 Oranuch (Mimee) Lerdsuwanki Joey Chow ‘Chaowarat Yongfiranon\nceo, Tetenuoe ead of Srategy and consulting Dentey Talend\nHealthspan Edge and the Roadmap to Global Medical Hub (onsen\n13:30 - 14:00 Prof. De. Yongyut Sivatanauksorn, M.D, PRD.\na\n‘Shaping The NEXT Frontier of the Global Event Economy (2 mein sian\n14:00 - 14:40 Koblaun Wattanavrangil De. Supawan Teerarat, PLD. ‘Chaowarat Yongiiranon\n‘Chaperon oF KASIKORNEAMK, 8 Vie Chairoman of hl Chamber of Commarea Presider, Tel Converton and Existon aurea (CEE)\no\n‘The AI Execution Paradox: Everyone has AI. Fewer have results (onsen\n14:45 - 15:05, cores\n&\\ ea\n(lll LL LL SSS -"
+    },
+    {
+      "source_image": "a9c5cae7-762a-4b8e-82e8-ea142a621796.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "ise 2\noma Ve rUneGal\nRUSTBOX} “ee\n‘Treasure AL TREEGAL ‘TRUE DIGITAL PARK “TRUSTBOX FULFILLMENT “Turtsat\ntots trot oot? totic 28 tot 8-02\n. FiGitHouse AG TSHSAUSE\ntrigr VOICERAcx\nwnGrad \\Vaxion Korea Ine. \\VectorFiux One by GitHouse Vela Software ‘vorcenacx\ntot trot 23 boot c2-10 ot 3-05 tothe\na X-DIGITAL\nC wiz.al Nay Xelware\nWate AL Wineworta WIZ AL THAILAND) — X-DIGITAL @THAILAND Xetware Pte Ltd\ntrot: 09 trot 99-08 tooth 2 twoticcs oth 0\nmn e\nYom ‘YenProtek AIOT Ying Zanroo Thailand Zipevent\nEee Cte Sino ae as"
+    },
+    {
+      "source_image": "aa65aec7-3c18-4e59-bf72-66c01750931f.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "oma Breen ss\nASO\nNATIVE SOURCECODE SUNSARA\n‘SORASO Hospitality Native son SourceCode Co, Lid. Sonsara AL SUPER\narea aaa =a oe =s\nTech\nlogy GALA\n“ 2026 ;AEYOND\n‘Superteam Thailand ‘Synology SYSTRONICS CO.,LTD. Taiwan Startup Terrace ‘TechGALA / Central Japan\nas panes oa ea a\nao TECHS \\sight omnes\nfo}\nLLM\n‘ep FUND “Teknologs ASV Sdn Bhd Tee ‘Thaitand Post Trait\n=a es = = =o\nTOMAZZ\n&Z TMES\n“Thimphu TechPark Limited igeRsoFt ‘THES Company Limited Tomazz —\n= ae a = SSS"
+    },
+    {
+      "source_image": "b13b008d-aae1-4ae1-91c8-3db8cd7e9c3c.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘TECHSAUCE GLOBAL SUMMIT 2026 — =f s.eeawr\\ a\nWORKSHOP. A\n‘Getting Ready for What Comes Next: A Gamifed Futures Decision La e &=.\n{=\nrs\n3300-1420 a spat Pee Samco (A) =\n= =\n‘create. Anatyze. Automate. — Reimagining Work with Micron 265 Copitot e ==.\n- S"
+    },
+    {
+      "source_image": "b5526667-dfca-4701-abdf-9f9c633fc55b.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Entrepreneur Branding: Your First Competitive Advantage (Cees (ate\n\n@ ear tn oe nent\n\nWhy Profitable Is Beating Fast in Southeast Asia's Consumer Race (0 Geemtrne [1 Me eeepc\neen He\n\nAe\n\nHow to Built a Blin Baht Brand Before Turning 35 (Conducted in Tha) (9 eens (ee\ncasnme tens nvconocen\n\nor sesiratngie\nSewcracerasonone\n\n2nd Gen to 3rd Gen: When Al Enters @70 Year Old Family Business (Condicted in Tha) (8 ets 1 Hettee\n\nco ‘scarcer eager iS tn é ecrener eee tn “~ Sonora coomon ce\n\nThe KEEPS Story: Move Like a Startup, Build Like a Brand (Conducted in Thai) 8 ete 1 Mette\n\nRY Soe ‘Rare ee once ee tiny Fanta Otte\n, 9 cncictereansnan\n\nHow 1 Built a Milion Business before 25 (Conducted in Tha) 8 ete 1 Mette\n\ncamonnae ‘erect onc nn sy Fane tae on Cntr\n9 nce ious\n4690-3780 | 4 Accelerate Demo Day 2026 e-\nHHealthspan Summit Opening Speech S| -S-\n~A ncaa a\n| eatth on the Wrist: What We Need to Look Out for in Human Performance Metrics =—_ ="
+    },
+    {
+      "source_image": "bc4845db-c760-4b3c-9877-39609b909860.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘What Makes a Startup Ecosystem Thrive? Lessons from Taiwan's Startup Journey\nasa0-23:20 =o\na omega TA\n‘Where to Launch in SEA: Practical Guide by ATLAS Alliance\nToston an cme ane tomar tenet pene ae\n1320-1200 | ORM Da\nerie pessrupdiereroey\n34:00-14:55 | irparinor 1 Pitching (Showenee)\n100-700 | Startup World Cup Southeast Asia Finale 2026"
+    },
+    {
+      "source_image": "cb3d2410-4feb-4f35-b2d1-36c1eabe1b27.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "KJ i a0 2 ex Cs\nJUBILANT TECH KA Imaging - Represented _ Kalguroo KO-EXPERIENCE Kollective\nBoot a sooth 89-08 oot: 8 oot v2 sooth 65-08\nBi tats\nLiberator\ntango Liberator Securities Co, Ltd. Lightwork AL Limitless Club lisa AI | by Brandface\nsooth 89-08 oot oot Boot: a8 oot\ncis Bi tats\nMAGICBOX\nSOLUTIONS\nLoBEYLIST 100100 TECHNOLOGY CO Loxley Orbit PCL. Magic Box Solutions MALAYSIA\noot: a4 soot 09-08 oot oot 2 oot 68\n_ _ i i\nMarkotingouru\nvanao Software Co.,Ltd MarkAny Inc MarketingGuru MATCHDAY HUB CO., LTD. (MEDIS HEALTH ACT CO,\n-coth: ATE ‘pooth: c5 02. ‘eooth: Az6- ‘pooth: 03 32 ‘pooth: DS 02"
+    },
+    {
+      "source_image": "d1541e7b-7e41-4743-924c-c8ecd2c2085a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "a Home Programs ¥ Exhibitions V Startup world cup 2026 Techsauce Amants 2026 Amendees ¥ FAQ\nTECHSAUCE GLOBAL SUMMIT 2026\nINNO\na Sal a me - =a] -e = oo o- <= = ous\ncrema Bigirat Hue + eS eee 3,200, — Krungeri ng meneeToR oe Sonnet\n=} = =. aaa eae ee Be ROCKSTARS ee\nCe ga =: SS eee 2 ae es =SSeon\nie an ie on — = = Ed | Became E\nSS ay aa setceF nmovaTOR GOH scAcon ve EvoND 002: ROE psc 205s CONNECT CFL MATH\n= | a = | a = | a = | a\nry. a Show Teciwode Al Networking — GALA = pagal ost\nee Labs Ley ASKS «=, ( FLsogials ae = AUCH\nee Om B Sse Qa 2026 ag” Sk Veer CALLING TECHSAU\n200,000 jn, = ™y 7a = A 3 = etal = |= apa ALL THAI STARTUPS! _ srcavce Abe\nSeere 3 — _— ar? a) omnes ie “ = we See\n— — = z = —\n(CPAXTRA. & HUMANICA = 5 - ene A SRE - “ routes \"\ncpt tenes =3 cpt tenes =3 == ptt ede os nt tenes"
+    },
+    {
+      "source_image": "d23972d5-fbea-4186-a2dc-8be40db18cae.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "i ES a B10\n‘BAMBOO MEDICAL BOX Limited Bor BILLION PRIMA San Bhd op\nSao es = eo ata\nBOLD braze!\nGROUP\nBNV Solutions Co., Lid ‘Bold Group Thailand ra] raze\nen aa sen Bormor cRour =\ns®) cotton\nBUZZEBEES CANS\n‘BUZZEBEES Canadian Embassy CANS CX CLOUD (Cloud_ ‘carbonClean Energy CARBONMICE\n‘Booth: 6 Booth: 83. Booth: A16 ‘Booth: C2-05 ‘Booth: 65-06.\nChillPay\nNI\n1\ny ee ‘Chon Works Classiq Technologies cloud-TA\n‘Booth: AB Booth: AZ2 ‘Booth: ABO ‘Booth: B7 Booth: AS5"
+    },
+    {
+      "source_image": "d6147998-b19c-4ffa-9441-507faf11d94a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "cloudpcareakids Coes Link Convert cake — cape\n= a or =a rae\nCU innovation Hub czech Republic Dataare Dawn Deettoney\n= =a a = ==\nes ezecnsaucs depa doppio\npeweven ict Dentsu FUTURE MANDALA Digtal Economy Promotio Motion Co, Ld. es\n=a = rad aed are\nree — _ — se :\nA\nDunia Intemational Sn Earthology Studio ECOTEN urban comfort DvIsony TECH CO, LTD. ctoxense Enterprise ltd,\n‘Booth: C305 ‘Booth: 30 ‘Booth: BS - 02. ‘Booth: 03-10 ‘Booth: C2-06 A"
+    },
+    {
+      "source_image": "d9beb49e-c02e-4104-b4b7-681d3e324f4a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Thailand's FoodTech Blueprint: From Kitchen of the World to Innovation Hub of Asia (C eenee (renee sie\n13:00 - 43:10 x. Krithpaka Boonfueng\n‘acitve Decor National moran Agency ube Orgsisnson -NIA\nFoodTech as National Policy, The Wellness Economy and Thailand's Next Economic Engine (2 creer ena (1 Fomdrach summit\n13:10 - 13:20 x Sriyada Patimaphan\nAber tote of ihe duction Sine, Research and mavation\nConsumer-Centric Innovation to Impact: Start-up Agility Meets FMCG Scale (C eenee (renee sie\n13:30- 13:50 ak Chand\n‘haiman and c£0, Nasi Indoctina\nas:s0-4600 | SPACE-F Batch 7 Demo Day (Bement\nFrom Proof of Concept to Market — What SPACE-F Partners Are Actually Building With Startups (C eenee (renee sie\n‘Chris Aurand, PhD. Rahul Colac De Allan Lim\n‘Senor Deparment Mangge Group Dcover & Deveopmet Thi Union Group 20, raver end Nave ead of pen Inoraton, Neste RAD Center\n16:00 - 16:40\nVictor Chen ‘Sean Mak\n£0, oodand Venture Managing Deco, inowate 360 Talend\nSPACE-F Batch 7 Programme Recap & Award Ceremony (Cenc (rents sie\n16:40 - 17:00 ‘Assoc. Prof. Pasit Pakawatpanurut, PhD.\nDepty Dean forReserc nd Inova, Fc of Since, Mahidol Unversity\nFerac Sing Oponing Kyat = =\n10:00 - 10:05, a “Takeshi Kito\n‘co-founder & £0, clobal ance & Technology Network open _"
+    },
+    {
+      "source_image": "db2c43b7-06cd-4996-8b58-2fc799ed0e24.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘The Race to the NEXT... (2 mein sian\n09:00 - 09:30 Oranuch (Mimee) Lerdsuwanki\ncro, Tetentoe\nPrime Minister's Digital Awards (0 rinse\n09:35 - 10:00 Cheichanok Chidehob\ninte of gt Economy and Soe, Thalnd\n‘THE NEXT THAILAND (Virtual Session) (2 mein sian\n10:10 - 10:15, Prof. De. Yodehanan Wongsawat\nDeputy Prime ine, & itr fight Edvstin Sane, Reserch nd InorationtThaland\nAI Native: the Mandate to Transform Your Company (Virtual Session) (0 rinse\n10:15 - 10:35, De. Kai-Fu Lee\nrounder & £0 of 02. | Chaiman of inovitonVtrea\nNew Horizons for Thailand's Economy: Connecting Technology to Growth (2 mein sian\n10:40 - 10:55, De. Santitar Sathirathai\nes intr fr nanos Minty finan of ald\nOlympics of Finance: Synergy for the New Frontier of Growth (0 rinse\n‘es inate for ance, Mit finance of Talnd ‘eo, KASIKORNANK ‘perations Manager, Word ark\n11:00 - 11:45, y\nsine Neve chor nd Jour, Tha Newe Network FNM)"
+    },
+    {
+      "source_image": "dfe09cf6-a1f3-40d6-a7eb-8cd37a6ca248.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "_ =| i i\nManao Software Co, td MarkAny Inc MarketingGure MATCHDAY HUB CO., LTD. MEDIS HEALTH ACT CO.\n= fea a aan eral\n\nS gendiaai sje\nLIBRA\n\nMek Melaka Com ee Se ‘MIND INTERVIEW Monti AL Voice Agent\n\noo aera) a Sas ares\n\nee a WV\n\npeverd\n\nMy Mooban Co.,Ltd NamoWebiz, Inc National Telecom Public_ ‘(NECTEC Neversitup Co.Ltd\n\nas are =a a5 =\n\nNexil AG TSSHSAUSE |\nAsia\n\nrs NEXTINERA Next Asia Accelerator a Norin Asia Ltd.\n\nes ara = so aera"
+    },
+    {
+      "source_image": "e743a229-b346-4abf-8f6e-1c7ba748aa43.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "-CHSAUCE GLOBAL SUMMIT 2026\n' a\nWORKSHOP —ailal\nCChatGPT Work: AI Agents in Action (evens ([O mentees\na Poe\nCrossing the Pilot-to-Producton Divide: An End-to-End Data Plane for At Agents ee ==\n@) Sars gen One\nchatcPT Work for Reporters ne\na rn ge Opt\nFrom Data to Action: Building an Ai-Powered Customer Engine with CDP ee ==\na Rees @ eee\n“The Death ofthe Technical Founder ee =\nee\nty"
+    },
+    {
+      "source_image": "ef5f95f0-dd66-4654-8952-e0c2cbf6c303.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘From India to the World: India as a Global Launchpad for Tech & Innovation\nAQ.\nKansai x Thailand: Creating the Future Through DeepTech Collaboration\nq==-—-—-\n32:00- 15:20 | Emtrpise Labs World Student Pitch (ASEAN Edition | empowered by CREDO, CPAKTRA,& Humana\n2539-4630 | MIPAXCDIGITAL CONTENTS@THAILAND SHOWCASE : AX Innovation Powered by Korea”\nInnovating Business Events: Thailand's Digital Playbook\n(7) Be\n—\nEE —- — —\n(Qe MY IT as\nwe\na\neae a\n‘ee\na\nere\nee ee ee\nan."
+    },
+    {
+      "source_image": "f0550c9d-f14a-4ab6-b314-96fdbc447252.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "aaa n nea ena nse een EI OS eee\n15:10 - 15:30 ‘anit Chearavanont ‘Chaowarat Yoniranon\ncroup hit Wholenle Bins fea CP ACTRA\nDecoding The NEXT Investment: What Global Companies Really Want (onsen\nsesso 16:10 ‘chroma, int Foreign Chambers of Commerce in Thland FCT) ‘es Chiman The Federation of Thai indstie, Deparment of Eonomicand Academic Aaa ‘asta Secretary General astm Ezonac Corda ofe (0)\n30-461 re\nammo Pekart\n‘Speci Abie, embesy of rand Bangin\nMarisa Chearavanont: The New Models for Philanthropy (onsen\n16:15 - 16:35, Marisa Chearavanont\nQD sesstsivortosanercsiman ofchacen oghand rue | una &chpeeof ca crs\n‘eat rret Poundaone\n‘T-Beauty Trends: The Beauty Reset, and What's Next for Global Expansion (Conducted in Thai) ([@ eremn arena (1) ment Eneprenear\n10:30- 11:25, awit Hanutsaha Warita Suebphanwone ‘Sarun Bangiusonjit\n(£0, sichand Mision To The Hoon rounder &c£0, hada croup ‘co-founder & £0, Uppereu Creatine\nFrom Zero to Billion: Scaling Brands Through Live Commerce (Conducted in Thai) (B eeennrene (1 eeneprneer\n11:30 - 12:00 Ploypatcha Hanjut ‘Sarun Banghusonit\nf Founder 820, eats ‘co-founder & £0, Uppereu Creatine\nHow a Thai Founder Raised Silicon Valley Money for Robots ([@ eremn arena (1) ment Eneprenear\n13:00 - 13:20 “Tanachart (lames) Kujareevanich Bibie Chanunya Rayamas\n£0, vison ‘Aarne pecalit- ASEAN Lend"
+    },
+    {
+      "source_image": "f0f23560-932d-40c1-a8bc-f175d6aad22a.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "‘The Commercialization Gap: What Founders, Investors, and Accelerators Must Fix Together ee\nre po ss pao ——\nee ee en See aes\na SSS ens\n\nGlobal, Fast, Human: The Founders Playbook forthe Next Decade o— Gee\n\n00-1259 —— a pt re. it Tope P\n\nQ ==. a= aes\n\na Se =— Eee\n\n9) SSeS\n\nBeyond Loyalty: Building a Truly Customer-Centric Organization = Gee\nee ‘Stnmecgeneome\n\n‘Owning the Experience: CX for the Agentic Era = Gee\nSS eee\n\nHow Can Marketers Make Every Penny Count with Ad Simulation? o— Gee\n\naq:==\n\n‘sas Apocalypse: What isthe Nex Era of Software (Cee (Bee\n\na eS SS unpre \\S=.\n\n‘The Inner Edge: Finding Clarity in the Race tothe Next You = oe\nara aratiyaeae ie pen EHR"
+    },
+    {
+      "source_image": "f2a11cb0-7628-4fdb-9198-09ee9925f0f2.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "Home Programe “ Exhibitions V Startup world cup 2026 Techsauce Awards 2026 —_Tano Week = Attendees ~ FAQ:\n‘The Inner Edge: Finding Clarity in the Race to the Next You (Otte (Fre\nara aratiyaeae ie pen EHR\nDesigning Life That Lasts: The Longevity Equation = ee\nSa See eee Epstein\nPutting SEA startups onthe global stage: PRin the age of AL —_\nAL Thinking: New Technology, Old Methodology — Reframe, Redesign and Rebuild. Your Business with First Principles AI = —\n14:10- 15:10 “Apinut (ard Venehaam\na =eS=\nFundraising Mastery How to Raise Your Fist Venture Capital Round —\na\nBuild Your Perfect Pitch Deck and Close Investors with AI = ee\na\n1000-1025 | idgng ASEAN Eeostems roster Sendbanng & Malaysian Tech Showcase (Cmmne (Bae\n‘Building an tnnovation Ecosystem Outside the Megncty: Strategic Insights from GIPA —= =\n13.00 -15:20 mera\nDY tment\nCo ne (memes (Etats\nfrac e"
+    },
+    {
+      "source_image": "f4b4b42e-d172-43a2-838d-f0983ea7d710.png",
+      "extraction_method": "OCR",
+      "verification_status": "needs_review",
+      "text": "AI with Accountability: Building Trust in the Intelligent Enterprise (Cmte (Ee\n14:40 - 15:00 ‘Chatchawat Asawarakwong\n‘es Csirman& Group ci irfmstonezity fe KASIXORN Busnes Technology Group OTE)\nROI of AI: The Realities of AI Deployment in Southeast Asia (tne eG.\nx. Chaichana Mitrpant Maryann Tseng, Frank Sommers\ntoute Deco Eecroic Waneactone Development AgEny ‘he satay Ofer & Vie President, Phany Grn Founder resent Atoopecs, | Cosounder at SnsereAL\n15:05 - 15:45,\ny\n«@) Thiraya (9 Thiranakanat\nco-eunds creer Dial\nAI Beyond the Ride: How Al is Reshaping Everyday Urban Life (tne eG.\n15:50 - 16:10 Mark Tolley\neponal PAC Director norive\nBeyond AI Assistants: How Enterprises Turn Al into Real Business Value (Cmte (Ee\n16:15 - 16:35, Xanin Pinsuvana\n£0, Humic\nAl's Bottle Neck is Energy - What's the Next Power Source Solution? (tne eG.\n16:40 - 17:00 Jan Lazek\nManaging Pre Pure Energy entree\nPromoter for Fighting Spirit: Opening the Doors of R&D Growth with Innovation Grants (2 mwmrtaisige [11 mechstowoane\n10:28 - 10:55, Prot. Dr. Sompong Kiaynongsruang\nPresident, Taland Since Reseach end Inoition TSA\n‘A\ns100-1:50 | Maet the Crach Startups: Leveraging Central European Innovation Hubs for Growth Cannes Ea"
+    }
+  ]
+}

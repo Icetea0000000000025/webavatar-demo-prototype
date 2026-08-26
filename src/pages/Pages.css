@@ -5205,15 +5205,17 @@ textarea.form-control {
 }
 .home-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
 }
 @media (max-width: 900px) {
   .home-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
 }
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .home-stats-grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 .home-stat-card {
@@ -5851,4 +5853,1281 @@ textarea.form-control {
   flex-shrink: 0;
   margin-top: 0.45rem;
 }
+
+/* ═══════════════════════════════════════════════════════
+   TECHSAUCE GLOBAL SUMMIT 2026 — KNOWLEDGE BASE STYLES
+   ═══════════════════════════════════════════════════════ */
+
+.techsauce-page-root {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.techsauce-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hero Section */
+.techsauce-hero {
+  position: relative;
+  padding: 8rem 0 4rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--primary) 12%, transparent) 0%, transparent 70%);
+}
+
+.techsauce-hero-glow-1 {
+  position: absolute;
+  top: -10%;
+  left: 10%;
+  width: clamp(300px, 45vw, 600px);
+  height: clamp(300px, 45vw, 600px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.techsauce-hero-glow-2 {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: clamp(280px, 40vw, 550px);
+  height: clamp(280px, 40vw, 550px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.techsauce-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.techsauce-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.12);
+}
+
+.techsauce-hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.techsauce-title-sub {
+  display: block;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 0.35rem;
+}
+
+.techsauce-hero-theme {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--muted-foreground);
+  margin-bottom: 2rem;
+}
+
+.techsauce-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 860px;
+  margin-bottom: 2.5rem;
+}
+
+.techsauce-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  text-align: left;
+}
+
+.techsauce-meta-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
+}
+
+.techsauce-meta-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.techsauce-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 780px;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .techsauce-stats-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.techsauce-stat-card {
+  padding: 1rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.techsauce-stat-num {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--primary);
+  font-family: var(--font-mono);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.techsauce-stat-lbl {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+}
+
+/* AI Knowledge Base Search Bar */
+.techsauce-search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 680px;
+  padding: 0.6rem 1.25rem;
+  background: var(--card);
+  border: 2px solid color-mix(in srgb, var(--primary) 40%, var(--border));
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.2);
+  margin-bottom: 1.25rem;
+  transition: var(--transition-normal);
+}
+
+.techsauce-search-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 12px 35px -5px rgba(99, 102, 241, 0.35);
+}
+
+.techsauce-search-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.techsauce-search-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.techsauce-search-clear {
+  background: transparent;
+  border: none;
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+}
+
+.techsauce-quick-chips {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.techsauce-chips-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  margin-right: 0.25rem;
+}
+
+.techsauce-chip {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-chip:hover {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+/* Tabs Bar */
+.techsauce-tabs-section {
+  position: sticky;
+  top: 4.5rem;
+  z-index: 30;
+  background: color-mix(in srgb, var(--background) 85%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 0;
+}
+
+.techsauce-nav-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+}
+
+.techsauce-nav-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.techsauce-tab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: transparent;
+  color: var(--muted-foreground);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-fast);
+}
+
+.techsauce-tab-pill:hover {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+.techsauce-tab-pill.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+.techsauce-tab-content {
+  padding: 3.5rem 0 6rem;
+}
+
+/* Notice / Architecture Card */
+.techsauce-notice-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+  box-shadow: var(--shadow-sm);
+}
+
+.techsauce-notice-icon {
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  flex-shrink: 0;
+}
+
+.techsauce-notice-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techsauce-badge-verified {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.techsauce-badge-ocr {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+/* Overview Highlights Grid */
+.techsauce-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.techsauce-overview-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.75rem;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-premium);
+  transition: var(--transition-normal);
+}
+
+.techsauce-overview-card:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+}
+
+.techsauce-overview-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.techsauce-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Filter Toolbar */
+.techsauce-filter-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+}
+
+.techsauce-filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.techsauce-filter-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+}
+
+.techsauce-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.techsauce-filter-btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-filter-btn:hover {
+  border-color: var(--primary);
+}
+
+.techsauce-filter-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.techsauce-select-filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.techsauce-select {
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  outline: none;
+}
+
+/* Workshop Grid & Cards */
+.techsauce-workshops-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.techsauce-workshop-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+  position: relative;
+}
+
+.techsauce-workshop-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  box-shadow: var(--shadow-md);
+}
+
+.techsauce-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.techsauce-time-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--foreground);
+}
+
+.techsauce-room-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.techsauce-room-a {
+  background: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.techsauce-room-b {
+  background: rgba(6, 182, 212, 0.12);
+  color: #0891b2;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+.techsauce-access-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.techsauce-access-reserve {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.techsauce-access-invitation {
+  background: rgba(244, 63, 94, 0.12);
+  color: #e11d48;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.techsauce-access-walkin {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+  border: 1px solid rgba(14, 165, 233, 0.25);
+}
+
+.techsauce-access-default {
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--border);
+}
+
+.techsauce-workshop-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--foreground);
+  margin-bottom: 1.25rem;
+  flex: 1;
+}
+
+.techsauce-speakers-wrap {
+  padding: 0.85rem;
+  border-radius: 12px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  margin-bottom: 1.25rem;
+}
+
+.techsauce-speaker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.techsauce-speaker-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.techsauce-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+.techsauce-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-action-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.techsauce-action-btn.active {
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Exhibitors Grid & Cards */
+.techsauce-search-box-sm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.techsauce-search-input-sm {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.85rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.techsauce-exhibitors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.techsauce-exhibitor-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.15rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.techsauce-exhibitor-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.techsauce-exhibitor-card.botnoi-featured {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 8%, var(--card)) 0%, var(--card) 100%);
+  border-color: var(--primary);
+  box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.3);
+}
+
+.techsauce-booth-pill {
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+.booth-botnoi {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.techsauce-featured-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--primary);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+}
+
+.techsauce-exhibitor-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.techsauce-exhibitor-copy {
+  align-self: flex-end;
+  background: transparent;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: var(--transition-fast);
+}
+
+.techsauce-exhibitor-copy:hover {
+  color: var(--primary);
+}
+
+/* Awards Banner & Showcase */
+.techsauce-awards-banner {
+  padding: 2.5rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.techsauce-awards-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.techsauce-awards-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.techsauce-awards-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.techsauce-award-cats-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techsauce-award-cat-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-award-cat-btn:hover {
+  border-color: var(--primary);
+}
+
+.techsauce-award-cat-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.techsauce-awards-categories-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.techsauce-award-category-block {
+  padding: 1.75rem;
+  border-radius: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.techsauce-award-category-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.techsauce-category-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.techsauce-award-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.techsauce-award-item-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.15rem;
+  border-radius: 12px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.techsauce-award-item-icon {
+  flex-shrink: 0;
+}
+
+.techsauce-award-item-text {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* OCR Trace Layer */
+.techsauce-alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.techsauce-ocr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.25rem;
+}
+
+.techsauce-ocr-card {
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.techsauce-ocr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.techsauce-pill-review {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.techsauce-ocr-text {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--muted);
+  padding: 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+/* Search Results UI */
+.techsauce-search-results-section {
+  padding: 3rem 0;
+  background: color-mix(in srgb, var(--primary) 4%, var(--background));
+  border-bottom: 1px solid var(--border);
+}
+
+.techsauce-results-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.techsauce-section-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.techsauce-priority-note {
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  margin-top: 0.35rem;
+}
+
+.techsauce-result-group {
+  margin-bottom: 2.5rem;
+}
+
+.techsauce-group-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+}
+
+.techsauce-award-card {
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.techsauce-award-cat-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.techsauce-award-item-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+.techsauce-empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--muted-foreground);
+  font-size: 0.95rem;
+}
+
+/* Vibe Sheet Spec Card */
+.techsauce-vibe-spec-card {
+  width: 100%;
+  max-width: 860px;
+  margin: 1rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+  box-shadow: var(--shadow-sm);
+}
+
+/* Spreadsheet Table Styling */
+.techsauce-sheet-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.techsauce-sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.techsauce-sheet-table th {
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.techsauce-sheet-table td {
+  padding: 0.85rem 1rem;
+  font-size: 0.82rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  color: var(--foreground);
+  vertical-align: middle;
+}
+
+.techsauce-sheet-table tr:last-child td {
+  border-bottom: none;
+}
+
+.techsauce-sheet-table tr:hover td {
+  background: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LIVE AI EVENT Q&A SHOWCASE CONSOLE STYLES
+   ═══════════════════════════════════════════════════════ */
+
+.techsauce-qa-console-card {
+  width: 100%;
+  max-width: 860px;
+  margin: 1.5rem auto 0;
+  padding: 1.5rem;
+  border-radius: 24px;
+  background: var(--card);
+  border: 2px solid color-mix(in srgb, var(--primary) 40%, var(--border));
+  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.25);
+  text-align: left;
+  position: relative;
+  z-index: 10;
+}
+
+.techsauce-qa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.techsauce-ai-pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.techsauce-qa-input-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: var(--transition-fast);
+}
+
+.techsauce-qa-input-box:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+  background: var(--card);
+}
+
+.techsauce-qa-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  outline: none;
+}
+
+.techsauce-qa-send-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.15rem;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.techsauce-qa-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.techsauce-qa-send-btn:not(:disabled):hover {
+  filter: brightness(1.1);
+  transform: scale(1.02);
+}
+
+.techsauce-preset-questions-wrap {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+}
+
+.techsauce-preset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-preset-btn:hover {
+  background: color-mix(in srgb, var(--primary) 12%, var(--secondary));
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.techsauce-preset-btn.active {
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+
+.techsauce-preset-btn.active svg {
+  color: #ffffff !important;
+}
+
+.techsauce-ai-response-box {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--primary) 5%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+  box-shadow: var(--shadow-sm);
+}
+
+.techsauce-ai-response-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.techsauce-response-category {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.techsauce-response-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--foreground);
+  line-height: 1.3;
+}
+
+.techsauce-tts-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-tts-btn:hover {
+  border-color: var(--primary);
+}
+
+.techsauce-tts-btn.speaking {
+  border-color: var(--destructive);
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.techsauce-copy-ans-btn {
+  padding: 0.4rem;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.techsauce-copy-ans-btn:hover {
+  border-color: var(--primary);
+}
+
+.techsauce-badges-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.techsauce-key-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+.techsauce-ai-body-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--foreground);
+  white-space: pre-line;
+}
+
+
+
 
