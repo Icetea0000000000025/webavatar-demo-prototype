@@ -9,6 +9,7 @@ export interface PageConfig {
 export const pagesConfig: PageConfig[] = [
   { name: 'Home', path: '/', id: 'home', key: 'nav.home', enabled: true },
   { name: 'About Us', path: '/about', id: 'about', key: 'nav.about', enabled: true },
+
   { name: 'Contact & FAQ', path: '/contact', id: 'contact', key: 'nav.contact', enabled: true },
   { name: 'Flight Demo', path: '/flight-demo', id: 'flight', key: 'nav.flight', enabled: true },
   { name: 'TN House Portal', path: '/all-demo', id: 'order', key: 'nav.order', enabled: true },

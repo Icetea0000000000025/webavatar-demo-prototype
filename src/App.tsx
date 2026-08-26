@@ -10,6 +10,7 @@ import SpaNavListener from './components/SpaNavListener';
 import GlobalPageCurtain from './components/motion-ui/GlobalPageCurtain';
 import Home from './pages/Home';
 import About from './pages/About';
+
 import Contact from './pages/Contact';
 import FlightDemo from './pages/FlightDemo';
 import FlightAdmin from './pages/FlightAdmin';
@@ -25,6 +26,7 @@ import './App.css';
 const pageComponents: Record<string, ReactNode> = {
   '/': <Home />,
   '/about': <About />,
+
   '/contact': <Contact />,
   '/flight-demo': <FlightDemo />,
   '/all-demo': <OrderDemo />,
@@ -35,6 +37,7 @@ const pageComponents: Record<string, ReactNode> = {
 const ROUTE_TITLE_MAP: Record<string, string> = {
   '/': 'nav.home',
   '/about': 'nav.about',
+
   '/contact': 'nav.contact',
   '/flight-demo': 'nav.flight',
   '/flight-demo/admin': 'flight.nav_admin',
