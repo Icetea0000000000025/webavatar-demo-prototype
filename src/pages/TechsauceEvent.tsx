@@ -1,13 +1,14 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, Copy, Check, Sparkles,
   Users, Award, Building2, Presentation,
   Calendar, MapPin, Grid, Table, X,
-  RotateCcw
+  RotateCcw, ChevronDown
 } from 'lucide-react';
 import {
   techsauceData,
+  AWARD_DESCRIPTIONS,
   type Workshop,
   type Exhibitor,
 } from '../lib/techsauceData';
@@ -33,7 +34,7 @@ function getRoomBadgeClass(room: string) {
 }
 
 export default function TechsauceEvent() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   // Active Tab: 'workshops' | 'exhibitors' | 'awards'
   const [activeTab, setActiveTab] = useState<TabType>(() => {
@@ -44,21 +45,39 @@ export default function TechsauceEvent() {
     return 'workshops';
   });
 
-  // View Mode: 'cards' | 'table'
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
 
-  // Workshop Filters
+  // Workshop Filters (Default to today's date "2026-08-27")
   const [workshopSearch, setWorkshopSearch] = useState('');
-  const [selectedDay, setSelectedDay] = useState<string>('all');
+  const [selectedDay, setSelectedDay] = useState<string>(() => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const matchToday = techsauceData.workshops.some((w) => w.date === todayStr);
+    return matchToday ? todayStr : '2026-08-27';
+  });
   const [selectedRoom, setSelectedRoom] = useState<string>('all');
   const [selectedAccess, setSelectedAccess] = useState<string>('all');
 
   // Exhibitor Filter
   const [selectedZone, setSelectedZone] = useState<string>('all');
   const [exhibitorSearch, setExhibitorSearch] = useState('');
+  const [visibleExhibitorCount, setVisibleExhibitorCount] = useState<number>(24);
+
+  // Reset visible exhibitors count when filters change
+  useEffect(() => {
+    setVisibleExhibitorCount(24);
+  }, [selectedZone, exhibitorSearch]);
 
   // Awards Active Category
   const [activeAwardCategory, setActiveAwardCategory] = useState<string>('all');
+
+  // Expanded state for Award details toggles (individual card only)
+  const [expandedAwards, setExpandedAwards] = useState<Record<string, boolean>>({});
+
+  const toggleAwardExpand = (key: string) => {
+    setExpandedAwards((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   // Copied state for feedback
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -181,7 +200,6 @@ export default function TechsauceEvent() {
           >
             {/* Summit Badge */}
             <div className="techsauce-badge">
-              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
               <span>Techsauce Global Summit 2026</span>
             </div>
 
@@ -344,7 +362,7 @@ export default function TechsauceEvent() {
             {/* Filter Toolbar */}
             <div className="techsauce-filter-toolbar" role="search" aria-label="Workshop Search and Filters">
               {/* Workshop Search Input */}
-              <div className="w-full md:max-w-xs">
+              <div className="flex-1 min-w-[200px] flex-shrink-0">
                 <div className="techsauce-search-box-sm">
                   <Search className="w-4 h-4 text-muted-foreground" />
                   <input
@@ -449,7 +467,7 @@ export default function TechsauceEvent() {
               </div>
             </div>
 
-            {/* Results count, reset & View Mode Toggle */}
+            {/* Results count & reset */}
             <div className="flex items-center justify-between my-4 text-xs text-muted-foreground flex-wrap gap-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="font-semibold">{t('event.showing_workshops').replace('{count}', String(filteredWorkshops.length))}</span>
@@ -471,122 +489,23 @@ export default function TechsauceEvent() {
                   </button>
                 )}
               </div>
-
-              {/* View Mode Toggle (Card vs Table) */}
-              <div className="flex items-center gap-1 bg-card border border-border p-1 rounded-xl shadow-xs" role="toolbar" aria-label="Workshops layout view mode">
-                <button
-                  id="view-mode-cards"
-                  type="button"
-                  onClick={() => setViewMode('cards')}
-                  aria-pressed={viewMode === 'cards'}
-                  aria-label="Switch to Card Grid View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'cards' ? 'active' : ''}`}
-                >
-                  <Grid className="w-3.5 h-3.5" />
-                  <span>{t('event.view_cards')}</span>
-                </button>
-                <button
-                  id="view-mode-table"
-                  type="button"
-                  onClick={() => setViewMode('table')}
-                  aria-pressed={viewMode === 'table'}
-                  aria-label="Switch to Structured Table View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'table' ? 'active' : ''}`}
-                >
-                  <Table className="w-3.5 h-3.5" />
-                  <span>{t('event.view_table')}</span>
-                </button>
-              </div>
             </div>
 
-            {/* Table View Mode */}
-            {viewMode === 'table' ? (
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table" aria-label="Workshops directory table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '110px', minWidth: '100px', whiteSpace: 'nowrap' }}>{t('event.table_date')}</th>
-                      <th style={{ width: '130px', minWidth: '120px', whiteSpace: 'nowrap' }}>{t('event.table_time')}</th>
-                      <th style={{ minWidth: '220px' }}>{t('event.table_title')}</th>
-                      <th style={{ minWidth: '220px' }}>{t('event.speakers_label')}</th>
-                      <th style={{ width: '160px', minWidth: '150px', whiteSpace: 'nowrap' }}>{t('event.filter_room')}</th>
-                      <th style={{ width: '150px', minWidth: '140px', whiteSpace: 'nowrap' }}>{t('event.filter_access')}</th>
-                      <th style={{ width: '110px', minWidth: '100px', whiteSpace: 'nowrap' }}>{t('event.table_actions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredWorkshops.map((w, idx) => (
-                      <tr key={idx} id={`workshop-row-${idx}`}>
-                        <td className="font-mono text-xs whitespace-nowrap">{w.date}</td>
-                        <td className="font-mono text-xs whitespace-nowrap">{w.time}</td>
-                        <td className="font-bold text-sm text-foreground">{w.title}</td>
-                        <td>
-                          {w.speakers.length > 0 ? (
-                            <div className="space-y-1">
-                              {w.speakers.map((s, sIdx) => (
-                                <div key={sIdx} className="text-xs leading-relaxed">
-                                  <strong className="text-foreground">{s.name}</strong>{' '}
-                                  <span className="text-muted-foreground">({s.role} @ <span className="text-primary font-semibold">{s.company}</span>)</span>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-xs text-muted-foreground italic">{t('event.panel_open_session')}</span>
-                          )}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <span className={`techsauce-room-pill ${getRoomBadgeClass(w.room)}`}>
-                            {w.room}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <span className={`techsauce-access-pill ${getAccessBadgeClass(w.access)}`}>
-                            {w.access}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <button
-                            id={`btn-copy-workshop-row-${idx}`}
-                            type="button"
-                            onClick={() => handleCopy(`${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})`)}
-                            className="btn btn-secondary text-xs py-1 px-2.5 cursor-pointer inline-flex items-center gap-1"
-                            aria-label={`Copy details for ${w.title}`}
-                          >
-                            {copiedText === `${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})` ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-500" />
-                                <span className="text-emerald-500">{t('event.copied')}</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3 text-muted-foreground" />
-                                <span>{t('event.copy')}</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              /* Cards View Mode */
-              <div className="techsauce-workshops-grid">
-                {filteredWorkshops.map((w, idx) => (
-                  <WorkshopCard
-                    key={idx}
-                    index={idx}
-                    workshop={w}
-                    onCopy={handleCopy}
-                    copiedText={copiedText}
-                    copyLabel={t('event.copy')}
-                    copiedLabel={t('event.copied')}
-                    speakersLabel={t('event.speakers_label')}
-                  />
-                ))}
-              </div>
-            )}
+            {/* Workshop Cards Grid */}
+            <div className="techsauce-workshops-grid">
+              {filteredWorkshops.map((w, idx) => (
+                <WorkshopCard
+                  key={idx}
+                  index={idx}
+                  workshop={w}
+                  onCopy={handleCopy}
+                  copiedText={copiedText}
+                  copyLabel={t('event.copy')}
+                  copiedLabel={t('event.copied')}
+                  speakersLabel={t('event.speakers_label')}
+                />
+              ))}
+            </div>
 
             {filteredWorkshops.length === 0 && (
               <div className="techsauce-empty-state">
@@ -714,7 +633,7 @@ export default function TechsauceEvent() {
               </div>
             </div>
 
-            {/* Note regarding preserved names & View Mode Toggle */}
+            {/* Note regarding preserved names */}
             <div className="flex items-center justify-between text-xs text-muted-foreground my-3 flex-wrap gap-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <span>{t('event.exhibitor_note')} {t('event.showing_exhibitors').replace('{count}', String(filteredExhibitors.length))}.</span>
@@ -734,103 +653,47 @@ export default function TechsauceEvent() {
                   </button>
                 )}
               </div>
-
-              {/* View Mode Toggle (Card vs Table) */}
-              <div className="flex items-center gap-1 bg-card border border-border p-1 rounded-xl shadow-xs" role="toolbar" aria-label="Exhibitors layout view mode">
-                <button
-                  id="exhibitor-view-mode-cards"
-                  type="button"
-                  onClick={() => setViewMode('cards')}
-                  aria-pressed={viewMode === 'cards'}
-                  aria-label="Switch to Card Grid View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'cards' ? 'active' : ''}`}
-                >
-                  <Grid className="w-3.5 h-3.5" />
-                  <span>{t('event.view_cards')}</span>
-                </button>
-                <button
-                  id="exhibitor-view-mode-table"
-                  type="button"
-                  onClick={() => setViewMode('table')}
-                  aria-pressed={viewMode === 'table'}
-                  aria-label="Switch to Structured Table View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'table' ? 'active' : ''}`}
-                >
-                  <Table className="w-3.5 h-3.5" />
-                  <span>{t('event.view_table')}</span>
-                </button>
-              </div>
             </div>
 
-            {/* Table View Mode */}
-            {viewMode === 'table' ? (
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table" aria-label="Exhibitors directory table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '70px' }}>#</th>
-                      <th>{t('event.table_company')}</th>
-                      <th style={{ width: '200px' }}>{t('event.table_booth_location')}</th>
-                      <th style={{ width: '120px' }}>{t('event.table_actions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredExhibitors.map((ex, idx) => (
-                      <tr key={idx} id={`exhibitor-row-${idx}`} className={ex.company.toLowerCase().includes('botnoi') ? 'bg-primary/10' : ''}>
-                        <td className="font-mono text-xs text-muted-foreground">{idx + 1}</td>
-                        <td className="font-bold text-sm">
-                          {ex.company}
-                          {ex.company.toLowerCase().includes('botnoi') && (
-                            <span className="ml-2 techsauce-featured-badge">{t('event.featured_ai')}</span>
-                          )}
-                        </td>
-                        <td>
-                          <span className={`techsauce-booth-pill ${ex.company.toLowerCase().includes('botnoi') ? 'booth-botnoi' : ''}`}>
-                            {ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')}
-                          </span>
-                        </td>
-                        <td>
-                          <button
-                            id={`btn-copy-exhibitor-row-${idx}`}
-                            type="button"
-                            onClick={() => handleCopy(`${ex.company} (${ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')})`)}
-                            className="btn btn-secondary text-xs py-1 px-2.5 cursor-pointer inline-flex items-center gap-1"
-                            aria-label={`Copy booth details for ${ex.company}`}
-                          >
-                            {copiedText === `${ex.company} (${ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')})` ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-500" />
-                                <span className="text-emerald-500">{t('event.copied')}</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3 text-muted-foreground" />
-                                <span>{t('event.copy')}</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              /* Exhibitor Cards Grid */
-              <div className="techsauce-exhibitors-grid">
-                {filteredExhibitors.map((ex, idx) => (
-                  <ExhibitorCard
-                    key={idx}
-                    index={idx}
-                    exhibitor={ex}
-                    onCopy={handleCopy}
-                    copiedText={copiedText}
-                    boothLabel={t('event.booth')}
-                    boothNotShownLabel={t('event.booth_not_shown')}
-                    featuredAiLabel={t('event.featured_ai')}
-                    copyTitle={t('event.copy_booth_title')}
-                  />
-                ))}
+            {/* Exhibitor Cards Grid (Paginated display for fast performance & smooth UI) */}
+            <div className="techsauce-exhibitors-grid">
+              {filteredExhibitors.slice(0, visibleExhibitorCount).map((ex, idx) => (
+                <ExhibitorCard
+                  key={idx}
+                  index={idx}
+                  exhibitor={ex}
+                  onCopy={handleCopy}
+                  copiedText={copiedText}
+                  boothLabel={t('event.booth')}
+                  boothNotShownLabel={t('event.booth_not_shown')}
+                  featuredAiLabel={t('event.featured_ai')}
+                  copyTitle={t('event.copy_booth_title')}
+                />
+              ))}
+            </div>
+
+            {/* Load More Button */}
+            {visibleExhibitorCount < filteredExhibitors.length && (
+              <div className="flex flex-col items-center justify-center mt-8 gap-2">
+                <button
+                  id="btn-load-more-exhibitors"
+                  type="button"
+                  onClick={() => setVisibleExhibitorCount((prev) => prev + 24)}
+                  className="techsauce-load-more-btn group"
+                  aria-label="Load more exhibitors"
+                >
+                  <span>
+                    {language === 'th'
+                      ? `แสดงผู้จัดแสดงเพิ่มเติม (${filteredExhibitors.length - visibleExhibitorCount} ราย)`
+                      : `Load More Exhibitors (${filteredExhibitors.length - visibleExhibitorCount} remaining)`}
+                  </span>
+                  <ChevronDown className="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
+                </button>
+                <span className="text-xs text-muted-foreground">
+                  {language === 'th'
+                    ? `แสดงแล้ว ${Math.min(visibleExhibitorCount, filteredExhibitors.length)} จากทั้งหมด ${filteredExhibitors.length} รายการ`
+                    : `Showing ${Math.min(visibleExhibitorCount, filteredExhibitors.length)} of ${filteredExhibitors.length} exhibitors`}
+                </span>
               </div>
             )}
 
@@ -926,59 +789,96 @@ export default function TechsauceEvent() {
                       </div>
 
                       <div className="techsauce-award-items-grid">
-                        {techsauceData.techsauce_awards.categories[cat].map((awardName, i) => (
-                          <article
-                            key={i}
-                            id={`award-item-${catIdx}-${i}`}
-                            className="techsauce-award-item-card"
-                            aria-label={`${awardName} (${cat})`}
-                          >
-                            <div className="w-full flex items-start justify-between gap-2">
-                              <div>
-                                <span className="inline-block text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">
-                                  {cat}
-                                </span>
-                                <h4 className="techsauce-award-item-text">{awardName}</h4>
+                        {techsauceData.techsauce_awards.categories[cat].map((awardName, i) => {
+                          const awardKey = `${cat}-${awardName}`;
+                          const isExpanded = !!expandedAwards[awardKey];
+
+                          return (
+                            <article
+                              key={i}
+                              id={`award-item-${catIdx}-${i}`}
+                              className={`techsauce-award-item-card ${isExpanded ? 'active' : ''}`}
+                              aria-label={`${awardName} (${cat})`}
+                            >
+                              <div className="w-full flex items-start justify-between gap-2 techsauce-award-item-header">
+                                <div className="flex-1">
+                                  <span className="inline-block text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">
+                                    {cat}
+                                  </span>
+                                  <h4 className="techsauce-award-item-text">{awardName}</h4>
+                                </div>
+                                <button
+                                  id={`btn-copy-award-${catIdx}-${i}`}
+                                  type="button"
+                                  onClick={() => handleCopy(`${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})`)}
+                                  className="techsauce-award-copy-btn cursor-pointer"
+                                  title={`Copy ${awardName} info`}
+                                  aria-label={`Copy details for ${awardName}`}
+                                >
+                                  {copiedText === `${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})` ? (
+                                    <Check className="w-3.5 h-3.5 text-emerald-500" />
+                                  ) : (
+                                    <Copy className="w-3.5 h-3.5 text-muted-foreground" />
+                                  )}
+                                </button>
                               </div>
+
+                              {/* Dedicated Toggle Button for Nomination Period, Date, Venue & Description */}
                               <button
-                                id={`btn-copy-award-${catIdx}-${i}`}
+                                id={`btn-toggle-award-${catIdx}-${i}`}
                                 type="button"
-                                onClick={() => handleCopy(`${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})`)}
-                                className="techsauce-award-copy-btn cursor-pointer"
-                                title={`Copy ${awardName} info`}
-                                aria-label={`Copy details for ${awardName}`}
+                                onClick={() => toggleAwardExpand(awardKey)}
+                                className={`techsauce-award-toggle-btn ${isExpanded ? 'active' : ''}`}
+                                aria-expanded={isExpanded}
+                                aria-controls={`award-desc-${catIdx}-${i}`}
                               >
-                                {copiedText === `${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})` ? (
-                                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                                ) : (
-                                  <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-                                )}
+                                <span>{isExpanded ? t('event.hide_details') : t('event.show_details')}</span>
+                                <ChevronDown
+                                  className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                    isExpanded ? 'rotate-180 text-amber-500' : 'text-muted-foreground'
+                                  }`}
+                                />
                               </button>
-                            </div>
 
-                            {/* Metadata Information Box */}
-                            <div className="techsauce-award-meta-box">
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.nomination_period_label')}: </span>
-                                <span className="techsauce-award-meta-val">{techsauceData.techsauce_awards.nomination_period}</span>
-                              </div>
+                              {/* Collapsible Content per Individual Card */}
+                              <AnimatePresence initial={false}>
+                                {isExpanded && (
+                                  <motion.div
+                                    id={`award-desc-${catIdx}-${i}`}
+                                    key="details"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.22, ease: 'easeInOut' }}
+                                    className="w-full overflow-hidden"
+                                  >
+                                    {/* Metadata Information Box (Nomination Period, Date, Venue) */}
+                                    <div className="techsauce-award-meta-box">
+                                      <div className="techsauce-award-meta-row">
+                                        <span className="techsauce-award-meta-label">{t('event.nomination_period_label')}: </span>
+                                        <span className="techsauce-award-meta-val">{techsauceData.techsauce_awards.nomination_period}</span>
+                                      </div>
 
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.announcement_date_label')}: </span>
-                                <span className="techsauce-award-meta-val font-mono font-bold text-amber-500">
-                                  {techsauceData.techsauce_awards.announcement_date}
-                                </span>
-                              </div>
+                                      <div className="techsauce-award-meta-row">
+                                        <span className="techsauce-award-meta-label">{t('event.announcement_date_label')}: </span>
+                                        <span className="techsauce-award-meta-val font-mono font-bold text-amber-500">
+                                          {techsauceData.techsauce_awards.announcement_date}
+                                        </span>
+                                      </div>
 
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.venue_label')}: </span>
-                                <span className="techsauce-award-meta-val text-[11px] leading-tight block mt-0.5">
-                                  {techsauceData.techsauce_awards.venue}
-                                </span>
-                              </div>
-                            </div>
-                          </article>
-                        ))}
+                                      <div className="techsauce-award-meta-row">
+                                        <span className="techsauce-award-meta-label">{t('event.venue_label')}: </span>
+                                        <span className="techsauce-award-meta-val text-[11px] leading-tight block mt-0.5">
+                                          {techsauceData.techsauce_awards.venue}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </article>
+                          );
+                        })}
                       </div>
                     </section>
                   );
@@ -1049,11 +949,11 @@ function WorkshopCard({
       {/* Speakers */}
       {workshop.speakers && workshop.speakers.length > 0 ? (
         <div className="techsauce-speakers-wrap">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-            <Users className="w-3 h-3" />
+          <div className="text-[11px] font-bold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5" />
             <span>{speakersLabel}</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {workshop.speakers.map((s, idx) => (
               <div key={idx} className="techsauce-speaker-item">
                 <div className="techsauce-speaker-avatar">
@@ -1071,7 +971,7 @@ function WorkshopCard({
         </div>
       ) : (
         <div className="techsauce-speakers-wrap">
-          <div className="text-xs text-muted-foreground italic">
+          <div className="text-xs text-muted-foreground italic py-1">
             Panel / Open Masterclass Session
           </div>
         </div>

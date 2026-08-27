@@ -6186,67 +6186,78 @@ textarea.form-control {
 /* Filter Toolbar */
 .techsauce-filter-toolbar {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: var(--shadow-sm);
+  justify-content: flex-start;
+  gap: 0.75rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   margin-bottom: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .techsauce-filter-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  flex-shrink: 0;
 }
 
 .techsauce-filter-btn {
-  padding: 0.45rem 0.95rem;
+  padding: 0.45rem 0.85rem;
   border-radius: 10px;
   font-size: 0.78rem;
   font-weight: 700;
-  background: var(--secondary);
+  background: var(--muted);
   color: var(--foreground);
-  border: 1px solid var(--border);
+  border: none;
   cursor: pointer;
   transition: var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .techsauce-filter-btn:hover {
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 15%, var(--muted));
+  color: var(--primary);
 }
 
 .techsauce-filter-btn.active {
   background: var(--primary);
   color: #ffffff;
-  border-color: var(--primary);
+  border: none;
 }
 
 .techsauce-select-filters {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
 }
 
 .techsauce-select {
-  padding: 0.5rem 0.9rem;
+  padding: 0.5rem 0.85rem;
   border-radius: 10px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  background: var(--card);
+  background: var(--muted);
   color: var(--foreground);
-  border: 1px solid var(--border);
+  border: none;
   outline: none;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .techsauce-select:focus {
-  border-color: var(--primary);
+  background: var(--card);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 30%, transparent);
 }
 
 /* Search Box Small */
@@ -6256,14 +6267,14 @@ textarea.form-control {
   gap: 0.5rem;
   padding: 0.45rem 0.85rem;
   background: var(--muted);
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 12px;
   transition: var(--transition-fast);
 }
 
 .techsauce-search-box-sm:focus-within {
-  border-color: var(--primary);
   background: var(--card);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 30%, transparent);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
 }
 
@@ -6393,10 +6404,10 @@ textarea.form-control {
 }
 
 .techsauce-speakers-wrap {
-  padding: 0.85rem;
-  border-radius: 14px;
-  background: var(--muted);
-  border: 1px solid var(--border);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
   margin-bottom: 1.25rem;
 }
 
@@ -6468,21 +6479,20 @@ textarea.form-control {
   padding: 1.25rem;
   border-radius: 16px;
   background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
   transition: var(--transition-normal);
 }
 
 .techsauce-exhibitor-card:hover {
   transform: translateY(-2px);
-  border-color: var(--primary);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
 }
 
 .techsauce-exhibitor-card.botnoi-featured {
   background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, var(--card)) 0%, var(--card) 100%);
-  border-color: var(--primary);
-  box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.35);
+  border: none;
+  box-shadow: 0 8px 24px -6px rgba(99, 102, 241, 0.3);
 }
 
 .techsauce-booth-pill {
@@ -6493,13 +6503,13 @@ textarea.form-control {
   font-family: var(--font-mono);
   background: var(--secondary);
   color: var(--foreground);
-  border: 1px solid var(--border);
+  border: none;
 }
 
 .booth-botnoi {
   background: var(--primary);
   color: #ffffff;
-  border-color: var(--primary);
+  border: none;
 }
 
 .techsauce-featured-badge {
@@ -6524,8 +6534,8 @@ textarea.form-control {
 
 .techsauce-exhibitor-copy {
   align-self: flex-end;
-  background: var(--secondary);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: none;
   border-radius: 6px;
   color: var(--muted-foreground);
   cursor: pointer;
@@ -6535,7 +6545,7 @@ textarea.form-control {
 
 .techsauce-exhibitor-copy:hover {
   color: var(--primary);
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
 }
 
 /* Awards Category Showcase */
@@ -6551,20 +6561,21 @@ textarea.form-control {
   font-size: 0.82rem;
   font-weight: 700;
   background: var(--card);
-  border: 1px solid var(--border);
+  border: none;
   color: var(--foreground);
   cursor: pointer;
   transition: var(--transition-fast);
 }
 
 .techsauce-award-cat-btn:hover {
-  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, var(--card));
+  color: var(--primary);
 }
 
 .techsauce-award-cat-btn.active {
   background: var(--primary);
   color: #ffffff;
-  border-color: var(--primary);
+  border: none;
 }
 
 .techsauce-awards-categories-wrap {
@@ -6577,8 +6588,8 @@ textarea.form-control {
   padding: 1.75rem;
   border-radius: 20px;
   background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .techsauce-award-category-title-row {
@@ -6587,30 +6598,43 @@ textarea.form-control {
   gap: 0.85rem;
   margin-bottom: 1.25rem;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
 }
 
 .techsauce-award-items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.25rem;
+  align-items: start;
 }
 
 .techsauce-award-item-card {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: stretch;
   gap: 0.75rem;
   padding: 1.25rem;
   border-radius: 16px;
   background: var(--muted);
-  border: 1px solid var(--border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 175px;
+  height: fit-content;
+}
+
+.techsauce-award-item-header {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 3.8rem;
 }
 
 .techsauce-award-item-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(245, 158, 11, 0.4);
   box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.12);
 }
 
@@ -6622,8 +6646,8 @@ textarea.form-control {
 }
 
 .techsauce-award-copy-btn {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: none;
   border-radius: 6px;
   padding: 0.35rem;
   color: var(--muted-foreground);
@@ -6631,15 +6655,15 @@ textarea.form-control {
 }
 
 .techsauce-award-copy-btn:hover {
-  border-color: #f59e0b;
   color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
 }
 
 .techsauce-award-meta-box {
   width: 100%;
   padding-top: 0.75rem;
   margin-top: 0.25rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid color-mix(in srgb, var(--border) 35%, transparent);
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -6664,6 +6688,53 @@ textarea.form-control {
 
 .techsauce-award-meta-val {
   color: var(--muted-foreground);
+}
+
+.techsauce-award-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0;
+  border-radius: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  margin-top: 0.25rem;
+  width: fit-content;
+}
+
+.techsauce-award-toggle-btn:hover {
+  border: none;
+  color: #f59e0b;
+  background: transparent;
+}
+
+.techsauce-award-toggle-btn.active {
+  border: none;
+  background: transparent;
+  color: #f59e0b;
+}
+
+.techsauce-award-toggle-btn:active {
+  transform: scale(0.98);
+}
+
+.techsauce-award-desc-text {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  opacity: 0.9;
+  padding: 0.6rem 0.75rem;
+  margin-top: 0.5rem;
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 3px solid #f59e0b;
+  border-radius: 0 6px 6px 0;
 }
 
 .techsauce-empty-state {
@@ -6718,6 +6789,54 @@ textarea.form-control {
 
 .techsauce-sheet-table tr:hover td {
   background: color-mix(in srgb, var(--primary) 4%, transparent);
+}
+
+/* Load More Button Style */
+.techsauce-load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.6rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--primary);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--primary) 35%, transparent);
+  transition: all 0.2s ease;
+}
+
+.techsauce-load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary) 45%, transparent);
+  opacity: 0.95;
+}
+
+.techsauce-load-more-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile Filter Responsive Touch Improvements */
+@media (max-width: 768px) {
+  .techsauce-filter-toolbar {
+    padding: 0;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .techsauce-filter-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .techsauce-select {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 8px;
+  }
 }
 
 
