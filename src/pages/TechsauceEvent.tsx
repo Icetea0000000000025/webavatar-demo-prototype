@@ -1,19 +1,16 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search, Copy, Check, Sparkles,
-  Users, Award, Building2, Presentation,
-  Calendar, MapPin, Grid, Table, X,
+  Search, Copy, Check,
+  Award, Building2, Presentation,
+  Calendar, MapPin, X,
   RotateCcw, ChevronDown
 } from 'lucide-react';
 import {
   techsauceData,
-  AWARD_DESCRIPTIONS,
   ZONE_LABELS,
   getBoothZone,
   getBoothZoneLabel,
-  type Workshop,
-  type Exhibitor,
 } from '../lib/techsauceData';
 import { useTranslation } from '../lib/LanguageContext';
 import AppFooter from '../components/AppFooter';
@@ -62,12 +59,6 @@ export default function TechsauceEvent() {
   // Exhibitor Filter
   const [selectedZone, setSelectedZone] = useState<string>('all');
   const [exhibitorSearch, setExhibitorSearch] = useState('');
-  const [visibleExhibitorCount, setVisibleExhibitorCount] = useState<number>(24);
-
-  // Reset visible exhibitors count when filters change
-  useEffect(() => {
-    setVisibleExhibitorCount(24);
-  }, [selectedZone, exhibitorSearch]);
 
   // Awards Active Category
   const [activeAwardCategory, setActiveAwardCategory] = useState<string>('all');
@@ -864,7 +855,7 @@ export default function TechsauceEvent() {
             <div className="ts-pill-list mt-6">
               {awardCategories
                 .filter((cat) => activeAwardCategory === 'all' || activeAwardCategory === cat)
-                .map((cat, catIdx) => (
+                .map((cat) => (
                   <div key={cat} className="ts-pill-group">
                     {/* Category Header */}
                     <div className="ts-pill-group-header">
@@ -940,181 +931,5 @@ export default function TechsauceEvent() {
       {/* Footer */}
       <AppFooter />
     </main>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Component: Workshop Card (Clean, Save Button Removed)
-───────────────────────────────────────────── */
-interface WorkshopCardProps {
-  index: number;
-  workshop: Workshop;
-  onCopy: (text: string) => void;
-  copiedText: string | null;
-  copyLabel: string;
-  copiedLabel: string;
-  speakersLabel: string;
-}
-
-function WorkshopCard({
-  index,
-  workshop,
-  onCopy,
-  copiedText,
-  copyLabel,
-  copiedLabel,
-  speakersLabel,
-}: WorkshopCardProps) {
-  const shareText = `${workshop.title} | ${workshop.date} ${workshop.time} at ${workshop.room} (${workshop.access})`;
-
-  return (
-    <motion.article
-      id={`workshop-${index}`}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="techsauce-workshop-card"
-      aria-label={`${workshop.title} (${workshop.date} ${workshop.time} at ${workshop.room})`}
-    >
-      {/* Top Metadata Row */}
-      <div className="techsauce-card-top">
-        <div className="techsauce-time-pill">
-          <Calendar className="w-3 h-3 text-muted-foreground mr-1" />
-          <span>{workshop.date} • {workshop.time}</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className={`techsauce-room-pill ${getRoomBadgeClass(workshop.room)}`}>
-            {workshop.room}
-          </span>
-          <span className={`techsauce-access-pill ${getAccessBadgeClass(workshop.access)}`}>
-            {workshop.access}
-          </span>
-        </div>
-      </div>
-
-      {/* Workshop Title */}
-      <h3 className="techsauce-workshop-title">{workshop.title}</h3>
-
-      {/* Speakers */}
-      {workshop.speakers && workshop.speakers.length > 0 ? (
-        <div className="techsauce-speakers-wrap">
-          <div className="text-[11px] font-bold text-amber-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5" />
-            <span>{speakersLabel}</span>
-          </div>
-          <div className="space-y-2.5">
-            {workshop.speakers.map((s, idx) => (
-              <div key={idx} className="techsauce-speaker-item">
-                <div className="techsauce-speaker-avatar">
-                  {s.name.charAt(0)}
-                </div>
-                <div className="techsauce-speaker-info">
-                  <div className="font-bold text-xs text-foreground">{s.name}</div>
-                  <div className="text-[11px] text-muted-foreground">
-                    {s.role} <span className="text-primary font-semibold">@ {s.company}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="techsauce-speakers-wrap">
-          <div className="text-xs text-muted-foreground italic py-1">
-            Panel / Open Masterclass Session
-          </div>
-        </div>
-      )}
-
-      {/* Actions footer (Save button removed, Clean copy button only) */}
-      <div className="techsauce-card-actions">
-        <button
-          id={`btn-copy-workshop-${index}`}
-          type="button"
-          onClick={() => onCopy(shareText)}
-          className="techsauce-action-btn w-full justify-center"
-          title={copyLabel}
-          aria-label={`Copy details for ${workshop.title}`}
-        >
-          {copiedText === shareText ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-emerald-500 font-semibold">{copiedLabel}</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-              <span>{copyLabel}</span>
-            </>
-          )}
-        </button>
-      </div>
-    </motion.article>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Component: Exhibitor Card
-───────────────────────────────────────────── */
-interface ExhibitorCardProps {
-  index: number;
-  exhibitor: Exhibitor;
-  onCopy: (text: string) => void;
-  copiedText: string | null;
-  boothLabel: string;
-  boothNotShownLabel: string;
-  featuredAiLabel: string;
-  copyTitle: string;
-}
-
-function ExhibitorCard({
-  index,
-  exhibitor,
-  onCopy,
-  copiedText,
-  boothLabel,
-  boothNotShownLabel,
-  featuredAiLabel,
-  copyTitle,
-}: ExhibitorCardProps) {
-  const isBotnoi = exhibitor.company.toLowerCase().includes('botnoi');
-  const boothDisplay = exhibitor.booth
-    ? (exhibitor.booth === 'Not shown' ? boothNotShownLabel : `${boothLabel} ${exhibitor.booth}`)
-    : boothNotShownLabel;
-
-  return (
-    <article
-      id={`exhibitor-${index}`}
-      className={`techsauce-exhibitor-card ${isBotnoi ? 'botnoi-featured' : ''}`}
-      aria-label={`${exhibitor.company} (${boothDisplay})`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <span className={`techsauce-booth-pill ${isBotnoi ? 'booth-botnoi' : ''}`}>
-          {boothDisplay}
-        </span>
-        {isBotnoi && (
-          <span className="techsauce-featured-badge">{featuredAiLabel}</span>
-        )}
-      </div>
-
-      <h4 className="techsauce-exhibitor-name" title={exhibitor.company}>
-        {exhibitor.company}
-      </h4>
-
-      <button
-        id={`btn-copy-exhibitor-${index}`}
-        type="button"
-        onClick={() => onCopy(`${exhibitor.company} (${boothDisplay})`)}
-        className="techsauce-exhibitor-copy"
-        title={copyTitle}
-        aria-label={`Copy booth details for ${exhibitor.company}`}
-      >
-        {copiedText === `${exhibitor.company} (${boothDisplay})` ? (
-          <Check className="w-3 h-3 text-emerald-500" />
-        ) : (
-          <Copy className="w-3 h-3" />
-        )}
-      </button>
-    </article>
   );
 }
