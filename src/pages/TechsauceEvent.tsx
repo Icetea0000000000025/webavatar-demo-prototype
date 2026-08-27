@@ -1,15 +1,16 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Search, Copy, Check, Sparkles,
-  Users, Award, Building2, Presentation,
-  Calendar, MapPin, Grid, Table, X,
-  RotateCcw
+  Search, Copy, Check,
+  Award, Building2, Presentation,
+  Calendar, MapPin, X,
+  RotateCcw, ChevronDown
 } from 'lucide-react';
 import {
   techsauceData,
-  type Workshop,
-  type Exhibitor,
+  ZONE_LABELS,
+  getBoothZone,
+  getBoothZoneLabel,
 } from '../lib/techsauceData';
 import { useTranslation } from '../lib/LanguageContext';
 import AppFooter from '../components/AppFooter';
@@ -33,7 +34,7 @@ function getRoomBadgeClass(room: string) {
 }
 
 export default function TechsauceEvent() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   // Active Tab: 'workshops' | 'exhibitors' | 'awards'
   const [activeTab, setActiveTab] = useState<TabType>(() => {
@@ -44,12 +45,14 @@ export default function TechsauceEvent() {
     return 'workshops';
   });
 
-  // View Mode: 'cards' | 'table'
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
 
-  // Workshop Filters
+  // Workshop Filters (Default to today's date "2026-08-27")
   const [workshopSearch, setWorkshopSearch] = useState('');
-  const [selectedDay, setSelectedDay] = useState<string>('all');
+  const [selectedDay, setSelectedDay] = useState<string>(() => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const matchToday = techsauceData.workshops.some((w) => w.date === todayStr);
+    return matchToday ? todayStr : '2026-08-27';
+  });
   const [selectedRoom, setSelectedRoom] = useState<string>('all');
   const [selectedAccess, setSelectedAccess] = useState<string>('all');
 
@@ -59,6 +62,16 @@ export default function TechsauceEvent() {
 
   // Awards Active Category
   const [activeAwardCategory, setActiveAwardCategory] = useState<string>('all');
+
+  // Expanded state for Award details toggles (individual card only)
+  const [expandedAwards, setExpandedAwards] = useState<Record<string, boolean>>({});
+
+  const toggleAwardExpand = (key: string) => {
+    setExpandedAwards((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
 
   // Copied state for feedback
   const [copiedText, setCopiedText] = useState<string | null>(null);
@@ -125,29 +138,23 @@ export default function TechsauceEvent() {
   // Filtered Exhibitors
   const filteredExhibitors = useMemo(() => {
     return techsauceData.exhibitors.filter((e) => {
+      const q = exhibitorSearch.trim().toLowerCase();
       const matchQuery =
-        !exhibitorSearch.trim() ||
-        e.company.toLowerCase().includes(exhibitorSearch.toLowerCase().trim()) ||
-        (e.booth && e.booth.toLowerCase().includes(exhibitorSearch.toLowerCase().trim()));
+        !q ||
+        e.company.toLowerCase().includes(q) ||
+        (e.booth && e.booth.toLowerCase().includes(q)) ||
+        getBoothZoneLabel(e.booth, 'th').toLowerCase().includes(q) ||
+        getBoothZoneLabel(e.booth, 'en').toLowerCase().includes(q);
 
       if (!matchQuery) return false;
 
       if (selectedZone === 'all') return true;
-      if (selectedZone === 'A') return e.booth && e.booth.startsWith('A');
-      if (selectedZone === 'B') return e.booth && e.booth.startsWith('B');
-      if (selectedZone === 'C') return e.booth && e.booth.startsWith('C');
-      if (selectedZone === 'D') return e.booth && e.booth.startsWith('D');
-      if (selectedZone === 'numbered') return e.booth && /^\d+$/.test(e.booth);
-      if (selectedZone === 'other')
-        return (
-          !e.booth ||
-          e.booth === 'Not shown' ||
-          (!e.booth.startsWith('A') &&
-            !e.booth.startsWith('B') &&
-            !e.booth.startsWith('C') &&
-            !e.booth.startsWith('D') &&
-            !/^\d+$/.test(e.booth))
-        );
+      if (selectedZone === 'A') return getBoothZone(e.booth) === 'A';
+      if (selectedZone === 'B') return getBoothZone(e.booth) === 'B';
+      if (selectedZone === 'C') return getBoothZone(e.booth) === 'C';
+      if (selectedZone === 'D') return getBoothZone(e.booth) === 'D';
+      if (selectedZone === 'numbered' || selectedZone === 'NUM') return getBoothZone(e.booth) === 'NUM';
+      if (selectedZone === 'other') return !getBoothZone(e.booth);
 
       return true;
     });
@@ -181,7 +188,6 @@ export default function TechsauceEvent() {
           >
             {/* Summit Badge */}
             <div className="techsauce-badge">
-              <Sparkles className="w-4 h-4 text-primary animate-pulse" />
               <span>Techsauce Global Summit 2026</span>
             </div>
 
@@ -296,9 +302,10 @@ export default function TechsauceEvent() {
                 <span className="techsauce-quick-badge">{totalHonorsCount}</span>
               </button>
             </nav>
-          </motion.div>
+            </motion.div>
         </div>
       </section>
+
 
       {/* ═══════════════════════════════════════
           AI AVATAR WIDGET INTERACTION DIRECTIVES & CONTEXT
@@ -323,10 +330,29 @@ export default function TechsauceEvent() {
           pointerEvents: 'none',
         }}
       >
-        AI Avatar Assistant Directives:
-        1. When answering user queries or discussing a specific workshop, exhibitor, or award honor, actively scroll and highlight the target card or section so the user can easily see it on the page.
-        2. Use scan_section or scan_page on target element selectors: #workshop-0 through #workshop-14 for workshops, #exhibitor-0 through #exhibitor-214 for exhibitors, and #award-category-0 through #award-category-5 for awards.
-        3. Switch tabs between #tab-workshops, #tab-exhibitors, and #tab-awards when the user inquires about different areas of Techsauce Global Summit 2026.
+        <p>
+          AI Avatar Assistant Knowledge Base & Directives for Techsauce Global Summit 2026:
+          When answering user questions about exhibitors, companies, or booth numbers, always refer to this official 215 exhibitors roster:
+        </p>
+        <ul id="ai-knowledge-exhibitors-roster">
+          {techsauceData.exhibitors.map((ex, idx) => {
+            const zKey = getBoothZone(ex.booth);
+            const zInfo = zKey ? ZONE_LABELS[zKey] : null;
+            const zLabel = zInfo ? `${zInfo.code} ${zInfo.nameTh} (${zInfo.name})` : '';
+            return (
+              <li key={idx} id={`exhibitor-${idx}`} data-company={ex.company} data-booth={ex.booth || 'Not shown'}>
+                บริษัท / ผู้จัดแสดง: {ex.company} | หมายเลขบูธ (Booth Number): {ex.booth || 'Not shown'} | โซน (Zone): {zLabel}
+              </li>
+            );
+          })}
+        </ul>
+        <div id="ai-knowledge-workshops-roster">
+          {techsauceData.workshops.map((w, idx) => (
+            <div key={idx} id={`workshop-${idx}`} data-title={w.title} data-time={w.time} data-room={w.room}>
+              Workshop: {w.title} | วันที่: {w.date} เวลา: {w.time} | ห้อง: {w.room} | สิทธิ์: {w.access} | วิทยากร: {w.speakers.map(s => `${s.name} (${s.role} @ ${s.company})`).join(', ')}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* ═══════════════════════════════════════
@@ -344,7 +370,7 @@ export default function TechsauceEvent() {
             {/* Filter Toolbar */}
             <div className="techsauce-filter-toolbar" role="search" aria-label="Workshop Search and Filters">
               {/* Workshop Search Input */}
-              <div className="w-full md:max-w-xs">
+              <div className="flex-1 min-w-[200px] flex-shrink-0">
                 <div className="techsauce-search-box-sm">
                   <Search className="w-4 h-4 text-muted-foreground" />
                   <input
@@ -449,150 +475,93 @@ export default function TechsauceEvent() {
               </div>
             </div>
 
-            {/* Results count, reset & View Mode Toggle */}
-            <div className="flex items-center justify-between my-4 text-xs text-muted-foreground flex-wrap gap-3">
-              <div className="flex items-center gap-3 flex-wrap">
-                <span className="font-semibold">{t('event.showing_workshops').replace('{count}', String(filteredWorkshops.length))}</span>
-                {(selectedDay !== 'all' || selectedRoom !== 'all' || selectedAccess !== 'all' || workshopSearch) && (
-                  <button
-                    id="btn-reset-workshop-filters"
-                    type="button"
-                    onClick={() => {
-                      setSelectedDay('all');
-                      setSelectedRoom('all');
-                      setSelectedAccess('all');
-                      setWorkshopSearch('');
-                    }}
-                    className="inline-flex items-center gap-1 text-primary hover:underline font-semibold cursor-pointer"
-                    aria-label="Reset all workshop filters"
-                  >
-                    <RotateCcw className="w-3 h-3" />
-                    <span>{t('event.reset_filters')}</span>
-                  </button>
-                )}
-              </div>
-
-              {/* View Mode Toggle (Card vs Table) */}
-              <div className="flex items-center gap-1 bg-card border border-border p-1 rounded-xl shadow-xs" role="toolbar" aria-label="Workshops layout view mode">
-                <button
-                  id="view-mode-cards"
-                  type="button"
-                  onClick={() => setViewMode('cards')}
-                  aria-pressed={viewMode === 'cards'}
-                  aria-label="Switch to Card Grid View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'cards' ? 'active' : ''}`}
-                >
-                  <Grid className="w-3.5 h-3.5" />
-                  <span>{t('event.view_cards')}</span>
-                </button>
-                <button
-                  id="view-mode-table"
-                  type="button"
-                  onClick={() => setViewMode('table')}
-                  aria-pressed={viewMode === 'table'}
-                  aria-label="Switch to Structured Table View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'table' ? 'active' : ''}`}
-                >
-                  <Table className="w-3.5 h-3.5" />
-                  <span>{t('event.view_table')}</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Table View Mode */}
-            {viewMode === 'table' ? (
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table" aria-label="Workshops directory table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '110px', minWidth: '100px', whiteSpace: 'nowrap' }}>{t('event.table_date')}</th>
-                      <th style={{ width: '130px', minWidth: '120px', whiteSpace: 'nowrap' }}>{t('event.table_time')}</th>
-                      <th style={{ minWidth: '220px' }}>{t('event.table_title')}</th>
-                      <th style={{ minWidth: '220px' }}>{t('event.speakers_label')}</th>
-                      <th style={{ width: '160px', minWidth: '150px', whiteSpace: 'nowrap' }}>{t('event.filter_room')}</th>
-                      <th style={{ width: '150px', minWidth: '140px', whiteSpace: 'nowrap' }}>{t('event.filter_access')}</th>
-                      <th style={{ width: '110px', minWidth: '100px', whiteSpace: 'nowrap' }}>{t('event.table_actions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredWorkshops.map((w, idx) => (
-                      <tr key={idx} id={`workshop-row-${idx}`}>
-                        <td className="font-mono text-xs whitespace-nowrap">{w.date}</td>
-                        <td className="font-mono text-xs whitespace-nowrap">{w.time}</td>
-                        <td className="font-bold text-sm text-foreground">{w.title}</td>
-                        <td>
-                          {w.speakers.length > 0 ? (
-                            <div className="space-y-1">
-                              {w.speakers.map((s, sIdx) => (
-                                <div key={sIdx} className="text-xs leading-relaxed">
-                                  <strong className="text-foreground">{s.name}</strong>{' '}
-                                  <span className="text-muted-foreground">({s.role} @ <span className="text-primary font-semibold">{s.company}</span>)</span>
-                                </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-xs text-muted-foreground italic">{t('event.panel_open_session')}</span>
-                          )}
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <span className={`techsauce-room-pill ${getRoomBadgeClass(w.room)}`}>
-                            {w.room}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <span className={`techsauce-access-pill ${getAccessBadgeClass(w.access)}`}>
-                            {w.access}
-                          </span>
-                        </td>
-                        <td className="whitespace-nowrap">
-                          <button
-                            id={`btn-copy-workshop-row-${idx}`}
-                            type="button"
-                            onClick={() => handleCopy(`${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})`)}
-                            className="btn btn-secondary text-xs py-1 px-2.5 cursor-pointer inline-flex items-center gap-1"
-                            aria-label={`Copy details for ${w.title}`}
-                          >
-                            {copiedText === `${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})` ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-500" />
-                                <span className="text-emerald-500">{t('event.copied')}</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3 text-muted-foreground" />
-                                <span>{t('event.copy')}</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              /* Cards View Mode */
-              <div className="techsauce-workshops-grid">
-                {filteredWorkshops.map((w, idx) => (
-                  <WorkshopCard
-                    key={idx}
-                    index={idx}
-                    workshop={w}
-                    onCopy={handleCopy}
-                    copiedText={copiedText}
-                    copyLabel={t('event.copy')}
-                    copiedLabel={t('event.copied')}
-                    speakersLabel={t('event.speakers_label')}
-                  />
-                ))}
-              </div>
-            )}
-
-            {filteredWorkshops.length === 0 && (
+            {/* Workshop Timeline View */}
+            {filteredWorkshops.length === 0 ? (
               <div className="techsauce-empty-state">
                 <Presentation className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
                 <p className="font-semibold">{t('event.no_workshops_match')}</p>
                 <p className="text-xs text-muted-foreground mt-1">Try resetting filters or adjusting search keywords.</p>
+              </div>
+            ) : (
+              <div className="ts-timeline">
+                {filteredWorkshops.map((w, idx) => {
+                  const key = `tl-${idx}`;
+                  const isOpen = !!expandedAwards[key];
+                  return (
+                    <div key={idx} className="ts-timeline-row">
+                      {/* Time Column */}
+                      <div className="ts-timeline-time">
+                        <span>{w.time}</span>
+                      </div>
+
+                      {/* Dot + Line */}
+                      <div className="ts-timeline-dot-col">
+                        <div className={`ts-timeline-dot ${isOpen ? 'active' : ''}`} />
+                        {idx < filteredWorkshops.length - 1 && <div className="ts-timeline-line" />}
+                      </div>
+
+                      {/* Content */}
+                      <div className="ts-timeline-content">
+                        <button
+                          type="button"
+                          className="ts-timeline-header"
+                          onClick={() => toggleAwardExpand(key)}
+                          aria-expanded={isOpen}
+                        >
+                          <div className="ts-timeline-title-group">
+                            <span className="ts-timeline-title">{w.title}</span>
+                            <div className="ts-timeline-pills">
+                              <span className={`techsauce-room-pill ${getRoomBadgeClass(w.room)}`}>{w.room}</span>
+                              <span className={`techsauce-access-pill ${getAccessBadgeClass(w.access)}`}>{w.access}</span>
+                            </div>
+                          </div>
+                          <ChevronDown className={`ts-timeline-chevron ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        <AnimatePresence initial={false}>
+                          {isOpen && (
+                            <motion.div
+                              key="detail"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2, ease: 'easeInOut' }}
+                              className="overflow-hidden"
+                            >
+                              <div className="ts-timeline-detail">
+                                {w.speakers && w.speakers.length > 0 && (
+                                  <div className="ts-timeline-speakers">
+                                    {w.speakers.map((s, si) => (
+                                      <div key={si} className="ts-timeline-speaker">
+                                        <div className="ts-timeline-avatar">{s.name.charAt(0)}</div>
+                                        <div>
+                                          <div className="font-semibold text-xs text-foreground">{s.name}</div>
+                                          <div className="text-[11px] text-muted-foreground">{s.role} <span className="text-primary">@ {s.company}</span></div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(`${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})`)}
+                                  className="ts-timeline-copy"
+                                  aria-label={`Copy details for ${w.title}`}
+                                >
+                                  {copiedText === `${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})` ? (
+                                    <><Check className="w-3 h-3 text-emerald-500" /><span className="text-emerald-500">{t('event.copied')}</span></>
+                                  ) : (
+                                    <><Copy className="w-3 h-3" /><span>{t('event.copy')}</span></>
+                                  )}
+                                </button>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -649,7 +618,7 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('all')}
                   className={`techsauce-filter-btn ${selectedZone === 'all' ? 'active' : ''}`}
                 >
-                  {t('event.zone_all')}
+                  {language === 'th' ? 'ทุกโซน (215)' : 'All Zones (215)'}
                 </button>
                 <button
                   id="filter-zone-a"
@@ -659,7 +628,7 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('A')}
                   className={`techsauce-filter-btn ${selectedZone === 'A' ? 'active' : ''}`}
                 >
-                  {t('event.zone_a')}
+                  {language === 'th' ? 'Zone A · ฮอลล์นวัตกรรม (80)' : 'Zone A · Innovation (80)'}
                 </button>
                 <button
                   id="filter-zone-b"
@@ -669,7 +638,7 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('B')}
                   className={`techsauce-filter-btn ${selectedZone === 'B' ? 'active' : ''}`}
                 >
-                  {t('event.zone_b')}
+                  {language === 'th' ? 'Zone B · สตาร์ทอัพ (27)' : 'Zone B · Startups (27)'}
                 </button>
                 <button
                   id="filter-zone-c"
@@ -679,7 +648,7 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('C')}
                   className={`techsauce-filter-btn ${selectedZone === 'C' ? 'active' : ''}`}
                 >
-                  {t('event.zone_c')}
+                  {language === 'th' ? 'Zone C · องค์กร (43)' : 'Zone C · Enterprise (43)'}
                 </button>
                 <button
                   id="filter-zone-d"
@@ -689,7 +658,7 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('D')}
                   className={`techsauce-filter-btn ${selectedZone === 'D' ? 'active' : ''}`}
                 >
-                  {t('event.zone_d')}
+                  {language === 'th' ? 'Zone D · นานาชาติ (15)' : 'Zone D · Global (15)'}
                 </button>
                 <button
                   id="filter-zone-numbered"
@@ -699,22 +668,12 @@ export default function TechsauceEvent() {
                   onClick={() => setSelectedZone('numbered')}
                   className={`techsauce-filter-btn ${selectedZone === 'numbered' ? 'active' : ''}`}
                 >
-                  {t('event.zone_numbered')}
-                </button>
-                <button
-                  id="filter-zone-other"
-                  type="button"
-                  role="radio"
-                  aria-checked={selectedZone === 'other'}
-                  onClick={() => setSelectedZone('other')}
-                  className={`techsauce-filter-btn ${selectedZone === 'other' ? 'active' : ''}`}
-                >
-                  {t('event.zone_other')}
+                  {language === 'th' ? 'Open Floor · ลานกลาง (40)' : 'Open Floor (40)'}
                 </button>
               </div>
             </div>
 
-            {/* Note regarding preserved names & View Mode Toggle */}
+            {/* Status & reset */}
             <div className="flex items-center justify-between text-xs text-muted-foreground my-3 flex-wrap gap-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <span>{t('event.exhibitor_note')} {t('event.showing_exhibitors').replace('{count}', String(filteredExhibitors.length))}.</span>
@@ -734,111 +693,119 @@ export default function TechsauceEvent() {
                   </button>
                 )}
               </div>
-
-              {/* View Mode Toggle (Card vs Table) */}
-              <div className="flex items-center gap-1 bg-card border border-border p-1 rounded-xl shadow-xs" role="toolbar" aria-label="Exhibitors layout view mode">
-                <button
-                  id="exhibitor-view-mode-cards"
-                  type="button"
-                  onClick={() => setViewMode('cards')}
-                  aria-pressed={viewMode === 'cards'}
-                  aria-label="Switch to Card Grid View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'cards' ? 'active' : ''}`}
-                >
-                  <Grid className="w-3.5 h-3.5" />
-                  <span>{t('event.view_cards')}</span>
-                </button>
-                <button
-                  id="exhibitor-view-mode-table"
-                  type="button"
-                  onClick={() => setViewMode('table')}
-                  aria-pressed={viewMode === 'table'}
-                  aria-label="Switch to Structured Table View"
-                  className={`techsauce-viewmode-btn ${viewMode === 'table' ? 'active' : ''}`}
-                >
-                  <Table className="w-3.5 h-3.5" />
-                  <span>{t('event.view_table')}</span>
-                </button>
-              </div>
             </div>
 
-            {/* Table View Mode */}
-            {viewMode === 'table' ? (
-              <div className="techsauce-sheet-table-wrap">
-                <table className="techsauce-sheet-table" aria-label="Exhibitors directory table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '70px' }}>#</th>
-                      <th>{t('event.table_company')}</th>
-                      <th style={{ width: '200px' }}>{t('event.table_booth_location')}</th>
-                      <th style={{ width: '120px' }}>{t('event.table_actions')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredExhibitors.map((ex, idx) => (
-                      <tr key={idx} id={`exhibitor-row-${idx}`} className={ex.company.toLowerCase().includes('botnoi') ? 'bg-primary/10' : ''}>
-                        <td className="font-mono text-xs text-muted-foreground">{idx + 1}</td>
-                        <td className="font-bold text-sm">
-                          {ex.company}
-                          {ex.company.toLowerCase().includes('botnoi') && (
-                            <span className="ml-2 techsauce-featured-badge">{t('event.featured_ai')}</span>
-                          )}
-                        </td>
-                        <td>
-                          <span className={`techsauce-booth-pill ${ex.company.toLowerCase().includes('botnoi') ? 'booth-botnoi' : ''}`}>
-                            {ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')}
-                          </span>
-                        </td>
-                        <td>
-                          <button
-                            id={`btn-copy-exhibitor-row-${idx}`}
-                            type="button"
-                            onClick={() => handleCopy(`${ex.company} (${ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')})`)}
-                            className="btn btn-secondary text-xs py-1 px-2.5 cursor-pointer inline-flex items-center gap-1"
-                            aria-label={`Copy booth details for ${ex.company}`}
+            {/* Zone Overview & Search/Filter Results */}
+            {exhibitorSearch.trim() || selectedZone !== 'all' ? (
+              /* ── Exhibitor List with Zone Labels ── */
+              filteredExhibitors.length > 0 ? (
+                <div className="ts-pill-list mt-3">
+                  {filteredExhibitors.map((ex, idx) => {
+                    const isBotnoi = ex.company.toLowerCase().includes('botnoi');
+                    const zoneKey = getBoothZone(ex.booth);
+                    const zoneInfo = zoneKey ? ZONE_LABELS[zoneKey] : null;
+                    const zoneName = zoneInfo ? (language === 'th' ? zoneInfo.nameTh : zoneInfo.name) : null;
+                    const boothDisplay = ex.booth && ex.booth !== 'Not shown'
+                      ? `Booth ${ex.booth}`
+                      : t('event.booth_not_shown');
+                    const copyVal = `${ex.company} — ${boothDisplay}${zoneName ? ` (${zoneName})` : ''}`;
+                    return (
+                      <div
+                        key={idx}
+                        id={`exhibitor-visible-${idx}`}
+                        className={`ts-pill-row ${isBotnoi ? 'ts-pill-row--featured' : ''}`}
+                        data-company={ex.company}
+                        data-booth={ex.booth}
+                        data-zone={zoneInfo?.name || ''}
+                      >
+                        <span className={`ts-pill-badge ${isBotnoi ? 'ts-pill-badge--featured' : ''}`}>
+                          {ex.booth && ex.booth !== 'Not shown' ? ex.booth : '—'}
+                        </span>
+                        {zoneInfo && (
+                          <span
+                            className="ts-zone-chip"
+                            style={{
+                              color: zoneInfo.color,
+                              backgroundColor: `${zoneInfo.color}15`,
+                              borderColor: `${zoneInfo.color}35`,
+                            }}
+                            title={zoneName || ''}
                           >
-                            {copiedText === `${ex.company} (${ex.booth ? `${t('event.booth')} ${ex.booth}` : t('event.booth_not_shown')})` ? (
-                              <>
-                                <Check className="w-3 h-3 text-emerald-500" />
-                                <span className="text-emerald-500">{t('event.copied')}</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy className="w-3 h-3 text-muted-foreground" />
-                                <span>{t('event.copy')}</span>
-                              </>
-                            )}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                            {language === 'th' ? zoneInfo.code : zoneInfo.name}
+                          </span>
+                        )}
+                        <span className="ts-pill-name">
+                          {ex.company}
+                          <span className="sr-only"> — หมายเลขบูธ {ex.booth} ({zoneName})</span>
+                        </span>
+                        {isBotnoi && (
+                          <span className="techsauce-featured-badge shrink-0">{t('event.featured_ai')}</span>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleCopy(copyVal)}
+                          className="ts-pill-copy ml-auto shrink-0"
+                          aria-label={`Copy ${ex.company}`}
+                          title={language === 'th' ? 'คัดลอกข้อมูลบูธ' : 'Copy booth info'}
+                        >
+                          {copiedText === copyVal
+                            ? <Check className="w-3.5 h-3.5 text-emerald-500" />
+                            : <Copy className="w-3.5 h-3.5" />}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="techsauce-empty-state">
+                  <Building2 className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
+                  <p className="font-semibold">{t('event.no_exhibitors_match').replace('{query}', exhibitorSearch)}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Check the spelling or switch zone filters.</p>
+                </div>
+              )
             ) : (
-              /* Exhibitor Cards Grid */
-              <div className="techsauce-exhibitors-grid">
-                {filteredExhibitors.map((ex, idx) => (
-                  <ExhibitorCard
-                    key={idx}
-                    index={idx}
-                    exhibitor={ex}
-                    onCopy={handleCopy}
-                    copiedText={copiedText}
-                    boothLabel={t('event.booth')}
-                    boothNotShownLabel={t('event.booth_not_shown')}
-                    featuredAiLabel={t('event.featured_ai')}
-                    copyTitle={t('event.copy_booth_title')}
-                  />
-                ))}
-              </div>
-            )}
+              /* ── Zone Overview Cards with Full Zone Labels & Descriptions ── */
+              <div className="ts-exhibitor-summary">
+                <div className="ts-exhibitor-zones-grid">
+                  {Object.values(ZONE_LABELS).map((zone) => {
+                    const count = techsauceData.exhibitors.filter((e) => getBoothZone(e.booth) === zone.key).length;
+                    return (
+                      <button
+                        key={zone.key}
+                        type="button"
+                        onClick={() => setSelectedZone(zone.key === 'NUM' ? 'numbered' : zone.key)}
+                        className="ts-exhibitor-zone-card"
+                      >
+                        <div className="ts-exhibitor-zone-header">
+                          <span
+                            className="ts-exhibitor-zone-badge"
+                            style={{
+                              backgroundColor: `${zone.color}15`,
+                              color: zone.color,
+                              borderColor: `${zone.color}35`,
+                            }}
+                          >
+                            {zone.code}
+                          </span>
+                          <span className="ts-exhibitor-zone-count">
+                            {count} {language === 'th' ? 'บูธ' : 'booths'}
+                          </span>
+                        </div>
+                        <div className="ts-exhibitor-zone-name">
+                          {language === 'th' ? zone.nameTh : zone.name}
+                        </div>
+                        <div className="ts-exhibitor-zone-desc">
+                          {language === 'th' ? zone.descTh : zone.desc}
+                        </div>
+                        <div className="ts-exhibitor-zone-action">
+                          <span>{language === 'th' ? 'แตะเพื่อดูรายชื่อบูธ' : 'Click to browse booths'}</span>
+                          <ChevronDown className="w-3.5 h-3.5 -rotate-90" />
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
 
-            {filteredExhibitors.length === 0 && (
-              <div className="techsauce-empty-state">
-                <Building2 className="w-10 h-10 text-muted-foreground/40 mx-auto mb-3" />
-                <p className="font-semibold">{t('event.no_exhibitors_match').replace('{query}', exhibitorSearch)}</p>
-                <p className="text-xs text-muted-foreground mt-1">Check the spelling or switch zone filters.</p>
               </div>
             )}
           </div>
@@ -884,105 +851,78 @@ export default function TechsauceEvent() {
               ))}
             </div>
 
-            {/* Awards Category Sections */}
-            <div className="techsauce-awards-categories-wrap mt-8">
+            {/* Awards Pill List — grouped by category */}
+            <div className="ts-pill-list mt-6">
               {awardCategories
                 .filter((cat) => activeAwardCategory === 'all' || activeAwardCategory === cat)
-                .map((cat, catIdx) => {
-                  const catSlug = cat.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                  return (
-                    <section
-                      key={cat}
-                      id={`award-category-${catSlug}`}
-                      aria-label={`${cat} Category (${techsauceData.techsauce_awards.categories[cat].length} Honors)`}
-                      className="techsauce-award-category-block"
-                    >
-                      <div className="techsauce-award-category-title-row">
-                        <div className="flex-1 flex flex-wrap items-center justify-between gap-3">
-                          <div>
-                            <h3 className="text-lg font-bold text-foreground">{cat}</h3>
-                            <p className="text-xs text-muted-foreground">
-                              {t('event.award_honors_count').replace(
-                                '{count}',
-                                String(techsauceData.techsauce_awards.categories[cat].length)
-                              )}
-                            </p>
-                          </div>
+                .map((cat) => (
+                  <div key={cat} className="ts-pill-group">
+                    {/* Category Header */}
+                    <div className="ts-pill-group-header">
+                      <span className="ts-pill-group-label">🏆 {cat}</span>
+                      <span className="ts-pill-group-count">{techsauceData.techsauce_awards.categories[cat].length}</span>
+                    </div>
 
-                          {/* Category Metadata Badges */}
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-500 font-medium text-xs border border-amber-500/20">
-                              <span>
-                                {t('event.nomination_period_label')}: {techsauceData.techsauce_awards.nomination_period}
-                              </span>
-                            </span>
-                            <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-500 font-medium text-xs border border-indigo-500/20">
-                              <span>
-                                {t('event.announcement_date_label')}: {techsauceData.techsauce_awards.announcement_date}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="techsauce-award-items-grid">
-                        {techsauceData.techsauce_awards.categories[cat].map((awardName, i) => (
-                          <article
-                            key={i}
-                            id={`award-item-${catIdx}-${i}`}
-                            className="techsauce-award-item-card"
-                            aria-label={`${awardName} (${cat})`}
+                    {/* Award rows */}
+                    {techsauceData.techsauce_awards.categories[cat].map((awardName, i) => {
+                      const awardKey = `${cat}-${awardName}`;
+                      const isExpanded = !!expandedAwards[awardKey];
+                      const copyVal = `${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})`;
+                      return (
+                        <div key={i} className="ts-pill-award-row">
+                          {/* Row header — tap to expand */}
+                          <button
+                            type="button"
+                            className="ts-pill-award-header"
+                            onClick={() => toggleAwardExpand(awardKey)}
+                            aria-expanded={isExpanded}
                           >
-                            <div className="w-full flex items-start justify-between gap-2">
-                              <div>
-                                <span className="inline-block text-[10px] font-bold text-amber-500 uppercase tracking-wider mb-1">
-                                  {cat}
-                                </span>
-                                <h4 className="techsauce-award-item-text">{awardName}</h4>
-                              </div>
+                            <span className="ts-pill-award-name">{awardName}</span>
+                            <div className="flex items-center gap-2 shrink-0">
                               <button
-                                id={`btn-copy-award-${catIdx}-${i}`}
                                 type="button"
-                                onClick={() => handleCopy(`${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})`)}
-                                className="techsauce-award-copy-btn cursor-pointer"
-                                title={`Copy ${awardName} info`}
-                                aria-label={`Copy details for ${awardName}`}
+                                onClick={(e) => { e.stopPropagation(); handleCopy(copyVal); }}
+                                className="ts-pill-copy"
+                                aria-label={`Copy ${awardName}`}
                               >
-                                {copiedText === `${awardName} — ${cat} (${techsauceData.techsauce_awards.venue}, ${techsauceData.techsauce_awards.announcement_date})` ? (
-                                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                                ) : (
-                                  <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-                                )}
+                                {copiedText === copyVal
+                                  ? <Check className="w-3.5 h-3.5 text-emerald-500" />
+                                  : <Copy className="w-3.5 h-3.5" />}
                               </button>
+                              <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                             </div>
+                          </button>
 
-                            {/* Metadata Information Box */}
-                            <div className="techsauce-award-meta-box">
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.nomination_period_label')}: </span>
-                                <span className="techsauce-award-meta-val">{techsauceData.techsauce_awards.nomination_period}</span>
-                              </div>
-
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.announcement_date_label')}: </span>
-                                <span className="techsauce-award-meta-val font-mono font-bold text-amber-500">
-                                  {techsauceData.techsauce_awards.announcement_date}
-                                </span>
-                              </div>
-
-                              <div className="techsauce-award-meta-row">
-                                <span className="techsauce-award-meta-label">{t('event.venue_label')}: </span>
-                                <span className="techsauce-award-meta-val text-[11px] leading-tight block mt-0.5">
-                                  {techsauceData.techsauce_awards.venue}
-                                </span>
-                              </div>
-                            </div>
-                          </article>
-                        ))}
-                      </div>
-                    </section>
-                  );
-                })}
+                          {/* Collapsible detail */}
+                          <AnimatePresence initial={false}>
+                            {isExpanded && (
+                              <motion.div
+                                key="award-detail"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                className="overflow-hidden"
+                              >
+                                <div className="ts-pill-award-detail">
+                                  <span className="ts-pill-award-meta">
+                                    📅 {t('event.nomination_period_label')}: <strong>{techsauceData.techsauce_awards.nomination_period}</strong>
+                                  </span>
+                                  <span className="ts-pill-award-meta">
+                                    📣 {t('event.announcement_date_label')}: <strong className="text-amber-500">{techsauceData.techsauce_awards.announcement_date}</strong>
+                                  </span>
+                                  <span className="ts-pill-award-meta">
+                                    📍 {t('event.venue_label')}: <strong>{techsauceData.techsauce_awards.venue}</strong>
+                                  </span>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
             </div>
           </div>
         </section>
@@ -991,181 +931,5 @@ export default function TechsauceEvent() {
       {/* Footer */}
       <AppFooter />
     </main>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Component: Workshop Card (Clean, Save Button Removed)
-───────────────────────────────────────────── */
-interface WorkshopCardProps {
-  index: number;
-  workshop: Workshop;
-  onCopy: (text: string) => void;
-  copiedText: string | null;
-  copyLabel: string;
-  copiedLabel: string;
-  speakersLabel: string;
-}
-
-function WorkshopCard({
-  index,
-  workshop,
-  onCopy,
-  copiedText,
-  copyLabel,
-  copiedLabel,
-  speakersLabel,
-}: WorkshopCardProps) {
-  const shareText = `${workshop.title} | ${workshop.date} ${workshop.time} at ${workshop.room} (${workshop.access})`;
-
-  return (
-    <motion.article
-      id={`workshop-${index}`}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="techsauce-workshop-card"
-      aria-label={`${workshop.title} (${workshop.date} ${workshop.time} at ${workshop.room})`}
-    >
-      {/* Top Metadata Row */}
-      <div className="techsauce-card-top">
-        <div className="techsauce-time-pill">
-          <Calendar className="w-3 h-3 text-muted-foreground mr-1" />
-          <span>{workshop.date} • {workshop.time}</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className={`techsauce-room-pill ${getRoomBadgeClass(workshop.room)}`}>
-            {workshop.room}
-          </span>
-          <span className={`techsauce-access-pill ${getAccessBadgeClass(workshop.access)}`}>
-            {workshop.access}
-          </span>
-        </div>
-      </div>
-
-      {/* Workshop Title */}
-      <h3 className="techsauce-workshop-title">{workshop.title}</h3>
-
-      {/* Speakers */}
-      {workshop.speakers && workshop.speakers.length > 0 ? (
-        <div className="techsauce-speakers-wrap">
-          <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-            <Users className="w-3 h-3" />
-            <span>{speakersLabel}</span>
-          </div>
-          <div className="space-y-2">
-            {workshop.speakers.map((s, idx) => (
-              <div key={idx} className="techsauce-speaker-item">
-                <div className="techsauce-speaker-avatar">
-                  {s.name.charAt(0)}
-                </div>
-                <div className="techsauce-speaker-info">
-                  <div className="font-bold text-xs text-foreground">{s.name}</div>
-                  <div className="text-[11px] text-muted-foreground">
-                    {s.role} <span className="text-primary font-semibold">@ {s.company}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="techsauce-speakers-wrap">
-          <div className="text-xs text-muted-foreground italic">
-            Panel / Open Masterclass Session
-          </div>
-        </div>
-      )}
-
-      {/* Actions footer (Save button removed, Clean copy button only) */}
-      <div className="techsauce-card-actions">
-        <button
-          id={`btn-copy-workshop-${index}`}
-          type="button"
-          onClick={() => onCopy(shareText)}
-          className="techsauce-action-btn w-full justify-center"
-          title={copyLabel}
-          aria-label={`Copy details for ${workshop.title}`}
-        >
-          {copiedText === shareText ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-emerald-500 font-semibold">{copiedLabel}</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-              <span>{copyLabel}</span>
-            </>
-          )}
-        </button>
-      </div>
-    </motion.article>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   Component: Exhibitor Card
-───────────────────────────────────────────── */
-interface ExhibitorCardProps {
-  index: number;
-  exhibitor: Exhibitor;
-  onCopy: (text: string) => void;
-  copiedText: string | null;
-  boothLabel: string;
-  boothNotShownLabel: string;
-  featuredAiLabel: string;
-  copyTitle: string;
-}
-
-function ExhibitorCard({
-  index,
-  exhibitor,
-  onCopy,
-  copiedText,
-  boothLabel,
-  boothNotShownLabel,
-  featuredAiLabel,
-  copyTitle,
-}: ExhibitorCardProps) {
-  const isBotnoi = exhibitor.company.toLowerCase().includes('botnoi');
-  const boothDisplay = exhibitor.booth
-    ? (exhibitor.booth === 'Not shown' ? boothNotShownLabel : `${boothLabel} ${exhibitor.booth}`)
-    : boothNotShownLabel;
-
-  return (
-    <article
-      id={`exhibitor-${index}`}
-      className={`techsauce-exhibitor-card ${isBotnoi ? 'botnoi-featured' : ''}`}
-      aria-label={`${exhibitor.company} (${boothDisplay})`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <span className={`techsauce-booth-pill ${isBotnoi ? 'booth-botnoi' : ''}`}>
-          {boothDisplay}
-        </span>
-        {isBotnoi && (
-          <span className="techsauce-featured-badge">{featuredAiLabel}</span>
-        )}
-      </div>
-
-      <h4 className="techsauce-exhibitor-name" title={exhibitor.company}>
-        {exhibitor.company}
-      </h4>
-
-      <button
-        id={`btn-copy-exhibitor-${index}`}
-        type="button"
-        onClick={() => onCopy(`${exhibitor.company} (${boothDisplay})`)}
-        className="techsauce-exhibitor-copy"
-        title={copyTitle}
-        aria-label={`Copy booth details for ${exhibitor.company}`}
-      >
-        {copiedText === `${exhibitor.company} (${boothDisplay})` ? (
-          <Check className="w-3 h-3 text-emerald-500" />
-        ) : (
-          <Copy className="w-3 h-3" />
-        )}
-      </button>
-    </article>
   );
 }
