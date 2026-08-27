@@ -49,6 +49,82 @@ export interface TechsauceKnowledgeBase {
   raw_source_text: RawSourceItem[];
 }
 
+/** Zone label map for Techsauce Global Summit 2026 */
+export interface ZoneInfo {
+  key: string;
+  code: string;
+  name: string;
+  nameTh: string;
+  color: string;
+  desc: string;
+  descTh: string;
+}
+
+export const ZONE_LABELS: Record<string, ZoneInfo> = {
+  A: {
+    key: 'A',
+    code: 'Zone A',
+    name: 'Innovation Hall',
+    nameTh: 'ฮอลล์นวัตกรรม (Zone A)',
+    color: '#6366f1',
+    desc: 'AI, DeepTech, Cloud & Enterprise Platforms',
+    descTh: 'โซน AI, ดีพเทค, คลาวด์ และเทคโนโลยีองค์กร',
+  },
+  B: {
+    key: 'B',
+    code: 'Zone B',
+    name: 'Startup Village',
+    nameTh: 'สตาร์ทอัพ วิลเลจ (Zone B)',
+    color: '#10b981',
+    desc: 'Early & Growth-stage Tech Startups',
+    descTh: 'โซนสตาร์ทอัพและผู้ประกอบการเทคโนโลยีเกิดใหม่',
+  },
+  C: {
+    key: 'C',
+    code: 'Zone C',
+    name: 'Enterprise Zone',
+    nameTh: 'โซนองค์กรและพันธมิตร (Zone C)',
+    color: '#f59e0b',
+    desc: 'Corporate Innovators & Tech Enablers',
+    descTh: 'โซนองค์กรชั้นนำ บริษัทไอที และพันธมิตรธุรกิจ',
+  },
+  D: {
+    key: 'D',
+    code: 'Zone D',
+    name: 'Global Pavilion',
+    nameTh: 'พาวิเลียนนานาชาติ (Zone D)',
+    color: '#ec4899',
+    desc: 'International Delegations & Global Hubs',
+    descTh: 'โซนหน่วยงานและผู้จัดแสดงระดับนานาชาติ',
+  },
+  NUM: {
+    key: 'NUM',
+    code: 'Open Floor',
+    name: 'Open Expo Floor',
+    nameTh: 'โซนบูธกลาง (เลข 1-40)',
+    color: '#0ea5e9',
+    desc: 'Main Concourse Exhibition Booths',
+    descTh: 'บูธนิทรรศการลานกลางหลัก (เลขโดด 1-40)',
+  },
+};
+
+/** Derive zone key from a booth string */
+export function getBoothZone(booth: string | null | undefined): string {
+  if (!booth || booth === 'Not shown') return '';
+  const trimmed = booth.trim();
+  const prefix = trimmed.match(/^([A-D])/i)?.[1]?.toUpperCase();
+  if (prefix && ZONE_LABELS[prefix]) return prefix;
+  if (/^\d/.test(trimmed)) return 'NUM';
+  return '';
+}
+
+/** Get readable label for a booth number */
+export function getBoothZoneLabel(booth: string | null | undefined, lang: 'th' | 'en' = 'th'): string {
+  const zoneKey = getBoothZone(booth);
+  if (!zoneKey || !ZONE_LABELS[zoneKey]) return '';
+  return lang === 'th' ? ZONE_LABELS[zoneKey].nameTh : ZONE_LABELS[zoneKey].name;
+}
+
 // 215 Curated Exhibitors synced from sheet/Techsauce_2026_Vibe_Knowledge_Sheet.xlsx - Exhibitors.csv
 export const EXHIBITORS_FROM_SHEET: Exhibitor[] = [
   { company: "SORASO Hospitality Native", booth: "A34" },
