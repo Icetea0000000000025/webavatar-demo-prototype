@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useSpring, AnimatePresence, type Variants } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import logoNewLightBlue from '../assets/logo-new-light-blue-02.png';
 import {
   Brain,
@@ -20,7 +20,9 @@ import {
   PhoneCall,
   Mic,
   Languages,
-  UserCheck
+  UserCheck,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
@@ -55,11 +57,18 @@ function About() {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isPurposeHeld, setIsPurposeHeld] = useState<boolean>(false);
   const [activeTeamCard, setActiveTeamCard] = useState<string | null>(null);
-  const [currentProductSlide, setCurrentProductSlide] = useState<number>(0);
+
+  // ═══════════════════════════════════════════════════
+  // OUR PRODUCTS CAROUSEL (SMOOTH TRANSFORM + MIDDLE CARD HIGHLIGHT + CLICK-TO-SCROLL)
+  // ═══════════════════════════════════════════════════
+  const [activeProductIndex, setActiveProductIndex] = useState<number>(0);
   const [visibleProductsCount, setVisibleProductsCount] = useState<number>(3);
+  const [isAutoScrolling, setIsAutoScrolling] = useState<boolean>(true);
   const [isProductHovered, setIsProductHovered] = useState<boolean>(false);
+  const touchStartX = useRef<number | null>(null);
   const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Responsive visible count
   useEffect(() => {
     const handleResize = () => {
       if (typeof window !== 'undefined') {
@@ -77,20 +86,68 @@ function About() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // ═══════════════════════════════════════════════════
-  // AUTO-SLIDE PRODUCTS EVERY 3.5 SECONDS (PAUSES ON HOVER)
-  // ═══════════════════════════════════════════════════
+  // Stop auto-scrolling permanently on any user or widget interaction
+  const stopAutoScroll = useCallback(() => {
+    setIsAutoScrolling(false);
+  }, []);
+
+  // Auto-slide every 3.8 seconds until user or widget interacts
   useEffect(() => {
-    if (isProductHovered) return;
-    const maxSlide = Math.max(0, 12 - visibleProductsCount); // 12 products total
-    if (maxSlide <= 0) return;
+    if (!isAutoScrolling || isProductHovered) return;
 
     const interval = setInterval(() => {
-      setCurrentProductSlide((prev) => (prev >= maxSlide ? 0 : prev + 1));
-    }, 3500);
+      setActiveProductIndex((prev) => (prev + 1) % 12);
+    }, 3800);
 
     return () => clearInterval(interval);
-  }, [isProductHovered, visibleProductsCount]);
+  }, [isAutoScrolling, isProductHovered]);
+
+  // Calculate the track slide position based on activeProductIndex:
+  // - On 3-card view (desktop):
+  //   - Card 0: slide 0 (window [0, 1, 2], card 0 highlighted)
+  //   - Card 1: slide 0 (window [0, 1, 2], card 1 in middle highlighted)
+  //   - Card 2..9: slide 1..8 (card in middle highlighted)
+  //   - Card 10: slide 9 (window [9, 10, 11], card 10 in middle highlighted)
+  //   - Card 11: slide 9 (window [9, 10, 11], card 11 highlighted)
+  const maxSlide = Math.max(0, 12 - visibleProductsCount);
+  const currentProductSlide = (() => {
+    if (visibleProductsCount >= 3) {
+      if (activeProductIndex === 0) return 0;
+      if (activeProductIndex >= 11) return maxSlide;
+      return Math.min(maxSlide, Math.max(0, activeProductIndex - 1));
+    } else {
+      return Math.min(maxSlide, activeProductIndex);
+    }
+  })();
+
+  // Click any card to select & smoothly scroll/center it into view
+  const handleCardClick = (idx: number, e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('a')) {
+      stopAutoScroll();
+      return;
+    }
+    stopAutoScroll();
+    setActiveProductIndex(idx);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+
+    if (Math.abs(deltaX) > 40) {
+      stopAutoScroll();
+      if (deltaX < 0) {
+        setActiveProductIndex((prev) => (prev + 1) % 12);
+      } else {
+        setActiveProductIndex((prev) => (prev - 1 + 12) % 12);
+      }
+    }
+  };
 
   const handlePurposeHoldStart = () => {
     if (holdTimerRef.current) {
@@ -641,6 +698,36 @@ function About() {
       <div className="about3-container">
 
         {/* ══════════════════════════════════════════════════════════
+            AI AVATAR WIDGET INTERACTION DIRECTIVES & CONTEXT
+            (Hidden assistive context scanned by DomScanner & Gemini Live Tools)
+        ══════════════════════════════════════════════════════════ */}
+        <div
+          id="ai-about-page-guidance"
+          role="note"
+          aria-hidden="false"
+          className="techsauce-ai-context-instructions"
+          style={{
+            position: 'absolute',
+            width: '1px',
+            height: '1px',
+            padding: 0,
+            margin: '-1px',
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'normal',
+            border: 0,
+            opacity: 0.01,
+            pointerEvents: 'none',
+          }}
+        >
+          AI Avatar Assistant Directives:
+          1. When discussing Botnoi's products or solutions (AI Agent Builder, AI Voicebot, Botnoi Voice, Botnoi Live Translation, AI Avatar, Collecto, Colinsight, Gogo Service, Smart Staff Scheduling, Vela, Botnoikitchen, Bokari), use scan_section on #products-catalog and smoothly scroll/highlight the specific card (#product-agent-builder, #product-voicebot, #product-botnoi-voice, #product-live-translation, #product-ai-avatar, #product-collecto, #product-colinsight, #product-gogo-service, #product-staff-scheduling, #product-vela, #product-botnoikitchen, #product-bokari).
+          2. To navigate the product carousel, target #btn-product-prev, #btn-product-next, or #product-dot-0 through #product-dot-11.
+          3. For company history, refer to #company-history with milestones #history-2016 through #history-2027.
+          4. For core expertise pillars, inspect #expertise-gap (Slot A: Knowledge, Slot B: 24/7 Service, Slot C: Efficiency, Slot D: Innovation).
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════
             1. HERO SECTION: WHO WE ARE & UNIFIED INTRO / VISION / MISSION CARD
         ══════════════════════════════════════════════════════════ */}
         <section className="about3-hero-section" id="who-we-are" aria-label="Who We Are">
@@ -987,15 +1074,24 @@ function About() {
             <p>{t('about.products_desc')}</p>
           </AnimatedSection>
 
-          {/* Product Carousel Slider Container (Auto-slides, pauses on hover) */}
+          {/* Product Carousel Slider Container */}
           <AnimatedSection direction="up" duration={0.8} delay={0.15}>
             <div
               className="products-slider-wrapper"
               onMouseEnter={() => setIsProductHovered(true)}
               onMouseLeave={() => setIsProductHovered(false)}
             >
-              {/* Viewport with overflow hidden */}
-              <div className="products-slider-viewport">
+              {/* Viewport with smooth GPU-accelerated transition */}
+              <div
+                id="products-carousel-viewport"
+                className="products-slider-viewport"
+                role="region"
+                aria-label="Botnoi AI Products Carousel"
+                tabIndex={0}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                onWheel={() => stopAutoScroll()}
+              >
                 <div
                   className="products-slider-track"
                   style={{
@@ -1003,15 +1099,19 @@ function About() {
                   }}
                 >
                   {products.map((product, idx) => {
-                    // Lock 3 colors across visible columns: 0 = ฟ้าอ่อน/Cyan, 1 = ฟ้า Botnoi, 2 = น้ำเงิน
-                    const slotThemeColors = ['#38BDF8', '#0284C7', '#2563EB'];
-                    const cardAccent = slotThemeColors[(idx - currentProductSlide + 300) % 3];
+                    const slotThemeColors = ['#38BDF8', '#0284C7', '#2563EB', '#6366F1'];
+                    const cardAccent = slotThemeColors[idx % slotThemeColors.length];
+                    const isHighlighted = activeProductIndex === idx;
 
                     return (
-                      <div
-                        className="product-card-modern"
+                      <article
+                        className={`product-card-modern ${isHighlighted ? 'is-highlighted-card' : ''}`}
                         key={product.id}
                         id={`product-${product.id}`}
+                        data-index={idx}
+                        onClick={(e) => handleCardClick(idx, e)}
+                        role="article"
+                        aria-label={`${product.name} — ${product.industry}`}
                         style={{
                           '--prod-accent': cardAccent,
                         } as React.CSSProperties}
@@ -1067,37 +1167,76 @@ function About() {
                         {/* Bottom Action Link */}
                         <div className="product-card-footer">
                           <a
+                            id={`btn-visit-${product.id}`}
                             href={product.link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="product-action-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              stopAutoScroll();
+                            }}
                             style={{
                               '--btn-accent': cardAccent,
                             } as React.CSSProperties}
+                            aria-label={`Visit ${product.name} official platform`}
                           >
                             <span>{t('about.prod_visit')}</span>
                             <ArrowRight size={15} className="btn-arrow-icon" />
                           </a>
                         </div>
-                      </div>
+                      </article>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Clean Floating Pagination Dots (No arrows, No outer enclosing frame) */}
-              <div className="products-clean-dots" role="tablist" aria-label="Product slides">
-                {Array.from({ length: Math.max(0, products.length - visibleProductsCount) + 1 }).map((_, dotIdx) => (
-                  <button
-                    key={dotIdx}
-                    type="button"
-                    role="tab"
-                    aria-selected={currentProductSlide === dotIdx}
-                    aria-label={`Slide ${dotIdx + 1} of ${Math.max(0, products.length - visibleProductsCount) + 1}`}
-                    className={`clean-dot-btn ${currentProductSlide === dotIdx ? 'is-active' : ''}`}
-                    onClick={() => setCurrentProductSlide(dotIdx)}
-                  />
-                ))}
+              {/* Bottom Pagination & Navigation Controls */}
+              <div className="products-controls-row">
+                <button
+                  id="btn-product-prev"
+                  type="button"
+                  onClick={() => {
+                    stopAutoScroll();
+                    setActiveProductIndex((prev) => (prev - 1 + 12) % 12);
+                  }}
+                  aria-label="Previous Products"
+                  className="products-arrow-btn"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+
+                {/* Floating Pagination Dots for all 12 products */}
+                <div className="products-clean-dots" role="tablist" aria-label="Product navigation dots">
+                  {products.map((product, dotIdx) => (
+                    <button
+                      key={product.id}
+                      id={`product-dot-${dotIdx}`}
+                      type="button"
+                      role="tab"
+                      aria-selected={activeProductIndex === dotIdx}
+                      aria-label={`Jump to ${product.name} (${dotIdx + 1} of ${products.length})`}
+                      className={`clean-dot-btn ${activeProductIndex === dotIdx ? 'is-active' : ''}`}
+                      onClick={() => {
+                        stopAutoScroll();
+                        setActiveProductIndex(dotIdx);
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  id="btn-product-next"
+                  type="button"
+                  onClick={() => {
+                    stopAutoScroll();
+                    setActiveProductIndex((prev) => (prev + 1) % 12);
+                  }}
+                  aria-label="Next Products"
+                  className="products-arrow-btn"
+                >
+                  <ChevronRight size={18} />
+                </button>
               </div>
             </div>
           </AnimatedSection>
