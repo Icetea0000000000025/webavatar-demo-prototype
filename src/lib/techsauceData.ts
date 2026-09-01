@@ -49,6 +49,82 @@ export interface TechsauceKnowledgeBase {
   raw_source_text: RawSourceItem[];
 }
 
+/** Zone label map for Techsauce Global Summit 2026 */
+export interface ZoneInfo {
+  key: string;
+  code: string;
+  name: string;
+  nameTh: string;
+  color: string;
+  desc: string;
+  descTh: string;
+}
+
+export const ZONE_LABELS: Record<string, ZoneInfo> = {
+  A: {
+    key: 'A',
+    code: 'Zone A',
+    name: 'Innovation Hall',
+    nameTh: 'ฮอลล์นวัตกรรม (Zone A)',
+    color: '#6366f1',
+    desc: 'AI, DeepTech, Cloud & Enterprise Platforms',
+    descTh: 'โซน AI, ดีพเทค, คลาวด์ และเทคโนโลยีองค์กร',
+  },
+  B: {
+    key: 'B',
+    code: 'Zone B',
+    name: 'Startup Village',
+    nameTh: 'สตาร์ทอัพ วิลเลจ (Zone B)',
+    color: '#10b981',
+    desc: 'Early & Growth-stage Tech Startups',
+    descTh: 'โซนสตาร์ทอัพและผู้ประกอบการเทคโนโลยีเกิดใหม่',
+  },
+  C: {
+    key: 'C',
+    code: 'Zone C',
+    name: 'Enterprise Zone',
+    nameTh: 'โซนองค์กรและพันธมิตร (Zone C)',
+    color: '#f59e0b',
+    desc: 'Corporate Innovators & Tech Enablers',
+    descTh: 'โซนองค์กรชั้นนำ บริษัทไอที และพันธมิตรธุรกิจ',
+  },
+  D: {
+    key: 'D',
+    code: 'Zone D',
+    name: 'Global Pavilion',
+    nameTh: 'พาวิเลียนนานาชาติ (Zone D)',
+    color: '#ec4899',
+    desc: 'International Delegations & Global Hubs',
+    descTh: 'โซนหน่วยงานและผู้จัดแสดงระดับนานาชาติ',
+  },
+  NUM: {
+    key: 'NUM',
+    code: 'Open Floor',
+    name: 'Open Expo Floor',
+    nameTh: 'โซนบูธกลาง (เลข 1-40)',
+    color: '#0ea5e9',
+    desc: 'Main Concourse Exhibition Booths',
+    descTh: 'บูธนิทรรศการลานกลางหลัก (เลขโดด 1-40)',
+  },
+};
+
+/** Derive zone key from a booth string */
+export function getBoothZone(booth: string | null | undefined): string {
+  if (!booth || booth === 'Not shown') return '';
+  const trimmed = booth.trim();
+  const prefix = trimmed.match(/^([A-D])/i)?.[1]?.toUpperCase();
+  if (prefix && ZONE_LABELS[prefix]) return prefix;
+  if (/^\d/.test(trimmed)) return 'NUM';
+  return '';
+}
+
+/** Get readable label for a booth number */
+export function getBoothZoneLabel(booth: string | null | undefined, lang: 'th' | 'en' = 'th'): string {
+  const zoneKey = getBoothZone(booth);
+  if (!zoneKey || !ZONE_LABELS[zoneKey]) return '';
+  return lang === 'th' ? ZONE_LABELS[zoneKey].nameTh : ZONE_LABELS[zoneKey].name;
+}
+
 // 215 Curated Exhibitors synced from sheet/Techsauce_2026_Vibe_Knowledge_Sheet.xlsx - Exhibitors.csv
 export const EXHIBITORS_FROM_SHEET: Exhibitor[] = [
   { company: "SORASO Hospitality Native", booth: "A34" },
@@ -267,6 +343,82 @@ export const EXHIBITORS_FROM_SHEET: Exhibitor[] = [
   { company: "SMRJ (Japan Zone)", booth: "Not shown" },
   { company: "So Idea", booth: "Not shown" }
 ];
+
+// Curated scope and criteria descriptions for all 18 Techsauce Awards
+export const AWARD_DESCRIPTIONS: Record<string, { en: string; th: string }> = {
+  "The Saucest Brand for Talent": {
+    en: "Recognizes the leading employer brand that champions top tech and business talent acquisition, culture, and employee advocacy.",
+    th: "ยกย่ององค์กรที่มีการสร้างแบรนด์นายจ้างยอดเยี่ยม ดึงดูดและพัฒนาบุคลากรชั้นนำในสายเทคโนโลยีและธุรกิจอย่างโดดเด่น",
+  },
+  "The Saucest Workplace & Culture": {
+    en: "Honors organizations fostering progressive workplace culture, diversity, mental well-being, and modern collaboration.",
+    th: "มอบให้กับองค์กรที่มีวัฒนธรรมการทำงานและสภาพแวดล้อมยอดเยี่ยม ส่งเสริมความหลากหลาย สุขภาวะที่ดี และการทำงานร่วมกัน",
+  },
+  "The Saucest Chief People Officer of the Year": {
+    en: "Celebrates exceptional People and HR leaders pioneering transformative workforce strategies and organizational agility.",
+    th: "ยกย่องผู้นำด้านทรัพยากรบุคคล (CPO/HR Leader) ยอดเยี่ยมแห่งปี ผู้ขับเคลื่อนกลยุทธ์การพัฒนาคนและปฏิรูปองค์กรสู่ความสำเร็จ",
+  },
+  "The Saucest Tech Solution": {
+    en: "Recognizes breakthrough technical products or platforms delivering high impact, scalability, and measurable value.",
+    th: "มอบให้กับโซลูชันหรือแพลตฟอร์มเทคโนโลยีที่โดดเด่น แก้ปัญหาสำคัญและสร้างคุณค่าที่วัดผลได้อย่างเป็นรูปธรรม",
+  },
+  "The Saucest Process Transformation": {
+    en: "Honors enterprises that successfully transformed legacy processes into automated, agile digital operations.",
+    th: "ยกย่ององค์กรที่ปฏิรูปกระบวนการทำงานสู่ระบบดิจิทัลและอัตโนมัติได้อย่างมีประสิทธิภาพ รวดเร็ว และแม่นยำ",
+  },
+  "The Saucest Tech Collab": {
+    en: "Celebrates impactful cross-sector tech partnerships that co-create innovative products and foster ecosystem synergy.",
+    th: "มอบให้กับความร่วมมือทางเทคโนโลยีระหว่างองค์กรหรือพันธมิตรที่ร่วมสร้างสรรค์นวัตกรรมใหม่และขับเคลื่อนระบบนิเวศ",
+  },
+  "The Saucest Tech Scaleup": {
+    en: "Recognizes fast-growing scaleups showing exponential market adoption, revenue acceleration, and regional expansion.",
+    th: "ยกย่องสตาร์ทอัพ/สเกลอัปที่มีการเติบโตแบบก้าวกระโดด ขยายฐานลูกค้าและรายได้ทั้งในระดับประเทศและภูมิภาค",
+  },
+  "The Saucest Infrastructure Enabler": {
+    en: "Honors foundational infrastructure, cloud, telecom, and cybersecurity providers enabling digital transformation.",
+    th: "มอบให้กับผู้ให้บริการโครงสร้างพื้นฐานดิจิทัล คลาวด์ และความมั่นคงปลอดภัยไซเบอร์ที่เป็นรากฐานสำคัญของการเปลี่ยนผ่าน",
+  },
+  "The Saucest Tech Visionary of the Year": {
+    en: "Celebrates forward-thinking pioneers shaping the future landscape of technology and business in Southeast Asia.",
+    th: "ยกย่องผู้นำวิสัยทัศน์กว้างไกลผู้มีบทบาทสำคัญในการกำหนดทิศทางเทคโนโลยีและธุรกิจแห่งอนาคตในภูมิภาค",
+  },
+  "The Saucest Woman in Tech": {
+    en: "Honors inspiring female leaders, founders, and technologists breaking boundaries and elevating diversity in tech.",
+    th: "ยกย่องผู้นำหญิงในวงการเทคโนโลยี ผู้สร้างแรงบันดาลใจ ทลายข้อจำกัด และส่งเสริมความหลากหลายในแวดวงนวัตกรรม",
+  },
+  "The Saucest Chief Technology Officer": {
+    en: "Celebrates outstanding CTOs demonstrating architectural vision, engineering excellence, and tech leadership.",
+    th: "มอบให้กับประธานเจ้าหน้าที่ฝ่ายเทคโนโลยี (CTO) แห่งปี ผู้เป็นเลิศด้านวิสัยทัศน์ทางสถาปัตยกรรมและการนำทีมวิศวกรรม",
+  },
+  "The Saucest AI-Driven Company": {
+    en: "Honors companies integrating AI deeply into core business workflows, decision-making, and customer touchpoints.",
+    th: "ยกย่ององค์กรที่ขับเคลื่อนธุรกิจด้วย AI ในระดับแกนหลัก เพิ่มขีดความสามารถการแข่งขันและสร้างประสบการณ์ใหม่อย่างแท้จริง",
+  },
+  "The Saucest AI Governance Leadership Award by ETDA": {
+    en: "Presented in partnership with ETDA to recognize organizations championing ethical, transparent, and secure AI governance.",
+    th: "รางวัลความร่วมมือกับ ETDA มอบให้กับองค์กรที่เป็นแบบอย่างในการกำกับดูแลการใช้งาน AI อย่างมีธรรมาภิบาล จริยธรรม และปลอดภัย",
+  },
+  "The Saucest Brand for a Better Planet": {
+    en: "Celebrates sustainable and green tech initiatives driving meaningful climate action, circularity, and ESG impact.",
+    th: "ยกย่ององค์กรหรือแบรนด์ที่ใช้เทคโนโลยีขับเคลื่อนความยั่งยืน สิ่งแวดล้อม (ESG) และสร้างการเปลี่ยนแปลงเชิงบวกให้กับโลก",
+  },
+  "The Saucest Venture": {
+    en: "Honors high-impact venture capital firms and funds actively fueling innovation, capital, and regional venture success.",
+    th: "มอบให้กับกองทุนหรือ Venture Capital ที่มีบทบาทโดดเด่นในการสนับสนุนเงินทุนและบ่มเพาะการเติบโตของสตาร์ทอัพ",
+  },
+  "The Saucest Rising Star Entrepreneur": {
+    en: "Recognizes emerging early-stage founders demonstrating exceptional agility, grit, and disruptive potential.",
+    th: "ยกย่องผู้ประกอบการดาวรุ่งรุ่นใหม่ที่มีความมุ่งมั่น คล่องตัว และมีศักยภาพในการสร้างสรรค์โมเดลธุรกิจที่พลิกโฉมอุตสาหกรรม",
+  },
+  "The Saucest Founder of the Year": {
+    en: "Celebrates an extraordinary founder who demonstrated stellar leadership, resilience, and groundbreaking milestones.",
+    th: "ยกย่องสุดยอดผู้ก่อตั้ง (Founder) แห่งปี ผู้นำพาองค์กรสร้างหมุดหมายความสำเร็จอันยิ่งใหญ่และเป็นแบบอย่างให้ผู้ประกอบการ",
+  },
+  "The Saucest Ecosystem Catalyst": {
+    en: "Honors accelerators, hubs, incubators, and enablers dedicated to uplifting community builders and startups.",
+    th: "มอบให้กับหน่วยงาน ตัวเร่งการเติบโต หรือ Hub ผู้มีบทบาทสำคัญในการผลักดันและเสริมสร้างความแข็งแกร่งให้คอมมูนิตี้สตาร์ทอัพ",
+  },
+};
 
 export const techsauceData: TechsauceKnowledgeBase = {
   ...(rawKnowledgeBase as TechsauceKnowledgeBase),

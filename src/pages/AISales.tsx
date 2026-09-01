@@ -39,13 +39,13 @@ export default function AISales() {
             href="https://talkingjelly.com/about"
             target="_blank"
             rel="noopener noreferrer"
-            title="Open AI Sales in new tab"
+            title={t('ai_sales.online_btn')}
             className="relative block p-3 sm:p-5 md:p-6 rounded-[2rem] sm:rounded-[2.75rem] bg-white shadow-2xl border border-white/90 hover:scale-[1.015] active:scale-[0.985] transition-transform duration-300"
           >
             <div className="w-[min(88vw,calc(100dvh-190px),560px)] h-[min(88vw,calc(100dvh-190px),560px)] aspect-square flex items-center justify-center">
               <img
                 src={winnTalkQr}
-                alt="Please scan to talk with our AI Sales"
+                alt={t('ai_sales.title')}
                 className="w-full h-full object-contain rounded-xl sm:rounded-2xl"
               />
             </div>

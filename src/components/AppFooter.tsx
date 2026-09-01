@@ -70,11 +70,11 @@ export const AppFooter: React.FC = () => {
               </ul>
             </div>
 
-            {/* Column 2: Use Cases Part 2 (2 cols) */}
+            {/* Column 2: Exploratory (2 cols) */}
             <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-3">
               <div className="h-7 flex items-center">
                 <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-foreground cursor-default">
-                  {t('footer.usecases')}
+                  {t('footer.exploratory')}
                 </h4>
               </div>
               <ul className="flex flex-col gap-2 text-sm">
