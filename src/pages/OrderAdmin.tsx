@@ -157,18 +157,85 @@ export default function OrderAdmin() {
     return 'received';
   };
 
+  const getAdminItemName = (item: { id: string; name: string; englishName?: string }) => {
+    const cleanId = item.id.replace("-", "");
+    const translationKey = `food_item.${cleanId}.name`;
+    const translated = t(translationKey as any);
+
+    if (language === 'th') {
+      const thMap: Record<string, string> = {
+        "krapao": "ข้าวกะเพราไก่ไข่ดาว",
+        "tomyum": "ต้มยำกุ้งน้ำข้น",
+        "greencurry": "แกงเขียวหวานไก่",
+        "mangorice": "ข้าวเหนียวมะม่วง",
+        "friedrice": "ข้าวผัดปู/กุ้ง",
+        "tomyumnoodle": "ก๋วยเตี๋ยวต้มยำกุ้ง",
+      };
+      return thMap[cleanId] || item.name;
+    }
+
+    if (translated && translated !== translationKey) {
+      return translated;
+    }
+
+    return item.englishName || item.name;
+  };
+
+  const getAnalyticsLabel = (type: 'revenue' | 'orders' | 'top_seller' | 'dish_unit' | 'order_unit') => {
+    switch (type) {
+      case 'revenue':
+        if (language === 'th') return 'ยอดขายรวมทั้งหมด';
+        if (language === 'zh') return '总收入';
+        if (language === 'ja') return '売上総額';
+        if (language === 'ko') return '총 매출';
+        if (language === 'es') return 'Ingresos Totales';
+        if (language === 'fr') return 'Revenu Total';
+        return 'Total Revenue';
+      case 'orders':
+        if (language === 'th') return 'ออเดอร์ทั้งหมด';
+        if (language === 'zh') return '总订单数';
+        if (language === 'ja') return '総注文数';
+        if (language === 'ko') return '총 주문 수';
+        if (language === 'es') return 'Pedidos Totales';
+        if (language === 'fr') return 'Commandes Totales';
+        return 'Total Orders';
+      case 'top_seller':
+        if (language === 'th') return 'เมนูขายดีอันดับ 1';
+        if (language === 'zh') return '最畅销菜品';
+        if (language === 'ja') return '一番人気メニュー';
+        if (language === 'ko') return '최고 인기 메뉴';
+        if (language === 'es') return 'Plato Más Vendido';
+        if (language === 'fr') return 'Plat Le Plus Vendu';
+        return 'Top Seller Dish';
+      case 'dish_unit':
+        if (language === 'th') return 'จาน';
+        if (language === 'zh') return '份';
+        if (language === 'ja') return '品';
+        if (language === 'ko') return '개';
+        if (language === 'es') return 'platos';
+        if (language === 'fr') return 'plats';
+        return 'dishes';
+      case 'order_unit':
+        if (language === 'th') return 'รายการ';
+        if (language === 'zh') return '单';
+        if (language === 'ja') return '件';
+        if (language === 'ko') return '건';
+        if (language === 'es') return 'pedidos';
+        if (language === 'fr') return 'commandes';
+        return 'orders';
+    }
+  };
+
   // Analytics Stats Summary
   const stats = useMemo(() => {
     const totalRev = orders.reduce((sum, o) => sum + (o.total || 0), 0);
     const totalCount = orders.length;
 
-    const dishCounts: Record<string, { count: number; name: string }> = {};
+    const dishCounts: Record<string, { count: number; item: any }> = {};
     orders.forEach((o) => {
       o.items?.forEach((item) => {
-        const localizedItem = item as typeof item & { englishName?: string };
-        const name = language === 'th' ? item.name : (localizedItem.englishName || item.name);
         if (!dishCounts[item.id]) {
-          dishCounts[item.id] = { count: 0, name };
+          dishCounts[item.id] = { count: 0, item };
         }
         dishCounts[item.id].count += item.quantity;
       });
@@ -178,7 +245,7 @@ export default function OrderAdmin() {
     const topSeller = sortedDishes[0] || null;
 
     return { totalRev, totalCount, topSeller };
-  }, [orders, language]);
+  }, [orders]);
 
   // Group orders by formatted date string
   const groupedOrders = useMemo(() => {
@@ -243,7 +310,7 @@ export default function OrderAdmin() {
           {/* Revenue Card */}
           <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/40">
             <p className="text-[11px] font-extrabold text-emerald-800 dark:text-emerald-300">
-              {language === 'th' ? "ยอดขายรวมทั้งหมด" : "Total Revenue"}
+              {getAnalyticsLabel('revenue')}
             </p>
             <p className="font-mono text-xl font-black text-stone-900 dark:text-white mt-1">
               {money.format(stats.totalRev)}
@@ -253,20 +320,20 @@ export default function OrderAdmin() {
           {/* Total Orders Card */}
           <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/40">
             <p className="text-[11px] font-extrabold text-amber-800 dark:text-amber-300">
-              {language === 'th' ? "ออเดอร์ทั้งหมด" : "Total Orders"}
+              {getAnalyticsLabel('orders')}
             </p>
             <p className="font-mono text-xl font-black text-stone-900 dark:text-white mt-1">
-              {stats.totalCount} {language === 'th' ? "รายการ" : "orders"}
+              {stats.totalCount} {getAnalyticsLabel('order_unit')}
             </p>
           </div>
 
           {/* Top Seller Card */}
           <div className="p-4 rounded-2xl bg-rose-50/60 dark:bg-rose-950/40 min-w-0">
             <p className="text-[11px] font-extrabold text-rose-800 dark:text-rose-300">
-              {language === 'th' ? "เมนูขายดีอันดับ 1" : "Top Seller Dish"}
+              {getAnalyticsLabel('top_seller')}
             </p>
             <p className="font-bold text-sm text-stone-900 dark:text-white truncate mt-1">
-              {stats.topSeller ? `${stats.topSeller.name} (${stats.topSeller.count} ${language === 'th' ? 'จาน' : 'dishes'})` : "-"}
+              {stats.topSeller ? `${getAdminItemName(stats.topSeller.item)} (${stats.topSeller.count} ${getAnalyticsLabel('dish_unit')})` : "-"}
             </p>
           </div>
         </div>
@@ -358,14 +425,7 @@ export default function OrderAdmin() {
                               {/* Dishes inline summary */}
                               <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-stone-800 dark:text-stone-200 pt-1">
                                 {order.items.map((item) => {
-                                  const localizedItem = item as typeof item & {
-                                    englishName?: string;
-                                    nameEn?: string;
-                                    nameTh?: string;
-                                  };
-                                  const name = language === 'th'
-                                    ? localizedItem.nameTh || item.name
-                                    : localizedItem.englishName || localizedItem.nameEn || item.name;
+                                  const name = getAdminItemName(item);
 
                                   return (
                                     <div key={item.id} className="inline-flex items-center gap-1.5 py-0.5">

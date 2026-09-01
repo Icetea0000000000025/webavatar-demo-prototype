@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
 import PageSkeleton from "@/components/PageSkeleton";
+import ScrollVelocityImageHeader from "@/components/ScrollVelocityImageHeader";
 
 import greenCurryImage from "@/assets/green-curry.jpg";
 import greenCurry2Image from "@/assets/green-curry-2.jpg";
@@ -40,6 +41,13 @@ import friedrice3Image from "@/assets/fried-rice-3.jpg";
 import tomyumnoodleImage from "@/assets/tomyum-noodle.jpg";
 import tomyumnoodle2Image from "@/assets/tomyum-noodle-2.jpg";
 import tomyumnoodle3Image from "@/assets/tomyum-noodle-3.jpg";
+
+import promoFood1 from "@/assets/promo-food-1.jpg";
+import promoFood2 from "@/assets/promo-food-2.jpg";
+import promoFood3 from "@/assets/promo-food-3.jpg";
+import promoFood4 from "@/assets/promo-food-4.jpg";
+import promoFood5 from "@/assets/promo-food-5.jpg";
+import promoFood6 from "@/assets/promo-food-6.jpg";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -412,6 +420,15 @@ export default function FoodOrderDemo() {
     }
   };
 
+  const showcaseImages = useMemo(() => [
+    promoFood1,
+    promoFood2,
+    promoFood3,
+    promoFood4,
+    promoFood5,
+    promoFood6,
+  ], []);
+
   useEffect(() => {
     try {
       const savedCart = window.localStorage.getItem(CART_KEY);
@@ -595,10 +612,10 @@ export default function FoodOrderDemo() {
         )}
       </AnimatePresence>
 
-      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background/50 backdrop-blur-sm text-foreground page-grid relative z-10 flex flex-col justify-between">
+      <div className="order-theme min-h-screen w-full max-w-full overflow-x-hidden bg-background text-foreground page-grid relative z-10 flex flex-col justify-between">
         {/* ── Header ─────────────────────────────────────────────────────── */}
-        <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-background/85 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
-          <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <header className="relative z-20 mx-auto mt-2 mb-4 w-[calc(100%-2rem)] max-w-7xl bg-transparent border-none shadow-none transition-all">
+          <div className="px-2 py-2 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
               <Link to="/" className="hover:text-emerald-600 transition-colors flex items-center gap-1">
                 <Home className="size-3" />
@@ -675,15 +692,12 @@ export default function FoodOrderDemo() {
         className="mx-auto w-full max-w-6xl overflow-hidden px-4 py-4 pb-32 sm:px-6 lg:px-8 lg:pb-12 flex-1"
       >
         <section aria-labelledby="menu-heading" className="min-w-0 overflow-hidden">
-          {/* Header section matching image.png */}
-          <div className="mb-8 text-center">
-            <h2 id="menu-heading" className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 dark:text-white tracking-tight">
-              {getDiscoverTitle(language)}
-            </h2>
-            <p className="mt-2.5 text-xs sm:text-sm text-stone-500 dark:text-stone-400 max-w-xl mx-auto leading-relaxed font-semibold">
-              {getDiscoverSubtitle(language)}
-            </p>
-          </div>
+          {/* Motion Scroll-Velocity Linked Pure Image Marquee Header */}
+          <ScrollVelocityImageHeader
+            title={getDiscoverTitle(language)}
+            subtitle={getDiscoverSubtitle(language)}
+            images={showcaseImages}
+          />
           
           {/* Categories select tabs with sliding motion pill */}
           <div
@@ -763,7 +777,7 @@ export default function FoodOrderDemo() {
 
                       <div className="pt-2 flex items-center justify-between gap-2 mt-3 border-t border-stone-100 dark:border-stone-800/60">
                         <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-wider truncate">
-                          {item.englishName}
+                          {name}
                         </span>
                         {quantity === 0 ? (
                           <div className="flex items-center gap-1.5 shrink-0">
