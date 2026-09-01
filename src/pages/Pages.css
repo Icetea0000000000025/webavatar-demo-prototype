@@ -6971,14 +6971,73 @@ textarea.form-control {
 
 
 /* ═══════════════════════════════════════════════════════
-   WORKSHOP TIMELINE VIEW
+   WORKSHOP TIMELINE VIEW & DAY GROUPING
    ═══════════════════════════════════════════════════════ */
+
+.ts-timeline-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.ts-timeline-day-group {
+  padding: 0;
+  margin-bottom: 0.5rem;
+}
+
+.ts-timeline-day-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--primary) 20%, var(--border));
+}
+
+.ts-timeline-day-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--foreground);
+  letter-spacing: -0.01em;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}
+
+.ts-timeline-day-count {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted-foreground);
+  background: var(--muted);
+  padding: 0.25rem 0.65rem;
+  border-radius: 99px;
+  line-height: 1;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.techsauce-date-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--primary) 10%, var(--muted));
+  color: var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 20%, transparent);
+}
 
 .ts-timeline {
   display: flex;
   flex-direction: column;
-  margin-top: 1.25rem;
-  padding-bottom: 2rem;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .ts-timeline-row {
@@ -7435,18 +7494,19 @@ textarea.form-control {
   text-align: left;
   padding: 1.1rem;
   border-radius: 14px;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: transparent;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
   position: relative;
   overflow: hidden;
 }
 
 .ts-exhibitor-zone-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.08);
-  border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+  background: color-mix(in srgb, var(--primary) 6%, var(--card));
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.06);
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
 }
 
 .ts-exhibitor-zone-header {

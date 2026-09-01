@@ -184,20 +184,13 @@ export default function AppNavbar() {
                   initial="initial"
                   animate="animate"
                 >
-                  <Link to={path} id={id} onClick={() => window.scrollTo(0, 0)}>
+                  <Link
+                    to={path}
+                    id={id}
+                    className={`btn-188 ${active ? 'active' : ''}`}
+                    onClick={() => window.scrollTo(0, 0)}
+                  >
                     {t(key)}
-                    {active && (
-                      <motion.div
-                        layoutId="activeTab"
-                        className="nav-active-pill"
-                        transition={{
-                          x: { type: 'spring', stiffness: 380, damping: 30 },
-                          width: { type: 'spring', stiffness: 380, damping: 30 },
-                          y: { type: 'tween', duration: 0 },
-                          height: { type: 'tween', duration: 0 }
-                        }}
-                      />
-                    )}
                   </Link>
                 </motion.li>
               );
@@ -214,22 +207,11 @@ export default function AppNavbar() {
               <Link
                 to="/all-demo"
                 id="nav-all-demos"
+                className={`btn-188 ${isDemoActive ? 'active' : ''}`}
                 onClick={() => window.scrollTo(0, 0)}
                 style={{ whiteSpace: 'nowrap' }}
               >
                 {t('nav.all_demos')}
-                {isDemoActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="nav-active-pill"
-                    transition={{
-                      x: { type: 'spring', stiffness: 380, damping: 30 },
-                      width: { type: 'spring', stiffness: 380, damping: 30 },
-                      y: { type: 'tween', duration: 0 },
-                      height: { type: 'tween', duration: 0 }
-                    }}
-                  />
-                )}
               </Link>
             </motion.li>
           </ul>
@@ -675,10 +657,15 @@ export default function AppNavbar() {
                         key={path}
                         className={`mobile-nav-item ${active ? 'active-link' : ''}`}
                       >
-                        <Link to={path} id={id} onClick={() => {
-                          window.scrollTo(0, 0);
-                          closeDrawer();
-                        }}>
+                        <Link
+                          to={path}
+                          id={id}
+                          className={`btn-188 ${active ? 'active' : ''}`}
+                          onClick={() => {
+                            window.scrollTo(0, 0);
+                            closeDrawer();
+                          }}
+                        >
                           {t(key)}
                         </Link>
                       </li>
@@ -690,6 +677,7 @@ export default function AppNavbar() {
                     <Link
                       to="/all-demo"
                       id="mobile-nav-all-demos"
+                      className={`btn-188 ${isDemoActive ? 'active' : ''}`}
                       onClick={() => {
                         window.scrollTo(0, 0);
                         closeDrawer();

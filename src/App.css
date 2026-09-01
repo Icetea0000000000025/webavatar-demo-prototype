@@ -1150,3 +1150,136 @@
   -webkit-text-fill-color: transparent;
 }
 
+/* ── Custom Button 108 Style ── */
+.btn-108 {
+  --color: #059669;
+  background-color: transparent;
+  padding: 6px 14px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--color);
+  transition: color 0.4s ease;
+  z-index: 1;
+  font-size: 13px;
+  border-radius: 8px;
+  font-weight: 700;
+  color: var(--color);
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.dark .btn-108 {
+  --color: #34d399;
+}
+
+.btn-108:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background: var(--color);
+  height: 0%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transition: height 0.3s ease;
+}
+
+.btn-108:hover::before {
+  height: 100%;
+}
+
+.btn-108:hover {
+  color: #ffffff;
+}
+
+.dark .btn-108:hover {
+  color: #064e3b;
+}
+
+.btn-108:active:before {
+  background: #047857;
+  transition: background 0.2s;
+}
+
+/*** disabled style ***/
+.btn-108:disabled {
+  pointer-events: none;
+  opacity: .65;
+  color: #7e7e7e;
+  background: #dcdcdc;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* ── Custom Button 188 Navigation Style ── */
+.btn-188 {
+  --color: var(--foreground);
+  --border_color: var(--primary);
+  font-size: 0.92rem;
+  color: var(--color);
+  font-weight: 600;
+  position: relative;
+  padding: 0.35rem 0.65rem;
+  border: none;
+  letter-spacing: -0.01em;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.btn-188:focus,
+.btn-188:hover {
+  color: var(--primary);
+}
+
+.btn-188:focus::after,
+.btn-188:hover::after,
+.btn-188.active::after {
+  width: 100%;
+  left: 0%;
+}
+
+.btn-188::after {
+  content: "";
+  pointer-events: none;
+  bottom: 0px;
+  left: 50%;
+  position: absolute;
+  width: 0%;
+  height: 2.5px;
+  background-color: var(--border_color);
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition-duration: .45s;
+  transition-property: width, left;
+  border-radius: 99px;
+}
+
+/*** disabled style ***/
+.btn-188:disabled {
+  pointer-events: none;
+  opacity: .65;
+  color: #7e7e7e;
+  background: #dcdcdc;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/*** dark mode ***/
+.dark .btn-188 {
+  --color: #ececec;
+  --border_color: var(--primary);
+}
+

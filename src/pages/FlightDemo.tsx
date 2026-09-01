@@ -122,6 +122,17 @@ export default function FlightDemo() {
   const { scrollY } = useScroll();
   const heroParallax = useTransform(scrollY, [0, 500], [0, 150]);
   const getCityLabel = (city: string) => getCityLabelForLang(city, language);
+  const getSameCityErrorText = (lang: string) => {
+    switch (lang) {
+      case 'th': return 'กรุณาเลือกเมืองต้นทางและปลายทางที่แตกต่างกัน';
+      case 'zh': return '出发地和目的地不能相同';
+      case 'ja': return '出発地と目的地は異なる都市を選択してください';
+      case 'ko': return '출발지와 도착지는 서로 다른 도시를 선택해주세요';
+      case 'es': return 'Por favor seleccione ciudades de origen y destino diferentes';
+      case 'fr': return 'Veuillez sélectionner des villes d\'origine et de destination différentes';
+      default: return 'Please select different origin and destination cities';
+    }
+  };
   const [isReady, setIsReady] = useState(false);
   const [tripType, setTripType] = useState<"round" | "oneway">("round");
   const [ticketBooking, setTicketBooking] = useState<BookingForm | null>(null);
@@ -329,7 +340,6 @@ export default function FlightDemo() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (form.from === form.to) {
-      toast.error(t('flight.err_same_city') || 'กรุณาเลือกเมืองต้นทางและปลายทางที่แตกต่างกัน');
       return;
     }
     if (!form.passengers || form.passengers < 1) {
@@ -463,7 +473,31 @@ export default function FlightDemo() {
         {!isReady && <PageSkeleton variant="flight" />}
       </AnimatePresence>
       <div className="flight-theme min-h-screen bg-background relative text-foreground overflow-x-hidden">
-        <Toaster position="top-center" richColors />
+        <style>{`
+          div[data-sonner-toaster],
+          section[data-sonner-toaster],
+          ol[data-sonner-toaster] {
+            position: fixed !important;
+            top: 50vh !important;
+            left: 50vw !important;
+            transform: translate(-50%, -50%) !important;
+            bottom: auto !important;
+            right: auto !important;
+            z-index: 999999 !important;
+            margin: 0 !important;
+          }
+          [data-sonner-toast] {
+            margin: 0 auto !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
+          }
+        `}</style>
+        <Toaster
+          position="top-center"
+          richColors
+          toastOptions={{
+            className: "shadow-2xl rounded-2xl border text-sm font-bold p-4",
+          }}
+        />
 
         {ticketBooking && (
           <TicketModal
@@ -619,7 +653,13 @@ export default function FlightDemo() {
                 </div>
 
                 <form onSubmit={handleSearchSubmit} className="grid md:grid-cols-2 gap-4">
-                  <Field label={t('flight.from')} htmlFor="fromCity" required>
+                  <Field
+                    label={t('flight.from')}
+                    htmlFor="fromCity"
+                    required
+                    isError={form.from === form.to}
+                    errorText={form.from === form.to ? getSameCityErrorText(language) : undefined}
+                  >
                     <select
                       id="fromCity"
                       name="fromCity"
@@ -634,7 +674,13 @@ export default function FlightDemo() {
                     </select>
                   </Field>
 
-                  <Field label={t('flight.to')} htmlFor="toCity" required>
+                  <Field
+                    label={t('flight.to')}
+                    htmlFor="toCity"
+                    required
+                    isError={form.from === form.to}
+                    errorText={form.from === form.to ? getSameCityErrorText(language) : undefined}
+                  >
                     <select
                       id="toCity"
                       name="toCity"
@@ -729,15 +775,28 @@ export default function FlightDemo() {
                     />
                   </Field>
 
-                  <Field label={t('flight.promo')} htmlFor="promoCode">
-                    <input
-                      id="promoCode"
-                      name="promoCode"
-                      value={form.promoCode}
-                      onChange={(e) => setForm({ ...form, promoCode: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
-                      placeholder={language === 'en' ? "e.g., PROMO2026" : "PROMO2026"}
-                    />
+                  <Field
+                    label={t('flight.promo')}
+                    htmlFor="promoCode"
+                    isError={form.promoCode.trim().length > 0 && form.promoCode.trim().toUpperCase() !== 'PROMO2026'}
+                    errorText={form.promoCode.trim().length > 0 && form.promoCode.trim().toUpperCase() !== 'PROMO2026' ? (language === 'th' ? 'โค้ดส่วนลดไม่ถูกต้อง (ใช้ได้เฉพาะ PROMO2026)' : 'Invalid promo code (Use PROMO2026)') : undefined}
+                  >
+                    <div className="relative flex items-center justify-between">
+                      <input
+                        id="promoCode"
+                        name="promoCode"
+                        value={form.promoCode}
+                        onChange={(e) => setForm({ ...form, promoCode: e.target.value })}
+                        className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal uppercase"
+                        placeholder="PROMO2026"
+                      />
+                      {form.promoCode.trim().toUpperCase() === 'PROMO2026' && (
+                        <span className="shrink-0 text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-emerald-300 dark:border-emerald-800 shadow-xs animate-bounce">
+                          <Check className="w-3 h-3 text-emerald-600" />
+                          <span>{language === 'th' ? 'ลด 20%' : '20% OFF'}</span>
+                        </span>
+                      )}
+                    </div>
                   </Field>
 
                   <div className="md:col-span-2 flex justify-end pt-4">
@@ -1459,20 +1518,36 @@ export default function FlightDemo() {
   );
 }
 
-function Field({ label, htmlFor, children, onClick, required }: { label: string; htmlFor?: string; children: React.ReactNode; onClick?: () => void; required?: boolean }) {
+function Field({ label, htmlFor, children, onClick, required, isError, errorText }: { label: string; htmlFor?: string; children: React.ReactNode; onClick?: () => void; required?: boolean; isError?: boolean; errorText?: string }) {
+  const { language } = useTranslation();
   return (
     <div
       onClick={onClick}
-      className={`block rounded-2xl bg-[var(--input)] px-4 py-3.5 border border-[var(--border)] shadow-xs transition-all ${onClick
-        ? "cursor-pointer hover:bg-slate-100/70 dark:hover:bg-slate-800/80 hover:border-sky-500 dark:hover:border-sky-400 hover:shadow-md hover:ring-2 hover:ring-sky-500/20 active:scale-98"
-        : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10"
-        }`}
+      className={`block rounded-2xl px-4 py-3.5 border shadow-xs transition-all relative ${
+        isError
+          ? "border-2 border-rose-500 dark:border-rose-500 ring-4 ring-rose-500/20 bg-rose-50/60 dark:bg-rose-950/40"
+          : "bg-[var(--input)] border-[var(--border)] " + (onClick
+          ? "cursor-pointer hover:bg-slate-100/70 dark:hover:bg-slate-800/80 hover:border-sky-500 dark:hover:border-sky-400 hover:shadow-md hover:ring-2 hover:ring-sky-500/20 active:scale-98"
+          : "focus-within:border-[var(--primary)] focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]/10")
+      }`}
     >
-      <label htmlFor={htmlFor} className="text-[10px] font-bold uppercase tracking-wider text-[var(--muted-foreground)] block cursor-pointer select-none">
-        {label}
-        {required && <span className="text-rose-500 ml-1 font-bold">*</span>}
-      </label>
+      <div className="flex items-center justify-between gap-1">
+        <label htmlFor={htmlFor} className={`text-[10px] font-bold uppercase tracking-wider block cursor-pointer select-none ${isError ? 'text-rose-600 dark:text-rose-400 font-black' : 'text-[var(--muted-foreground)]'}`}>
+          {label}
+          {required && <span className="text-rose-500 ml-1 font-bold">*</span>}
+        </label>
+        {isError && (
+          <span className="text-[10px] font-extrabold text-rose-700 dark:text-rose-300 bg-rose-200/80 dark:bg-rose-900/80 px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+            {language === 'th' ? 'เลือกเมืองซ้ำกันไม่ได้' : 'Cannot select same city'}
+          </span>
+        )}
+      </div>
       <div className="mt-1">{children}</div>
+      {isError && errorText && (
+        <p className="mt-1.5 text-xs font-bold text-rose-600 dark:text-rose-400 flex items-center gap-1">
+          <span>⚠️ {errorText}</span>
+        </p>
+      )}
     </div>
   );
 }
@@ -1499,9 +1574,9 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
   const basePrice = booking.pricePerPax || (booking.to.includes("เชียงใหม่") || booking.to.includes("ภูเก็ต") ? 890 : 990);
   const totalPrice = basePrice * booking.passengers;
 
-  // Calculate discount from promo codes
-  const promoUpper = (booking.promoCode || "").toUpperCase();
-  const discountPercent = promoUpper === "PROMO2026" ? 0.2 : promoUpper === "BOTNOI" ? 0.15 : 0;
+  // Calculate discount from promo codes (ONLY PROMO2026 is valid)
+  const promoUpper = (booking.promoCode || "").trim().toUpperCase();
+  const discountPercent = promoUpper === "PROMO2026" ? 0.2 : 0;
   const discountAmount = totalPrice * discountPercent;
   const finalPrice = totalPrice - discountAmount;
 
