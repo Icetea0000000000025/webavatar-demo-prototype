@@ -33,6 +33,13 @@ function getRoomBadgeClass(room: string) {
   return 'techsauce-room-default';
 }
 
+function getDayHeaderTitle(dateStr: string, lang: string): string {
+  if (dateStr === '2026-08-26') return lang === 'th' ? 'วันที่ 1 — 26 สิงหาคม 2026' : 'Day 1 — August 26, 2026';
+  if (dateStr === '2026-08-27') return lang === 'th' ? 'วันที่ 2 — 27 สิงหาคม 2026' : 'Day 2 — August 27, 2026';
+  if (dateStr === '2026-08-28') return lang === 'th' ? 'วันที่ 3 — 28 สิงหาคม 2026' : 'Day 3 — August 28, 2026';
+  return dateStr;
+}
+
 export default function TechsauceEvent() {
   const { t, language } = useTranslation();
 
@@ -51,7 +58,7 @@ export default function TechsauceEvent() {
   const [selectedDay, setSelectedDay] = useState<string>(() => {
     const todayStr = new Date().toISOString().split('T')[0];
     const matchToday = techsauceData.workshops.some((w) => w.date === todayStr);
-    return matchToday ? todayStr : '2026-08-27';
+    return matchToday ? todayStr : 'all';
   });
   const [selectedRoom, setSelectedRoom] = useState<string>('all');
   const [selectedAccess, setSelectedAccess] = useState<string>('all');
@@ -134,6 +141,29 @@ export default function TechsauceEvent() {
       return matchDay && matchRoom && matchAccess && matchSearch;
     });
   }, [selectedDay, selectedRoom, selectedAccess, workshopSearch]);
+
+  // Group filtered workshops by date for day-separated timeline view
+  const workshopsByDate = useMemo(() => {
+    const groups: { date: string; workshops: typeof filteredWorkshops }[] = [];
+    const dateMap = new Map<string, typeof filteredWorkshops>();
+
+    filteredWorkshops.forEach((w) => {
+      if (!dateMap.has(w.date)) {
+        dateMap.set(w.date, []);
+      }
+      dateMap.get(w.date)!.push(w);
+    });
+
+    const sortedDates = Array.from(dateMap.keys()).sort();
+    sortedDates.forEach((date) => {
+      groups.push({
+        date,
+        workshops: dateMap.get(date)!,
+      });
+    });
+
+    return groups;
+  }, [filteredWorkshops]);
 
   // Filtered Exhibitors
   const filteredExhibitors = useMemo(() => {
@@ -483,85 +513,102 @@ export default function TechsauceEvent() {
                 <p className="text-xs text-muted-foreground mt-1">Try resetting filters or adjusting search keywords.</p>
               </div>
             ) : (
-              <div className="ts-timeline">
-                {filteredWorkshops.map((w, idx) => {
-                  const key = `tl-${idx}`;
-                  const isOpen = !!expandedAwards[key];
-                  return (
-                    <div key={idx} className="ts-timeline-row">
-                      {/* Time Column */}
-                      <div className="ts-timeline-time">
-                        <span>{w.time}</span>
-                      </div>
+              <div className="ts-timeline-groups space-y-6">
+                {workshopsByDate.map((group) => (
+                  <div key={group.date} className="ts-timeline-day-group">
+                    {/* Day Header Banner */}
+                    <div className="ts-timeline-day-header">
+                      <h3 className="ts-timeline-day-title">
+                        {getDayHeaderTitle(group.date, language)}
+                      </h3>
+                      <span className="ts-timeline-day-count">
+                        {group.workshops.length} {language === 'th' ? 'เวิร์กช็อป' : 'workshops'}
+                      </span>
+                    </div>
 
-                      {/* Dot + Line */}
-                      <div className="ts-timeline-dot-col">
-                        <div className={`ts-timeline-dot ${isOpen ? 'active' : ''}`} />
-                        {idx < filteredWorkshops.length - 1 && <div className="ts-timeline-line" />}
-                      </div>
+                    {/* Timeline for this day */}
+                    <div className="ts-timeline">
+                      {group.workshops.map((w, idx) => {
+                        const key = `tl-${w.date}-${idx}`;
+                        const isOpen = !!expandedAwards[key];
+                        return (
+                          <div key={idx} className="ts-timeline-row">
+                            {/* Time Column */}
+                            <div className="ts-timeline-time">
+                              <span>{w.time}</span>
+                            </div>
 
-                      {/* Content */}
-                      <div className="ts-timeline-content">
-                        <button
-                          type="button"
-                          className="ts-timeline-header"
-                          onClick={() => toggleAwardExpand(key)}
-                          aria-expanded={isOpen}
-                        >
-                          <div className="ts-timeline-title-group">
-                            <span className="ts-timeline-title">{w.title}</span>
-                            <div className="ts-timeline-pills">
-                              <span className={`techsauce-room-pill ${getRoomBadgeClass(w.room)}`}>{w.room}</span>
-                              <span className={`techsauce-access-pill ${getAccessBadgeClass(w.access)}`}>{w.access}</span>
+                            {/* Dot + Line */}
+                            <div className="ts-timeline-dot-col">
+                              <div className={`ts-timeline-dot ${isOpen ? 'active' : ''}`} />
+                              {idx < group.workshops.length - 1 && <div className="ts-timeline-line" />}
+                            </div>
+
+                            {/* Content */}
+                            <div className="ts-timeline-content">
+                              <button
+                                type="button"
+                                className="ts-timeline-header"
+                                onClick={() => toggleAwardExpand(key)}
+                                aria-expanded={isOpen}
+                              >
+                                <div className="ts-timeline-title-group">
+                                  <span className="ts-timeline-title">{w.title}</span>
+                                  <div className="ts-timeline-pills">
+                                    <span className={`techsauce-room-pill ${getRoomBadgeClass(w.room)}`}>{w.room}</span>
+                                    <span className={`techsauce-access-pill ${getAccessBadgeClass(w.access)}`}>{w.access}</span>
+                                  </div>
+                                </div>
+                                <ChevronDown className={`ts-timeline-chevron ${isOpen ? 'rotate-180' : ''}`} />
+                              </button>
+
+                              <AnimatePresence initial={false}>
+                                {isOpen && (
+                                  <motion.div
+                                    key="detail"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    transition={{ duration: 0.2, ease: 'easeInOut' }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="ts-timeline-detail">
+                                      {w.speakers && w.speakers.length > 0 && (
+                                        <div className="ts-timeline-speakers">
+                                          {w.speakers.map((s, si) => (
+                                            <div key={si} className="ts-timeline-speaker">
+                                              <div className="ts-timeline-avatar">{s.name.charAt(0)}</div>
+                                              <div>
+                                                <div className="font-semibold text-xs text-foreground">{s.name}</div>
+                                                <div className="text-[11px] text-muted-foreground">{s.role} <span className="text-primary">@ {s.company}</span></div>
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                      <button
+                                        type="button"
+                                        onClick={() => handleCopy(`${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})`)}
+                                        className="ts-timeline-copy"
+                                        aria-label={`Copy details for ${w.title}`}
+                                      >
+                                        {copiedText === `${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})` ? (
+                                          <><Check className="w-3 h-3 text-emerald-500" /><span className="text-emerald-500">{t('event.copied')}</span></>
+                                        ) : (
+                                          <><Copy className="w-3 h-3" /><span>{t('event.copy')}</span></>
+                                        )}
+                                      </button>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
                             </div>
                           </div>
-                          <ChevronDown className={`ts-timeline-chevron ${isOpen ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        <AnimatePresence initial={false}>
-                          {isOpen && (
-                            <motion.div
-                              key="detail"
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.2, ease: 'easeInOut' }}
-                              className="overflow-hidden"
-                            >
-                              <div className="ts-timeline-detail">
-                                {w.speakers && w.speakers.length > 0 && (
-                                  <div className="ts-timeline-speakers">
-                                    {w.speakers.map((s, si) => (
-                                      <div key={si} className="ts-timeline-speaker">
-                                        <div className="ts-timeline-avatar">{s.name.charAt(0)}</div>
-                                        <div>
-                                          <div className="font-semibold text-xs text-foreground">{s.name}</div>
-                                          <div className="text-[11px] text-muted-foreground">{s.role} <span className="text-primary">@ {s.company}</span></div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                                <button
-                                  type="button"
-                                  onClick={() => handleCopy(`${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})`)}
-                                  className="ts-timeline-copy"
-                                  aria-label={`Copy details for ${w.title}`}
-                                >
-                                  {copiedText === `${w.title} | ${w.date} ${w.time} at ${w.room} (${w.access})` ? (
-                                    <><Check className="w-3 h-3 text-emerald-500" /><span className="text-emerald-500">{t('event.copied')}</span></>
-                                  ) : (
-                                    <><Copy className="w-3 h-3" /><span>{t('event.copy')}</span></>
-                                  )}
-                                </button>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             )}
           </div>
