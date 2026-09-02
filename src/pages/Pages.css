@@ -2153,28 +2153,32 @@
   margin-bottom: 1.35rem;
 }
 
-/* Unified Dark Glass Sphere (All 4 Circles Same Color - NO Glow) */
+/* Unified Light/Dark Glass Sphere (All 4 Circles Adapt to Theme) */
 .unified-glass-circle {
-  background: rgba(15, 23, 42, 0.88);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 2px solid rgba(56, 189, 248, 0.35);
-  box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.25);
+  border: 2px solid rgba(2, 132, 199, 0.28);
+  box-shadow: 0 8px 24px -4px rgba(2, 132, 199, 0.1), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .unified-glass-circle:hover,
 .unified-glass-circle:active {
-  border-color: #38BDF8;
+  border-color: #0284C7;
+  box-shadow: 0 12px 28px -4px rgba(2, 132, 199, 0.22);
 }
 
 .dark .unified-glass-circle {
-  background: rgba(15, 23, 42, 0.95);
+  background: rgba(15, 23, 42, 0.92);
   border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 0 16px -4px rgba(56, 189, 248, 0.15);
 }
 
 .dark .unified-glass-circle:hover,
 .dark .unified-glass-circle:active {
   border-color: #38BDF8;
+  box-shadow: 0 12px 30px -4px rgba(0, 0, 0, 0.65), 0 0 24px -4px rgba(56, 189, 248, 0.3);
 }
 
 /* Outer Border Frame Ring with Dashed Lines that Blink on Hold/Hover */
@@ -2182,12 +2186,33 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 1.5px dashed rgba(56, 189, 248, 0.25);
+  border: 1.5px dashed rgba(2, 132, 199, 0.25);
   pointer-events: none;
   transition: border-color 0.3s ease, inset 0.3s ease;
 }
 
+.dark .perf-circle-frame-ring {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
 @keyframes dashed-ring-blink-spin {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.4;
+    border-color: rgba(2, 132, 199, 0.25);
+  }
+  50% {
+    opacity: 1;
+    border-color: #0284C7;
+  }
+  100% {
+    transform: rotate(180deg);
+    opacity: 0.4;
+    border-color: rgba(2, 132, 199, 0.25);
+  }
+}
+
+@keyframes dashed-ring-blink-spin-dark {
   0% {
     transform: rotate(0deg);
     opacity: 0.4;
@@ -2206,13 +2231,34 @@
 
 .unified-glass-circle:hover .perf-circle-frame-ring,
 .unified-glass-circle:active .perf-circle-frame-ring {
-  border-color: #38BDF8;
+  border-color: #0284C7;
   inset: -8px;
   animation: dashed-ring-blink-spin 3s linear infinite;
 }
 
+.dark .unified-glass-circle:hover .perf-circle-frame-ring,
+.dark .unified-glass-circle:active .perf-circle-frame-ring {
+  border-color: #38BDF8;
+  animation: dashed-ring-blink-spin-dark 3s linear infinite;
+}
+
 /* Expanding Outward Dashed Lines Animation on Hold/Hover (ขีดแผ่ขยายออกมาจากวงกลม) */
 @keyframes dashed-ripple-outward {
+  0% {
+    inset: -6px;
+    opacity: 0.95;
+    transform: scale(0.98);
+    border-color: #0284C7;
+  }
+  100% {
+    inset: -18px;
+    opacity: 0;
+    transform: scale(1.08);
+    border-color: rgba(2, 132, 199, 0);
+  }
+}
+
+@keyframes dashed-ripple-outward-dark {
   0% {
     inset: -6px;
     opacity: 0.95;
@@ -2238,23 +2284,38 @@
 
 .unified-glass-circle:hover .perf-circle-pulse-dash,
 .unified-glass-circle:active .perf-circle-pulse-dash {
-  border: 1.5px dashed #38BDF8;
+  border: 1.5px dashed #0284C7;
   animation: dashed-ripple-outward 1.35s infinite cubic-bezier(0.2, 0.8, 0.4, 1);
+}
+
+.dark .unified-glass-circle:hover .perf-circle-pulse-dash,
+.dark .unified-glass-circle:active .perf-circle-pulse-dash {
+  border: 1.5px dashed #38BDF8;
+  animation: dashed-ripple-outward-dark 1.35s infinite cubic-bezier(0.2, 0.8, 0.4, 1);
 }
 
 .perf-circle-value {
   font-size: 2.1rem;
   font-weight: 850;
-  color: #FFFFFF;
+  color: #0F172A;
   letter-spacing: -0.025em;
   line-height: 1.1;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   z-index: 2;
   transition: color 0.3s ease;
 }
 
 .unified-glass-circle:hover .perf-circle-value,
 .unified-glass-circle:active .perf-circle-value {
+  color: #0284C7;
+}
+
+.dark .perf-circle-value {
+  color: #FFFFFF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark .unified-glass-circle:hover .perf-circle-value,
+.dark .unified-glass-circle:active .perf-circle-value {
   color: #F0F9FF;
 }
 

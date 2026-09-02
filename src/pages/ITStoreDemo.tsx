@@ -20,8 +20,14 @@ import {
   Cpu,
   ShieldCheck,
   Clock,
+  LayoutGrid,
+  Smartphone,
+  Laptop,
+  Monitor,
+  Headphones,
+  Layers,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
@@ -604,8 +610,8 @@ const products: ITProduct[] = [
   // ── Phone (9 items) ───────────────────────────────────────────────────────
   {
     id: "matext",
-    name: "Botnoi Titan Tri-Fold Ultimate",
-    specs: '10.2" Tri-Fold 3K OLED · Neural Core AI · 16GB RAM · 1TB ROM · IPX8',
+    name: "HUAWEI Mate XT Ultimate Design",
+    specs: '10.2" Tri-Fold 3K OLED · Kirin AI · 16GB RAM · 1TB ROM · IPX8',
     description:
       "Pioneering triple-folding 10.2-inch OLED flagship expanding from compact handheld to cinematic tablet. Crafted with aerospace titanium hinges, 16GB RAM, 1TB storage, and ultra-slim 3.6mm profile.",
     category: "Phone",
@@ -613,14 +619,14 @@ const products: ITProduct[] = [
     image: huaweiMateXT,
     badge: "Tri-Fold 10.2\"",
     color: "#b91c1c",
-    specTags: ["10.2\" Tri-Fold", "Neural Core AI", "16GB+1TB", "3.6mm Slim"],
+    specTags: ["10.2\" Tri-Fold", "Kirin AI", "16GB+1TB", "3.6mm Slim"],
     rating: 5.0,
     salesCount: 220,
   },
   {
     id: "matex6",
-    name: "Botnoi Apex Fold Crimson",
-    specs: '7.93" Dual-Screen Foldable · Neural Core Octa · 12GB RAM · 512GB ROM',
+    name: "HUAWEI Mate X6",
+    specs: '7.93" Dual-Screen Foldable · Kirin 9020 · 12GB RAM · 512GB ROM',
     description:
       "Ultra-thin dual-screen foldable masterpiece encased in crimson vegan leather. Features quad ultra-lighting camera array, dual satellite connectivity, and 66W SuperCharge.",
     category: "Phone",
@@ -628,13 +634,13 @@ const products: ITProduct[] = [
     image: huaweiMateX6,
     badge: "Falcon Fold",
     color: "#b91c1c",
-    specTags: ["7.93\" Foldable", "Neural Core", "Crimson Leather"],
+    specTags: ["7.93\" Foldable", "Kirin 9020", "Crimson Leather"],
     rating: 4.9,
     salesCount: 165,
   },
   {
     id: "mate80pro",
-    name: "Botnoi Horizon Pro AI",
+    name: "HUAWEI Mate 80 Pro",
     specs: '6.75" LTPO OLED · 16GB RAM · 512GB ROM · 50MP Master Optics',
     description:
       "Next-gen flagship smartphone engineered with an ultra-responsive 6.75-inch LTPO OLED display, 7.95mm titanium-shield architecture, IP68 protection, 16GB RAM, and 5,750mAh dual-cell battery with 100W HyperCharge.",
@@ -649,7 +655,7 @@ const products: ITProduct[] = [
   },
   {
     id: "matexs2",
-    name: "Botnoi Falcon Wing Dual",
+    name: "HUAWEI Mate Xs 2",
     specs: '7.8" Outward Fold OLED · Ultra-Light 255g · 8GB RAM · 512GB ROM',
     description:
       "Ultra-light outward-folding smartphone featuring an expansive 7.8-inch display, dual-rotating Falcon Wing seamless hinge, 8GB RAM + 512GB storage, and True-Chroma camera.",
@@ -664,7 +670,7 @@ const products: ITProduct[] = [
   },
   {
     id: "mate50",
-    name: "Botnoi Orbit Star Ring",
+    name: "HUAWEI Mate 50",
     specs: '6.7" OLED (90Hz) · AI Octa-Core · 8GB RAM · 256GB ROM · Crystal Armor Glass',
     description:
       "Luxury flagship smartphone featuring a symmetrical Star Ring camera matrix, Crystal Armor drop-resistant glass, 8GB RAM + 256GB storage, and 66W fast charging.",
@@ -679,7 +685,7 @@ const products: ITProduct[] = [
   },
   {
     id: "matex7",
-    name: "Botnoi Zenith Fold Ultra",
+    name: "HUAWEI Mate X7",
     specs: '8.0" Flexible OLED Foldable · 16GB RAM · 512GB ROM · 50MP Studio Camera',
     description:
       "Next-generation inward folding flagship featuring an 8.0-inch 120Hz flexible OLED workspace, 16GB RAM + 512GB high-speed storage, 5,600mAh battery, and studio-grade 50MP triple-sensor imaging.",
@@ -694,49 +700,49 @@ const products: ITProduct[] = [
   },
   {
     id: "phone7",
-    name: "Botnoi CyberMatrix 5G",
-    specs: '6.78" 165Hz AMOLED · Transparent Cyberpunk Glass · 120W Flash Charge · 6500mAh',
-    description: "Futuristic smartphone designed with transparent rear armor and customizable glyph notification illumination. Powered by flagship gaming silicon and 165Hz display.",
+    name: "HUAWEI Pura 70 Ultra",
+    specs: '6.8" 120Hz LTPO OLED · 16GB RAM · 512GB ROM · Ultra Lighting Retractable Camera',
+    description: "Groundbreaking photography flagship featuring a retractable 1-inch Ultra Lighting Camera, Kunlun Crystal Armor Glass, and 100W SuperCharge.",
     category: "Phone",
-    price: 28990,
+    price: 49990,
     image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80&auto=format&fit=crop",
-    badge: "Cyberpunk",
+    badge: "Pura Ultra",
     color: "#06b6d4",
-    specTags: ["165Hz AMOLED", "Glyph Lighting", "6500mAh 120W"],
+    specTags: ["6.8\" LTPO OLED", "1-inch Retractable", "100W SuperCharge"],
     rating: 4.9,
     salesCount: 275,
   },
   {
     id: "phone8",
-    name: "Botnoi Compact Pocket Flip",
-    specs: '6.9" 120Hz LTPO Fold · 3.6" Edge-to-Edge Outer OLED · Dual 50MP FlexCam · 190g',
-    description: "Ultra-pocketable vertical clamshell folding smartphone. Capture hands-free tripod photos with FlexMode and reply to messages directly from the oversized 3.6-inch cover screen.",
+    name: "HUAWEI Pocket 2",
+    specs: '6.94" 120Hz LTPO Fold · 1.15" Cover Screen · 12GB RAM · 256GB ROM · XMAGE Quad',
+    description: "Ultra-pocketable vertical clamshell folding smartphone. Capture hands-free tripod photos with FlexMode and reply to messages directly from the outer screen.",
     category: "Phone",
     price: 34900,
     image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=600&q=80&auto=format&fit=crop",
     badge: "Pocket Flip",
     color: "#ec4899",
-    specTags: ["Pocket Clamshell", "3.6\" Outer OLED", "FlexCam 50MP"],
+    specTags: ["Pocket Clamshell", "XMAGE Quad", "120Hz Foldable"],
     rating: 4.8,
     salesCount: 320,
   },
   {
     id: "phone9",
-    name: "Botnoi Explorer Rugged 5G",
-    specs: '6.58" Gorilla Armor 120Hz · Thermal Imaging Sensor · Night Vision · 10,800mAh',
-    description: "Extreme adventure and industrial smartphone equipped with professional thermal imaging and infrared night vision. Submersible IP69K rating with massive 10,800mAh battery.",
+    name: "HUAWEI Mate 60 RS Ultimate Design",
+    specs: '6.82" 120Hz LTPO OLED · Ceramic Body · 16GB RAM · 512GB ROM · Satellite Calling',
+    description: "Ultra-luxury ceramic master edition smartphone engineered with star diamond design, dual satellite calling, and Kunlun Glass armor.",
     category: "Phone",
-    price: 21900,
+    price: 62900,
     image: "https://images.unsplash.com/photo-1580910051074-3eb694886505?w=600&q=80&auto=format&fit=crop",
-    badge: "Thermal FLIR",
+    badge: "Ultimate RS",
     color: "#f59e0b",
-    specTags: ["Thermal Sensor", "10,800mAh", "IP69K Mil-Spec"],
-    rating: 4.7,
+    specTags: ["Ceramic Body", "Star Diamond", "Satellite Calling"],
+    rating: 4.9,
     salesCount: 180,
   },
 ];
 
-const categories: ITCategory[] = ["All Products", "Laptops", "Monitors", "Audio", "Accessories", "Phone"];
+const categories: ITCategory[] = ["All Products", "Phone", "Laptops", "Monitors", "Audio", "Accessories"];
 
 const money = new Intl.NumberFormat("th-TH", {
   style: "currency",
@@ -754,6 +760,25 @@ export default function ITStoreDemo() {
     const key = `itstore_item.${id}.${field}` as TranslationKey;
     const translated = t(key);
     return translated === key ? fallback : translated;
+  };
+
+  const getCategoryIcon = (cat: ITCategory) => {
+    switch (cat) {
+      case "All Products":
+        return <LayoutGrid className="size-3.5 shrink-0" />;
+      case "Phone":
+        return <Smartphone className="size-3.5 shrink-0" />;
+      case "Laptops":
+        return <Laptop className="size-3.5 shrink-0" />;
+      case "Monitors":
+        return <Monitor className="size-3.5 shrink-0" />;
+      case "Audio":
+        return <Headphones className="size-3.5 shrink-0" />;
+      case "Accessories":
+        return <Layers className="size-3.5 shrink-0" />;
+      default:
+        return <Sparkles className="size-3.5 shrink-0" />;
+    }
   };
 
   const getBadgeTranslation = (badge: string | undefined) => {
@@ -816,6 +841,40 @@ export default function ITStoreDemo() {
 
   const [ready, setReady] = useState(false);
   const cartRef = useRef<HTMLElement>(null);
+  const categorySliderRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollButtons = useCallback(() => {
+    const el = categorySliderRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 6);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 6);
+  }, []);
+
+  useEffect(() => {
+    const el = categorySliderRef.current;
+    if (!el) return;
+    updateScrollButtons();
+    el.addEventListener("scroll", updateScrollButtons, { passive: true });
+    window.addEventListener("resize", updateScrollButtons);
+    return () => {
+      el.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
+    };
+  }, [updateScrollButtons]);
+
+  const scrollCategories = (direction: "left" | "right") => {
+    if (categorySliderRef.current) {
+      const scrollAmount = direction === "left" ? -220 : 220;
+      categorySliderRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
+  const handleCategorySelect = (cat: ITCategory, e: React.MouseEvent<HTMLButtonElement>) => {
+    setActiveCategory(cat);
+    e.currentTarget.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
 
   const toggleExpand = (productId: string) => {
     setExpandedProducts((prev) => ({ ...prev, [productId]: !prev[productId] }));
@@ -977,8 +1036,8 @@ export default function ITStoreDemo() {
     {
       id: "matext",
       badge: "World's 1st Tri-Fold OLED",
-      title: "Botnoi Titan Tri-Fold",
-      subtitle: "10.2\" Expanding 3K OLED · Neural Core AI · 16GB + 1TB · Ultra-Slim 3.6mm Titanium Architecture",
+      title: "HUAWEI Mate XT Ultimate",
+      subtitle: "10.2\" Expanding 3K OLED · Kirin AI · 16GB + 1TB · Ultra-Slim 3.6mm Titanium Architecture",
       price: 109990,
       image: huaweiMateXT,
       accent: "#ef4444",
@@ -988,7 +1047,7 @@ export default function ITStoreDemo() {
     {
       id: "matex6",
       badge: "Ultra-Slim Falcon Fold",
-      title: "Botnoi Apex Fold",
+      title: "HUAWEI Mate X6",
       subtitle: "Ultra-Thin Dual-Screen Foldable · Quad Ultra Lighting Camera Array · Dual Satellite Calling",
       price: 59990,
       image: huaweiMateX6,
@@ -999,7 +1058,7 @@ export default function ITStoreDemo() {
     {
       id: "mate80pro",
       badge: "AI Flagship Titanium",
-      title: "Botnoi Horizon Pro",
+      title: "HUAWEI Mate 80 Pro",
       subtitle: "Next-Gen AI Core Architecture · 100W HyperCharge · Crystal Armor Glass Shield",
       price: 43990,
       image: huaweiMate80Pro,
@@ -1010,7 +1069,7 @@ export default function ITStoreDemo() {
     {
       id: "matexs2",
       badge: "Falcon Wing Outward Fold",
-      title: "Botnoi Falcon Wing",
+      title: "HUAWEI Mate Xs 2",
       subtitle: "7.8\" True-Chroma Flexible Display · Ultra-Light 255g · Double-Rotating Seamless Hinge",
       price: 39990,
       image: huaweiMateXs2,
@@ -1297,43 +1356,77 @@ export default function ITStoreDemo() {
               </div>
             </div>
 
-            {/* Category Pills - Smooth horizontal scrolling on mobile */}
-            <div
-              className="mb-6 sm:mb-8 flex items-center gap-2 overflow-x-auto whitespace-nowrap pb-2 pt-1 scroll-smooth no-scrollbar"
-              role="tablist"
-              aria-label={t("itstore.categories_label")}
-              style={{ WebkitOverflowScrolling: "touch" }}
-            >
-              {categories.map((cat) => {
-                const active = activeCategory === cat;
-                const catCount = cat === "All Products" 
-                  ? products.length 
-                  : products.filter(p => p.category === cat).length;
-                return (
-                  <button
-                    key={cat}
-                    className={`relative shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer border flex items-center gap-1.5 sm:gap-2 shadow-xs ${
-                      active
-                        ? "border-transparent text-white shadow-md shadow-indigo-500/25 scale-[1.02]"
-                        : "text-foreground/75 border-foreground/10 bg-card hover:text-foreground hover:bg-foreground/5 hover:border-foreground/20"
-                    }`}
-                    style={active ? { background: "linear-gradient(135deg,#6366f1,#8b5cf6)" } : {}}
-                    onClick={() => setActiveCategory(cat)}
-                    role="tab"
-                    aria-selected={active}
-                    id={`itstore-cat-${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                  >
-                    <span>{getCategoryLabel(cat)}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold ${
-                        active ? "bg-white/20 text-white" : "bg-foreground/10 text-foreground/60"
+            {/* Category Slide Bar - Smooth horizontal slider without outer enclosing frame */}
+            <div className="relative mb-6 sm:mb-8 flex items-center gap-1.5">
+              {/* Left Slide Button */}
+              <button
+                type="button"
+                onClick={() => scrollCategories("left")}
+                aria-label="Slide categories left"
+                className={`hidden sm:flex shrink-0 items-center justify-center w-8 h-8 rounded-full border border-foreground/10 bg-card hover:bg-foreground/5 text-foreground/70 hover:text-foreground shadow-xs transition-all duration-200 cursor-pointer active:scale-90 ${
+                  canScrollLeft ? "opacity-100" : "opacity-30 hover:opacity-40 cursor-default"
+                }`}
+                disabled={!canScrollLeft}
+              >
+                <ChevronLeft className="size-4" />
+              </button>
+
+              {/* Scrollable Container with Categories */}
+              <div
+                ref={categorySliderRef}
+                className="flex-1 flex items-center gap-2 overflow-x-auto whitespace-nowrap py-1 px-0.5 scroll-smooth no-scrollbar"
+                role="tablist"
+                aria-label={t("itstore.categories_label")}
+                style={{ WebkitOverflowScrolling: "touch" }}
+              >
+                {categories.map((cat) => {
+                  const active = activeCategory === cat;
+                  const catCount =
+                    cat === "All Products"
+                      ? products.length
+                      : products.filter((p) => p.category === cat).length;
+                  return (
+                    <button
+                      key={cat}
+                      className={`relative shrink-0 px-3.5 sm:px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer border flex items-center gap-2 shadow-xs select-none ${
+                        active
+                          ? "border-transparent text-white shadow-md shadow-indigo-500/25 scale-[1.02]"
+                          : "text-foreground/75 border-foreground/10 bg-card hover:text-foreground hover:bg-foreground/5 hover:border-foreground/20"
                       }`}
+                      style={active ? { background: "linear-gradient(135deg,#6366f1,#8b5cf6)" } : {}}
+                      onClick={(e) => handleCategorySelect(cat, e)}
+                      role="tab"
+                      aria-selected={active}
+                      id={`itstore-cat-${cat.toLowerCase().replace(/\s+/g, "-")}`}
                     >
-                      {catCount}
-                    </span>
-                  </button>
-                );
-              })}
+                      <span className={`transition-transform duration-200 ${active ? "scale-110" : "text-foreground/60"}`}>
+                        {getCategoryIcon(cat)}
+                      </span>
+                      <span>{getCategoryLabel(cat)}</span>
+                      <span
+                        className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono font-bold transition-colors ${
+                          active ? "bg-white/20 text-white" : "bg-foreground/10 text-foreground/60"
+                        }`}
+                      >
+                        {catCount}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Slide Button */}
+              <button
+                type="button"
+                onClick={() => scrollCategories("right")}
+                aria-label="Slide categories right"
+                className={`hidden sm:flex shrink-0 items-center justify-center w-8 h-8 rounded-full border border-foreground/10 bg-card hover:bg-foreground/5 text-foreground/70 hover:text-foreground shadow-xs transition-all duration-200 cursor-pointer active:scale-90 ${
+                  canScrollRight ? "opacity-100" : "opacity-30 hover:opacity-40 cursor-default"
+                }`}
+                disabled={!canScrollRight}
+              >
+                <ChevronRight className="size-4" />
+              </button>
             </div>
 
             {/* Product Grid */}
