@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Package, Trash2, ArrowLeft } from "lucide-react";
+import { Package, Trash2, ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/lib/LanguageContext";
 import type { ITOrder } from "./ITStoreDemo";
 import "./Pages.css";
@@ -68,19 +68,6 @@ export default function ITStoreAdmin() {
       <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-lg transition-all">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div
-              style={{
-                width: 38,
-                height: 38,
-                borderRadius: 9,
-                background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Cpu size={18} color="white" />
-            </div>
             <div>
               <div className="font-extrabold text-slate-900 dark:text-white text-sm leading-tight">
                 {t("itstore_admin.title")}
@@ -143,17 +130,17 @@ export default function ITStoreAdmin() {
         <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden">
           {/* Table header row */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="font-extrabold text-slate-900 dark:text-white text-base flex items-center gap-2">
-              <Package size={18} style={{ color: "#6366f1" }} />
+            <h2 className="font-extrabold text-slate-900 dark:text-white text-base leading-none">
               {t("itstore_admin.order_log")}
             </h2>
             {orders.length > 0 && (
               <button
                 onClick={clearAll}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 transition"
+                className="flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 transition leading-none shrink-0"
                 id="itstore-admin-clear"
               >
-                <Trash2 size={11} /> {t("itstore_admin.btn_clear")}
+                <Trash2 size={11} className="shrink-0" />
+                <span>{t("itstore_admin.btn_clear")}</span>
               </button>
             )}
           </div>
