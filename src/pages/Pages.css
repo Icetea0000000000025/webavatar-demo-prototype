@@ -3550,13 +3550,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem;
+  padding: 0.5rem;
   box-sizing: border-box;
 }
 
 .team-slide-botnoi-logo {
-  width: 82%;
-  height: 82%;
+  width: 92%;
+  height: 92%;
   object-fit: contain;
   filter: drop-shadow(0 4px 14px rgba(56, 189, 248, 0.35));
   transition: transform 0.4s ease;
@@ -3574,8 +3574,8 @@
 }
 
 .team-sliding-card.is-expanded .team-slide-botnoi-logo {
-  width: 85%;
-  height: 85%;
+  width: 94%;
+  height: 94%;
 }
 
 .team-sliding-card.is-collapsed .team-slide-visual {
@@ -3585,7 +3585,7 @@
 }
 
 .team-sliding-card.is-collapsed .team-slide-logo-container {
-  padding: 0.25rem;
+  padding: 0.2rem;
 }
 
 .team-sliding-card.is-collapsed .team-slide-botnoi-logo {
@@ -3636,6 +3636,18 @@
   flex-direction: column;
   gap: 2px;
   text-align: left;
+}
+
+.sheet-name .name-full {
+  display: none;
+}
+
+.sheet-name .name-short {
+  display: inline;
+}
+
+.team-sliding-card:not(.is-expanded) .sheet-body-content {
+  display: none;
 }
 
 .sheet-name {
@@ -3703,61 +3715,178 @@
   color: #CBD5E1;
 }
 
-/* Responsive */
+.sheet-role-subtitle {
+  display: none;
+}
+
+/* Responsive Leadership Team Interactive Expansion for Mobile & Tablet (< 900px) */
 @media (max-width: 900px) {
   .team-sliding-track {
-    flex-direction: column;
-    height: auto !important;
-    max-height: none !important;
-    gap: 0.75rem;
-    overflow: visible;
-    margin: 0;
-    padding: 4px 0;
-  }
-
-  /* All cards: full width column */
-  .team-sliding-card {
-    flex: none !important;
-    min-width: 100% !important;
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-  }
-
-  /* Expanded: full card, column layout */
-  .team-sliding-card.is-expanded {
+    display: flex !important;
     flex-direction: column !important;
-    padding: 12px !important;
+    height: auto !important;
+    max-height: none !important;
+    gap: 0.85rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  /* Base state (Unselected / Default): All cards shown as clean, sleek horizontal rows */
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 88px !important;
+    min-height: 88px !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 10px 16px !important;
+    border-radius: 20px !important;
+    gap: 1rem !important;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .team-slide-visual {
+    width: 68px !important;
+    height: 68px !important;
+    min-width: 68px !important;
+    border-radius: 14px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .team-slide-logo-container {
+    padding: 0.25rem !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .team-slide-botnoi-logo {
+    width: 90% !important;
+    height: 90% !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .team-slide-white-sheet {
+    display: flex !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 0 0 0 0.5rem !important;
+    height: auto !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .sheet-header,
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .sheet-meta-title {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .sheet-name {
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .team-sliding-card:not(.is-expanded):not(.is-collapsed) .sheet-role-subtitle {
+    display: block !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: var(--cta, #0284C7) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-top: 2px !important;
+  }
+
+  .dark .team-sliding-card:not(.is-expanded):not(.is-collapsed) .sheet-role-subtitle {
+    color: #38BDF8 !important;
+  }
+
+  /* EXPANDED Card: Full feature card with photo tile, name, role, and description */
+  .team-sliding-card.is-expanded {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    flex-direction: column !important;
+    padding: 1.25rem !important;
+    border-radius: 24px !important;
+    gap: 0.85rem !important;
+    border-color: rgba(56, 189, 248, 0.7) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
   }
 
   .team-sliding-card.is-expanded .team-slide-visual {
     width: 100% !important;
-    height: 220px !important;
-    border-radius: 18px;
+    height: 230px !important;
+    border-radius: 18px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .team-sliding-card.is-expanded .team-slide-logo-container {
+    padding: 0.4rem !important;
+  }
+
+  .team-sliding-card.is-expanded .team-slide-botnoi-logo {
+    width: 90% !important;
+    height: 90% !important;
   }
 
   .team-sliding-card.is-expanded .team-slide-white-sheet {
-    padding: 1rem 0.75rem !important;
-    text-align: left;
+    display: flex !important;
+    opacity: 1 !important;
+    padding: 0.25rem 0.25rem 0.25rem 0.25rem !important;
+    height: auto !important;
+    gap: 0.5rem !important;
+    text-align: left !important;
   }
 
-  /* Collapsed: show as compact horizontal mini card (not hidden) */
+  .team-sliding-card.is-expanded .sheet-name {
+    font-size: 1.3rem !important;
+    white-space: normal !important;
+  }
+
+  .team-sliding-card.is-expanded .sheet-role-subtitle {
+    display: none !important;
+  }
+
+  /* COLLAPSED Cards (when another card is active): Compact sleek horizontal rows */
   .team-sliding-card.is-collapsed {
     flex: none !important;
-    height: 72px !important;
-    min-height: 72px !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 76px !important;
+    min-height: 76px !important;
     flex-direction: row !important;
+    align-items: center !important;
     padding: 8px 14px !important;
-    align-items: center;
-    gap: 1rem;
+    border-radius: 18px !important;
+    gap: 1rem !important;
+    opacity: 0.9 !important;
+    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) !important;
+  }
+
+  .team-sliding-card.is-collapsed:hover,
+  .team-sliding-card.is-collapsed:active {
+    opacity: 1 !important;
   }
 
   .team-sliding-card.is-collapsed .team-slide-visual {
-    width: 52px !important;
-    height: 52px !important;
-    min-width: 52px;
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
     border-radius: 12px !important;
-    flex-shrink: 0;
+    flex-shrink: 0 !important;
   }
 
   .team-sliding-card.is-collapsed .team-slide-logo-container {
@@ -3765,29 +3894,71 @@
   }
 
   .team-sliding-card.is-collapsed .team-slide-botnoi-logo {
-    width: 85% !important;
-    height: 85% !important;
-    transform: rotate(0deg) scale(1) !important;
+    width: 90% !important;
+    height: 90% !important;
   }
 
-  /* Show name in collapsed on mobile */
   .team-sliding-card.is-collapsed .team-slide-white-sheet {
     display: flex !important;
+    flex: 1 !important;
+    min-width: 0 !important;
     opacity: 1 !important;
-    max-height: none !important;
-    flex-direction: column;
-    justify-content: center;
-    padding: 0 !important;
+    visibility: visible !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    padding: 0 0 0 0.5rem !important;
+    height: auto !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  .team-sliding-card.is-collapsed .sheet-header,
+  .team-sliding-card.is-collapsed .sheet-meta-title {
+    display: flex !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    width: 100% !important;
   }
 
   .team-sliding-card.is-collapsed .sheet-name {
-    font-size: 0.9rem !important;
+    display: block !important;
+    font-size: 1.02rem !important;
+    font-weight: 800 !important;
+    color: #0F172A !important;
     opacity: 1 !important;
+    visibility: visible !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
-  /* Default state (no card selected): all show as normal compact cards */
-  .team-sliding-card:not(.is-expanded):not(.is-collapsed) {
-    height: auto !important;
+  .dark .team-sliding-card.is-collapsed .sheet-name {
+    color: #F8FAFC !important;
+  }
+
+  .team-sliding-card.is-collapsed .sheet-role-subtitle {
+    display: block !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: var(--cta, #0284C7) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    margin-top: 1px !important;
+  }
+
+  .dark .team-sliding-card.is-collapsed .sheet-role-subtitle {
+    color: #38BDF8 !important;
+  }
+
+  .sheet-role-title {
+    font-size: 0.92rem !important;
+    font-weight: 750 !important;
+  }
+
+  .sheet-desc-text {
+    font-size: 0.86rem !important;
+    line-height: 1.6 !important;
   }
 }
 
@@ -6951,21 +7122,59 @@ textarea.form-control {
 /* Mobile Filter Responsive Touch Improvements */
 @media (max-width: 768px) {
   .techsauce-filter-toolbar {
-    padding: 0;
-    gap: 0.5rem;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 0.75rem !important;
+    padding: 0 !important;
+    overflow-x: visible !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .techsauce-filter-toolbar > div {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+
+  .techsauce-search-box-sm {
+    width: 100% !important;
+    padding: 0.65rem 0.9rem !important;
+    border-radius: 14px !important;
+  }
+
+  .techsauce-search-input-sm {
+    font-size: 0.9rem !important;
+    width: 100% !important;
+  }
+
+  .techsauce-filter-buttons {
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding-bottom: 0.25rem !important;
     -webkit-overflow-scrolling: touch;
   }
 
   .techsauce-filter-btn {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.75rem;
-    border-radius: 8px;
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 10px !important;
+  }
+
+  .techsauce-select-filters {
+    width: 100% !important;
+    overflow-x: auto !important;
+    padding-bottom: 0.25rem !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   .techsauce-select {
-    padding: 0.45rem 0.75rem;
-    font-size: 0.75rem;
-    border-radius: 8px;
+    padding: 0.45rem 0.85rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 10px !important;
   }
 }
 

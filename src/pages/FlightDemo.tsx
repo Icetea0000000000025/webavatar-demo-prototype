@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Luggage, Coffee, Mic, Plane, Wifi, Zap, ChevronDown, ChevronUp, Check, ArrowLeft, Sparkles, Clock, Ticket, ChevronRight, Home } from "lucide-react";
+import { Luggage, Coffee, Mic, Plane, Wifi, Zap, ChevronDown, ChevronUp, Check, ArrowLeft, Clock, Ticket, ChevronRight, Home } from "lucide-react";
 import { saveBooking, getBookings, type Booking } from "@/lib/bookings";
 import { toast, Toaster } from "sonner";
 import PageSkeleton from "@/components/PageSkeleton";
@@ -521,11 +521,11 @@ export default function FlightDemo() {
           <motion.img
             src={heroBg}
             alt="Flight View Thailand"
-            className="absolute inset-0 -z-10 h-[120%] w-full object-cover"
+            className="absolute inset-0 -z-10 h-full md:h-[120%] w-full object-cover object-[center_25%] md:object-center opacity-40 md:opacity-100 transition-opacity duration-300"
             style={{ y: heroParallax }}
           />
           {/* Dark scrim for text readability */}
-          <div className="absolute inset-0 -z-[5] bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/70" />
+          <div className="absolute inset-0 -z-[5] bg-gradient-to-b from-slate-950/85 via-slate-950/70 to-slate-950/90 md:from-slate-900/60 md:via-slate-900/30 md:to-slate-900/70" />
 
           <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-white/90 dark:bg-slate-900/95 text-slate-800 dark:text-white backdrop-blur-md border border-slate-200/80 dark:border-slate-700/80 rounded-2xl shadow-lg transition-all">
             <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -803,9 +803,8 @@ export default function FlightDemo() {
                     <button
                       type="submit"
                       id="submit-flight-search"
-                      className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center gap-2"
+                      className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center justify-center gap-2"
                     >
-                      <Plane className="w-4 h-4" />
                       {t('flight.search_flights')}
                     </button>
                   </div>
@@ -1347,9 +1346,8 @@ export default function FlightDemo() {
                     <button
                       type="submit"
                       id="submit-flight-booking"
-                      className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center gap-1.5"
+                      className="px-10 py-4 rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 text-white font-display font-bold text-sm shadow-md hover:from-sky-500 hover:to-indigo-500 hover:shadow-lg active:scale-98 transition-all cursor-pointer flex items-center justify-center gap-1.5"
                     >
-                      <Sparkles className="w-4 h-4 text-sky-200" />
                       {t('flight.submit')}
                     </button>
                   </div>
@@ -1600,11 +1598,11 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 p-0 sm:max-w-md bg-[#eef6fc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl font-display">
-        <div className="p-8 relative select-none">
+      <DialogContent className="max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-200 dark:border-slate-800 p-0 max-w-[calc(100vw-1.5rem)] sm:max-w-md bg-[#eef6fc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl font-display">
+        <div className="p-4 sm:p-7 relative select-none">
 
           {/* Header branding (Top center) */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-4 sm:mb-6 pr-8">
             <div className="flex items-center gap-1.5">
               <span className="font-display font-black text-lg text-sky-950 dark:text-sky-100 tracking-tight">BotnoiAir</span>
             </div>
@@ -1616,17 +1614,17 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
           {/* Route Display */}
           <div className="flex justify-between items-end mb-1">
             <div>
-              <div className="text-4xl font-black font-display text-sky-950 dark:text-sky-100 tracking-tight leading-none">{getCode(booking.from)}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1.5">{getCleanCity(booking.from)}</div>
+              <div className="text-3xl sm:text-4xl font-black font-display text-sky-950 dark:text-sky-100 tracking-tight leading-none">{getCode(booking.from)}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">{getCleanCity(booking.from)}</div>
             </div>
             <div className="text-right">
-              <div className="text-4xl font-black font-display text-sky-950 dark:text-sky-100 tracking-tight leading-none">{getCode(booking.to)}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1.5">{getCleanCity(booking.to)}</div>
+              <div className="text-3xl sm:text-4xl font-black font-display text-sky-950 dark:text-sky-100 tracking-tight leading-none">{getCode(booking.to)}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1">{getCleanCity(booking.to)}</div>
             </div>
           </div>
 
           {/* Connection line with Plane icon */}
-          <div className="flex items-center w-full my-5 relative">
+          <div className="flex items-center w-full my-3 sm:my-5 relative">
             {/* Left dot */}
             <div className="w-4 h-4 rounded-full bg-sky-200 dark:bg-sky-900/60 flex items-center justify-center shrink-0">
               <div className="w-1.5 h-1.5 rounded-full bg-sky-600 dark:bg-sky-400"></div>
@@ -1637,7 +1635,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
             {/* Center rotated Plane icon */}
             <div className="px-2 text-sky-950 dark:text-sky-200 shrink-0 transform rotate-45">
-              <Plane className="w-6 h-6 fill-current stroke-[1.5]" />
+              <Plane className="w-5 h-5 sm:w-6 sm:h-6 fill-current stroke-[1.5]" />
             </div>
 
             {/* Right dashed line */}
@@ -1650,10 +1648,10 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
           </div>
 
           {/* Depart & Arrive details */}
-          <div className="grid grid-cols-3 gap-2 mb-6">
+          <div className="grid grid-cols-3 gap-2 mb-4 sm:mb-6">
             <div className="text-left">
               <div className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">{t('flight.modal_depart')}</div>
-              <div className="font-extrabold text-sm text-slate-800 dark:text-slate-200 mt-0.5">{booking.departDate}</div>
+              <div className="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-200 mt-0.5">{booking.departDate}</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{outboundDepart}</div>
             </div>
             <div className="text-center flex flex-col justify-center">
@@ -1664,7 +1662,7 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
               <div className="text-[9px] text-slate-400 dark:text-slate-400 font-bold uppercase tracking-wider">
                 {booking.tripType === "round" && booking.returnDate ? t('flight.modal_return') : t('flight.modal_arrive')}
               </div>
-              <div className="font-extrabold text-sm text-slate-800 dark:text-slate-200 mt-0.5">
+              <div className="font-extrabold text-xs sm:text-sm text-slate-800 dark:text-slate-200 mt-0.5">
                 {booking.tripType === "round" && booking.returnDate ? booking.returnDate : booking.departDate}
               </div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1674,37 +1672,37 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
           </div>
 
           {/* Dashed separator */}
-          <div className="border-t border-dashed border-sky-200/80 dark:border-sky-800/80 my-5"></div>
+          <div className="border-t border-dashed border-sky-200/80 dark:border-sky-800/80 my-3 sm:my-5"></div>
 
           {/* Passenger details grid */}
-          <div className="grid grid-cols-3 gap-y-4 gap-x-2 text-left mb-6">
+          <div className="grid grid-cols-3 gap-y-3 sm:gap-y-4 gap-x-2 text-left mb-4 sm:mb-6">
             <div className="col-span-2">
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_passenger')}</p>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate pr-2">{booking.passengerName}</p>
+              <p className="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200 truncate pr-2">{booking.passengerName}</p>
             </div>
             <div>
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_seat')}</p>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{seatNumber}</p>
+              <p className="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200">{seatNumber}</p>
             </div>
 
             <div className="col-span-2">
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_class_status')}</p>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{flightClass} / {t('flight.status_confirmed')}</p>
+              <p className="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200">{flightClass} / {t('flight.status_confirmed')}</p>
             </div>
             <div>
               <p className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.modal_passengers_num')}</p>
-              <p className="font-bold text-sm text-slate-800 dark:text-slate-200">{booking.passengers}</p>
+              <p className="font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-200">{booking.passengers}</p>
             </div>
           </div>
 
           {/* Barcode and price */}
-          <div className="border-t border-dashed border-sky-200/80 dark:border-sky-800/80 pt-5 mt-5 flex justify-between items-center">
+          <div className="border-t border-dashed border-sky-200/80 dark:border-sky-800/80 pt-3 sm:pt-5 mt-3 sm:mt-5 flex justify-between items-center">
             {/* Mock price */}
             <div className="text-left">
               <div className="text-[9px] text-slate-400 dark:text-slate-400 uppercase font-bold tracking-wider mb-0.5">{t('flight.total_fare')}</div>
               <div className="flex flex-col">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-xl font-black text-sky-950 dark:text-sky-100">฿{finalPrice.toLocaleString()}</span>
+                  <span className="text-lg sm:text-xl font-black text-sky-950 dark:text-sky-100">฿{finalPrice.toLocaleString()}</span>
                   <span className="text-[9px] text-slate-400 dark:text-slate-400">/{booking.passengers} {t('flight.pax_suffix')}</span>
                 </div>
                 {discountAmount > 0 && (
@@ -1716,12 +1714,12 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
             </div>
 
             {/* Barcode mockup */}
-            <div className="h-9 w-32 opacity-80 dark:invert" style={{ background: "repeating-linear-gradient(95deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 6px, transparent 6px, transparent 10px, #1e293b 10px, #1e293b 14px, transparent 14px, transparent 16px)" }}></div>
+            <div className="h-8 sm:h-9 w-24 sm:w-32 opacity-80 dark:invert" style={{ background: "repeating-linear-gradient(95deg, #1e293b, #1e293b 2px, transparent 2px, transparent 4px, #1e293b 4px, #1e293b 6px, transparent 6px, transparent 10px, #1e293b 10px, #1e293b 14px, transparent 14px, transparent 16px)" }}></div>
           </div>
 
           {/* Close button at the bottom */}
-          <div className="mt-8 flex justify-center">
-            <button onClick={onClose} id="confirm-ticket-modal" className="w-full py-3 bg-sky-950 dark:bg-sky-600 text-white font-bold text-xs rounded-2xl shadow-md hover:bg-sky-900 dark:hover:bg-sky-500 active:scale-98 transition-all cursor-pointer">
+          <div className="mt-5 sm:mt-8 flex justify-center">
+            <button onClick={onClose} id="confirm-ticket-modal" className="w-full py-2.5 sm:py-3 bg-sky-950 dark:bg-sky-600 text-white font-bold text-xs rounded-2xl shadow-md hover:bg-sky-900 dark:hover:bg-sky-500 active:scale-98 transition-all cursor-pointer">
               {t('flight.modal_close')}
             </button>
           </div>

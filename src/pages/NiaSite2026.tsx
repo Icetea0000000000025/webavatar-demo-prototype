@@ -219,7 +219,7 @@ export default function NiaSite2026() {
         </AnimatedSection>
 
         {/* INTERACTIVE CONTROLS */}
-        <div className="bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-rose-500/20 p-6 shadow-2xl mb-8">
+        <div className="bg-zinc-900/60 backdrop-blur-md rounded-3xl border border-rose-500/20 p-4 sm:p-6 shadow-2xl mb-8">
           
           {/* SEARCH BAR */}
           <div className="mb-6 relative">
