@@ -611,7 +611,7 @@ export const translations = {
     "flight.seat_selected_label": "Selected Seat: {seat}",
     "flight.seat_please_select": "Please select a seat",
     "flight.seat_confirm": "Confirm Seat",
-    "nav.restaurant": "Restaurant Order",
+    "nav.restaurant": "Botnoi Restaurant Demo",
     "nav.food_demo": "Botnoi Restaurant",
     "flight.summary_title": "Flight Selection Summary",
     "flight.outbound_label": "Outbound Flight",
