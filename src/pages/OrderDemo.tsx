@@ -10,7 +10,6 @@ import {
   ShoppingBag,
   ChevronDown,
   Sparkles,
-  FlaskConical,
   GraduationCap,
   Map,
   HeartPulse,
@@ -37,7 +36,7 @@ import {
 import botnoiAirLogo from "../assets/Screenshot 2026-08-10 140706.png";
 import botnoiRestaurantLogo from "../assets/IT.png";
 import promoPhuket from "../assets/hotel.png";
-import padKrapaoImage from "../assets/Restarant.png";
+import padKrapaoImage from "../assets/Restaurant.png";
 import AppFooter from "../components/AppFooter";
 
 export type ProjectCategory = 
@@ -1194,7 +1193,6 @@ export default function OrderDemo() {
             {sandboxDemos.length > 0 && (
               <section aria-label="Sandbox Demos" id="sandbox-demos-section">
                 <div className="flex items-center gap-2.5 mb-5">
-                  <FlaskConical className="size-4 text-primary shrink-0" />
                   <h2 className="text-xs font-black text-primary uppercase tracking-widest font-mono leading-none m-0 p-0 flex items-center">
                     {t('showcase.sandbox_demos' as any)}
                   </h2>
@@ -1214,7 +1212,6 @@ export default function OrderDemo() {
             {projectDemos.length > 0 && (
               <section aria-label="TN Startup Demos" id="tn-startup-demos-section">
                 <div className="flex items-center gap-2.5 mb-5">
-                  <Sparkles className="size-4 text-primary shrink-0" />
                   <h2 className="text-xs font-black text-primary uppercase tracking-widest font-mono leading-none m-0 p-0 flex items-center">
                     {t('showcase.student_projects')}
                   </h2>

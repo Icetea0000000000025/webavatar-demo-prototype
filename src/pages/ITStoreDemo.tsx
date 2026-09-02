@@ -7,8 +7,6 @@ import {
   ReceiptText,
   ShoppingCart,
   Trash2,
-  Zap,
-  Home,
   Search,
   SlidersHorizontal,
   Sparkles,
@@ -17,7 +15,6 @@ import {
   X,
   Star,
   CheckCircle2,
-  Cpu,
   ShieldCheck,
   Clock,
 } from "lucide-react";
@@ -809,6 +806,7 @@ export default function ITStoreDemo() {
   const [lastAddedId, setLastAddedId] = useState<string | null>(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [isHoveringBanner, setIsHoveringBanner] = useState(false);
+  const [isMobileCartOpen, setIsMobileCartOpen] = useState(false);
 
   // Promo code system
   const [promoCodeInput, setPromoCodeInput] = useState("");
@@ -1044,8 +1042,7 @@ export default function ITStoreDemo() {
         <header className="relative z-20 mx-auto mt-4 mb-6 w-[calc(100%-2rem)] max-w-7xl bg-background/85 backdrop-blur-md border border-foreground/10 rounded-2xl shadow-lg transition-all">
           <div className="px-6 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <nav className="flex items-center gap-2 text-xs text-foreground/60 font-bold" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-indigo-500 transition-colors flex items-center gap-1.5">
-                <Home className="size-3.5" />
+              <Link to="/" className="hover:text-indigo-500 transition-colors">
                 <span>{t('nav.home')}</span>
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
@@ -1053,8 +1050,7 @@ export default function ITStoreDemo() {
                 <span>{t('showcase.portal')}</span>
               </Link>
               <ChevronRight className="size-3 text-foreground/30" />
-              <span className="text-foreground font-extrabold uppercase font-mono tracking-wider flex items-center gap-1.5 text-indigo-500 dark:text-indigo-400">
-                <Zap className="size-3.5 fill-current" />
+              <span className="text-foreground font-extrabold uppercase font-mono tracking-wider text-indigo-500 dark:text-indigo-400">
                 {t('nav.itstore')}
               </span>
             </nav>
@@ -1062,25 +1058,23 @@ export default function ITStoreDemo() {
             <nav className="flex items-center gap-2 sm:gap-3 text-sm font-semibold">
               <Link
                 to="/it-store-demo/admin"
-                className="px-3 sm:px-4 py-1.5 rounded-full bg-foreground/5 hover:bg-foreground/10 transition-all border border-foreground/10 text-foreground text-xs font-bold flex items-center gap-1.5"
+                className="px-3.5 sm:px-4 py-2 rounded-full bg-foreground/5 hover:bg-foreground/10 transition-all border border-foreground/10 text-foreground text-xs sm:text-sm font-bold flex items-center justify-center cursor-pointer shadow-xs whitespace-nowrap"
                 id="nav-itstore-admin"
               >
-                <Cpu className="size-3.5 text-indigo-500" />
-                <span className="hidden sm:inline">{t("itstore.nav_admin")}</span>
+                <span>{t("itstore.nav_admin")}</span>
               </Link>
               <button
-                className="relative flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white transition-all shadow-md hover:shadow-indigo-500/25 active:scale-95 cursor-pointer"
+                className="relative flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold text-white transition-all shadow-md hover:shadow-indigo-500/25 active:scale-95 cursor-pointer"
                 style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6)" }}
                 onClick={() => {
                   if (window.innerWidth < 1024) {
-                    setCartDrawerOpen(true);
+                    setIsMobileCartOpen(true);
                   } else {
                     cartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
                   }
                 }}
                 id="itstore-cart-btn"
               >
-                <ShoppingCart className="size-4" />
                 <span>{t("itstore.nav_cart")}</span>
                 <span className="min-w-5 h-5 rounded-full bg-white text-indigo-600 text-xs font-extrabold flex items-center justify-center shadow px-1">
                   {itemCount}
@@ -1156,9 +1150,8 @@ export default function ITStoreDemo() {
                           setQuickViewQty(1);
                         }}
                         variant="outline"
-                        className="rounded-full px-3.5 sm:px-4 py-1.5 sm:py-2 font-bold text-xs border-foreground/20 hover:bg-foreground/10 gap-1.5 cursor-pointer shadow-xs"
+                        className="rounded-full px-3.5 sm:px-4 py-1.5 sm:py-2 font-bold text-xs border-foreground/20 hover:bg-foreground/10 cursor-pointer shadow-xs"
                       >
-                        <Eye className="size-3.5" />
                         <span>{t("itstore.explore_specs")}</span>
                       </Button>
 
@@ -1608,10 +1601,10 @@ export default function ITStoreDemo() {
             )}
           </section>
 
-          {/* ── Cart Sidebar ─────────────────────────────────────────────── */}
+          {/* ── Cart Sidebar (Hidden on mobile < lg, replaced by floating bottom bar + modal) ─────────────────────────────────────────────── */}
           <aside
             ref={cartRef as React.RefObject<HTMLDivElement>}
-            className="itstore-cart-sidebar"
+            className="itstore-cart-sidebar hidden lg:block"
             aria-label="Shopping Cart"
             id="itstore-cart"
           >
@@ -1837,6 +1830,227 @@ export default function ITStoreDemo() {
             </div>
           </aside>
         </div>
+
+        {/* ── Mobile Sticky Floating Bottom Order Summary Card (Mobile < lg when cart has items) ── */}
+        <AnimatePresence>
+          {itemCount > 0 && (
+            <motion.div
+              initial={{ y: 80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 80, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="fixed bottom-4 left-4 right-4 z-40 lg:hidden"
+            >
+              <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white backdrop-blur-xl border border-indigo-500/30 rounded-2xl shadow-2xl p-3 px-4 flex items-center justify-between gap-3 shadow-indigo-500/10">
+                {/* Left: Cart Icon + Item Count + Subtotal (Opens Mobile Cart Modal directly on screen) */}
+                <button
+                  type="button"
+                  onClick={() => setIsMobileCartOpen(true)}
+                  className="flex items-center gap-3 text-left focus:outline-none cursor-pointer group min-w-0"
+                >
+                  <div className="relative flex-shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <ShoppingCart size={18} />
+                    </div>
+                    <motion.span
+                      key={itemCount}
+                      initial={{ scale: 0.6 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                      className="absolute -top-1.5 -right-1.5 bg-indigo-600 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-slate-900 shadow-md font-mono"
+                    >
+                      {itemCount}
+                    </motion.span>
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider truncate">
+                      {t("itstore.cart_total")} ({itemCount})
+                    </div>
+                    <div className="text-sm font-black text-emerald-400 font-mono leading-none mt-0.5 truncate">
+                      {money.format(subtotal)}
+                    </div>
+                  </div>
+                </button>
+
+                {/* Right: Direct Checkout CTA Button */}
+                <button
+                  type="button"
+                  onClick={() => setReviewOpen(true)}
+                  className="px-4 py-2.5 rounded-xl text-xs font-black text-white flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 active:scale-95 transition-all cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 flex-shrink-0"
+                  id="itstore-mobile-checkout-btn"
+                >
+                  <span>{t("itstore.cart_review_checkout")}</span>
+                  <ChevronRight size={15} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Mobile Cart Details Pop-up Modal ── */}
+        <Dialog open={isMobileCartOpen} onOpenChange={setIsMobileCartOpen}>
+          <DialogContent className="max-w-md w-[calc(100vw-2rem)] bg-card text-foreground border-foreground/10 rounded-3xl p-5 overflow-hidden shadow-2xl max-h-[85vh] flex flex-col z-[100]">
+            <DialogHeader className="p-0 text-left border-b border-foreground/10 pb-3">
+              <div className="flex items-center justify-between gap-2 pr-6">
+                <DialogTitle asChild>
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                      <ShoppingCart size={17} />
+                    </div>
+                    <span className="font-extrabold text-base text-foreground leading-none truncate">
+                      {t("itstore.cart_title")} ({itemCount})
+                    </span>
+                  </div>
+                </DialogTitle>
+                {cartItems.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm(t("itstore.cart_clear_confirm"))) {
+                        setCart({});
+                        setAppliedPromo(null);
+                        setIsMobileCartOpen(false);
+                        toast.info("Cart cleared");
+                      }
+                    }}
+                    className="text-xs font-bold text-foreground/50 hover:text-red-500 transition-colors cursor-pointer shrink-0 leading-none py-1.5"
+                  >
+                    {language === 'th' ? 'ล้างตะกร้า' : 'Clear'}
+                  </button>
+                )}
+              </div>
+            </DialogHeader>
+
+            {/* Scrollable Cart Items */}
+            <div className="flex-1 overflow-y-auto my-3 pr-1 space-y-2.5 max-h-[280px] divide-y divide-foreground/10">
+              <AnimatePresence initial={false} mode="popLayout">
+                {cartItems.length === 0 ? (
+                  <div className="py-8 text-center text-foreground/50 text-xs">
+                    <ShoppingCart size={32} className="mx-auto mb-2 opacity-30 text-indigo-500" />
+                    <div className="font-bold text-foreground/70">{t("itstore.cart_empty")}</div>
+                  </div>
+                ) : (
+                  cartItems.map((item) => (
+                    <motion.div
+                      key={item.id}
+                      layout
+                      className="flex items-center gap-3 pt-2.5 first:pt-0"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-12 h-12 rounded-xl object-contain bg-foreground/5 p-1 border border-foreground/10 shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="font-extrabold text-foreground text-xs truncate">
+                          {getProductTranslation(item.id, "name", item.name)}
+                        </div>
+                        <div className="text-xs text-foreground/60 font-semibold font-mono mt-0.5">
+                          {money.format(item.price)}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-0.5 bg-foreground/5 rounded-full p-0.5 border border-foreground/10">
+                          <button
+                            type="button"
+                            onClick={() => changeQty(item.id, -1)}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-foreground/70 hover:bg-foreground/10 cursor-pointer"
+                          >
+                            <Minus size={10} />
+                          </button>
+                          <span className="text-xs font-black w-4 text-center text-foreground font-mono">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => changeQty(item.id, 1)}
+                            className="w-6 h-6 rounded-full flex items-center justify-center text-foreground/70 hover:bg-foreground/10 cursor-pointer"
+                          >
+                            <Plus size={10} />
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeItem(item.id)}
+                          className="w-6 h-6 rounded-full flex items-center justify-center text-foreground/40 hover:text-red-500 cursor-pointer ml-0.5"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Promo Code Input */}
+            <div className="py-2.5 border-t border-foreground/10">
+              <form onSubmit={applyPromoCode} className="flex gap-2">
+                <div className="relative flex-1">
+                  <Tag className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-foreground/40" />
+                  <input
+                    type="text"
+                    value={promoCodeInput}
+                    onChange={(e) => setPromoCodeInput(e.target.value)}
+                    placeholder={t("itstore.promo_placeholder")}
+                    disabled={appliedPromo !== null}
+                    className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-foreground/5 border border-foreground/10 text-xs font-mono uppercase text-foreground focus:outline-none focus:border-indigo-500 disabled:opacity-60"
+                  />
+                </div>
+                {appliedPromo ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAppliedPromo(null);
+                      setPromoCodeInput("");
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-red-500/10 text-red-500 text-xs font-bold hover:bg-red-500/20 transition-colors cursor-pointer"
+                  >
+                    {t("itstore.remove_promo")}
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    disabled={!promoCodeInput.trim()}
+                    className="px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold hover:bg-indigo-700 transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    {t("itstore.promo_apply")}
+                  </button>
+                )}
+              </form>
+            </div>
+
+            {/* Totals & Checkout */}
+            <div className="pt-3 border-t border-foreground/10 space-y-2">
+              <div className="flex justify-between text-xs text-foreground/70">
+                <span>{t("itstore.cart_subtotal")}</span>
+                <span className="font-semibold text-foreground">{money.format(rawSubtotal)}</span>
+              </div>
+              {appliedPromo && (
+                <div className="flex justify-between text-xs text-emerald-500 font-bold">
+                  <span>{t("itstore.promo_discount")} ({appliedPromo})</span>
+                  <span>-{money.format(discountAmount)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm font-black text-foreground pt-1.5 border-t border-foreground/10">
+                <span>{t("itstore.cart_total")}</span>
+                <span className="text-indigo-500 font-mono">{money.format(subtotal)}</span>
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsMobileCartOpen(false);
+                  setReviewOpen(true);
+                }}
+                disabled={cartItems.length === 0}
+                className="w-full mt-2 flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black text-white transition-all shadow-lg cursor-pointer disabled:opacity-40"
+                style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6)" }}
+              >
+                <ChevronRight size={16} /> {t("itstore.cart_review_checkout")}
+              </button>
+            </div>
+          </DialogContent>
+        </Dialog>
 
         {/* ── Quick View Tech Specs & Full Image Dialog (Fixed Sticky Bottom Action Bar) ── */}
         <Dialog open={quickViewProduct !== null} onOpenChange={(open) => !open && setQuickViewProduct(null)}>

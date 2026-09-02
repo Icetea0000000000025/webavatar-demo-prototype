@@ -183,7 +183,7 @@ const menu: MenuItem[] = [
     englishName: "Creamy Tom Yum Goong",
     description: "กุ้งสดตัวโต น้ำซุปเข้มข้น หอมสมุนไพรไทย",
     category: "เมนูยอดนิยม",
-    categories: ["เมนูยอดนิยม", "อาหารจานเดียว", "กับข้าว"],
+    categories: ["เมนูยอดนิยม", "กับข้าว"],
     price: 179,
     image: tomYumImage,
     images: [tomYumImage, tomYum2Image, tomYum3Image],
@@ -195,7 +195,7 @@ const menu: MenuItem[] = [
     englishName: "Green Curry Chicken",
     description: "เครื่องแกงตำสด กะทิหอมมัน พร้อมข้าวสวย",
     category: "กับข้าว",
-    categories: ["เมนูยอดนิยม", "กับข้าว", "อาหารจานเดียว"],
+    categories: ["กับข้าว"],
     price: 149,
     image: greenCurryImage,
     images: [greenCurryImage, greenCurry2Image, greenCurry3Image],
@@ -207,7 +207,7 @@ const menu: MenuItem[] = [
     englishName: "Mango Sticky Rice",
     description: "มะม่วงสุกหวาน ข้าวเหนียวมูนราดกะทิสด",
     category: "ของหวาน",
-    categories: ["เมนูยอดนิยม", "ของหวาน"],
+    categories: ["ของหวาน"],
     price: 119,
     image: mangoStickyRiceImage,
     images: [mangoStickyRiceImage, mangoStickyRice2Image, mangoStickyRice3Image],
@@ -218,7 +218,7 @@ const menu: MenuItem[] = [
     englishName: "Shrimp Fried Rice",
     description: "ข้าวหอมมะลิผัดหอมกระทะ กุ้งสดและผักกรอบ",
     category: "อาหารจานเดียว",
-    categories: ["เมนูยอดนิยม", "อาหารจานเดียว"],
+    categories: ["อาหารจานเดียว"],
     price: 109,
     image: friedriceImage,
     images: [friedriceImage, friedrice2Image, friedrice3Image],
@@ -229,7 +229,7 @@ const menu: MenuItem[] = [
     englishName: "Tom Yum Noodles",
     description: "เส้นนุ่ม น้ำต้มยำรสจัดจ้าน ถั่วคั่วหอม",
     category: "อาหารจานเดียว",
-    categories: ["เมนูยอดนิยม", "อาหารจานเดียว"],
+    categories: ["อาหารจานเดียว"],
     price: 79,
     image: tomyumnoodleImage,
     images: [tomyumnoodleImage, tomyumnoodle2Image, tomyumnoodle3Image],
@@ -714,7 +714,7 @@ export default function FoodOrderDemo() {
           
           {/* Categories select tabs with sliding motion pill */}
           <div
-            className="mb-8 flex justify-center gap-2 overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 scrollbar-hide snap-x"
+            className="mb-8 flex justify-start sm:justify-center gap-2 overflow-x-auto whitespace-nowrap pb-3 -mx-4 px-4 scrollbar-hide snap-x"
             role="tablist"
             aria-label={t("food.categories_label")}
           >

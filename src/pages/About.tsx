@@ -1327,6 +1327,7 @@ function About() {
                       <div className="sheet-header">
                         <div className="sheet-meta-title">
                           <h3 className="sheet-name">{isExpanded ? member.fullName : member.name}</h3>
+                          <p className="sheet-role-subtitle">{member.role}</p>
                         </div>
                       </div>
 
