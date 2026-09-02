@@ -58,12 +58,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+export type FoodCategory = "เมนูยอดนิยม" | "อาหารจานเดียว" | "กับข้าว" | "ของหวาน";
+
 export interface MenuItem {
   id: string;
   name: string;
   englishName: string;
   description: string;
-  category: "เมนูยอดนิยม" | "อาหารจานเดียว" | "กับข้าว" | "ของหวาน";
+  category: FoodCategory;
+  categories?: FoodCategory[];
   price: number;
   image: string;
   images?: string[];
@@ -168,6 +171,7 @@ const menu: MenuItem[] = [
     englishName: "Chicken Pad Kra Pao",
     description: "กะเพราหอมฉุน ผัดไฟแรง เสิร์ฟพร้อมไข่ดาวกรอบ",
     category: "เมนูยอดนิยม",
+    categories: ["เมนูยอดนิยม", "อาหารจานเดียว"],
     price: 89,
     image: padKrapaoImage,
     images: [padKrapaoImage, padKrapao2Image, padKrapao3Image],
@@ -179,6 +183,7 @@ const menu: MenuItem[] = [
     englishName: "Creamy Tom Yum Goong",
     description: "กุ้งสดตัวโต น้ำซุปเข้มข้น หอมสมุนไพรไทย",
     category: "เมนูยอดนิยม",
+    categories: ["เมนูยอดนิยม", "อาหารจานเดียว", "กับข้าว"],
     price: 179,
     image: tomYumImage,
     images: [tomYumImage, tomYum2Image, tomYum3Image],
@@ -190,6 +195,7 @@ const menu: MenuItem[] = [
     englishName: "Green Curry Chicken",
     description: "เครื่องแกงตำสด กะทิหอมมัน พร้อมข้าวสวย",
     category: "กับข้าว",
+    categories: ["เมนูยอดนิยม", "กับข้าว", "อาหารจานเดียว"],
     price: 149,
     image: greenCurryImage,
     images: [greenCurryImage, greenCurry2Image, greenCurry3Image],
@@ -201,6 +207,7 @@ const menu: MenuItem[] = [
     englishName: "Mango Sticky Rice",
     description: "มะม่วงสุกหวาน ข้าวเหนียวมูนราดกะทิสด",
     category: "ของหวาน",
+    categories: ["เมนูยอดนิยม", "ของหวาน"],
     price: 119,
     image: mangoStickyRiceImage,
     images: [mangoStickyRiceImage, mangoStickyRice2Image, mangoStickyRice3Image],
@@ -211,6 +218,7 @@ const menu: MenuItem[] = [
     englishName: "Shrimp Fried Rice",
     description: "ข้าวหอมมะลิผัดหอมกระทะ กุ้งสดและผักกรอบ",
     category: "อาหารจานเดียว",
+    categories: ["เมนูยอดนิยม", "อาหารจานเดียว"],
     price: 109,
     image: friedriceImage,
     images: [friedriceImage, friedrice2Image, friedrice3Image],
@@ -221,6 +229,7 @@ const menu: MenuItem[] = [
     englishName: "Tom Yum Noodles",
     description: "เส้นนุ่ม น้ำต้มยำรสจัดจ้าน ถั่วคั่วหอม",
     category: "อาหารจานเดียว",
+    categories: ["เมนูยอดนิยม", "อาหารจานเดียว"],
     price: 79,
     image: tomyumnoodleImage,
     images: [tomyumnoodleImage, tomyumnoodle2Image, tomyumnoodle3Image],
@@ -245,7 +254,7 @@ function getItemCustomizationConfig(item: MenuItem | null, lang: string) {
   const isJa = lang === 'ja';
   const isKo = lang === 'ko';
 
-  if (item.category === "ของหวาน") {
+  if (item.id === "mango-rice" || item.category === "ของหวาน") {
     return {
       spicinessLabel: isTh ? "ระดับความหวาน" : isZh ? "甜度选择" : isJa ? "甘さの選択" : isKo ? "당도 선택" : "Sweetness Level",
       spicinessOptions: isTh ? ["หวานน้อย", "หวานปกติ", "หวานมาก"] : isZh ? ["微甜", "正常甜", "加甜"] : isJa ? ["控えめ", "普通", "甘め"] : ["Less Sweet", "Normal", "Extra Sweet"],
@@ -446,7 +455,11 @@ export default function FoodOrderDemo() {
   }, [cart, ready]);
 
   const visibleMenu =
-    category === "ทั้งหมด" ? menu : menu.filter((item) => item.category === category);
+    category === "ทั้งหมด"
+      ? menu
+      : menu.filter((item) =>
+          item.categories ? item.categories.includes(category) : item.category === category
+        );
   const cartItems = useMemo(
     () =>
       menu

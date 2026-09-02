@@ -48,8 +48,8 @@ const ROUTE_TITLE_MAP: Record<string, string> = {
   '/flight-demo': 'nav.flight',
   '/flight-demo/admin': 'flight.nav_admin',
   '/all-demo': 'nav.all_demos',
-  '/food-demo': 'nav.food_demo',
-  '/food-demo/admin': 'nav.food_demo',
+  '/food-demo': 'nav.restaurant',
+  '/food-demo/admin': 'food.nav_admin',
   '/it-store-demo': 'nav.itstore',
   '/it-store-demo/admin': 'nav.itstore',
   '/nia-site-2026': 'nav.site2026',
@@ -92,7 +92,7 @@ function AppRoutes() {
     let title = '';
     if (translationKey) {
       const translated = t(translationKey as any);
-      if (translated && !translated.startsWith('nav.') && !translated.startsWith('flight.')) {
+      if (translated && !translated.startsWith('nav.') && !translated.startsWith('flight.') && !translated.startsWith('food.')) {
         title = translated;
       }
     }
