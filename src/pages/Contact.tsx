@@ -16,8 +16,8 @@ const GOOGLE_SHEETS_TOPIC_LABELS: Record<string, string> = {
   enterprise: 'On-Premise Enterprise Solutions'
 };
 
-const SHOW_INQUIRY_ROSTER = false;
-const ENABLE_LOCAL_INQUIRY_STORAGE = false;
+const SHOW_INQUIRY_ROSTER = true;
+const ENABLE_LOCAL_INQUIRY_STORAGE = true;
 
 interface Submission {
   id: number;
@@ -31,28 +31,7 @@ interface Submission {
   timestamp: string;
 }
 
-// Redaction Helpers
-const formatRedactedName = (name: string) => {
-  if (!name) return "";
-  const cleaned = name.trim();
-  if (cleaned.length === 0) return "";
-  if (cleaned.length === 1) return cleaned + "...";
-  return cleaned[0] + "..." + cleaned[cleaned.length - 1];
-};
 
-const formatRedactedEmail = (email: string) => {
-  if (!email) return "";
-  const cleaned = email.trim();
-  const firstLetter = cleaned.length > 0 ? cleaned[0] : "";
-  const atIndex = cleaned.indexOf("@");
-  if (atIndex !== -1) {
-    const domainPart = cleaned.substring(atIndex + 1);
-    const dotIndex = domainPart.lastIndexOf(".");
-    const tld = dotIndex !== -1 ? domainPart.substring(dotIndex + 1) : "com";
-    return `${firstLetter}***@***.${tld}`;
-  }
-  return `${firstLetter}***@***.com`;
-};
 
 const formatPhoneForSubmission = (phoneNumber: string) => {
   const trimmedPhoneNumber = phoneNumber.trim();
@@ -629,52 +608,65 @@ function Contact() {
                   <th className="py-3 px-4">{t('contact.th_name')}</th>
                   <th className="py-3 px-4">{t('contact.th_email')}</th>
                   <th className="py-3 px-4">{t('contact.th_topic')}</th>
+                  <th className="py-3 px-4">{t('contact.th_msg')}</th>
                   <th className="py-3 px-2 text-right">{t('contact.th_time')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/30">
                 {/* Live Reactive Draft Row */}
                 <AnimatePresence>
-                  {(formData.name.trim() || formData.email.trim()) && (
+                  {(formData.name.trim() || formData.email.trim() || formData.message.trim()) && (
                     <motion.tr 
                       className="text-primary font-medium bg-primary/5"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
                     >
                       <td className="py-3.5 px-2 font-mono font-bold">{t('contact.draft_badge')}</td>
-                      <td className="py-3.5 px-4">{formatRedactedName(formData.name) || <span className="opacity-40 italic">{t('contact.draft_typing_name')}</span>}</td>
-                      <td className="py-3.5 px-4">{formatRedactedEmail(formData.email) || <span className="opacity-40 italic">{t('contact.draft_typing_email')}</span>}</td>
+                      <td className="py-3.5 px-4">{formData.name || <span className="opacity-40 italic">{t('contact.draft_typing_name')}</span>}</td>
+                      <td className="py-3.5 px-4">{formData.email || <span className="opacity-40 italic">{t('contact.draft_typing_email')}</span>}</td>
                       <td className="py-3.5 px-4"><span className="text-xs font-mono">{getInquiryTypeLabel(formData.inquiryType)}</span></td>
+                      <td className="py-3.5 px-4 text-xs max-w-[250px] truncate">{formData.message || <span className="opacity-40 italic">--</span>}</td>
                       <td className="py-3.5 px-2 font-mono text-xs text-right opacity-60">--:--</td>
                     </motion.tr>
                   )}
                 </AnimatePresence>
 
                 {/* Submissions List */}
-                {submissions.length > 0 ? (
-                  submissions.map((sub) => (
-                    <tr key={sub.id} className="hover:bg-muted/20 transition-colors">
-                      <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground">#{sub.formNumber}</td>
-                      <td className="py-3.5 px-4 font-semibold text-foreground">{formatRedactedName(sub.name)}</td>
-                      <td className="py-3.5 px-4 text-muted-foreground">{formatRedactedEmail(sub.email)}</td>
-                      <td className="py-3.5 px-4">
-                        <span className="text-xs font-mono text-primary font-semibold">
-                          {getInquiryTypeLabel(sub.inquiryType)}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground text-right tabular-nums">{sub.timestamp}</td>
-                    </tr>
-                  ))
-                ) : (
-                  !formData.name.trim() && !formData.email.trim() && (
-                    <tr>
-                      <td colSpan={5} className="py-10 text-center text-sm text-muted-foreground/60">
-                        {t('contact.no_submissions')}
-                      </td>
-                    </tr>
-                  )
-                )}
+                <AnimatePresence initial={false}>
+                  {submissions.length > 0 ? (
+                    submissions.map((sub) => (
+                      <motion.tr 
+                        key={sub.id} 
+                        initial={{ opacity: 0, y: -10, backgroundColor: "rgba(16, 185, 129, 0.15)" }}
+                        animate={{ opacity: 1, y: 0, backgroundColor: "rgba(0, 0, 0, 0)" }}
+                        transition={{ duration: 0.5 }}
+                        className="hover:bg-muted/20 transition-colors"
+                      >
+                        <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground font-bold">#{sub.formNumber}</td>
+                        <td className="py-3.5 px-4 font-semibold text-foreground">{sub.name}</td>
+                        <td className="py-3.5 px-4 text-muted-foreground">{sub.email}</td>
+                        <td className="py-3.5 px-4">
+                          <span className="text-xs font-mono text-primary font-semibold">
+                            {getInquiryTypeLabel(sub.inquiryType)}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-xs text-foreground/90 max-w-[280px] truncate font-medium" title={sub.message}>
+                          {sub.message || <span className="text-muted-foreground/40 italic">-</span>}
+                        </td>
+                        <td className="py-3.5 px-2 font-mono text-xs text-muted-foreground text-right tabular-nums">{sub.timestamp}</td>
+                      </motion.tr>
+                    ))
+                  ) : (
+                    !formData.name.trim() && !formData.email.trim() && !formData.message.trim() && (
+                      <tr>
+                        <td colSpan={6} className="py-10 text-center text-sm text-muted-foreground/60">
+                          {t('contact.no_submissions')}
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </AnimatePresence>
               </tbody>
             </table>
           </div>
