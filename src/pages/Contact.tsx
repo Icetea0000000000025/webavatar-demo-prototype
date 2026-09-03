@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, MapPin, Phone, Mail, ArrowUpRight, Check, ChevronDown } from 'lucide-react';
+import { Download, MapPin, Phone, Mail, ArrowUpRight, Check, ChevronDown, Search, Filter, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
 import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
@@ -77,6 +77,51 @@ function Contact() {
   const [copiedCard, setCopiedCard] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  // Table Search, Filter & Sorting States
+  const [searchQuery, setSearchQuery] = useState('');
+  const [topicFilter, setTopicFilter] = useState('all');
+  const [sortField, setSortField] = useState<'formNumber' | 'name' | 'email' | 'inquiryType' | 'timestamp'>('formNumber');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc'); // default: latest (high to low)
+
+  const handleSort = (field: 'formNumber' | 'name' | 'email' | 'inquiryType' | 'timestamp') => {
+    if (sortField === field) {
+      setSortOrder(prev => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder('desc');
+    }
+  };
+
+  const filteredAndSortedSubmissions = React.useMemo(() => {
+    return submissions
+      .filter((sub) => {
+        const matchesTopic = topicFilter === 'all' || sub.inquiryType === topicFilter;
+        const q = searchQuery.trim().toLowerCase();
+        const matchesSearch = !q || 
+          sub.name.toLowerCase().includes(q) ||
+          sub.email.toLowerCase().includes(q) ||
+          (sub.message || '').toLowerCase().includes(q) ||
+          `#${sub.formNumber}`.includes(q) ||
+          getInquiryTypeLabel(sub.inquiryType).toLowerCase().includes(q);
+        return matchesTopic && matchesSearch;
+      })
+      .sort((a, b) => {
+        let comparison = 0;
+        if (sortField === 'formNumber') {
+          comparison = a.formNumber - b.formNumber;
+        } else if (sortField === 'name') {
+          comparison = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+        } else if (sortField === 'email') {
+          comparison = a.email.localeCompare(b.email);
+        } else if (sortField === 'inquiryType') {
+          comparison = a.inquiryType.localeCompare(b.inquiryType);
+        } else if (sortField === 'timestamp') {
+          comparison = a.id - b.id;
+        }
+        return sortOrder === 'desc' ? -comparison : comparison;
+      });
+  }, [submissions, searchQuery, topicFilter, sortField, sortOrder, t]);
 
   const handleContactCardClick = (type: 'address' | 'phone' | 'email', actionUrl?: string, textToCopy?: string) => {
     if (textToCopy) {
@@ -195,8 +240,8 @@ function Contact() {
 
   const handleDownloadList = () => {
     const hasDraft = Boolean(formData.name.trim() || formData.email.trim());
-    const dataToExport = submissions.length > 0 
-      ? submissions 
+    const dataToExport = filteredAndSortedSubmissions.length > 0 
+      ? filteredAndSortedSubmissions 
       : hasDraft 
       ? [{
           id: 1,
@@ -599,17 +644,133 @@ function Contact() {
             </button>
           </div>
 
+          {/* Filter & Search Toolbar (Frameless) */}
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-5 text-xs">
+            {/* Search Input Box */}
+            <div className="relative flex-1 min-w-[220px]">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('contact.search_placeholder')}
+                className="w-full bg-background border border-border/80 rounded-xl pl-9 pr-8 py-2 text-xs text-foreground outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 placeholder:text-muted-foreground/50 transition-all"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground text-xs p-1"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Topic Filter Dropdown */}
+            <div className="flex items-center gap-2">
+              <Filter className="size-3.5 text-muted-foreground hidden sm:block" />
+              <select
+                value={topicFilter}
+                onChange={(e) => setTopicFilter(e.target.value)}
+                className="bg-background border border-border/80 rounded-xl px-3 py-2 text-xs text-foreground outline-none cursor-pointer focus:border-primary transition-all"
+              >
+                <option value="all">{t('contact.all_topics')}</option>
+                <option value="contact">{t('contact.inquiry_label_contact')}</option>
+                <option value="webavatar">{t('contact.inquiry_label_webavatar')}</option>
+                <option value="chatbot">{t('contact.inquiry_label_chatbot')}</option>
+                <option value="voice">{t('contact.inquiry_label_voice')}</option>
+                <option value="enterprise">{t('contact.inquiry_label_enterprise')}</option>
+              </select>
+            </div>
+          </div>
+
           {/* Minimal Borderless Data Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-border text-xs font-mono font-bold text-muted-foreground/80 uppercase">
-                  <th className="py-3 px-2">{t('contact.th_id')}</th>
-                  <th className="py-3 px-4">{t('contact.th_name')}</th>
-                  <th className="py-3 px-4">{t('contact.th_email')}</th>
-                  <th className="py-3 px-4">{t('contact.th_topic')}</th>
+                <tr className="border-b border-border text-xs font-mono font-bold text-muted-foreground/80 uppercase select-none">
+                  {/* ID Header */}
+                  <th 
+                    onClick={() => handleSort('formNumber')} 
+                    className="py-3 px-2 cursor-pointer hover:text-primary transition-colors"
+                    title="คลิกเพื่อเรียงลำดับ ID"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>{t('contact.th_id')}</span>
+                      {sortField === 'formNumber' ? (
+                        sortOrder === 'desc' ? <ArrowDown className="size-3 text-primary" /> : <ArrowUp className="size-3 text-primary" />
+                      ) : (
+                        <ArrowUpDown className="size-3 text-muted-foreground/40" />
+                      )}
+                    </div>
+                  </th>
+
+                  {/* Name Header */}
+                  <th 
+                    onClick={() => handleSort('name')} 
+                    className="py-3 px-4 cursor-pointer hover:text-primary transition-colors"
+                    title="คลิกเพื่อเรียงตามชื่อ"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>{t('contact.th_name')}</span>
+                      {sortField === 'name' ? (
+                        sortOrder === 'desc' ? <ArrowDown className="size-3 text-primary" /> : <ArrowUp className="size-3 text-primary" />
+                      ) : (
+                        <ArrowUpDown className="size-3 text-muted-foreground/40" />
+                      )}
+                    </div>
+                  </th>
+
+                  {/* Email Header */}
+                  <th 
+                    onClick={() => handleSort('email')} 
+                    className="py-3 px-4 cursor-pointer hover:text-primary transition-colors"
+                    title="คลิกเพื่อเรียงตามอีเมล"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>{t('contact.th_email')}</span>
+                      {sortField === 'email' ? (
+                        sortOrder === 'desc' ? <ArrowDown className="size-3 text-primary" /> : <ArrowUp className="size-3 text-primary" />
+                      ) : (
+                        <ArrowUpDown className="size-3 text-muted-foreground/40" />
+                      )}
+                    </div>
+                  </th>
+
+                  {/* Topic Header */}
+                  <th 
+                    onClick={() => handleSort('inquiryType')} 
+                    className="py-3 px-4 cursor-pointer hover:text-primary transition-colors"
+                    title="คลิกเพื่อเรียงตามประเภทหัวข้อ"
+                  >
+                    <div className="flex items-center gap-1">
+                      <span>{t('contact.th_topic')}</span>
+                      {sortField === 'inquiryType' ? (
+                        sortOrder === 'desc' ? <ArrowDown className="size-3 text-primary" /> : <ArrowUp className="size-3 text-primary" />
+                      ) : (
+                        <ArrowUpDown className="size-3 text-muted-foreground/40" />
+                      )}
+                    </div>
+                  </th>
+
+                  {/* Message Summary Header */}
                   <th className="py-3 px-4">{t('contact.th_msg')}</th>
-                  <th className="py-3 px-2 text-right">{t('contact.th_time')}</th>
+
+                  {/* Time Header */}
+                  <th 
+                    onClick={() => handleSort('timestamp')} 
+                    className="py-3 px-2 text-right cursor-pointer hover:text-primary transition-colors"
+                    title="คลิกเพื่อเรียงตามเวลา"
+                  >
+                    <div className="flex items-center justify-end gap-1">
+                      <span>{t('contact.th_time')}</span>
+                      {sortField === 'timestamp' ? (
+                        sortOrder === 'desc' ? <ArrowDown className="size-3 text-primary" /> : <ArrowUp className="size-3 text-primary" />
+                      ) : (
+                        <ArrowUpDown className="size-3 text-muted-foreground/40" />
+                      )}
+                    </div>
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/30">
@@ -634,8 +795,8 @@ function Contact() {
 
                 {/* Submissions List */}
                 <AnimatePresence initial={false}>
-                  {submissions.length > 0 ? (
-                    submissions.map((sub) => (
+                  {filteredAndSortedSubmissions.length > 0 ? (
+                    filteredAndSortedSubmissions.map((sub) => (
                       <motion.tr 
                         key={sub.id} 
                         initial={{ opacity: 0, y: -10, backgroundColor: "rgba(16, 185, 129, 0.15)" }}
@@ -661,7 +822,9 @@ function Contact() {
                     !formData.name.trim() && !formData.email.trim() && !formData.message.trim() && (
                       <tr>
                         <td colSpan={6} className="py-10 text-center text-sm text-muted-foreground/60">
-                          {t('contact.no_submissions')}
+                          {searchQuery || topicFilter !== 'all' 
+                            ? t('contact.no_matching_submissions') 
+                            : t('contact.no_submissions')}
                         </td>
                       </tr>
                     )
