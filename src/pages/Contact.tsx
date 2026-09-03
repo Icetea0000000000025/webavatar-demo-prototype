@@ -31,28 +31,7 @@ interface Submission {
   timestamp: string;
 }
 
-// Redaction Helpers
-const formatRedactedName = (name: string) => {
-  if (!name) return "";
-  const cleaned = name.trim();
-  if (cleaned.length === 0) return "";
-  if (cleaned.length === 1) return cleaned + "...";
-  return cleaned[0] + "..." + cleaned[cleaned.length - 1];
-};
 
-const formatRedactedEmail = (email: string) => {
-  if (!email) return "";
-  const cleaned = email.trim();
-  const firstLetter = cleaned.length > 0 ? cleaned[0] : "";
-  const atIndex = cleaned.indexOf("@");
-  if (atIndex !== -1) {
-    const domainPart = cleaned.substring(atIndex + 1);
-    const dotIndex = domainPart.lastIndexOf(".");
-    const tld = dotIndex !== -1 ? domainPart.substring(dotIndex + 1) : "com";
-    return `${firstLetter}***@***.${tld}`;
-  }
-  return `${firstLetter}***@***.com`;
-};
 
 const formatPhoneForSubmission = (phoneNumber: string) => {
   const trimmedPhoneNumber = phoneNumber.trim();
