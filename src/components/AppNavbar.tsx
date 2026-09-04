@@ -697,18 +697,6 @@ export default function AppNavbar() {
                   <span className="widget-dot"></span>
                   <span>{t('nav.live')}</span>
                 </div>
-                <Link
-                  className="btn btn-primary"
-                  to="/contact"
-                  onClick={() => {
-                    window.scrollTo(0, 0);
-                    closeDrawer();
-                  }}
-                  id="mobile-cta-button"
-                  style={{ display: 'block', textAlign: 'center' }}
-                >
-                  {t('nav.request')}
-                </Link>
               </div>
             </motion.div>
           </div>
