@@ -1283,3 +1283,102 @@
   --border_color: var(--primary);
 }
 
+/* Button 102 Bubble Animation Motion - Fully Transparent (No background) */
+.btn-102 {
+  font-weight: bold;
+  color: #ffffff;
+  background-color: transparent !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 8px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1.4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  box-shadow: none !important;
+  transition: border-color 0.3s ease;
+  isolation: isolate;
+  white-space: nowrap;
+}
+
+.btn-102:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-102 > .circle_102 {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  transition: transform 0.6s ease, opacity 0.4s ease;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.btn-102 > .btn-text-102 {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+}
+
+.btn-102 > .circle_102:nth-child(1) {
+  background-color: #0066FF;
+  transform: translate(-4.5em, -4.5em) scale(0.5);
+}
+
+.btn-102 > .circle_102:nth-child(2) {
+  background-color: #0284c7;
+  transform: translate(-7em, 2em) scale(0.5);
+}
+
+.btn-102 > .circle_102:nth-child(3) {
+  background-color: #2563eb;
+  transform: translate(-0.2em, 3.5em) scale(0.5);
+}
+
+.btn-102 > .circle_102:nth-child(4) {
+  background-color: #0ea5e9;
+  transform: translate(4.5em, 3em) scale(0.5);
+}
+
+.btn-102 > .circle_102:nth-child(5) {
+  background-color: #1d4ed8;
+  transform: translate(4.5em, -4.5em) scale(0.5);
+}
+
+.btn-102:hover > .circle_102 {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(6.5);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+/*** disabled style ***/
+.btn-102:disabled {
+  pointer-events: none;
+  opacity: .65;
+  color: #7e7e7e;
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  text-shadow: none;
+}
+
+
