@@ -73,165 +73,23 @@ const TypewriterHeading: React.FC<TypewriterHeadingProps> = ({ text, className }
     </h2>
   );
 };
+import {
+  type CityMeta,
+  CITIES_CONFIG,
+  CITIES,
+  getCityDetails,
+  getCityFullName,
+  getPromoDiscountRate,
+} from "@/lib/cities";
 
-export interface CityMeta {
-  code: string;
-  nameEn: string;
-  nameTh: string;
-  fullNameTh: string;
-  fullNameEn: string;
-  airportEn: string;
-  airportTh: string;
-}
-
-export const CITIES_CONFIG: Record<string, CityMeta> = {
-  "กรุงเทพฯ (DMK)": {
-    code: "DMK",
-    nameEn: "Bangkok (Don Mueang)",
-    nameTh: "กรุงเทพฯ (ดอนเมือง)",
-    fullNameTh: "กรุงเทพมหานคร (ท่าอากาศยานดอนเมือง)",
-    fullNameEn: "Bangkok (Don Mueang International Airport)",
-    airportEn: "Don Mueang Intl Airport",
-    airportTh: "ท่าอากาศยานดอนเมือง",
-  },
-  "กรุงเทพฯ (BKK)": {
-    code: "BKK",
-    nameEn: "Bangkok (Suvarnabhumi)",
-    nameTh: "กรุงเทพฯ (สุวรรณภูมิ)",
-    fullNameTh: "กรุงเทพมหานคร (ท่าอากาศยานสุวรรณภูมิ)",
-    fullNameEn: "Bangkok (Suvarnabhumi Airport)",
-    airportEn: "Suvarnabhumi Intl Airport",
-    airportTh: "ท่าอากาศยานสุวรรณภูมิ",
-  },
-  "เชียงใหม่ (CNX)": {
-    code: "CNX",
-    nameEn: "Chiang Mai",
-    nameTh: "เชียงใหม่",
-    fullNameTh: "จังหวัดเชียงใหม่ (ท่าอากาศยานนานาชาติเชียงใหม่)",
-    fullNameEn: "Chiang Mai (Chiang Mai International Airport)",
-    airportEn: "Chiang Mai Intl Airport",
-    airportTh: "ท่าอากาศยานเชียงใหม่",
-  },
-  "ภูเก็ต (HKT)": {
-    code: "HKT",
-    nameEn: "Phuket",
-    nameTh: "ภูเก็ต",
-    fullNameTh: "จังหวัดภูเก็ต (ท่าอากาศยานนานาชาติภูเก็ต)",
-    fullNameEn: "Phuket (Phuket International Airport)",
-    airportEn: "Phuket Intl Airport",
-    airportTh: "ท่าอากาศยานภูเก็ต",
-  },
-  "หาดใหญ่ (HDY)": {
-    code: "HDY",
-    nameEn: "Hat Yai",
-    nameTh: "หาดใหญ่",
-    fullNameTh: "หาดใหญ่ จังหวัดสงขลา (ท่าอากาศยานนานาชาติหาดใหญ่)",
-    fullNameEn: "Hat Yai, Songkhla (Hat Yai International Airport)",
-    airportEn: "Hat Yai Intl Airport",
-    airportTh: "ท่าอากาศยานหาดใหญ่",
-  },
-  "กระบี่ (KBV)": {
-    code: "KBV",
-    nameEn: "Krabi",
-    nameTh: "กระบี่",
-    fullNameTh: "จังหวัดกระบี่ (ท่าอากาศยานนานาชาติกระบี่)",
-    fullNameEn: "Krabi (Krabi International Airport)",
-    airportEn: "Krabi Intl Airport",
-    airportTh: "ท่าอากาศยานนานาชาติกระบี่",
-  },
-  "เชียงราย (CEI)": {
-    code: "CEI",
-    nameEn: "Chiang Rai",
-    nameTh: "เชียงราย",
-    fullNameTh: "จังหวัดเชียงราย (ท่าอากาศยานแม่ฟ้าหลวง เชียงราย)",
-    fullNameEn: "Chiang Rai (Mae Fah Luang Chiang Rai International Airport)",
-    airportEn: "Mae Fah Luang Chiang Rai Intl",
-    airportTh: "ท่าอากาศยานแม่ฟ้าหลวง เชียงราย",
-  },
-  "สุราษฎร์ธานี (URT)": {
-    code: "URT",
-    nameEn: "Surat Thani",
-    nameTh: "สุราษฎร์ธานี",
-    fullNameTh: "จังหวัดสุราษฎร์ธานี (ท่าอากาศยานสุราษฎร์ธานี)",
-    fullNameEn: "Surat Thani (Surat Thani Airport)",
-    airportEn: "Surat Thani Airport",
-    airportTh: "ท่าอากาศยานสุราษฎร์ธานี",
-  },
-  "อุดรธานี (UTH)": {
-    code: "UTH",
-    nameEn: "Udon Thani",
-    nameTh: "อุดรธานี",
-    fullNameTh: "จังหวัดอุดรธานี (ท่าอากาศยานนานาชาติอุดรธานี)",
-    fullNameEn: "Udon Thani (Udon Thani International Airport)",
-    airportEn: "Udon Thani Intl Airport",
-    airportTh: "ท่าอากาศยานอุดรธานี",
-  },
-  "อุบลราชธานี (UBP)": {
-    code: "UBP",
-    nameEn: "Ubon Ratchathani",
-    nameTh: "อุบลราชธานี",
-    fullNameTh: "จังหวัดอุบลราชธานี (ท่าอากาศยานนานาชาติอุบลราชธานี)",
-    fullNameEn: "Ubon Ratchathani (Ubon Ratchathani Airport)",
-    airportEn: "Ubon Ratchathani Airport",
-    airportTh: "ท่าอากาศยานอุบลราชธานี",
-  },
-  "ขอนแก่น (KKC)": {
-    code: "KKC",
-    nameEn: "Khon Kaen",
-    nameTh: "ขอนแก่น",
-    fullNameTh: "จังหวัดขอนแก่น (ท่าอากาศยานขอนแก่น)",
-    fullNameEn: "Khon Kaen (Khon Kaen Airport)",
-    airportEn: "Khon Kaen Airport",
-    airportTh: "ท่าอากาศยานขอนแก่น",
-  },
-  "นครศรีธรรมราช (NST)": {
-    code: "NST",
-    nameEn: "Nakhon Si Thammarat",
-    nameTh: "นครศรีธรรมราช",
-    fullNameTh: "จังหวัดนครศรีธรรมราช (ท่าอากาศยานนครศรีธรรมราช)",
-    fullNameEn: "Nakhon Si Thammarat (Nakhon Si Thammarat Airport)",
-    airportEn: "Nakhon Si Thammarat Airport",
-    airportTh: "ท่าอากาศยานนครศรีธรรมราช",
-  },
+export {
+  type CityMeta,
+  CITIES_CONFIG,
+  CITIES,
+  getCityDetails,
+  getCityFullName,
+  getPromoDiscountRate,
 };
-
-const CITIES = Object.keys(CITIES_CONFIG);
-
-export function getCityDetails(cityStr: string, language: string = 'en') {
-  const meta = CITIES_CONFIG[cityStr];
-  if (meta) {
-    return {
-      code: meta.code,
-      cityName: language === 'th' ? meta.nameTh : meta.nameEn,
-      fullName: language === 'th' ? meta.fullNameTh : meta.fullNameEn,
-      airportName: language === 'th' ? meta.airportTh : meta.airportEn,
-    };
-  }
-  const match = cityStr ? cityStr.match(/(.+?)\s*\(([A-Z]{3})\)/) : null;
-  const code = match ? match[2] : "DMK";
-  const rawName = match ? match[1].trim() : (cityStr || "กรุงเทพฯ (DMK)");
-  return {
-    code,
-    cityName: rawName,
-    fullName: rawName,
-    airportName: `${rawName} Airport`,
-  };
-}
-
-export function getCityFullName(cityStr: string, language: string = 'en') {
-  if (!cityStr) return '';
-  const meta = CITIES_CONFIG[cityStr];
-  if (meta) {
-    return language === 'th' ? meta.fullNameTh : meta.fullNameEn;
-  }
-  for (const [, val] of Object.entries(CITIES_CONFIG)) {
-    if (cityStr.includes(val.code) || cityStr.includes(val.nameTh) || cityStr.includes(val.nameEn)) {
-      return language === 'th' ? val.fullNameTh : val.fullNameEn;
-    }
-  }
-  const details = getCityDetails(cityStr, language);
-  return details.fullName || details.cityName || cityStr;
-}
 
 export function parseDateForCard(dateStr: string, fallbackDays = 0, language: string = 'en') {
   let target = dateStr;
@@ -474,6 +332,11 @@ export default function FlightDemo() {
 
   const departDateInputRef = useRef<HTMLInputElement>(null);
   const returnDateInputRef = useRef<HTMLInputElement>(null);
+  const passengerNameInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+  const seatFieldRef = useRef<HTMLDivElement>(null);
+  const [passengerFormSubmitted, setPassengerFormSubmitted] = useState(false);
 
   const openDatePicker = (ref: React.RefObject<HTMLInputElement | null>) => {
     if (!ref.current) return;
@@ -759,6 +622,8 @@ export default function FlightDemo() {
 
   const handlePassengerSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setPassengerFormSubmitted(true);
+
     if (!form.passengers || form.passengers < 1) {
       toast.error(t('flight.err_min_passengers') || 'จำนวนผู้โดยสารต้องมีอย่างน้อย 1 ท่าน');
       setForm((prev) => ({ ...prev, passengers: 1 }));
@@ -789,32 +654,39 @@ export default function FlightDemo() {
       }
     }
 
-    if (!form.passengerName || !form.email) {
-      toast.error(t('flight.booking_error'));
+    if (!form.passengerName || !form.passengerName.trim()) {
+      passengerNameInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      passengerNameInputRef.current?.focus();
       return;
     }
-    if (!form.phone || form.phone.length !== 10) {
-      toast.error(t('flight.err_phone_length') || 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก');
+
+    if (!form.email || !form.email.trim() || !form.email.includes('@')) {
+      emailInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      emailInputRef.current?.focus();
       return;
     }
+
+    const cleanPhone = (form.phone || '').trim();
+    if (!cleanPhone || cleanPhone.length !== 10) {
+      phoneInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      phoneInputRef.current?.focus();
+      return;
+    }
+
     const mySeats = (form.seat || "").split(",").map(s => s.trim()).filter(Boolean);
     if (mySeats.length === 0) {
-      toast.error(t('flight.seat_please_select') || 'กรุณาเลือกที่นั่ง');
+      seatFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setSeatMapOpen(true);
       return;
     }
     if (mySeats.length < form.passengers) {
-      toast.error(
-        language === 'th'
-          ? `กรุณาเลือกที่นั่งให้ครบ ${form.passengers} ที่นั่ง (เลือกแล้ว ${mySeats.length} ที่นั่ง)`
-          : `Please select all ${form.passengers} seats (currently selected ${mySeats.length})`
-      );
+      seatFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setSeatMapOpen(true);
       return;
     }
 
     const cleanPromo = (form.promoCode || "").trim().toUpperCase();
-    if (cleanPromo.length > 0 && cleanPromo !== "PROMO2026") {
+    if (cleanPromo.length > 0 && getPromoDiscountRate(cleanPromo) === 0) {
       toast.error(language === 'th' ? 'โค้ดส่วนลดไม่ถูกต้อง กรุณาตรวจสอบหรือลบออกก่อนทำการจอง' : 'Invalid promo code. Please verify or clear it to proceed.');
       return;
     }
@@ -840,6 +712,7 @@ export default function FlightDemo() {
         toast.error(
           (t('flight.err_seat_taken') || "Seat {seat} is already booked for this flight. Please select another seat.").replace('{seat}', takenSeat)
         );
+        seatFieldRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setSeatMapOpen(true);
         return;
       }
@@ -906,6 +779,7 @@ export default function FlightDemo() {
     setBoardingPassOpen(true);
 
     // Reset steps
+    setPassengerFormSubmitted(false);
     setBookingStep("search");
     setSelectedOutboundFlight(null);
     setSelectedInboundFlight(null);
@@ -924,6 +798,11 @@ export default function FlightDemo() {
       phone: "",
       seat: "",
     });
+
+    const bookingSection = document.getElementById("booking");
+    if (bookingSection) {
+      bookingSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const fromDetails = useMemo(() => getCityDetails(form.from, language), [form.from, language]);
@@ -952,17 +831,49 @@ export default function FlightDemo() {
           section[data-sonner-toaster],
           ol[data-sonner-toaster] {
             position: fixed !important;
-            top: 50vh !important;
-            left: 50vw !important;
-            transform: translate(-50%, -50%) !important;
+            top: 24px !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
             bottom: auto !important;
             right: auto !important;
-            z-index: 999999 !important;
+            z-index: 99999999 !important;
             margin: 0 !important;
+            pointer-events: none !important;
+            width: auto !important;
+            display: flex !important;
+            justify-content: center !important;
           }
           [data-sonner-toast] {
+            pointer-events: auto !important;
             margin: 0 auto !important;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
+            box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+            border-radius: 18px !important;
+            font-weight: 800 !important;
+            font-size: 0.95rem !important;
+            padding: 14px 22px !important;
+            min-width: 320px !important;
+            max-width: 92vw !important;
+            backdrop-filter: blur(12px) !important;
+          }
+          [data-sonner-toast][data-type="error"] {
+            background-color: #fff1f2 !important;
+            color: #9f1239 !important;
+            border: 2px solid #f43f5e !important;
+          }
+          .dark [data-sonner-toast][data-type="error"] {
+            background-color: #4c0519 !important;
+            color: #ffe4e6 !important;
+            border: 2px solid #fb7185 !important;
+          }
+          [data-sonner-toast][data-type="success"] {
+            background-color: #f0fdf4 !important;
+            color: #14532d !important;
+            border: 2px solid #22c55e !important;
+          }
+          .dark [data-sonner-toast][data-type="success"] {
+            background-color: #052e16 !important;
+            color: #dcfce7 !important;
+            border: 2px solid #4ade80 !important;
           }
           input[type="date"]::-webkit-calendar-picker-indicator {
             position: absolute !important;
@@ -977,10 +888,18 @@ export default function FlightDemo() {
           }
         `}</style>
         <Toaster
-          position="top-center"
-          richColors
+          position="bottom-center"
+          theme="dark"
+          closeButton
+          duration={4000}
           toastOptions={{
-            className: "shadow-2xl rounded-2xl border text-sm font-bold p-4",
+            className: "!bg-[#0b0f19] !text-white !border !border-slate-800 !shadow-2xl !rounded-2xl !py-3 !px-5 !text-xs !font-medium",
+            style: {
+              backgroundColor: "#0b0f19",
+              color: "#f8fafc",
+              border: "1px solid #1e293b",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6)",
+            },
           }}
         />
 
@@ -2444,27 +2363,33 @@ export default function FlightDemo() {
                         )}
                       </>
                     )}
-                    <div className="flex justify-between items-center pt-2 text-sm font-display">
-                      <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.summary_fare_per_person')} × {form.passengers}:</span>
-                      <span className={`font-extrabold ${form.promoCode?.trim().toUpperCase() === "PROMO2026" ? "line-through text-slate-400 text-xs" : "text-sky-950 dark:text-white"}`}>
-                        ฿{(tripType === "multicity"
-                          ? selectedMultiCityFlights.reduce((sum, f) => sum + (f?.price || 0), 0) * form.passengers
-                          : ((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)) * form.passengers
-                        ).toLocaleString()}
-                      </span>
-                    </div>
-                    {form.promoCode?.trim().toUpperCase() === "PROMO2026" && (
-                      <div className="flex justify-between items-center pt-1 text-sm font-display text-emerald-600 dark:text-emerald-400 font-bold">
-                        <span className="text-xs">PROMO2026 (-20%):</span>
-                        <span>
-                          ฿{Math.round((
-                            (tripType === "multicity"
-                              ? selectedMultiCityFlights.reduce((sum, f) => sum + (f?.price || 0), 0) * form.passengers
-                              : ((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)) * form.passengers) * 0.8
-                          )).toLocaleString()}
-                        </span>
-                      </div>
-                    )}
+                    {(() => {
+                      const promoRate = getPromoDiscountRate(form.promoCode);
+                      const baseTotal = (tripType === "multicity"
+                        ? selectedMultiCityFlights.reduce((sum, f) => sum + (f?.price || 0), 0) * form.passengers
+                        : ((selectedOutboundFlight?.price || 0) + (selectedInboundFlight?.price || 0)) * form.passengers
+                      );
+                      const promoName = (form.promoCode || "").trim().toUpperCase();
+
+                      return (
+                        <>
+                          <div className="flex justify-between items-center pt-2 text-sm font-display">
+                            <span className="text-slate-500 dark:text-slate-400 font-medium">{t('flight.summary_fare_per_person')} × {form.passengers}:</span>
+                            <span className={`font-extrabold ${promoRate > 0 ? "line-through text-slate-400 text-xs" : "text-sky-950 dark:text-white"}`}>
+                              ฿{baseTotal.toLocaleString()}
+                            </span>
+                          </div>
+                          {promoRate > 0 && (
+                            <div className="flex justify-between items-center pt-1 text-sm font-display text-emerald-600 dark:text-emerald-400 font-bold">
+                              <span className="text-xs">{promoName} (-{Math.round(promoRate * 100)}%):</span>
+                              <span>
+                                ฿{Math.round(baseTotal * (1 - promoRate)).toLocaleString()}
+                              </span>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -2473,107 +2398,162 @@ export default function FlightDemo() {
                 </h3>
 
                 <form onSubmit={handlePassengerSubmit} className="grid md:grid-cols-2 gap-4">
-                  <Field label={t('flight.passenger_name')} htmlFor="passengerName" required>
-                    <input
-                      id="passengerName"
-                      name="passengerName"
-                      required
-                      value={form.passengerName || ''}
+                  {(() => {
+                    const isNameInvalid = Boolean(passengerFormSubmitted && (!form.passengerName || !form.passengerName.trim()));
+                    const isEmailInvalid = Boolean(passengerFormSubmitted && (!form.email || !form.email.trim() || !form.email.includes('@')));
+                    const isPhoneInvalid = Boolean(
+                      passengerFormSubmitted &&
+                      (!form.phone || form.phone.trim().length !== 10)
+                    );
+                    const mySeats = (form.seat || "").split(",").map(s => s.trim()).filter(Boolean);
+                    const isSeatInvalid = Boolean(passengerFormSubmitted && (mySeats.length === 0 || mySeats.length < form.passengers));
 
-                      // 1. ล้างตัวอักษรไทยออกทันทีหลังจากพิมพ์/ผสมคำเสร็จ
-                      onCompositionEnd={(e) => {
-                        const cleanValue = e.currentTarget.value.replace(/[^a-zA-Z\s]/g, '');
-                        setForm((prev) => ({ ...prev, passengerName: cleanValue }));
-                      }}
+                    return (
+                      <>
+                        <Field
+                          label={t('flight.passenger_name')}
+                          htmlFor="passengerName"
+                          required
+                          isError={isNameInvalid}
+                          errorText={isNameInvalid ? (language === 'th' ? 'กรุณากรอกชื่อ-นามสกุลผู้โดยสาร (ภาษาอังกฤษ)' : (t('flight.booking_error') || 'Please enter passenger full name')) : undefined}
+                        >
+                          <input
+                            ref={passengerNameInputRef}
+                            id="passengerName"
+                            name="passengerName"
+                            required
+                            value={form.passengerName || ''}
 
-                      // 2. รับค่าและกรองภาษาไทยออก (ใช้ Cast Type แก้ปัญหา TypeScript เรียบร้อย)
-                      onChange={(e) => {
-                        if (!(e.nativeEvent as InputEvent).isComposing) {
-                          const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-                          setForm((prev) => ({ ...prev, passengerName: cleanValue }));
-                        } else {
-                          setForm((prev) => ({ ...prev, passengerName: e.target.value }));
-                        }
-                      }}
+                            // 1. ล้างตัวอักษรไทยออกทันทีหลังจากพิมพ์/ผสมคำเสร็จ
+                            onCompositionEnd={(e) => {
+                              const cleanValue = e.currentTarget.value.replace(/[^a-zA-Z\s]/g, '');
+                              setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                            }}
 
-                      // 3. ป้องกันตอนหลุดโฟกัส (Blur) และตอน ก๊อปปี้วาง (Paste)
-                      onBlur={(e) => {
-                        const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
-                        setForm((prev) => ({ ...prev, passengerName: cleanValue }));
-                      }}
-                      onPaste={(e) => {
-                        e.preventDefault();
-                        const pastedText = e.clipboardData.getData('text');
-                        const cleanValue = pastedText.replace(/[^a-zA-Z\s]/g, '');
-                        setForm((prev) => ({ ...prev, passengerName: (prev.passengerName || '') + cleanValue }));
-                      }}
+                            // 2. รับค่าและกรองภาษาไทยออก (ใช้ Cast Type แก้ปัญหา TypeScript เรียบร้อย)
+                            onChange={(e) => {
+                              if (!(e.nativeEvent as InputEvent).isComposing) {
+                                const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                                setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                              } else {
+                                setForm((prev) => ({ ...prev, passengerName: e.target.value }));
+                              }
+                            }}
 
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
-                      placeholder={t('flight.passenger_name_placeholder')}
-                    />
-                  </Field>
-                  <Field label={t('flight.email')} htmlFor="email" required>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={form.email}
-                      onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      placeholder="you@email.com"
-                    />
-                  </Field>
-                  <Field label={t('flight.phone')} htmlFor="phone" required>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={10}
-                      required
-                      value={form.phone || ''}
-                      onChange={(e) => {
-                        // คัดเอาเฉพาะตัวเลข (0-9) เท่านั้น และจำกัดไม่เกิน 10 หลัก
-                        const cleanValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-                        setForm((prev) => ({ ...prev, phone: cleanValue }));
-                      }}
-                      onPaste={(e) => {
-                        // ป้องกันกรณีก๊อปปี้ข้อความที่มีตัวอักษรติดมาวาง
-                        e.preventDefault();
-                        const pastedText = e.clipboardData.getData('text');
-                        const cleanValue = pastedText.replace(/[^0-9]/g, '');
-                        setForm((prev) => ({ ...prev, phone: ((prev.phone || '') + cleanValue).slice(0, 10) }));
-                      }}
-                      className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
-                      placeholder="08XXXXXXXX"
-                    />
-                  </Field>
-                  <Field
-                    label={
-                      <div className="flex items-center justify-between w-full">
-                        <span>{t('flight.modal_seat') || "Seat"} ({form.passengers} {language === 'th' ? 'ที่นั่ง' : 'Seats'})</span>
-                        {form.seat && (
-                          <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold px-1.5 py-0.5 rounded bg-sky-500/10 dark:bg-sky-950/40">
-                            {form.seat.split(',').map(s => s.trim()).filter(Boolean).length}/{form.passengers} {language === 'th' ? 'ที่นั่ง' : 'Seats'}
-                          </span>
-                        )}
-                      </div>
-                    }
-                    onClick={() => setSeatMapOpen(true)}
-                    required
-                  >
-                    <div className="py-0.5 select-none font-display">
-                      <span className={`font-bold text-sm truncate block ${form.seat ? "text-sky-600 dark:text-sky-400 font-extrabold" : "text-slate-500 dark:text-slate-400"}`}>
-                        {form.seat || (language === 'th' ? `ยังไม่ได้เลือก (ต้องเลือก ${form.passengers} ที่นั่ง)` : `Not selected (${form.passengers} seats)`)}
-                      </span>
-                    </div>
-                  </Field>
+                            // 3. ป้องกันตอนหลุดโฟกัส (Blur) และตอน ก๊อปปี้วาง (Paste)
+                            onBlur={(e) => {
+                              const cleanValue = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+                              setForm((prev) => ({ ...prev, passengerName: cleanValue }));
+                            }}
+                            onPaste={(e) => {
+                              e.preventDefault();
+                              const pastedText = e.clipboardData.getData('text');
+                              const cleanValue = pastedText.replace(/[^a-zA-Z\s]/g, '');
+                              setForm((prev) => ({ ...prev, passengerName: (prev.passengerName || '') + cleanValue }));
+                            }}
+
+                            className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 placeholder:font-normal"
+                            placeholder={t('flight.passenger_name_placeholder')}
+                          />
+                        </Field>
+
+                        <Field
+                          label={t('flight.email')}
+                          htmlFor="email"
+                          required
+                          isError={isEmailInvalid}
+                          errorText={isEmailInvalid ? (language === 'th' ? 'กรุณากรอกอีเมลให้ถูกต้อง (เช่น you@email.com)' : 'Please enter a valid email address') : undefined}
+                        >
+                          <input
+                            ref={emailInputRef}
+                            type="email"
+                            id="email"
+                            name="email"
+                            required
+                            value={form.email}
+                            onChange={(e) => {
+                              setForm({ ...form, email: e.target.value });
+                            }}
+                            className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                            placeholder="you@email.com"
+                          />
+                        </Field>
+
+                        <Field
+                          label={t('flight.phone')}
+                          htmlFor="phone"
+                          required
+                          isError={isPhoneInvalid}
+                          errorText={isPhoneInvalid ? (t('flight.err_phone_length') || 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก') : undefined}
+                        >
+                          <input
+                            ref={phoneInputRef}
+                            id="phone"
+                            name="phone"
+                            type="tel"
+                            inputMode="numeric"
+                            maxLength={10}
+                            required
+                            value={form.phone || ''}
+                            onChange={(e) => {
+                              // คัดเอาเฉพาะตัวเลข (0-9) เท่านั้น และจำกัดไม่เกิน 10 หลัก
+                              const cleanValue = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
+                              setForm((prev) => ({ ...prev, phone: cleanValue }));
+                            }}
+                            onPaste={(e) => {
+                              // ป้องกันกรณีก๊อปปี้ข้อความที่มีตัวอักษรติดมาวาง
+                              e.preventDefault();
+                              const pastedText = e.clipboardData.getData('text');
+                              const cleanValue = pastedText.replace(/[^0-9]/g, '');
+                              setForm((prev) => ({ ...prev, phone: ((prev.phone || '') + cleanValue).slice(0, 10) }));
+                            }}
+                            className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                            placeholder="08XXXXXXXX"
+                          />
+                        </Field>
+
+                        <Field
+                          containerRef={seatFieldRef}
+                          label={
+                            <div className="flex items-center justify-between w-full">
+                              <span>{t('flight.modal_seat') || "Seat"} ({form.passengers} {language === 'th' ? 'ที่นั่ง' : 'Seats'})</span>
+                              {form.seat && (
+                                <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold px-1.5 py-0.5 rounded bg-sky-500/10 dark:bg-sky-950/40">
+                                  {mySeats.length}/{form.passengers} {language === 'th' ? 'ที่นั่ง' : 'Seats'}
+                                </span>
+                              )}
+                            </div>
+                          }
+                          onClick={() => {
+                            setSeatMapOpen(true);
+                          }}
+                          required
+                          isError={isSeatInvalid}
+                          errorText={
+                            isSeatInvalid
+                              ? (language === 'th'
+                                  ? (mySeats.length === 0
+                                      ? 'กรุณาเลือกที่นั่ง'
+                                      : `กรุณาเลือกที่นั่งให้ครบ ${form.passengers} ที่นั่ง (เลือกแล้ว ${mySeats.length} ที่นั่ง)`)
+                                  : (t('flight.seat_please_select') || `Please select ${form.passengers} seat(s)`))
+                              : undefined
+                          }
+                        >
+                          <div className="py-0.5 select-none font-display">
+                            <span className={`font-bold text-sm truncate block ${form.seat ? "text-sky-600 dark:text-sky-400 font-extrabold" : "text-slate-500 dark:text-slate-400"}`}>
+                              {form.seat || (language === 'th' ? `ยังไม่ได้เลือก (ต้องเลือก ${form.passengers} ที่นั่ง)` : `Not selected (${form.passengers} seats)`)}
+                            </span>
+                          </div>
+                        </Field>
+                      </>
+                    );
+                  })()}
 
                   {/* Promo Code Field */}
                   {(() => {
                     const cleanPromo = (form.promoCode || '').trim().toUpperCase();
-                    const isValidPromo = cleanPromo === "PROMO2026";
+                    const promoRate = getPromoDiscountRate(cleanPromo);
+                    const isValidPromo = promoRate > 0;
                     const isInvalidPromo = cleanPromo.length > 0 && !isValidPromo;
 
                     return (
@@ -2583,7 +2563,7 @@ export default function FlightDemo() {
                             <span>{t('flight.modal_promo') || "Promo Code"}</span>
                             {isValidPromo && (
                               <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 dark:bg-emerald-950/40">
-                                {language === 'th' ? '✓ ลด 20%' : '✓ 20% OFF'}
+                                {language === 'th' ? `✓ ลด ${Math.round(promoRate * 100)}%` : `✓ ${Math.round(promoRate * 100)}% OFF`}
                               </span>
                             )}
                           </div>
@@ -2598,9 +2578,11 @@ export default function FlightDemo() {
                           name="promoCode"
                           type="text"
                           value={form.promoCode || ''}
-                          onChange={(e) => setForm((prev) => ({ ...prev, promoCode: e.target.value.toUpperCase() }))}
+                          onChange={(e) => {
+                            setForm((prev) => ({ ...prev, promoCode: e.target.value.toUpperCase() }));
+                          }}
                           className="w-full bg-transparent outline-none font-bold text-slate-800 dark:text-slate-100 text-sm font-display placeholder:text-slate-400 dark:placeholder:text-slate-500 uppercase"
-                          placeholder={t('flight.promo_placeholder') || (language === 'th' ? "เช่น PROMO2026" : "e.g., PROMO2026")}
+                          placeholder={language === 'th' ? "เช่น SKYPROMO2026, PROMO2026" : "e.g., SKYPROMO2026, PROMO2026"}
                         />
                       </Field>
                     );
@@ -2856,7 +2838,13 @@ export default function FlightDemo() {
       <TicketModal
         booking={ticketBooking}
         open={boardingPassOpen}
-        onClose={() => setBoardingPassOpen(false)}
+        onClose={() => {
+          setBoardingPassOpen(false);
+          const bookingSection = document.getElementById("booking");
+          if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }}
       />
 
       {/* SEAT MAP MODAL */}
@@ -2876,10 +2864,11 @@ export default function FlightDemo() {
   );
 }
 
-function Field({ label, htmlFor, children, onClick, required, isError, errorText, className = "" }: { label: React.ReactNode; htmlFor?: string; children: React.ReactNode; onClick?: () => void; required?: boolean; isError?: boolean; errorText?: string; className?: string }) {
+function Field({ label, htmlFor, children, onClick, required, isError, errorText, className = "", containerRef }: { label: React.ReactNode; htmlFor?: string; children: React.ReactNode; onClick?: () => void; required?: boolean; isError?: boolean; errorText?: string; className?: string; containerRef?: React.Ref<HTMLDivElement> }) {
   const { language } = useTranslation();
   return (
     <div
+      ref={containerRef}
       onClick={onClick}
       className={`block rounded-2xl px-4 py-3.5 border shadow-xs transition-all relative ${className} ${
         isError
@@ -2944,9 +2933,9 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
   const basePrice = booking.pricePerPax || (booking.to?.includes("เชียงใหม่") || booking.to?.includes("ภูเก็ต") ? 890 : 990);
   const totalPrice = basePrice * booking.passengers;
 
-  // Calculate discount from promo codes (ONLY PROMO2026 is valid)
+  // Calculate discount from promo codes (e.g. SKYPROMO2026, PROMO2026)
   const promoUpper = (booking.promoCode || "").trim().toUpperCase();
-  const discountPercent = promoUpper === "PROMO2026" ? 0.2 : 0;
+  const discountPercent = getPromoDiscountRate(promoUpper);
   const discountAmount = totalPrice * discountPercent;
   const finalPrice = totalPrice - discountAmount;
 
@@ -2975,8 +2964,12 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
   const inboundDepart = booking.inboundTime || "09:00";
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-200 dark:border-slate-800 p-0 max-w-[calc(100vw-1.5rem)] sm:max-w-md bg-[#eef6fc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl font-display">
+    <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
+      <DialogContent
+        onPointerDownOutside={() => onClose()}
+        onInteractOutside={() => onClose()}
+        className="max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-3xl border border-slate-200 dark:border-slate-800 p-0 max-w-[calc(100vw-1.5rem)] sm:max-w-md bg-[#eef6fc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl font-display"
+      >
         <div className="p-4 sm:p-7 relative select-none">
 
           {/* Header branding (Top center) */}
@@ -3135,7 +3128,12 @@ function TicketModal({ booking, open, onClose }: { booking: any, open: boolean, 
 
           {/* Close button at the bottom */}
           <div className="mt-5 sm:mt-8 flex justify-center">
-            <button onClick={onClose} id="confirm-ticket-modal" className="w-full py-2.5 sm:py-3 bg-sky-950 dark:bg-sky-600 text-white font-bold text-xs rounded-2xl shadow-md hover:bg-sky-900 dark:hover:bg-sky-500 active:scale-98 transition-all cursor-pointer">
+            <button
+              type="button"
+              onClick={onClose}
+              id="confirm-ticket-modal"
+              className="w-full py-2.5 sm:py-3 bg-sky-950 dark:bg-sky-600 text-white font-bold text-xs rounded-2xl shadow-md hover:bg-sky-900 dark:hover:bg-sky-500 active:scale-98 transition-all cursor-pointer"
+            >
               {t('flight.modal_close')}
             </button>
           </div>
@@ -3225,23 +3223,35 @@ function SeatMapModal({
     }
   };
 
-  const handleConfirm = () => {
-    const sorted = [...currentSeats].sort((a, b) => {
-      const numA = parseInt(a, 10);
-      const numB = parseInt(b, 10);
-      if (numA !== numB) return numA - numB;
-      return a.localeCompare(b);
-    });
-    onSelectSeat(sorted.join(", "));
+  const saveAndClose = () => {
+    if (currentSeats.length > 0) {
+      const sorted = [...currentSeats].sort((a, b) => {
+        const numA = parseInt(a, 10);
+        const numB = parseInt(b, 10);
+        if (numA !== numB) return numA - numB;
+        return a.localeCompare(b);
+      });
+      onSelectSeat(sorted.join(", "));
+    } else {
+      onSelectSeat("");
+    }
     onClose();
+  };
+
+  const handleConfirm = () => {
+    saveAndClose();
   };
 
   const isComplete = currentSeats.length === maxSeats;
   const remainingSeats = maxSeats - currentSeats.length;
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 p-0 sm:max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl">
+    <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) saveAndClose(); }}>
+      <DialogContent
+        onPointerDownOutside={() => saveAndClose()}
+        onInteractOutside={() => saveAndClose()}
+        className="max-h-[90vh] overflow-y-auto overflow-x-hidden rounded-3xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 p-0 sm:max-w-md bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 shadow-2xl"
+      >
         <div className="p-6 relative select-none">
           {/* Header */}
           <div className="text-center mb-5">
