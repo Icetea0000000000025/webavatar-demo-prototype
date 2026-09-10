@@ -233,7 +233,32 @@ export default function FlightAdmin() {
 
   // Filtered bookings for manifest
   const filteredBookings = items.filter((b) =>
-    [b.passengerName, b.email, b.from, b.to, b.phone, b.seat || "", b.outboundFlightNo || "", b.aircraftModel || ""].join(" ").toLowerCase().includes(q.toLowerCase())
+    [
+      b.passengerName,
+      b.email,
+      b.from,
+      b.to,
+      b.phone,
+      b.seat || "",
+      b.returnSeat || "",
+      b.outboundFlightNo || "",
+      b.inboundFlightNo || "",
+      b.aircraftModel || "",
+      b.inboundAircraftModel || "",
+      b.aircraftTail || "",
+      b.inboundAircraftTail || "",
+      ...(b.legs || []).flatMap((l) => [
+        l.from,
+        l.to,
+        l.flightNo || "",
+        l.aircraftModel || "",
+        l.aircraftTail || "",
+        l.seat || "",
+      ]),
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(q.toLowerCase())
   );
 
   // Map seat status based on dynamic cabinConfig
@@ -246,24 +271,22 @@ export default function FlightAdmin() {
       cabinConfig.allCols.forEach((c) => {
         const seatId = `${r}${c}`;
         const booking = items.find((b) => {
-          if (!b.seat) return false;
-          const seats = b.seat.split(",").map((s) => s.trim());
-          if (!seats.includes(seatId)) return false;
-
           const bOrigCode = getAirportCode(b.from);
           const bDestCode = getAirportCode(b.to);
 
           // 1. One-way or Round-trip outbound route matching
           if (bOrigCode === curOrigCode && bDestCode === curDestCode) {
             if (!b.outboundFlightNo || b.outboundFlightNo === selectedFlightNo || currentAircraft.flightNo === selectedFlightNo) {
-              return true;
+              const seats = (b.seat || "").split(",").map((s) => s.trim());
+              if (seats.includes(seatId)) return true;
             }
           }
 
           // 2. Round-trip return route matching (when current plane is operating the return leg)
           if (b.tripType === "round" && bOrigCode === curDestCode && bDestCode === curOrigCode) {
             if (!b.inboundFlightNo || b.inboundFlightNo === selectedFlightNo || currentAircraft.flightNo === selectedFlightNo) {
-              return true;
+              const inSeats = (b.returnSeat || b.seat || "").split(",").map((s) => s.trim());
+              if (inSeats.includes(seatId)) return true;
             }
           }
 
@@ -272,17 +295,25 @@ export default function FlightAdmin() {
             const hasLegMatch = b.legs.some((l) => {
               const legOrig = getAirportCode(l.from);
               const legDest = getAirportCode(l.to);
-              return legOrig === curOrigCode && legDest === curDestCode && (!l.flightNo || l.flightNo === selectedFlightNo || currentAircraft.flightNo === selectedFlightNo);
+              const isRoute = legOrig === curOrigCode && legDest === curDestCode;
+              const isFlight = !l.flightNo || l.flightNo === selectedFlightNo || currentAircraft.flightNo === selectedFlightNo;
+              if (isRoute && isFlight) {
+                const legSeats = (l.seat || b.seat || "").split(",").map((s) => s.trim());
+                return legSeats.includes(seatId);
+              }
+              return false;
             });
             if (hasLegMatch) return true;
           }
 
           // 4. Exact flight number matching ONLY IF route origins/destinations match or are not specified
           if (b.outboundFlightNo === selectedFlightNo && (!bOrigCode || bOrigCode === curOrigCode) && (!bDestCode || bDestCode === curDestCode)) {
-            return true;
+            const seats = (b.seat || "").split(",").map((s) => s.trim());
+            if (seats.includes(seatId)) return true;
           }
           if (b.inboundFlightNo === selectedFlightNo && (!bOrigCode || bOrigCode === curDestCode) && (!bDestCode || bDestCode === curOrigCode)) {
-            return true;
+            const inSeats = (b.returnSeat || b.seat || "").split(",").map((s) => s.trim());
+            if (inSeats.includes(seatId)) return true;
           }
 
           return false;
@@ -531,6 +562,9 @@ export default function FlightAdmin() {
     return (
       <button
         key={seatId}
+        id={`admin-seat-btn-${seatId}`}
+        data-testid={`admin-seat-btn-${seatId}`}
+        data-seat-id={seatId}
         type="button"
         onClick={() => handleToggleLock(seatId)}
         className={`relative w-full ${cabinConfig.seatHeight} rounded-[4px] border flex items-center justify-center cursor-pointer select-none transition-all duration-150 box-border shrink-0 ${
@@ -638,6 +672,8 @@ export default function FlightAdmin() {
           </h1>
           <div className="flex items-center bg-white/80 dark:bg-slate-900/80 p-1 rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800">
             <button
+              id="admin-tab-operations"
+              data-testid="admin-tab-operations"
               onClick={() => setActiveTab("dashboard")}
               className={`px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === "dashboard"
@@ -648,6 +684,8 @@ export default function FlightAdmin() {
               {t("flight_admin.tab_operations")}
             </button>
             <button
+              id="admin-tab-manifest"
+              data-testid="admin-tab-manifest"
               onClick={() => setActiveTab("bookings")}
               className={`px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 activeTab === "bookings"
@@ -665,6 +703,8 @@ export default function FlightAdmin() {
 
         <div className="flex items-center justify-start sm:justify-end gap-2 w-full sm:w-auto">
           <button
+            id="admin-refresh-fleet-btn"
+            data-testid="admin-refresh-fleet-btn"
             onClick={() => refreshData(true)}
             disabled={isRefreshing}
             className="p-2 sm:p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer disabled:opacity-60 shrink-0"
@@ -2109,6 +2149,8 @@ export default function FlightAdmin() {
                       {/* Admin Quick Action Controls */}
                       <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
                         <button
+                          id="admin-unlock-all-btn"
+                          data-testid="admin-unlock-all-btn"
                           type="button"
                           onClick={handleUnlockAll}
                           className="flex-1 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all cursor-pointer text-center"
@@ -2116,6 +2158,8 @@ export default function FlightAdmin() {
                           {t("flight_admin.btn_unlock_all")}
                         </button>
                         <button
+                          id="admin-reset-defaults-btn"
+                          data-testid="admin-reset-defaults-btn"
                           type="button"
                           onClick={handleResetDefaults}
                           className="flex-1 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all cursor-pointer text-center"
@@ -2221,15 +2265,101 @@ export default function FlightAdmin() {
                             {b.passengerName}
                           </td>
                           <td className="px-4 py-3.5 font-mono">
-                            <div className="font-bold text-sky-600 dark:text-sky-400">
-                              {b.outboundFlightNo || "BTN201"}
-                            </div>
-                            <div className="text-[10px] text-slate-400 truncate mt-0.5">
-                              {b.aircraftModel || "Airbus A320"} {b.aircraftTail ? `(${b.aircraftTail})` : ""}
-                            </div>
+                            {b.legs && b.legs.length > 1 ? (
+                              <div className="space-y-1.5 min-w-[130px]">
+                                {b.legs.map((leg, idx) => (
+                                  <div key={idx} className="flex flex-col leading-tight">
+                                    <div className="flex items-center gap-1.5">
+                                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-mono text-[9px] font-bold shrink-0">
+                                        {idx + 1}
+                                      </span>
+                                      <span className="font-bold text-sky-600 dark:text-sky-400 text-xs">
+                                        {leg.flightNo || (idx === 0 ? b.outboundFlightNo : b.inboundFlightNo) || `BTN20${idx + 1}`}
+                                      </span>
+                                    </div>
+                                    <div className="text-[10px] text-slate-500 dark:text-slate-400 pl-5.5 mt-0.5 truncate">
+                                      {leg.aircraftModel || (idx === 0 ? b.aircraftModel : b.inboundAircraftModel) || "Airbus A320"}
+                                      {leg.aircraftTail || (idx === 0 ? b.aircraftTail : b.inboundAircraftTail)
+                                        ? ` (${leg.aircraftTail || (idx === 0 ? b.aircraftTail : b.inboundAircraftTail)})`
+                                        : ""}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : b.tripType === "round" && (b.inboundFlightNo || b.inboundAircraftModel) ? (
+                              <div className="space-y-1.5 min-w-[130px]">
+                                <div className="flex flex-col leading-tight">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 font-mono text-[9px] font-bold shrink-0">
+                                      1
+                                    </span>
+                                    <span className="font-bold text-sky-600 dark:text-sky-400 text-xs">
+                                      {b.outboundFlightNo || "BTN201"}
+                                    </span>
+                                  </div>
+                                  <div className="text-[10px] text-slate-500 dark:text-slate-400 pl-5.5 mt-0.5 truncate">
+                                    {b.aircraftModel || "Airbus A320"} {b.aircraftTail ? `(${b.aircraftTail})` : ""}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col leading-tight">
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-mono text-[9px] font-bold shrink-0">
+                                      2
+                                    </span>
+                                    <span className="font-bold text-indigo-600 dark:text-indigo-400 text-xs">
+                                      {b.inboundFlightNo || "BTN202"}
+                                    </span>
+                                  </div>
+                                  <div className="text-[10px] text-slate-500 dark:text-slate-400 pl-5.5 mt-0.5 truncate">
+                                    {b.inboundAircraftModel || b.aircraftModel || "Airbus A320"} {b.inboundAircraftTail ? `(${b.inboundAircraftTail})` : ""}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div>
+                                <div className="font-bold text-sky-600 dark:text-sky-400 text-xs">
+                                  {b.legs?.[0]?.flightNo || b.outboundFlightNo || "BTN201"}
+                                </div>
+                                <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                                  {b.legs?.[0]?.aircraftModel || b.aircraftModel || "Airbus A320"} {(b.legs?.[0]?.aircraftTail || b.aircraftTail) ? `(${b.legs?.[0]?.aircraftTail || b.aircraftTail})` : ""}
+                                </div>
+                              </div>
+                            )}
                           </td>
-                          <td className="px-4 py-3.5 font-mono font-bold text-sky-600 dark:text-sky-400">
-                            {b.seat || <span className="text-slate-400 font-normal italic">{t("flight_admin.seat_not_specified")}</span>}
+                          <td className="px-4 py-3.5 font-mono font-bold">
+                            {b.legs && b.legs.length > 1 ? (
+                              <div className="space-y-1.5">
+                                {b.legs.map((leg, idx) => (
+                                  <div key={idx} className="flex items-center gap-1.5">
+                                    <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono text-[9px] font-bold shrink-0">
+                                      {idx + 1}
+                                    </span>
+                                    <span className={leg.seat ? "text-sky-600 dark:text-sky-400" : "text-slate-400 font-normal italic text-[11px]"}>
+                                      {leg.seat || t("flight_admin.seat_not_specified")}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : b.returnSeat ? (
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono text-[9px] font-bold shrink-0">
+                                    1
+                                  </span>
+                                  <span className="text-sky-600 dark:text-sky-400">{b.seat || t("flight_admin.seat_not_specified")}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono text-[9px] font-bold shrink-0">
+                                    2
+                                  </span>
+                                  <span className="text-indigo-600 dark:text-indigo-400">{b.returnSeat}</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <span className="text-sky-600 dark:text-sky-400">
+                                {b.seat || <span className="text-slate-400 font-normal italic">{t("flight_admin.seat_not_specified")}</span>}
+                              </span>
+                            )}
                           </td>
                           <td className="px-4 py-3.5 font-medium text-slate-800 dark:text-slate-200">
                             {b.tripType === "multicity" && b.legs && b.legs.length > 0 ? (
@@ -2279,8 +2409,25 @@ export default function FlightAdmin() {
                             </span>
                           </td>
                           <td className="px-4 py-3.5 font-medium text-slate-700 dark:text-slate-300 text-xs">
-                            {formatDate(b.departDate, language)}
-                            {b.returnDate ? ` / ${formatDate(b.returnDate, language)}` : ""}
+                            {b.tripType === "multicity" && b.legs && b.legs.length > 0 ? (
+                              <div className="space-y-1">
+                                {b.legs.map((leg, idx) => (
+                                  <div key={idx} className="flex items-center gap-1.5 whitespace-nowrap">
+                                    {b.legs!.length > 1 && (
+                                      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono text-[9px] font-bold shrink-0">
+                                        {idx + 1}
+                                      </span>
+                                    )}
+                                    <span>{formatDate(leg.departDate || b.departDate, language)}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="whitespace-nowrap">
+                                {formatDate(b.departDate, language)}
+                                {b.returnDate ? ` / ${formatDate(b.returnDate, language)}` : ""}
+                              </div>
+                            )}
                           </td>
                           <td className="px-4 py-3.5 font-mono font-bold text-slate-800 dark:text-slate-200">
                             {b.passengers}

@@ -10,6 +10,10 @@ export type FlightLeg = {
   airlineName?: string;
   airlineCode?: string;
   price?: number;
+  seat?: string;
+  aircraftModel?: string;
+  aircraftTail?: string;
+  class?: string;
 };
 
 export type Aircraft = {
@@ -2749,6 +2753,7 @@ export type Booking = {
   email: string;
   phone: string;
   seat?: string;
+  returnSeat?: string;
   pricePerPax?: number;
   class?: string;
   aircraftModel?: string;
@@ -2757,6 +2762,8 @@ export type Booking = {
   outboundTime?: string;
   inboundFlightNo?: string;
   inboundTime?: string;
+  inboundAircraftModel?: string;
+  inboundAircraftTail?: string;
 };
 
 const KEY = "nok_bookings";
@@ -3887,14 +3894,9 @@ export function releaseSeatBooking(
   const updatedBookings: Booking[] = [];
 
   for (const b of allBookings) {
-    if (!b.seat) {
-      updatedBookings.push(b);
-      continue;
-    }
-    const seats = b.seat.split(",").map((s) => s.trim());
+    let bookingModified = false;
     const bOrig = getAirportCode(b.from);
     const bDest = getAirportCode(b.to);
-
     const matchesRoute = (!originCode || bOrig === originCode) && (!destCode || bDest === destCode);
     const matchesFlight =
       !flightNo ||
@@ -3903,14 +3905,59 @@ export function releaseSeatBooking(
       b.legs?.some((l) => l.flightNo === flightNo) ||
       !b.outboundFlightNo;
 
-    if (seats.includes(seatId) && matchesFlight && (matchesRoute || !originCode)) {
-      releasedBooking = b;
-      const remainingSeats = seats.filter((s) => s !== seatId);
-      if (remainingSeats.length > 0) {
+    let newSeat = b.seat;
+    let newReturnSeat = b.returnSeat;
+    let newLegs = b.legs;
+
+    // 1. Check main seat
+    if (b.seat) {
+      const seats = b.seat.split(",").map((s) => s.trim());
+      if (seats.includes(seatId) && matchesFlight && (matchesRoute || !originCode)) {
+        bookingModified = true;
+        releasedBooking = b;
+        const remaining = seats.filter((s) => s !== seatId);
+        newSeat = remaining.join(", ");
+      }
+    }
+
+    // 2. Check returnSeat
+    if (b.returnSeat) {
+      const retSeats = b.returnSeat.split(",").map((s) => s.trim());
+      if (retSeats.includes(seatId) && matchesFlight) {
+        bookingModified = true;
+        releasedBooking = b;
+        const remaining = retSeats.filter((s) => s !== seatId);
+        newReturnSeat = remaining.join(", ");
+      }
+    }
+
+    // 3. Check legs
+    if (b.legs && b.legs.length > 0) {
+      newLegs = b.legs.map((l) => {
+        if (!l.seat) return l;
+        const legSeats = l.seat.split(",").map((s) => s.trim());
+        const legOrig = getAirportCode(l.from);
+        const legDest = getAirportCode(l.to);
+        const legRouteMatch = (!originCode || legOrig === originCode) && (!destCode || legDest === destCode);
+        const legFlightMatch = !flightNo || l.flightNo === flightNo;
+        if (legSeats.includes(seatId) && (legFlightMatch || legRouteMatch)) {
+          bookingModified = true;
+          releasedBooking = b;
+          const remaining = legSeats.filter((s) => s !== seatId);
+          return { ...l, seat: remaining.join(", ") };
+        }
+        return l;
+      });
+    }
+
+    if (bookingModified) {
+      const hasAnySeats = Boolean(newSeat || newReturnSeat || newLegs?.some((l) => Boolean(l.seat)));
+      if (hasAnySeats) {
         updatedBookings.push({
           ...b,
-          seat: remainingSeats.join(", "),
-          passengers: Math.max(1, remainingSeats.length),
+          seat: newSeat,
+          returnSeat: newReturnSeat,
+          legs: newLegs,
         });
       }
     } else {
