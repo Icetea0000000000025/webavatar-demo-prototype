@@ -1,4 +1,4 @@
-# 🤖 Botnoi WebAvatar Demo Portal & Interactive Sandbox
+# Botnoi WebAvatar Demo Portal & Interactive Sandbox
 
 > **Web Application ต้นแบบและศูนย์รวม Interactive Sandbox สำหรับทดสอบการเชื่อมต่อระบบ 3D Conversational AI (Botnoi WebAvatar)** เข้ากับเว็บแอปพลิเคชันจริง พร้อมจำลอง Use Cases ธุรกิจหลากหลายรูปแบบ
 
@@ -10,7 +10,7 @@
 
 ---
 
-## 📖 สารบัญ (Table of Contents)
+## สารบัญ (Table of Contents)
 
 1. [ภาพรวมโปรเจกต์ (Overview)](#-ภาพรวมโปรเจกต์-overview)
 2. [ฟีเจอร์เด่น (Key Features)](#-ฟีเจอร์เด่น-key-features)
@@ -24,7 +24,7 @@
 
 ---
 
-## 📌 ภาพรวมโปรเจกต์ (Overview)
+##  ภาพรวมโปรเจกต์ (Overview)
 
 โปรเจกต์ **Botnoi WebAvatar Demo Portal** พัฒนาขึ้นเพื่อเป็น Sandbox และ Showcase มาตรฐานระดับ Enterprise ที่สาธิตศักยภาพของ **Botnoi WebAvatar** ในการโต้ตอบด้วยเสียง (Voice-to-Voice) ร่วมกับการควบคุมและนำทางหน้าเว็บแบบ Single Page Application (SPA) ได้แบบ Real-time 
 
@@ -55,30 +55,30 @@
 
 ---
 
-## ✨ ฟีเจอร์เด่น (Key Features)
+## ฟีเจอร์เด่น (Key Features)
 
-- 🎙️ **Voice-to-Voice Real-time Interaction**: สนทนาเสียงโต้ตอบแบบธรรมชาติกับ 3D VRM Avatar พร้อมระบบจำลองการขยับปาก (Lip-sync) และท่าทางตามบริบท
-- 🧭 **Intelligent SPA Web Navigation**: Avatar สามารถสั่งเปลี่ยนหน้า (Route) หรือเลื่อนไปยังตำแหน่งที่ต้องการผ่าน Event `webavatar-navigate`
-- 🛫 **Flight Booking System (Botnoi Air)**:
+-  **Voice-to-Voice Real-time Interaction**: สนทนาเสียงโต้ตอบแบบธรรมชาติกับ 3D VRM Avatar พร้อมระบบจำลองการขยับปาก (Lip-sync) และท่าทางตามบริบท
+-  **Intelligent SPA Web Navigation**: Avatar สามารถสั่งเปลี่ยนหน้า (Route) หรือเลื่อนไปยังตำแหน่งที่ต้องการผ่าน Event `webavatar-navigate`
+-  **Flight Booking System (Botnoi Air)**:
   - ค้นหาเที่ยวบินทั้งแบบเที่ยวเดียว (One-Way), ไป-กลับ (Round-Trip) และหลายเมือง (Multi-City)
   - ผังเลือกที่นั่งบนเครื่องบินเสมือนจริง (Interactive 3D-Style Seat Map Modal)
   - คำนวณราคา, โปรโมชั่นโค้ดส่วนลด และออกบัตรที่นั่ง (Boarding Pass Ticket Modal)
   - หน้า **Flight Admin Dashboard** สำหรับล็อกที่นั่ง, ตรวจสอบรายชื่อผู้โดยสาร และจัดการเที่ยวบิน
-- 🍽️ **Food Ordering System (Botnoi Restaurant)**:
+-  **Food Ordering System (Botnoi Restaurant)**:
   - เมนูอาหารพร้อมตัวกรองหมวดหมู่, ปรับแต่งจำนวน, ระบบตะกร้าสินค้าแบบ Real-time และสรุปใบเสร็จ
   - หน้า **Restaurant Admin Dashboard** สำหรับจัดการสต็อกและรายการอาหาร
-- 💻 **IT Store E-Commerce (Botnoi IT Store)**:
+-  **IT Store E-Commerce (Botnoi IT Store)**:
   - แคตตาล็อกสินค้าอุปกรณ์ไอทีและแกดเจ็ต ค้นหาตามสเปก แบรนด์ และช่วงราคา
   - หน้า **IT Store Admin Dashboard** สำหรับจัดการคลังสินค้า
-- 🌐 **Full 7-Language Localization**: รองรับภาษาไทย (TH), อังกฤษ (EN), จีน (ZH), ญี่ปุ่น (JA), เกาหลี (KO), สเปน (ES), ฝรั่งเศส (FR) ทั้งหน้าเว็บและข้อความทักทายของ Avatar
-- 🎨 **Adaptive Design & Modern UX**:
+-  **Full 7-Language Localization**: รองรับภาษาไทย (TH), อังกฤษ (EN), จีน (ZH), ญี่ปุ่น (JA), เกาหลี (KO), สเปน (ES), ฝรั่งเศส (FR) ทั้งหน้าเว็บและข้อความทักทายของ Avatar
+-  **Adaptive Design & Modern UX**:
   - สลับโหมด Dark / Light ได้อย่างสมบูรณ์แบบ
   - Responsive 100% ใช้งานลื่นไหลบนมือถือ แท็บเล็ต และคอมพิวเตอร์
   - เอฟเฟกต์ Transition นุ่มนวลด้วย Framer Motion (Page Curtain Wipe Transition)
 
 ---
 
-## 🚀 รายการหน้า Demo ทั้งหมด (Demo Catalog)
+##  รายการหน้า Demo ทั้งหมด (Demo Catalog)
 
 | Route | หน้าเว็บ | ฟังก์ชันและความสามารถหลัก |
 | :--- | :--- | :--- |
@@ -97,7 +97,7 @@
 
 ---
 
-## 🛠️ เทคโนโลยีที่ใช้ (Tech Stack)
+##  เทคโนโลยีที่ใช้ (Tech Stack)
 
 ### Core Technologies
 - **Frontend Framework**: [React 19](https://react.dev/)
@@ -117,7 +117,7 @@
 
 ---
 
-## ⚙️ การติดตั้งและรันโปรเจกต์ (Getting Started)
+##  การติดตั้งและรันโปรเจกต์ (Getting Started)
 
 ### 1. ความต้องการของระบบ (Prerequisites)
 - **Node.js**: เวอร์ชัน `>= 18.0.0` ขึ้นไป
@@ -232,7 +232,7 @@ export function triggerWebAvatarCall(): boolean {
 
 ---
 
-## 🌐 ระบบหลายภาษา (Multilingual Support 7 ภาษา)
+## ระบบหลายภาษา (Multilingual Support 7 ภาษา)
 
 โปรเจกต์รองรับการสลับภาษาได้แบบ Real-time ทั้งหมด **7 ภาษา**:
 
@@ -250,7 +250,7 @@ export function triggerWebAvatarCall(): boolean {
 
 ---
 
-## 📁 โครงสร้างไดเรกทอรี (Directory Structure)
+## โครงสร้างไดเรกทอรี (Directory Structure)
 
 ```text
 webavatar-demo-prototype/
@@ -296,7 +296,7 @@ webavatar-demo-prototype/
 
 ---
 
-## 📜 NPM Scripts
+## NPM Scripts
 
 | คำสั่ง | คำอธิบาย |
 | :--- | :--- |
