@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
+import { formatDateTime } from "@/lib/dateUtils";
 import PageSkeleton from "@/components/PageSkeleton";
 import ScrollVelocityImageHeader from "@/components/ScrollVelocityImageHeader";
 
@@ -86,33 +87,9 @@ export interface Receipt {
   total: number;
 }
 
-export function formatOrderDate(dateVal: string | number | undefined, lang: string): string {
+export function formatOrderDate(dateVal: string | number | undefined, lang: string = 'en') {
   if (!dateVal) return "";
-  let date: Date;
-  if (typeof dateVal === "number") {
-    date = new Date(dateVal);
-  } else {
-    const parsed = Number(dateVal);
-    if (!isNaN(parsed) && parsed > 1000000000000) {
-      date = new Date(parsed);
-    } else {
-      date = new Date(dateVal);
-    }
-  }
-  if (isNaN(date.getTime())) {
-    return String(dateVal);
-  }
-  const localeMap: Record<string, string> = {
-    th: 'th-TH',
-    en: 'en-US',
-    zh: 'zh-CN',
-    ja: 'ja-JP',
-    ko: 'ko-KR',
-    es: 'es-ES',
-    fr: 'fr-FR',
-  };
-  const locale = localeMap[lang] || 'en-US';
-  return date.toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" });
+  return formatDateTime(dateVal, lang, { dateStyle: "medium", timeStyle: "short" });
 }
 
 function FoodItemImage({
