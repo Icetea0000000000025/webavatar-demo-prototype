@@ -28,6 +28,7 @@ import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation, type TranslationKey } from "@/lib/LanguageContext";
+import { formatDateTime } from "@/lib/dateUtils";
 import PageSkeleton from "@/components/PageSkeleton";
 import SkeletonImage from "@/components/SkeletonImage";
 import { Button } from "@/components/ui/button";
@@ -79,25 +80,11 @@ export interface ITOrder {
   total: number;
 }
 
-export const formatOrderDate = (orderedAt: string, lang: string) => {
-  if (!orderedAt) return "";
-  const d = new Date(orderedAt);
-  if (!isNaN(d.getTime())) {
-    const localeMap: Record<string, string> = {
-      th: "th-TH",
-      en: "en-US",
-      zh: "zh-CN",
-      ja: "ja-JP",
-      ko: "ko-KR",
-      es: "es-ES",
-      fr: "fr-FR",
-    };
-    return d.toLocaleString(localeMap[lang] || "en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  }
-  return orderedAt;
+export const formatOrderDate = (orderedAt: string, lang: string = 'en') => {
+  return formatDateTime(orderedAt, lang, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 };
 
 // ─── Storage Keys ───────────────────────────────────────────────────────────

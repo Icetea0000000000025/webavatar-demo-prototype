@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Package, Trash2, ArrowLeft } from "lucide-react";
 import { useTranslation } from "@/lib/LanguageContext";
+import { formatDateTime } from "@/lib/dateUtils";
 import type { ITOrder } from "./ITStoreDemo";
 import "./Pages.css";
 
@@ -15,24 +16,10 @@ const money = new Intl.NumberFormat("th-TH", {
 });
 
 const formatOrderDate = (orderedAt: string, lang: string) => {
-  if (!orderedAt) return "";
-  const d = new Date(orderedAt);
-  if (!isNaN(d.getTime())) {
-    const localeMap: Record<string, string> = {
-      th: "th-TH",
-      en: "en-US",
-      zh: "zh-CN",
-      ja: "ja-JP",
-      ko: "ko-KR",
-      es: "es-ES",
-      fr: "fr-FR",
-    };
-    return d.toLocaleString(localeMap[lang] || "en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  }
-  return orderedAt;
+  return formatDateTime(orderedAt, lang, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
 };
 
 export default function ITStoreAdmin() {

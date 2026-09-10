@@ -5,6 +5,7 @@ import { ArrowLeft, RefreshCw, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/LanguageContext";
+import { formatDate, formatTime } from "@/lib/dateUtils";
 
 const ORDERS_KEY = "botnoi-restaurant-orders";
 const money = new Intl.NumberFormat("th-TH", {
@@ -30,8 +31,7 @@ function parseTimestamp(order: Receipt): number {
 
 function getOrderDateHeader(order: Receipt, lang: string): string {
   const ts = parseTimestamp(order);
-  const locale = lang === 'th' ? "th-TH" : lang === 'ja' ? "ja-JP" : lang === 'zh' ? "zh-CN" : "en-US";
-  return new Date(ts).toLocaleDateString(locale, {
+  return formatDate(ts, lang, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -41,8 +41,7 @@ function getOrderDateHeader(order: Receipt, lang: string): string {
 
 function getOrderTimeOnly(order: Receipt, lang: string): string {
   const ts = parseTimestamp(order);
-  const locale = lang === 'th' ? "th-TH" : lang === 'ja' ? "ja-JP" : lang === 'zh' ? "zh-CN" : "en-US";
-  return new Date(ts).toLocaleTimeString(locale, {
+  return formatTime(ts, lang, {
     hour: "2-digit",
     minute: "2-digit",
   });

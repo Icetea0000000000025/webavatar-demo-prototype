@@ -33,7 +33,7 @@ import {
   Laptop,
   type LucideIcon,
 } from "lucide-react";
-import botnoiAirLogo from "../assets/Screenshot 2026-08-10 140706.png";
+import botnoiAirLogo from "../assets/air.png";
 import botnoiRestaurantLogo from "../assets/IT.png";
 import promoPhuket from "../assets/hotel.png";
 import padKrapaoImage from "../assets/Restaurant.png";

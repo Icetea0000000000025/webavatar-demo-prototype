@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Download, MapPin, Phone, Mail, ArrowUpRight, Check, ChevronDown, Search, Filter, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslation } from '../lib/LanguageContext';
+import { formatDateTime } from '../lib/dateUtils';
 import AnimatedSection from '../components/AnimatedSection';
 import AppFooter from '../components/AppFooter';
 import './Pages.css';
@@ -49,7 +50,7 @@ const formatPhoneForSubmission = (phoneNumber: string) => {
 };
 
 function Contact() {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -204,7 +205,7 @@ function Contact() {
         phoneNumber: formData.phoneNumber,
         inquiryType: formData.inquiryType,
         message: formData.message,
-        timestamp: new Date().toLocaleString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+        timestamp: formatDateTime(new Date(), language)
       };
 
       const updatedSubmissions = [newInquiry, ...submissions];
@@ -250,7 +251,7 @@ function Contact() {
           email: formData.email,
           inquiryType: formData.inquiryType,
           message: formData.message,
-          timestamp: new Date().toLocaleString()
+          timestamp: formatDateTime(new Date(), language)
         }]
       : [];
 
